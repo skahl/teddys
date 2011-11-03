@@ -1,0 +1,253 @@
+<?xml version="1.0"?>
+<project name="Teddys" company="" manager="" phase="" project-start="20111103T000000Z" mrproject-version="2" calendar="1">
+  <properties/>
+  <phases/>
+  <calendars>
+    <day-types>
+      <day-type id="0" name="Arbeiten" description="Ein Vorgabe-Arbeitstag"/>
+      <day-type id="1" name="Nicht Arbeiten" description="Ein Vorgabetag, an dem nicht gearbeitet wird"/>
+      <day-type id="2" name="Basis verwenden" description="Tag vom Basiskalender verwenden"/>
+    </day-types>
+    <calendar id="1" name="Vorgabe">
+      <default-week mon="1" tue="1" wed="1" thu="0" fri="1" sat="1" sun="0"/>
+      <overridden-day-types>
+        <overridden-day-type id="0">
+          <interval start="0800" end="1200"/>
+          <interval start="1300" end="1700"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days/>
+    </calendar>
+  </calendars>
+  <tasks>
+    <task id="1" name="Vorplanung" note="" work="28800" start="20111103T000000Z" end="20111103T170000Z" work-start="20111103T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    <task id="2" name="Einarbeitung" note="" work="2772000" start="20111103T170000Z" end="20111117T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="1" type="FS"/>
+      </predecessors>
+      <task id="3" name="jMonkeyEngine 3" note="" work="403200" start="20111103T170000Z" end="20111113T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="4" name="Engine-Aufbau" note="" work="259200" start="20111103T170000Z" end="20111113T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="5" name="Perspektive" note="" work="57600" start="20111103T170000Z" end="20111110T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="6" name="Partikel/Effekte" note="" work="86400" start="20111103T170000Z" end="20111113T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      </task>
+      <task id="7" name="&#xC4;hnliche Projekte recherchieren" note="" work="86400" start="20111103T170000Z" end="20111106T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="8" name="Anforderungen erheben" note="" work="2282400" start="20111103T170000Z" end="20111117T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="9" name="Formale Anforderungen" note="" work="115200" start="20111103T170000Z" end="20111117T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="10" name="Features" note="" work="345600" start="20111103T170000Z" end="20111110T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <task id="11" name="Spielmodi" note="" work="172800" start="20111103T170000Z" end="20111110T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+          <task id="12" name="Spieleinfl&#xFC;sse (Gewitter u.&#xE4;.)" note="" work="172800" start="20111103T170000Z" end="20111110T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        </task>
+        <task id="13" name="Character Design" note="" work="151200" start="20111103T170000Z" end="20111110T150000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="14" name="Leveldesign" note="" work="257400" start="20111103T170000Z" end="20111113T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <task id="15" name="Aufbau Levels" note="" work="86400" start="20111103T170000Z" end="20111113T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+          <task id="16" name="Plattformen" note="" work="85500" start="20111103T170000Z" end="20111113T164500Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+          <task id="17" name="Hindernisse" note="" work="85500" start="20111103T170000Z" end="20111113T164500Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        </task>
+        <task id="18" name="Sounddesign-Liste" note="" work="57600" start="20111103T170000Z" end="20111110T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="19" name="Waffen-Liste" note="" work="172800" start="20111103T170000Z" end="20111110T170000Z" work-start="20111106T080000Z" percent-complete="50" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="20" name="Extras" note="" work="345600" start="20111103T170000Z" end="20111117T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="21" name="Game States" note="" work="245700" start="20111103T170000Z" end="20111113T154500Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="22" name="Effekte" note="" work="245700" start="20111103T170000Z" end="20111113T154500Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="23" name="Texturen-Liste" note="" work="172800" start="20111103T170000Z" end="20111110T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="24" name="Animationen-Liste" note="" work="172800" start="20111103T170000Z" end="20111110T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      </task>
+    </task>
+    <task id="25" name="Pre-Alpha" note="" work="1042200" start="20111103T170000Z" end="20111124T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="2" type="SS"/>
+      </predecessors>
+      <task id="26" name="Projekt-Grundger&#xFC;st aufbauen" note="Threading" work="172800" start="20111103T170000Z" end="20111124T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="27" name="Netzwerkfunktionalit&#xE4;t" note="" work="167400" start="20111103T170000Z" end="20111124T153000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="28" name="Game States definiert" note="" work="160200" start="20111103T170000Z" end="20111124T133000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="29" name="Erstes grobes Leveldesign" note="" work="84600" start="20111113T170000Z" end="20111124T163000Z" work-start="20111117T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="14" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="30" name="Erstes HUD" note="" work="115200" start="20111103T170000Z" end="20111117T170000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="31" name="Darstellung (Perspektive etc.)" note="" work="171000" start="20111103T170000Z" end="20111124T163000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="32" name="Szenegraph erstellen" note="" work="171000" start="20111103T170000Z" end="20111124T163000Z" work-start="20111106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    </task>
+    <task id="33" name="Alpha" note="" work="1541700" start="20111124T170000Z" end="20111218T170000Z" work-start="20111127T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="25" type="FS"/>
+      </predecessors>
+      <task id="34" name="Erste Modellwelt" note="" work="201600" start="20111124T170000Z" end="20111218T170000Z" work-start="20111127T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="35" name="Erste Texturen" note="" work="188100" start="20111124T170000Z" end="20111218T131500Z" work-start="20111127T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="36" name="Test erster Effekte" note="" work="115200" start="20111124T170000Z" end="20111208T170000Z" work-start="20111127T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="37" name="Steuerbare Modellfigur" note="" work="288000" start="20111124T170000Z" end="20111211T170000Z" work-start="20111127T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="38" name="Jetpack-Integration" note="" work="144000" start="20111124T170000Z" end="20111211T170000Z" work-start="20111127T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="39" name="Erste Waffe" note="" work="172800" start="20111124T170000Z" end="20111215T170000Z" work-start="20111127T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="40" name="Weiterentwickeltes HUD" note="" work="144000" start="20111124T170000Z" end="20111211T170000Z" work-start="20111127T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="41" name="Dummy-Gegner" note="" work="115200" start="20111124T170000Z" end="20111208T170000Z" work-start="20111127T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="42" name="Kollisionshandling" note="" work="172800" start="20111124T170000Z" end="20111215T170000Z" work-start="20111127T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    </task>
+    <task id="43" name="[MS] Alpha-Release" note="" work="0" start="20111218T170000Z" end="20111218T170000Z" work-start="20111218T170000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="33" type="FS"/>
+      </predecessors>
+    </task>
+    <task id="44" name="Weihnachtspause" note="" work="259200" start="20111223T000000Z" end="20120101T170000Z" work-start="20111225T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <constraint type="must-start-on" time="20111223T000000Z"/>
+    </task>
+    <task id="45" name="Beta" note="" work="2698200" start="20111218T170000Z" end="20120129T170000Z" work-start="20111222T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="33" type="FS"/>
+      </predecessors>
+      <task id="46" name="Ein fertiges Level" note="" work="341100" start="20111218T170000Z" end="20120129T154500Z" work-start="20111222T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="47" name="Effekte" note="" work="341100" start="20111218T170000Z" end="20120129T154500Z" work-start="20111222T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="48" name="Erste Items" note="" work="682200" start="20111218T170000Z" end="20120129T154500Z" work-start="20111222T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="49" name="Weitere Waffen" note="" work="345600" start="20111218T170000Z" end="20120129T170000Z" work-start="20111222T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="50" name="Einige Sounds" note="" work="337500" start="20111218T170000Z" end="20120129T144500Z" work-start="20111222T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="51" name="Charakter-Animation" note="" work="337500" start="20111218T170000Z" end="20120129T144500Z" work-start="20111222T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="52" name="Dummy-Gegner l&#xE4;uft rum" note="" work="140400" start="20111218T170000Z" end="20120105T160000Z" work-start="20111222T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="53" name="Netzwerkfunktionalit&#xE4;t ausbauen?" note="" work="172800" start="20111218T170000Z" end="20120108T170000Z" work-start="20111222T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    </task>
+    <task id="54" name="[MS] Beta-Release" note="" work="0" start="20120129T170000Z" end="20120129T170000Z" work-start="20120129T170000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="45" type="FS"/>
+      </predecessors>
+    </task>
+    <task id="55" name="Beta-Tests" note="" work="142200" start="20120124T170000Z" end="20120209T163000Z" work-start="20120126T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="45" type="FS" lag="-432000"/>
+      </predecessors>
+    </task>
+    <task id="56" name="Gamma" note="" work="1822500" start="20120129T170000Z" end="20120226T170000Z" work-start="20120202T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="45" type="FS"/>
+      </predecessors>
+      <task id="57" name="Codeoptimierungen" note="" work="691200" start="20120129T170000Z" end="20120226T170000Z" work-start="20120202T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="58" name="Netzwerkoptimierungen" note="" work="229500" start="20120129T170000Z" end="20120226T164500Z" work-start="20120202T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="59" name="Texturen komplett" note="" work="222300" start="20120129T170000Z" end="20120226T144500Z" work-start="20120202T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="60" name="Sounds komplett" note="" work="222300" start="20120129T170000Z" end="20120226T144500Z" work-start="20120202T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="61" name="Waffen komplett" note="" work="142200" start="20120129T170000Z" end="20120216T163000Z" work-start="20120202T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="62" name="Animationen komplett" note="" work="172800" start="20120129T170000Z" end="20120219T170000Z" work-start="20120202T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="63" name="Waffen-Balancing" note="" work="142200" start="20120129T170000Z" end="20120216T163000Z" work-start="20120202T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    </task>
+    <task id="64" name="[MS] Gamma-Release" note="" work="0" start="20120226T170000Z" end="20120226T170000Z" work-start="20120226T170000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="56" type="FS"/>
+      </predecessors>
+    </task>
+    <task id="65" name="Weitere Level" note="" work="194400" start="20120129T170000Z" end="20120223T150000Z" work-start="20120202T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="45" type="FS"/>
+      </predecessors>
+    </task>
+    <task id="66" name="Delta" note="" work="861300" start="20120226T170000Z" end="20120315T170000Z" work-start="20120301T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="56" type="FS"/>
+      </predecessors>
+      <task id="67" name="Codeoptimierungen" note="" work="432000" start="20120226T170000Z" end="20120315T170000Z" work-start="20120301T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="68" name="Inhaltsoptimierungen" note="" work="429300" start="20120226T170000Z" end="20120315T164500Z" work-start="20120301T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    </task>
+    <task id="69" name="Begleit-Website erstellen" note="" work="86400" start="20120226T170000Z" end="20120308T170000Z" work-start="20120301T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="66" type="SS"/>
+      </predecessors>
+    </task>
+    <task id="70" name="Abgabe" note="" work="72000" start="20120315T170000Z" end="20120322T120000Z" work-start="20120318T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="66" type="FS"/>
+      </predecessors>
+      <task id="71" name="Release-Version (Delta)" note="" work="28800" start="20120315T170000Z" end="20120318T170000Z" work-start="20120318T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="72" name="Projektdokumentation" note="" work="43200" start="20120315T170000Z" end="20120322T120000Z" work-start="20120318T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    </task>
+    <task id="73" name="[MS] Endabgabe" note="" work="0" start="20120324T000000Z" end="20120324T000000Z" work-start="20120325T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+      <constraint type="must-start-on" time="20120324T000000Z"/>
+    </task>
+  </tasks>
+  <resource-groups/>
+  <resources>
+    <resource id="1" name="Christian" short-name="cm" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="2" name="Sebastian" short-name="sk" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="3" name="Benjamin" short-name="bs" type="1" units="0" email="" note="" std-rate="0"/>
+  </resources>
+  <allocations>
+    <allocation task-id="68" resource-id="1" units="100"/>
+    <allocation task-id="67" resource-id="1" units="100"/>
+    <allocation task-id="60" resource-id="1" units="100"/>
+    <allocation task-id="57" resource-id="1" units="100"/>
+    <allocation task-id="58" resource-id="1" units="100"/>
+    <allocation task-id="50" resource-id="1" units="100"/>
+    <allocation task-id="53" resource-id="1" units="100"/>
+    <allocation task-id="52" resource-id="1" units="100"/>
+    <allocation task-id="44" resource-id="1" units="100"/>
+    <allocation task-id="42" resource-id="1" units="100"/>
+    <allocation task-id="41" resource-id="1" units="100"/>
+    <allocation task-id="37" resource-id="1" units="100"/>
+    <allocation task-id="27" resource-id="1" units="100"/>
+    <allocation task-id="24" resource-id="1" units="100"/>
+    <allocation task-id="23" resource-id="1" units="100"/>
+    <allocation task-id="22" resource-id="1" units="100"/>
+    <allocation task-id="21" resource-id="1" units="100"/>
+    <allocation task-id="20" resource-id="1" units="100"/>
+    <allocation task-id="19" resource-id="1" units="100"/>
+    <allocation task-id="18" resource-id="1" units="100"/>
+    <allocation task-id="9" resource-id="1" units="100"/>
+    <allocation task-id="13" resource-id="1" units="100"/>
+    <allocation task-id="12" resource-id="1" units="100"/>
+    <allocation task-id="11" resource-id="1" units="100"/>
+    <allocation task-id="7" resource-id="1" units="100"/>
+    <allocation task-id="4" resource-id="1" units="100"/>
+    <allocation task-id="65" resource-id="2" units="100"/>
+    <allocation task-id="68" resource-id="2" units="100"/>
+    <allocation task-id="67" resource-id="2" units="100"/>
+    <allocation task-id="62" resource-id="2" units="100"/>
+    <allocation task-id="59" resource-id="2" units="100"/>
+    <allocation task-id="57" resource-id="2" units="100"/>
+    <allocation task-id="51" resource-id="2" units="100"/>
+    <allocation task-id="48" resource-id="2" units="100"/>
+    <allocation task-id="47" resource-id="2" units="100"/>
+    <allocation task-id="46" resource-id="2" units="100"/>
+    <allocation task-id="44" resource-id="2" units="100"/>
+    <allocation task-id="36" resource-id="2" units="100"/>
+    <allocation task-id="35" resource-id="2" units="100"/>
+    <allocation task-id="37" resource-id="2" units="100"/>
+    <allocation task-id="34" resource-id="2" units="100"/>
+    <allocation task-id="29" resource-id="2" units="100"/>
+    <allocation task-id="28" resource-id="2" units="100"/>
+    <allocation task-id="26" resource-id="2" units="100"/>
+    <allocation task-id="24" resource-id="2" units="100"/>
+    <allocation task-id="23" resource-id="2" units="100"/>
+    <allocation task-id="22" resource-id="2" units="100"/>
+    <allocation task-id="21" resource-id="2" units="100"/>
+    <allocation task-id="20" resource-id="2" units="100"/>
+    <allocation task-id="19" resource-id="2" units="100"/>
+    <allocation task-id="17" resource-id="2" units="100"/>
+    <allocation task-id="16" resource-id="2" units="100"/>
+    <allocation task-id="15" resource-id="2" units="100"/>
+    <allocation task-id="13" resource-id="2" units="100"/>
+    <allocation task-id="12" resource-id="2" units="100"/>
+    <allocation task-id="11" resource-id="2" units="100"/>
+    <allocation task-id="7" resource-id="2" units="100"/>
+    <allocation task-id="4" resource-id="2" units="100"/>
+    <allocation task-id="6" resource-id="2" units="100"/>
+    <allocation task-id="68" resource-id="3" units="100"/>
+    <allocation task-id="67" resource-id="3" units="100"/>
+    <allocation task-id="63" resource-id="3" units="100"/>
+    <allocation task-id="61" resource-id="3" units="100"/>
+    <allocation task-id="57" resource-id="3" units="100"/>
+    <allocation task-id="49" resource-id="3" units="100"/>
+    <allocation task-id="48" resource-id="3" units="100"/>
+    <allocation task-id="44" resource-id="3" units="100"/>
+    <allocation task-id="40" resource-id="3" units="100"/>
+    <allocation task-id="39" resource-id="3" units="100"/>
+    <allocation task-id="32" resource-id="3" units="100"/>
+    <allocation task-id="31" resource-id="3" units="100"/>
+    <allocation task-id="30" resource-id="3" units="100"/>
+    <allocation task-id="24" resource-id="3" units="100"/>
+    <allocation task-id="23" resource-id="3" units="100"/>
+    <allocation task-id="22" resource-id="3" units="100"/>
+    <allocation task-id="21" resource-id="3" units="100"/>
+    <allocation task-id="20" resource-id="3" units="100"/>
+    <allocation task-id="19" resource-id="3" units="100"/>
+    <allocation task-id="13" resource-id="3" units="100"/>
+    <allocation task-id="12" resource-id="3" units="100"/>
+    <allocation task-id="11" resource-id="3" units="100"/>
+    <allocation task-id="7" resource-id="3" units="100"/>
+    <allocation task-id="4" resource-id="3" units="100"/>
+    <allocation task-id="5" resource-id="3" units="100"/>
+  </allocations>
+</project>
