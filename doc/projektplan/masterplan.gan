@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Untitled Gantt Project" company="" webLink="http://" view-date="2011-11-07" view-index="0" gantt-divider-location="674" resource-divider-location="300" version="2.0">
-    <description/>
-    <view zooming-state="default:4" id="gantt-chart"/>
+<project name="Teddys" company="Teddys" webLink="http://code.google.com/p/teddys/" view-date="2011-10-17" view-index="0" gantt-divider-location="674" resource-divider-location="300" version="2.0">
+    <description><![CDATA[A 2D Teddy Jump & Run, Sidescrolling Shooter Game. ]]></description>
+    <view zooming-state="default:5" id="gantt-chart"/>
     <view id="resource-table">
         <field id="0" name="Ressource" width="55" order="0"/>
-        <field id="1" name="Rolle" width="44" order="0"/>
+        <field id="1" name="Rolle" width="44" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -12,13 +12,18 @@
             <day-type id="0"/>
             <day-type id="1"/>
             <calendar id="1" name="default">
-                <default-week sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
+                <default-week sun="0" mon="1" tue="1" wed="1" thu="0" fri="1" sat="1"/>
                 <overriden-day-types/>
                 <days/>
             </calendar>
         </day-types>
+        <date year="2011" month="12" date="24"/>
+        <date year="2011" month="12" date="25"/>
+        <date year="2011" month="12" date="26"/>
+        <date year="2011" month="12" date="31"/>
+        <date year="2012" month="1" date="1"/>
     </calendars>
-    <tasks>
+    <tasks color="#8cb6ce">
         <taskproperties>
             <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
             <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
@@ -31,110 +36,209 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="0" name="Vorplanung" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-        <task id="1" name="Einarbeitung" color="#8cb6ce" meeting="false" start="2011-11-10" duration="2" complete="0" priority="1" expand="true">
-            <task id="2" name="jMonkey Engine 3" color="#8cb6ce" meeting="false" start="2011-11-10" duration="2" complete="0" priority="1" expand="true">
-                <task id="3" name="Engine-Aufbau" color="#8cb6ce" meeting="false" start="2011-11-10" duration="2" complete="0" priority="1" expand="true"/>
-                <task id="4" name="Perspektive" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                <task id="5" name="Partikel/Effekte" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
+        <task id="0" name="Vorplanung" color="#8cb6ce" meeting="false" start="2011-11-03" duration="1" complete="0" priority="1" expand="true"/>
+        <task id="1" name="Einarbeitung" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true">
+            <depend id="24" type="1" difference="0" hardness="Rubber"/>
+            <task id="2" name="jMonkey Engine 3" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true">
+                <task id="3" name="Engine-Aufbau" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true"/>
+                <task id="4" name="Perspektive" color="#8cb6ce" meeting="false" start="2011-11-10" duration="3" complete="0" priority="1" expand="true"/>
+                <task id="5" name="Partikel/Effekte" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true"/>
             </task>
             <task id="6" name="Ähnliche Projekte recherchieren" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="7" name="Anforderungen erheben" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true">
-                <task id="8" name="Formale Anforderungen" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                <task id="10" name="Features" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true">
-                    <task id="19" name="Spielmodi" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                    <task id="20" name="Spieleinflüsse (Gewitter u.ä.)" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
+            <task id="7" name="Anforderungen erheben" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true">
+                <task id="8" name="Formale Anforderungen" color="#8cb6ce" meeting="false" start="2011-11-10" duration="3" complete="0" priority="1" expand="true"/>
+                <task id="9" name="Features" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true">
+                    <task id="10" name="Spielmodi" color="#8cb6ce" meeting="false" start="2011-11-10" duration="3" complete="0" priority="1" expand="true"/>
+                    <task id="11" name="Spieleinflüsse (Gewitter u.ä.)" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true"/>
                 </task>
-                <task id="21" name="Character Design" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                <task id="11" name="Leveldesign" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true">
-                    <task id="22" name="Aufbau Levels" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                    <task id="23" name="Plattformen" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                    <task id="24" name="Hindernisse" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
+                <task id="12" name="Character Design" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true"/>
+                <task id="13" name="Leveldesign" color="#8cb6ce" meeting="false" start="2011-11-10" duration="2" complete="0" priority="1" expand="true">
+                    <depend id="28" type="2" difference="0" hardness="Strong"/>
+                    <task id="14" name="Aufbau Levels" color="#8cb6ce" meeting="false" start="2011-11-10" duration="2" complete="0" priority="1" expand="true"/>
+                    <task id="15" name="Plattformen" color="#8cb6ce" meeting="false" start="2011-11-10" duration="2" complete="0" priority="1" expand="true"/>
+                    <task id="16" name="Hindernisse" color="#8cb6ce" meeting="false" start="2011-11-10" duration="2" complete="0" priority="1" expand="true"/>
                 </task>
-                <task id="12" name="Sounddesign-Liste" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                <task id="13" name="Waffenliste" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                <task id="14" name="Extras" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                <task id="15" name="Game States" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                <task id="16" name="Effekte" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                <task id="17" name="Texturenliste" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-                <task id="18" name="Animationsliste" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
+                <task id="17" name="Sounddesign-Liste" color="#8cb6ce" meeting="false" start="2011-11-10" duration="3" complete="0" priority="1" expand="true"/>
+                <task id="18" name="Waffenliste" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
+                <task id="19" name="Extras" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
+                <task id="20" name="Game States" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true"/>
+                <task id="21" name="Effekte" color="#8cb6ce" meeting="false" start="2011-11-10" duration="3" complete="0" priority="1" expand="true"/>
+                <task id="22" name="Texturenliste" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true"/>
+                <task id="23" name="Animationsliste" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true"/>
             </task>
         </task>
-        <task id="25" name="Pre-Alpha" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true">
-            <task id="31" name="Projekt-Grundgerüst aufbauen" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="32" name="Netzwerkfunktionalität" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="33" name="Game States definiert" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="34" name="Erstes grobes Leveldesign" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="35" name="Erstes HUD" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="36" name="Darstellung (Perspektive etc.)" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="37" name="Szenegraph erstellen" color="#8cb6ce" meeting="false" start="2011-11-10" duration="1" complete="0" priority="1" expand="true"/>
+        <task id="24" name="Pre-Alpha" color="#8cb6ce" meeting="false" start="2011-11-10" duration="6" complete="0" priority="1" expand="true">
+            <task id="25" name="Projekt-Grundgerüst aufbauen" color="#8cb6ce" meeting="false" start="2011-11-10" duration="2" complete="0" priority="1" expand="true"/>
+            <task id="26" name="Netzwerkfunktionalität" color="#8cb6ce" meeting="false" start="2011-11-10" duration="5" complete="0" priority="1" expand="true"/>
+            <task id="28" name="Erstes grobes Leveldesign" color="#8cb6ce" meeting="false" start="2011-11-17" duration="4" complete="0" priority="1" expand="true"/>
+            <task id="29" name="Erstes HUD" color="#8cb6ce" meeting="false" start="2011-11-10" duration="3" complete="0" priority="1" expand="true"/>
+            <task id="30" name="Darstellung (Perspektive etc.)" color="#8cb6ce" meeting="false" start="2011-11-10" duration="3" complete="0" priority="1" expand="true"/>
+            <task id="31" name="Szenegraph erstellen" color="#8cb6ce" meeting="false" start="2011-11-10" duration="5" complete="0" priority="1" expand="true"/>
         </task>
-        <task id="26" name="Alpha" color="#8cb6ce" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true">
-            <task id="38" name="Erste Modellwelt" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="39" name="Erste Texturen" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="40" name="Test erster Effekte" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="41" name="Steuerbare Modellfigur" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="42" name="Jetpack-Integration" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="43" name="Erste Waffe" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="44" name="Weiterentwickeltes HUD" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="45" name="Dummy-Gegner" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="46" name="Kollisionshandling" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
+        <task id="32" name="Alpha" color="#8cb6ce" meeting="false" start="2011-12-01" duration="7" complete="0" priority="1" expand="true">
+            <depend id="43" type="2" difference="0" hardness="Strong"/>
+            <task id="33" name="Erste Modellwelt" meeting="false" start="2011-12-01" duration="7" complete="0" priority="1" expand="true"/>
+            <task id="34" name="Erste Texturen" meeting="false" start="2011-12-01" duration="7" complete="0" priority="1" expand="true"/>
+            <task id="35" name="Test erster Effekte" meeting="false" start="2011-12-01" duration="2" complete="0" priority="1" expand="true">
+                <depend id="38" type="2" difference="0" hardness="Strong"/>
+            </task>
+            <task id="36" name="Steuerbare Modellfigur" meeting="false" start="2011-12-01" duration="4" complete="0" priority="1" expand="true"/>
+            <task id="37" name="Jetpack-Integration" meeting="false" start="2011-12-01" duration="4" complete="0" priority="1" expand="true"/>
+            <task id="38" name="Erste Waffe" meeting="false" start="2011-12-08" duration="2" complete="0" priority="1" expand="true"/>
+            <task id="39" name="Weiterentwickeltes HUD" meeting="false" start="2011-12-01" duration="5" complete="0" priority="1" expand="true"/>
+            <task id="40" name="Dummy-Gegner" meeting="false" start="2011-12-01" duration="2" complete="0" priority="1" expand="true"/>
+            <task id="41" name="Kollisionshandling" meeting="false" start="2011-12-01" duration="7" complete="0" priority="1" expand="true"/>
+            <task id="42" name="[MS] Alpha-Release" color="#000000" meeting="true" start="2011-12-01" duration="1" complete="0" priority="1" expand="true"/>
         </task>
-        <task id="27" name="Beta" color="#8cb6ce" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true">
-            <task id="47" name="Ein fertiges Level" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="48" name="Effekte" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="49" name="Erste Items" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="50" name="Weitere Waffen" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="51" name="Einige Sounds" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="52" name="Charakter-Animation" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="53" name="Dummy-Gegner läuft rum" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="54" name="Netzwerkfunktionalität ausbauen?" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="55" name="[MS] Beta-Release" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
+        <task id="43" name="Beta" color="#8cb6ce" meeting="false" start="2012-01-05" duration="9" complete="0" thirdDate="2012-01-01" thirdDate-constraint="1" priority="1" expand="true">
+            <depend id="53" type="2" difference="0" hardness="Strong"/>
+            <depend id="54" type="2" difference="0" hardness="Strong"/>
+            <task id="44" name="Ein fertiges Level" meeting="false" start="2011-12-29" duration="9" complete="0" priority="1" expand="true"/>
+            <task id="45" name="Effekte" meeting="false" start="2011-12-29" duration="9" complete="0" priority="1" expand="true"/>
+            <task id="46" name="Erste Items" meeting="false" start="2011-12-29" duration="7" complete="0" priority="1" expand="true"/>
+            <task id="47" name="Weitere Waffen" meeting="false" start="2011-12-29" duration="5" complete="0" priority="1" expand="true"/>
+            <task id="48" name="Einige Sounds" meeting="false" start="2011-12-29" duration="7" complete="0" priority="1" expand="true"/>
+            <task id="49" name="Charakter-Animation" meeting="false" start="2011-12-29" duration="9" complete="0" priority="1" expand="true"/>
+            <task id="50" name="Dummy-Gegner läuft rum" meeting="false" start="2011-12-29" duration="4" complete="0" priority="1" expand="true"/>
+            <task id="51" name="Netzwerkfunktionalität ausbauen?" meeting="false" start="2011-12-29" duration="6" complete="0" priority="1" expand="true"/>
+            <task id="52" name="[MS] Beta-Release" color="#000000" meeting="true" start="2011-12-29" duration="1" complete="0" priority="1" expand="true"/>
         </task>
-        <task id="56" name="Beta-Tests" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-        <task id="28" name="Gamma" color="#8cb6ce" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true">
-            <task id="57" name="Codeoptimierungen" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="58" name="Netzwerkoptimierungen" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="59" name="Texturen komplett" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="60" name="Sounds komplett" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="61" name="Waffen komplett" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="62" name="Animationen komplett" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="63" name="Waffen-Balancing" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="64" name="[MS] Gamma-Release" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
+        <task id="53" name="Beta-Tests" meeting="false" start="2012-02-05" duration="4" complete="0" priority="1" expand="true">
+            <depend id="63" type="2" difference="0" hardness="Rubber"/>
         </task>
-        <task id="65" name="Weiteres Level" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-        <task id="29" name="Delta" color="#8cb6ce" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true">
-            <task id="66" name="Codeoptimierungen" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="67" name="Inhaltsoptimierungen" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
+        <task id="63" name="Weiteres Level" meeting="false" start="2012-02-26" duration="7" complete="0" priority="1" expand="true"/>
+        <task id="54" name="Gamma" color="#8cb6ce" meeting="false" start="2012-02-05" duration="7" complete="0" priority="1" expand="true">
+            <depend id="64" type="2" difference="0" hardness="Strong"/>
+            <task id="55" name="Codeoptimierungen" meeting="false" start="2012-02-05" duration="4" complete="0" priority="1" expand="true"/>
+            <task id="56" name="Netzwerkoptimierungen" meeting="false" start="2012-02-05" duration="3" complete="0" priority="1" expand="true"/>
+            <task id="57" name="Texturen komplett" meeting="false" start="2012-02-05" duration="7" complete="0" priority="1" expand="true"/>
+            <task id="58" name="Sounds komplett" meeting="false" start="2012-02-05" duration="5" complete="0" priority="1" expand="true"/>
+            <task id="59" name="Waffen komplett" meeting="false" start="2012-02-05" duration="3" complete="0" priority="1" expand="true"/>
+            <task id="60" name="Animationen komplett" meeting="false" start="2012-02-05" duration="7" complete="0" priority="1" expand="true"/>
+            <task id="61" name="Waffen-Balancing" meeting="false" start="2012-02-05" duration="1" complete="0" priority="1" expand="true"/>
+            <task id="62" name="[MS] Gamma-Release" color="#000000" meeting="true" start="2012-02-05" duration="1" complete="0" priority="1" expand="true"/>
         </task>
-        <task id="68" name="Begleit-Website erstellen" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-        <task id="30" name="Abgabe" color="#8cb6ce" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true">
-            <task id="69" name="Release-Version" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="70" name="Projektdokumentation" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
-            <task id="71" name="[MS] Endabgabe" meeting="false" start="2011-11-07" duration="1" complete="0" priority="1" expand="true"/>
+        <task id="64" name="Delta" color="#8cb6ce" meeting="false" start="2012-03-01" duration="15" complete="0" priority="1" expand="true">
+            <depend id="68" type="2" difference="0" hardness="Strong"/>
+            <task id="65" name="Codeoptimierungen" meeting="false" start="2012-03-01" duration="7" complete="0" priority="1" expand="true"/>
+            <task id="66" name="Inhaltsoptimierungen" meeting="false" start="2012-03-01" duration="15" complete="0" priority="1" expand="true"/>
+        </task>
+        <task id="67" name="Begleit-Website erstellen" meeting="false" start="2012-05-03" duration="3" complete="0" priority="1" expand="true"/>
+        <task id="68" name="Abgabe" color="#8cb6ce" meeting="false" start="2012-04-22" duration="6" complete="0" priority="1" expand="true">
+            <depend id="67" type="3" difference="0" hardness="Rubber"/>
+            <task id="69" name="Release-Version vorbereiten" meeting="false" start="2012-04-22" duration="1" complete="0" priority="1" expand="true"/>
+            <task id="70" name="Projektdokumentation" meeting="false" start="2012-04-22" duration="6" complete="0" priority="1" expand="true"/>
+            <task id="71" name="[MS] Endabgabe" color="#000000" meeting="true" start="2012-04-22" duration="1" complete="0" priority="1" expand="true"/>
         </task>
     </tasks>
     <resources>
-        <resource id="0" name="Christian" function="SoftwareDevelopment:2" contacts="christian.muecke87@gmail.com" phone=""/>
-        <resource id="1" name="Benjamin" function="SoftwareDevelopment:2" contacts="besient@gmail.com" phone=""/>
-        <resource id="2" name="Sebastian" function="SoftwareDevelopment:2" contacts="sebkahl@gmail.com" phone=""/>
+        <resource id="3" name="Christian" function="SoftwareDevelopment:2" contacts="christian.muecke87@gmail.com" phone=""/>
+        <resource id="4" name="Benjamin" function="SoftwareDevelopment:2" contacts="besient@gmail.com" phone=""/>
+        <resource id="5" name="Sebastian" function="SoftwareDevelopment:2" contacts="sebkahl@gmail.com" phone=""/>
     </resources>
     <allocations>
-        <allocation task-id="0" resource-id="2" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
-        <allocation task-id="0" resource-id="1" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
-        <allocation task-id="0" resource-id="0" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="0" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="0" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="0" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="3" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="3" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="3" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="4" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="5" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="6" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="6" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="6" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="8" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="8" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="9" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="9" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="9" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="12" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="12" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="12" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="13" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="17" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="18" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="18" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="18" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="19" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="19" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="19" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="20" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="20" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="20" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="21" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="21" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="21" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="22" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="22" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="22" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="23" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="23" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="23" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="25" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="26" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="28" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="29" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="30" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="31" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="33" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="34" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="35" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="36" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="36" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="37" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="38" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="39" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="40" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="41" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="44" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="45" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="46" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="46" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="47" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="48" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="49" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="50" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="51" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="53" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="53" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="53" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="55" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="55" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="55" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="56" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="57" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="58" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="59" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="60" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="61" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="63" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="65" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="65" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="65" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="66" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="66" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="66" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="67" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="67" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="67" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="68" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="68" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="68" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
     </allocations>
     <vacations>
-        <vacation start="2011-12-23" end="2012-01-01" resourceid="0"/>
-        <vacation start="2011-12-23" end="2012-01-01" resourceid="1"/>
-        <vacation start="2011-12-23" end="2012-01-01" resourceid="2"/>
+        <vacation start="2011-12-23" end="2012-01-01" resourceid="3"/>
+        <vacation start="2011-12-23" end="2012-01-01" resourceid="4"/>
+        <vacation start="2011-12-23" end="2012-01-01" resourceid="5"/>
     </vacations>
     <taskdisplaycolumns>
-        <displaycolumn property-id="tpd3" order="0" width="75"/>
-        <displaycolumn property-id="tpd4" order="1" width="75"/>
-        <displaycolumn property-id="tpd5" order="2" width="75"/>
-        <displaycolumn property-id="tpd6" order="3" width="50"/>
-        <displaycolumn property-id="tpd8" order="4" width="75"/>
+        <displaycolumn property-id="tpd3" order="0" width="166"/>
+        <displaycolumn property-id="tpd4" order="1" width="55"/>
+        <displaycolumn property-id="tpd5" order="2" width="53"/>
+        <displaycolumn property-id="tpd6" order="3" width="38"/>
+        <displaycolumn property-id="tpd8" order="4" width="57"/>
+        <displaycolumn property-id="tpd7" order="5" width="56"/>
     </taskdisplaycolumns>
     <previous/>
     <roles roleset-name="Default"/>
