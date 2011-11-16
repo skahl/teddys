@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
+           
+    <useControls filename="nifty-default-controls.xml" />
+    <useStyles filename="nifty-default-styles.xml" />
+  
+    <screen id="start">
+    </screen>
+    
+    <screen id="hud" controller="perspectivetest.hud.TestHUD">
+       
+        <layer id="hud" backgroundColor="#fff0" childLayout="vertical">
+        
+            <panel id="spacerPanel" width="100%" height="90%" childLayout="horizontal" backgroundColor="#fff0"/>
+      
+            <panel id="hudPanel" width="100%" height="10%" childLayout="horizontal" backgroundColor="#fff0" >  
+        
+                <panel id="itemPanel" width="20%" height="100%" childLayout="horizontal" backgroundColor="#fff0">
+                    <text text="Item: " font="Interface/Fonts/Default.fnt" width="25%" height="100%"/>
+                    <control name="label" id="itemLabel" font="Interface/Fonts/Default.fnt" text="" width="25%" height="100%"/>
+                </panel>
+                
+                <panel id="weaponPanel" width="60%" height="100%" childLayout="horizontal" backgroundColor="#fff0">
+                    <text text="W1: " font="Interface/Fonts/Default.fnt" width="10%" height="100%"/>
+                    <control name="label" id="w1Label" font="Interface/Fonts/Default.fnt" text="" width="10%" height="100%"/>
+                    <text text="W2: " font="Interface/Fonts/Default.fnt" width="10%" height="100%"/>
+                    <control name="label" id="w2Label" font="Interface/Fonts/Default.fnt" text="" width="10%" height="100%"/>
+                    <text text="W3: " font="Interface/Fonts/Default.fnt" width="10%" height="100%"/>
+                    <control name="label" id="w3Label" font="Interface/Fonts/Default.fnt" text="" width="10%" height="100%"/>
+                    <text text="W4: " font="Interface/Fonts/Default.fnt" width="10%" height="100%"/>
+                    <control name="label" id="w4Label" font="Interface/Fonts/Default.fnt" text="" width="10%" height="100%"/>
+                    <text text="W5: " font="Interface/Fonts/Default.fnt" width="10%" height="100%"/>
+                    <control name="label" id="w5Label" font="Interface/Fonts/Default.fnt" text="" width="10%" height="100%"/>                
+                </panel>
+        
+                <panel id="healthPanel" width="20%" height="100%" childLayout="horizontal" backgroundColor="#fff0">
+                    <text text="Health: " font="Interface/Fonts/Default.fnt" width="25%" height="100%"/>
+                    <control name="label" id="healthLabel" font="Interface/Fonts/Default.fnt" text="${CALL.getHealth()}%" width="25%" height="100%"/>
+                </panel>
+                
+            </panel>
+
+    </layer>
+  </screen>
+</nifty>
