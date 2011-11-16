@@ -86,6 +86,7 @@ public class BaseGame extends SimpleApplication {
         // init start state
         stateManager.getState(Menu.class).initialize(stateManager, this);
         stateManager.getState(Menu.class).setEnabled(true);
+        logger.log(Level.INFO, "\nMenu State: enabled\n");
     }  
  
     @Override

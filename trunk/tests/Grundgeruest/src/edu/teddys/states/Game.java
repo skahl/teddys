@@ -5,8 +5,8 @@ import edu.teddys.controls.RotationControl;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.effect.ParticleEmitter;
 import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
@@ -14,8 +14,10 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import edu.teddys.BaseGame;
 import edu.teddys.objects.Jetpack;
+import java.util.logging.Level;
 
 /**
  *
@@ -30,25 +32,23 @@ public class Game extends AbstractAppState {
     private boolean paused;
     
     private Node rotationNode;
-    private ParticleEmitter jetpack1;
-    private ParticleEmitter jetpack2;
     private RotationControl rotationControl;
+    
+    private Jetpack redJetpack;
+    private Jetpack blueJetpack;
+    
+    
     
     // ActionListener
     private ActionListener actionListener = new ActionListener() {
         public void onAction(String name, boolean keyPressed, float tpf) {
-            if(name.equals("Pause") && !keyPressed) {
-                if(paused) {
-                    // TODO: inform other players of pausing status
-                    
-                    setPaused(false);
-                    
-                    paused = false;
-                    
-                    rotationControl.setPaused(paused);
+            if(name.equals("ParticleTrigger") && !keyPressed) {
+                if(!redJetpack.isEnabled() || !blueJetpack.isEnabled()) {
+                    redJetpack.setEnabled(true);
+                    blueJetpack.setEnabled(true);
                 } else {
-                    
-                    setPaused(true);
+                    redJetpack.setEnabled(false);
+                    blueJetpack.setEnabled(false);
                 }
             }
         }
@@ -56,16 +56,26 @@ public class Game extends AbstractAppState {
     
     
     // AnalogListener
+    /*
     public AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float pressDuration, float tpf) {
             
             if(name.equals("ParticleTrigger")) {
                 // TODO: Trigger particle emitter activation.
-                jetpack1.emitAllParticles();
-                jetpack2.emitAllParticles();
+                jetpack1.setEnabled(true);
+                jetpack2.setEnabled(true);
+            } else {
+                if(jetpack1.isEnabled()) {
+                    jetpack1.setEnabled(false);
+                }
+                if(jetpack2.isEnabled()) {
+                    jetpack2.setEnabled(false);
+                }
             }
         }
     };
+    
+    */
     
     
     @Override
@@ -114,16 +124,14 @@ public class Game extends AbstractAppState {
         rotationNode = new Node("rotationNode");
         
         // add blue jetpack
-        Jetpack blueJetpack = new Jetpack("blueJetpack", ColorRGBA.Blue, this.app.getAssetManager());
+        blueJetpack = new Jetpack("blueJetpack", ColorRGBA.Blue, this.app.getAssetManager());
         blueJetpack.getNode().setLocalTranslation(new Vector3f(2f, 0f, -2f));
         blueJetpack.getNode().setLocalScale(0.5f);
-        jetpack1 = blueJetpack.getParticleEmitter();
         
         // add a red jetpack
-        Jetpack redJetpack = new Jetpack("blueJetpack", ColorRGBA.Red, this.app.getAssetManager());
+        redJetpack = new Jetpack("blueJetpack", ColorRGBA.Red, this.app.getAssetManager());
         redJetpack.getNode().setLocalTranslation(new Vector3f(-2f, 0f, -2f));
         redJetpack.getNode().setLocalScale(0.5f);
-        jetpack2 = redJetpack.getParticleEmitter();
         
         
         // attach boxes to rotationNode
@@ -149,13 +157,13 @@ public class Game extends AbstractAppState {
         if(attach) {
             // add key mappings
             //inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_P));
-            inputManager.addMapping("ParticleTrigger", new KeyTrigger(MouseInput.BUTTON_LEFT));
+            inputManager.addMapping("ParticleTrigger", new KeyTrigger(KeyInput.KEY_SPACE));
 
             // add the action listener
-            //inputManager.addListener(actionListener, new String[]{"Pause"});
+            inputManager.addListener(actionListener, new String[]{"ParticleTrigger"});
 
             // add the analog listener
-            inputManager.addListener(analogListener, new String[]{"ParticleTrigger"});
+            //inputManager.addListener(analogListener, new String[]{"ParticleTrigger"});
            
         } else {
             //inputManager.deleteMapping("Pause");
@@ -167,10 +175,16 @@ public class Game extends AbstractAppState {
     public void setPaused(boolean paused) {
         if(paused && !this.paused) {
             this.paused = true;
+            
+            redJetpack.pause();
+            blueJetpack.pause();
                     
             rotationControl.setPaused(paused);
         } else if(!paused && this.paused) {
             this.paused = false;
+            
+            redJetpack.unpause();
+            blueJetpack.unpause();
             
             rotationControl.setPaused(paused);
         }

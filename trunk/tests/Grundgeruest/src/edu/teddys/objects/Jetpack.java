@@ -2,14 +2,13 @@
 package edu.teddys.objects;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.effect.ParticleEmitter;
-import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
+import edu.teddys.effects.JetpackEffect;
 
 /**
  *
@@ -22,10 +21,11 @@ public class Jetpack {
     private Box box;
     private Geometry geo;
     private Material mat;
-    private ParticleEmitter pe;
+    private JetpackEffect jetpack;
     
     public Jetpack(String name, ColorRGBA color, AssetManager assetManager) {
         mother = new Node(name);
+        jetpack = new JetpackEffect("jetpack", assetManager);
         
         this.assetManager = assetManager;
         box = new Box(new Vector3f(0f, 0f, 0f), 1f, 1f, 1f);
@@ -36,32 +36,28 @@ public class Jetpack {
         geo.setMaterial(mat);
         mother.attachChild(geo);
         
-        pe = new ParticleEmitter("jetPack",
-                ParticleMesh.Type.Triangle, 30);
-        Material pmat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        pmat.setTexture("Texture", assetManager.loadTexture("Textures/Effects/Explosion/smoketrail.png"));
-        pe.setMaterial(pmat);
-        pe.setImagesX(1); pe.setImagesY(3);
-        pe.setEndColor(new ColorRGBA(1f, 0f, 0f, 1f));   // red
-        pe.setStartColor(new ColorRGBA(1f, 1f, 0f, 0.5f)); // yellow
-        pe.getParticleInfluencer().setInitialVelocity(new Vector3f(0,2,0));
-        pe.setStartSize(1.5f);
-        pe.setEndSize(0.1f);
-        pe.setGravity(0,0,0);
-        pe.setLowLife(0.5f);
-        pe.setHighLife(3f);
-        pe.getParticleInfluencer().setVelocityVariation(0.3f);
+        mother.attachChild(jetpack.getNode());
         
         
-        mother.attachChild(pe);
     }
     
     public Node getNode() {
         return mother;
     }
     
-    public ParticleEmitter getParticleEmitter() {
-        return pe;
+    public void setEnabled(boolean enable) {
+        jetpack.setEnabled(enable);
+    }
+    
+    public boolean isEnabled() {
+        return jetpack.isEnabled();
     }
         
+    public void pause() {
+        jetpack.pause();
+    }
+    
+    public void unpause() {
+        jetpack.unpause();
+    }
 }
