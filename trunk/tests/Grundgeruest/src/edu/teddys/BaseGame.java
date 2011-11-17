@@ -8,6 +8,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.renderer.RenderManager;
+import edu.teddys.controls.MappingEnums;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +30,7 @@ public class BaseGame extends SimpleApplication {
     private ActionListener actionListener = new ActionListener() {
         public void onAction(String name, boolean keyPressed, float tpf) {
             
-            if(name.equals("Menu") && !keyPressed) {
+            if(name.equals(MappingEnums.MENU.name()) && !keyPressed) {
                 if(!stateManager.getState(Menu.class).isEnabled()) {
                     
                     // if a game is running while menu is activated
@@ -111,10 +112,10 @@ public class BaseGame extends SimpleApplication {
     
     public void initKeys() {
         // add key mappings
-        inputManager.addMapping("Menu", new KeyTrigger(KeyInput.KEY_M));
+        inputManager.addMapping(MappingEnums.MENU.name(), new KeyTrigger(KeyInput.KEY_M));
         
         // add the action listener
-        inputManager.addListener(actionListener, new String[]{"Menu"});
+        inputManager.addListener(actionListener, new String[]{MappingEnums.MENU.name()});
         
     }
     

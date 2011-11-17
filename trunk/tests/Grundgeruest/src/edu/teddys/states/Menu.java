@@ -9,6 +9,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import edu.teddys.BaseGame;
+import edu.teddys.controls.MappingEnums;
 
 /**
  *
@@ -24,7 +25,7 @@ public class Menu extends AbstractAppState {
     // ActionListener
     private ActionListener actionListener = new ActionListener() {
         public void onAction(String name, boolean keyPressed, float tpf) {
-            if(name.equals("GameStart") && !keyPressed) {
+            if(name.equals(MappingEnums.GAME_START.name()) && !keyPressed) {
                 app.menuFeedback("Start Game");
             }
         }
@@ -78,13 +79,13 @@ public class Menu extends AbstractAppState {
         
         if(attach) {
             // add key mappings
-            inputManager.addMapping("GameStart", new KeyTrigger(KeyInput.KEY_RETURN));
+            inputManager.addMapping(MappingEnums.GAME_START.name(), new KeyTrigger(KeyInput.KEY_RETURN));
 
             // add the action listener
-            inputManager.addListener(actionListener, new String[]{"GameStart"});
+            inputManager.addListener(actionListener, new String[]{MappingEnums.GAME_START.name()});
            
         } else {
-            inputManager.deleteMapping("GameStart");
+            inputManager.deleteMapping(MappingEnums.GAME_START.name());
         }
         
     }
