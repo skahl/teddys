@@ -8,7 +8,8 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.renderer.RenderManager;
-import edu.teddys.controls.MappingEnums;
+import com.jme3.system.AppSettings;
+import edu.teddys.controls.MappingEnum;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +31,7 @@ public class BaseGame extends SimpleApplication {
     private ActionListener actionListener = new ActionListener() {
         public void onAction(String name, boolean keyPressed, float tpf) {
             
-            if(name.equals(MappingEnums.MENU.name()) && !keyPressed) {
+            if(name.equals(MappingEnum.MENU.name()) && !keyPressed) {
                 if(!stateManager.getState(Menu.class).isEnabled()) {
                     
                     // if a game is running while menu is activated
@@ -63,10 +64,21 @@ public class BaseGame extends SimpleApplication {
     
     public static void main(String[] args) {
         
-        BaseGame app = new BaseGame();
-        // TODO: Change the logo of the game
-        
-        app.start();
+      AppSettings settings = new AppSettings(true);
+      
+      BaseGame app = new BaseGame();
+      app.setSettings(settings);
+      settings.setTitle(GameSettings.TITLE);
+      settings.setSamples(GameSettings.MSAA);
+      settings.setVSync(GameSettings.VSYNC);
+      
+      // setIcons(new BufferedImage[]{ ImageIO.read(new File("")), …});
+      
+      app.start();
+    }
+    
+    public AppSettings getSettings() {
+      return settings;
     }
 
     @Override
@@ -112,10 +124,10 @@ public class BaseGame extends SimpleApplication {
     
     public void initKeys() {
         // add key mappings
-        inputManager.addMapping(MappingEnums.MENU.name(), new KeyTrigger(KeyInput.KEY_M));
+        inputManager.addMapping(MappingEnum.MENU.name(), new KeyTrigger(KeyInput.KEY_M));
         
         // add the action listener
-        inputManager.addListener(actionListener, new String[]{MappingEnums.MENU.name()});
+        inputManager.addListener(actionListener, new String[]{MappingEnum.MENU.name()});
         
     }
     

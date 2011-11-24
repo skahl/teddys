@@ -6,14 +6,12 @@ package edu.teddys;
 
 /**
  *
+ * Provides default settings of the application.
+ * 
  * @author cm
  */
 public class GameSettings {
   
-  /**
-   * The port on which the socket will be opened
-   */
-  public static final Integer SERVER_PORT = 6100;
   /**
    * The title displayed on the window
    */
