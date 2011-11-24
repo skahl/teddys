@@ -14,5 +14,6 @@ abstract public class Weapon {
   private Integer spread;
   private Integer range;
   private Integer accuracy;
-  private Integer spawningrate;
+  private Integer fireRate;
+  private Integer spawningRate;
 }

@@ -2,13 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.teddys.objects.box.extras;
+package edu.teddys.network;
 
 /**
  *
  * @author cm
  */
-public class Extra {
-  private String name;
-  private Integer spawningRate;
+public enum NetworkMessageType {
+  INFO,WARNING,ERROR,REQUEST,DISCONNECT,ACCEPT,REJECT
 }

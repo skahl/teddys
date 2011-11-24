@@ -10,5 +10,5 @@ package edu.teddys.objects.box.items;
  */
 public class Item {
   private String name;
-  private Integer spawningrate;
+  private Integer spawningRate;
 }

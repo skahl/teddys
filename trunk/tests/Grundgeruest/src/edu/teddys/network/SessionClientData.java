@@ -8,7 +8,7 @@ package edu.teddys.network;
  *
  * @author cm
  */
-class SessionClientData {
+public class SessionClientData {
   private Integer kills;
   private Integer deaths;
   private Integer wins;

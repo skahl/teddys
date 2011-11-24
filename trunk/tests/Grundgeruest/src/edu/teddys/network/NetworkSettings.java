@@ -12,11 +12,15 @@ package edu.teddys.network;
  */
 public class NetworkSettings {
   /**
-   * The port on which the socket will be opened
+   * The port on which the socket will be opened.
    */
   public static final Integer SERVER_PORT = 6100;
   /**
    * Use encryption for the whole communication.
    */
   public static final boolean useEncryptionIfAvailable = false;
+  /**
+   * Use the UDP communication protocol for messages.
+   */
+  public static final boolean useUDPIfAvailable = true;
 }
