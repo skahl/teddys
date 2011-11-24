@@ -1,63 +1,42 @@
-
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package edu.teddys.objects;
-
-import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
-import edu.teddys.effects.JetpackEffect;
 
 /**
  *
- * @author skahl
+ * @author cm
  */
 public class Jetpack {
-    
-    private AssetManager assetManager;
-    private Node mother;
-    private Box box;
-    private Geometry geo;
-    private Material mat;
-    private JetpackEffect jetpack;
-    
-    public Jetpack(String name, ColorRGBA color, AssetManager assetManager) {
-        mother = new Node(name);
-        jetpack = new JetpackEffect("jetpack", assetManager);
-        
-        this.assetManager = assetManager;
-        box = new Box(new Vector3f(0f, 0f, 0f), 1f, 1f, 1f);
-        geo = new Geometry("boxGeo", box);
-        
-        mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", color);
-        geo.setMaterial(mat);
-        mother.attachChild(geo);
-        
-        mother.attachChild(jetpack.getNode());
-        
-        
-    }
-    
-    public Node getNode() {
-        return mother;
-    }
-    
-    public void setEnabled(boolean enable) {
-        jetpack.setEnabled(enable);
-    }
-    
-    public boolean isEnabled() {
-        return jetpack.isEnabled();
-    }
-        
-    public void pause() {
-        jetpack.pause();
-    }
-    
-    public void unpause() {
-        jetpack.unpause();
-    }
+  
+  private Integer maxEnergy;
+  private Integer currentEnergy;
+  private boolean enabled = false;
+
+  public Integer getCurrentEnergy() {
+    return currentEnergy;
+  }
+
+  public void setCurrentEnergy(Integer currentEnergy) {
+    this.currentEnergy = currentEnergy;
+  }
+
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  public Integer getMaxEnergy() {
+    return maxEnergy;
+  }
+
+  public void setMaxEnergy(Integer maxEnergy) {
+    this.maxEnergy = maxEnergy;
+  }
+  
+  
 }

@@ -4,7 +4,6 @@ import perspectivetest.input.CrosshairControl;
 import perspectivetest.input.PlayerControl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
@@ -17,12 +16,14 @@ import com.jme3.scene.shape.Box;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
+import perspectivetest.input.Cursor;
 
 /**
  * 
  * @author besient
  */
 public class Main extends SimpleApplication {
+
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -33,7 +34,7 @@ public class Main extends SimpleApplication {
     public void simpleInitApp() {
         
         //Background        
-        Box background = new Box(new Vector3f(0, 0, 0), 5, 5, 1);
+        Box background = new Box(new Vector3f(0, 0, 0), 5, 5, 0.1f);
         Geometry backgroundGeom = new Geometry("Background", background);
 
         Material backgroundMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -45,7 +46,7 @@ public class Main extends SimpleApplication {
         //Player        
         Node playerNode = new Node("Player");
         
-        Box player = new Box(new Vector3f(0,0,0), 0.01f, 0.01f, 0.01f);
+        Box player = new Box(new Vector3f(0,0,0), 0.05f, 0.05f, 0.01f);
         Geometry playerGeom = new Geometry("Player", player);
         
         Material playerMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
@@ -53,35 +54,35 @@ public class Main extends SimpleApplication {
         playerGeom.setMaterial(playerMat);
         
         playerNode.attachChild(playerGeom);
-        playerNode.move(0,0,5);
+        playerNode.move(0,0,2);
         rootNode.attachChild(playerNode);
         
         //Crosshair
-        Box crosshair = new Box(new Vector3f(0,0,0), 0.01f, 0.01f, 0.01f);
-        Geometry crosshairGeom = new Geometry("Crosshair", crosshair);
-
-        Material crosshairMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        crosshairMat.setTexture("ColorMap", assetManager.loadTexture("Textures/fadenkreuz.png"));
-        crosshairMat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-        crosshairGeom.setMaterial(crosshairMat);
-        crosshairGeom.move(0, 0, 5);
-        playerNode.attachChild(crosshairGeom);
+        assetManager.loadTexture("Textures/fadenkreuz.png");
+        
+        Cursor cursor = new Cursor("Cursor");
+        cursor.setImage(assetManager, "Textures/fadenkreuz.png", true);
+        cursor.setHeight(64);
+        cursor.setWidth(64);
+        playerNode.attachChild(cursor);
+        
         
         //Camera
         cam.setLocation(Vector3f.ZERO);
-        cam.setParallelProjection(true);
-        
+                
         CameraNode camNode = new CameraNode("Camera", cam);
         camNode.setControlDir(ControlDirection.SpatialToCamera);
         
         playerNode.attachChild(camNode);
-        camNode.move(0,0,10);
+        camNode.move(0,0,2);
         camNode.lookAt(playerNode.getWorldTranslation(), new Vector3f(0,1,0));
         
         flyCam.setEnabled(false);
         
+        
         //Input
-        CrosshairControl cameraControl = new CrosshairControl(camNode, playerNode, crosshairGeom);
+        CrosshairControl cameraControl = new CrosshairControl(camNode, playerNode, cursor, 
+                settings.getWidth(), settings.getHeight());
         cameraControl.registerWithInput(inputManager);
         
         mouseInput.setCursorVisible(false);
@@ -100,7 +101,7 @@ public class Main extends SimpleApplication {
         setDisplayStatView(false);
         
         Element niftyElement = nifty.getCurrentScreen().findElementByName("itemLabel");
-        niftyElement.getRenderer(TextRenderer.class).setText("QuadDamage");
+        niftyElement.getRenderer(TextRenderer.class).setText("");
         
     }
 

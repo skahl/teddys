@@ -12,8 +12,8 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import edu.teddys.BaseGame;
-import edu.teddys.controls.MappingEnums;
-import edu.teddys.objects.Jetpack;
+import edu.teddys.controls.MappingEnum;
+import edu.teddys.objects.JetpackView;
 
 /**
  *
@@ -27,13 +27,13 @@ public class Game extends AbstractAppState {
   private boolean paused;
   private Node rotationNode;
   private RotationControl rotationControl;
-  private Jetpack redJetpack;
-  private Jetpack blueJetpack;
+  private JetpackView redJetpack;
+  private JetpackView blueJetpack;
   // ActionListener
   private ActionListener actionListener = new ActionListener() {
 
     public void onAction(String name, boolean keyPressed, float tpf) {
-      if (name.equals(MappingEnums.PARTICLE_TRIGGER.name()) && !keyPressed) {
+      if (name.equals(MappingEnum.PARTICLE_TRIGGER.name()) && !keyPressed) {
         if (!redJetpack.isEnabled() || !blueJetpack.isEnabled()) {
           redJetpack.setEnabled(true);
           blueJetpack.setEnabled(true);
@@ -112,12 +112,12 @@ public class Game extends AbstractAppState {
     rotationNode = new Node("rotationNode");
 
     // add blue jetpack
-    blueJetpack = new Jetpack("blueJetpack", ColorRGBA.Blue, this.app.getAssetManager());
+    blueJetpack = new JetpackView("blueJetpack", ColorRGBA.Blue, this.app.getAssetManager());
     blueJetpack.getNode().setLocalTranslation(new Vector3f(2f, 0f, -2f));
     blueJetpack.getNode().setLocalScale(0.5f);
 
     // add a red jetpack
-    redJetpack = new Jetpack("blueJetpack", ColorRGBA.Red, this.app.getAssetManager());
+    redJetpack = new JetpackView("blueJetpack", ColorRGBA.Red, this.app.getAssetManager());
     redJetpack.getNode().setLocalTranslation(new Vector3f(-2f, 0f, -2f));
     redJetpack.getNode().setLocalScale(0.5f);
 
@@ -145,17 +145,17 @@ public class Game extends AbstractAppState {
     if (attach) {
       // add key mappings
       //inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_P));
-      inputManager.addMapping(MappingEnums.PARTICLE_TRIGGER.name(), new KeyTrigger(KeyInput.KEY_SPACE));
+      inputManager.addMapping(MappingEnum.PARTICLE_TRIGGER.name(), new KeyTrigger(KeyInput.KEY_SPACE));
 
       // add the action listener
-      inputManager.addListener(actionListener, new String[]{MappingEnums.PARTICLE_TRIGGER.name()});
+      inputManager.addListener(actionListener, new String[]{MappingEnum.PARTICLE_TRIGGER.name()});
 
       // add the analog listener
       //inputManager.addListener(analogListener, new String[]{"ParticleTrigger"});
 
     } else {
       //inputManager.deleteMapping("Pause");
-      inputManager.deleteMapping(MappingEnums.PARTICLE_TRIGGER.name());
+      inputManager.deleteMapping(MappingEnum.PARTICLE_TRIGGER.name());
     }
 
   }
