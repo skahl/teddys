@@ -8,8 +8,6 @@ package edu.teddys.network;
  *
  * @author cm
  */
-public enum NetworkMessageType {
-  INFO,WARNING,ERROR,
-  REQUEST,DISCONNECT,
-  ACCEPT,REJECT
+public class NetworkData {
+  
 }

@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * @see NetworkCommunicatorAPI
  * @author cm
  */
-public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicatorAPI {
+public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicatorAPI {
   
   private com.jme3.network.Client networkClient;
 
@@ -59,7 +59,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
               String.format("Client is connected to server %s:%d.",
                 serverIP, serverPort));
     } catch (IOException ex) {
-      Logger.getLogger(NetworkCommunicatorSpidermonkeyClient.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(NetworkCommunicatorSpidermonkeyServer.class.getName()).log(Level.SEVERE, null, ex);
       return new NetworkMessage(NetworkMessageType.ERROR, ex.getMessage());
     }
   }

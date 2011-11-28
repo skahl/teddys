@@ -9,14 +9,18 @@ import com.jme3.network.MessageListener;
 
 /**
  *
+ * The listener for clients of our network implementation.
+ * 
  * @author cm
  */
-public class ClientListenerSpidermonkey implements MessageListener<Client> {
-  public void messageReceived(Client source, Message message) {
+public class ClientListenerSpidermonkey implements MessageListener<com.jme3.network.Client> {
+  public void messageReceived(com.jme3.network.Client source, Message message) {
     if(message instanceof NetworkMessageSpidermonkey) {
       NetworkMessageSpidermonkey msg = (NetworkMessageSpidermonkey)message;
-      System.out.println(msg.getData().getMessage());
+      NetworkData data = msg.getData();
+      if(data instanceof NetworkMessage) {
+        System.out.println(((NetworkMessage)data).getMessage());
+      }
     }
   }
-  
 }

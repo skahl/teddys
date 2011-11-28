@@ -8,7 +8,7 @@ package edu.teddys.network;
  *
  * @author cm
  */
-public class NetworkMessage {
+public class NetworkMessage extends NetworkData {
 
   private NetworkMessageType type;
   private String message;

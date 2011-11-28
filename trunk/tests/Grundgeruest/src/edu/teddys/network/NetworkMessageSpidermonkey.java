@@ -14,18 +14,18 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class NetworkMessageSpidermonkey extends AbstractMessage {
 
-  private NetworkMessage data;
+  private NetworkData data;
 
   public NetworkMessageSpidermonkey() {
     setReliable(NetworkSettings.useUDPIfAvailable);
   }
 
-  public NetworkMessageSpidermonkey(NetworkMessage message) {
+  public NetworkMessageSpidermonkey(NetworkData message) {
     this();
     this.data = message;
   }
   
-  public NetworkMessage getData() {
+  public NetworkData getData() {
     return data;
   }
 }

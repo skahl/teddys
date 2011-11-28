@@ -8,8 +8,7 @@ package edu.teddys.network;
  *
  * @author cm
  */
-public enum NetworkMessageType {
-  INFO,WARNING,ERROR,
-  REQUEST,DISCONNECT,
-  ACCEPT,REJECT
+public enum NetworkEventTypes {
+  TRIGGER_WEAPON, TRIGGER_ITEM,
+  LOAD_MAP
 }
