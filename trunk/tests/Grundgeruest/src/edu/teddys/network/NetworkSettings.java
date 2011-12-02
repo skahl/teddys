@@ -18,9 +18,14 @@ public class NetworkSettings {
   /**
    * Use encryption for the whole communication.
    */
-  public static final boolean useEncryptionIfAvailable = false;
+  public static final boolean USE_ENCRYPTION_IF_AVAIL = false;
   /**
    * Use the UDP communication protocol for messages.
    */
-  public static final boolean useUDPIfAvailable = true;
+  public static final boolean USE_UDP = true;
+  /**
+   * The ID of the server regarding network communication. Default: 0, clients
+   * have to be given IDs > 0.
+   */
+  public static final Integer SERVER_ID = 0;
 }
