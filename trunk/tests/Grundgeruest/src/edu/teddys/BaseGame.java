@@ -12,6 +12,7 @@ import com.jme3.network.serializing.Serializer;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 import edu.teddys.controls.MappingEnum;
+import edu.teddys.network.HealthListenerTest;
 import edu.teddys.network.NetworkCommunicatorSpidermonkeyClient;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.TeddyServer;
@@ -131,6 +132,12 @@ public class BaseGame extends SimpleApplication {
 //    
 //    server.stopServer();
 //    System.out.println("Server stopped.");
+    
+    System.out.println("Testing attribute listener ...");
+    client.registerListener("health", new HealthListenerTest());
+    System.out.println("Listener registered. Setting health to 50 ...");
+    client.setHealth(50);
+    System.out.println("Done.");
   }
   
   private void initSerializer() {

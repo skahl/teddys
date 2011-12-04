@@ -5,7 +5,6 @@
 package edu.teddys.network;
 
 import edu.teddys.network.messages.NetworkMessage;
-import edu.teddys.network.messages.NetworkMessageInfo;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,6 +69,8 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   }
 
   public void send(NetworkMessage message) {
+    //TODO check if a recipient field is available
+    
     networkServer.broadcast(message);
   }
 

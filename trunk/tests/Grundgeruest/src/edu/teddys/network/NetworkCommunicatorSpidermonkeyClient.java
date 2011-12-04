@@ -6,7 +6,6 @@ package edu.teddys.network;
 
 import com.jme3.network.Client;
 import edu.teddys.network.messages.NetworkMessage;
-import edu.teddys.network.messages.NetworkMessageInfo;
 import java.io.IOException;
 import java.util.Date;
 import java.util.logging.Level;

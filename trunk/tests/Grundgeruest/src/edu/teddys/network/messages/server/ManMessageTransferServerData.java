@@ -5,7 +5,7 @@
 package edu.teddys.network.messages.server;
 
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.network.NetworkSettings;
+import edu.teddys.network.TeddyServerData;
 import edu.teddys.network.messages.NetworkMessageManipulation;
 
 /**
@@ -15,8 +15,22 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 @Serializable
 public class ManMessageTransferServerData extends NetworkMessageManipulation {
 
-//  private ServerData data;
+  private TeddyServerData data;
   
   public ManMessageTransferServerData() {
+    super();
+  }
+  
+  public ManMessageTransferServerData(TeddyServerData data) {
+    super();
+    setData(data);
+  }
+
+  public TeddyServerData getData() {
+    return data;
+  }
+
+  private void setData(TeddyServerData data) {
+    this.data = data;
   }
 }

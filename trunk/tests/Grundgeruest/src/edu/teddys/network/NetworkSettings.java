@@ -12,6 +12,10 @@ package edu.teddys.network;
  */
 public class NetworkSettings {
   /**
+   * The default value for server connection. Used for development issues yet.
+   */
+  public static final String DEFAULT_SERVER = "127.0.0.1";
+  /**
    * The port on which the socket will be opened.
    */
   public static final Integer SERVER_PORT = 6100;

@@ -14,13 +14,15 @@ import edu.teddys.network.messages.NetworkMessageResponse;
 @Serializable
 public class ResMessageSendChecksum extends NetworkMessageResponse {
 
+  private String token;
   private String checksum;
 
-  public ResMessageSendChecksum(String checksum) {
-    if (checksum == null) {
-      throw new InstantiationError("Checksum not specified!");
+  public ResMessageSendChecksum(String token, String checksum) {
+    if (checksum == null || token == null) {
+      throw new InstantiationError("Checksum or token not specified!");
     }
     setChecksum(checksum);
+    setToken(token);
   }
 
   public String getChecksum() {
@@ -29,5 +31,13 @@ public class ResMessageSendChecksum extends NetworkMessageResponse {
 
   private void setChecksum(String checksum) {
     this.checksum = checksum;
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  private void setToken(String token) {
+    this.token = token;
   }
 }

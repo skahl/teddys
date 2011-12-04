@@ -36,7 +36,7 @@ public class TeddyClient implements NetworkCommunicatorAPI {
   /**
    * Server ip the client uses for the gameplay.
    */
-  private String serverIP = "127.0.0.1";
+  private String serverIP = NetworkSettings.DEFAULT_SERVER;
   /**
    * Public key of the server for the encryption.
    */
@@ -117,6 +117,10 @@ public class TeddyClient implements NetworkCommunicatorAPI {
 
   public void setCurrentItem(Item currentItem) {
     this.currentItem = currentItem;
+    //TODO check
+    for(AttributeListener listener : listeners.get(String.valueOf(currentItem))) {
+      listener.attributeChanged(currentItem);
+    }
   }
 
   public Integer getCurrentWeapon() {
@@ -125,6 +129,10 @@ public class TeddyClient implements NetworkCommunicatorAPI {
 
   public void setCurrentWeapon(Integer currentWeapon) {
     this.currentWeapon = currentWeapon;
+    //TODO check
+    for(AttributeListener listener : listeners.get(String.valueOf(currentWeapon))) {
+      listener.attributeChanged(currentWeapon);
+    }
   }
 
   public Integer getHealth() {
@@ -134,7 +142,7 @@ public class TeddyClient implements NetworkCommunicatorAPI {
   public void setHealth(Integer health) {
     this.health = health;
     //TODO check
-    for(AttributeListener listener : listeners.get(health.toString())) {
+    for(AttributeListener listener : listeners.get(String.valueOf(health))) {
       listener.attributeChanged(health);
     }
   }
