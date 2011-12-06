@@ -11,6 +11,6 @@ package edu.teddys.network;
 public class HealthListenerTest implements AttributeListener<Integer> {
 
   public void attributeChanged(Integer value) {
-    System.out.println("Health changed to " + value + "!");
+    System.out.println("Listener: Health changed to " + value + "!");
   }
 }

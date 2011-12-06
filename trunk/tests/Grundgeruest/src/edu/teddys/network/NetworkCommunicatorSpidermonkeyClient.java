@@ -32,29 +32,26 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
   }
 
   private NetworkCommunicatorSpidermonkeyClient() {
-    // The serializer must be called to know what class can be persisted.
-//    Serializer.registerClass(NetworkMessage.class);
   }
 
   public String getPubKey(String pubKeyClient) {
-    //TODO: Use a socket connection for the encryption part
+    //TODO encrypt the messages before broadcasting with given public key?
     return "";
   }
 
   public void send(NetworkMessage message) {
-    //TODO send a message request to the server in order to inform all users
     networkClient.send(message);
   }
 
   public boolean join() {
+    TeddyClient client = TeddyClient.getInstance();
     // Check for active connection
     if (networkClient != null) {
       if (networkClient.isConnected()) {
-//        throw new RuntimeException("TeddyClient is already connected!");
-        return false;
+        // close connection
+        disconnect(client);
       }
     }
-    TeddyClient client = TeddyClient.getInstance();
     // Get the server settings
     String serverIP = client.getServerIP();
     Integer serverPort = NetworkSettings.SERVER_PORT;
@@ -68,8 +65,17 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
       networkClient.start();
       if(networkClient.isConnected()) {
         System.out.println("Client is connected. Setting the appropriate ID ...");
+        //TODO use the client state listener?
       } else {
-        System.out.println("Not fully connected.");
+        System.out.println("Not fully connected yet.");
+      }
+      while(networkClient.getId() == -1) {
+        try {
+          //TODO use state listener instead of polling?
+          Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+          Logger.getLogger(NetworkCommunicatorSpidermonkeyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
       }
       // Get the ID from the server
       client.setId(networkClient.getId());
@@ -78,7 +84,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
       // Configure the client to receive messages
       networkClient.addMessageListener(new ClientListener());
       // Well done!
-      System.out.println("Client is connected!!");
+      System.out.println("Client is connected!");
       return true;
     } catch (IOException ex) {
       Logger.getLogger(NetworkCommunicatorSpidermonkeyClient.class.getName()).log(Level.SEVERE, null, ex);

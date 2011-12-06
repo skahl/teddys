@@ -74,6 +74,9 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
     networkServer.broadcast(message);
   }
 
+  /*
+   * TODO use the client state listener for this purpose?
+   */
   public boolean join() {
 //    // Check for active connection
 //    if(networkServer != null) {
