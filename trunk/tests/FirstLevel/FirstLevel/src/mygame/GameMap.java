@@ -32,25 +32,28 @@ public class GameMap {
     private CollisionShape sceneShape;
     
     public GameMap(String mapPath, Main app) {
+        //mapPath = "Models/firstlevel/firstlevel.j3o";
         
         try {
         
         mapModel = (Node)app.getAssetManager().loadModel(mapPath);
         mapModel.center();
         mapModel.getLocalRotation().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_Y);
-        //mapModel.setLocalTranslation(0f, 0f, 0f);
+        
+        
         
         // enable alpha blending
         // not necessary due to MultiSampling and renderManager.setAlphaToCoverage
-        /**
+        
         for(Spatial geom : mapModel.getChildren()) {
             if(geom instanceof Geometry) {
                 Material mat = ((Geometry)geom).getMaterial();
                 
+                mat.getAdditionalRenderState().setAlphaTest(true);
                 mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
                 geom.setQueueBucket(Bucket.Transparent);
             }
-        }**/
+        }
         
         sceneShape = CollisionShapeFactory.createMeshShape(mapModel);
         mapPhysics = new RigidBodyControl(sceneShape, 0);

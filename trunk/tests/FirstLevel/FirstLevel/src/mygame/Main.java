@@ -2,6 +2,7 @@ package mygame;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.light.AmbientLight;
 import com.jme3.renderer.RenderManager;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
@@ -22,8 +23,8 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        renderManager.setAlphaToCoverage(true);
-        pssmRenderer = new PssmShadowRenderer(assetManager, 1024, 3);
+        //renderManager.setAlphaToCoverage(true);
+        pssmRenderer = new PssmShadowRenderer(assetManager, 512, 3);
         
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
@@ -35,17 +36,21 @@ public class Main extends SimpleApplication {
         this.getCamera().lookAtDirection(Vector3f.UNIT_Z, Vector3f.UNIT_Y);
         
         // init lights
-        Vector3f sunDirection = new Vector3f(1f, -1f, 2f);
+        Vector3f sunDirection = new Vector3f(1f, -1f, 1.5f);
         sunDirection.normalizeLocal();
         
         DirectionalLight sunL = new DirectionalLight();
-        sunL.setColor(ColorRGBA.White.mult(2f));
+        sunL.setColor(ColorRGBA.White.mult(1.3f));
         sunL.setDirection(sunDirection);
         rootNode.addLight(sunL);
         
-        pssmRenderer.setDirection(sunDirection);
+        AmbientLight sunA = new AmbientLight();
+        sunA.setColor(ColorRGBA.White.mult(0.5f));
+        rootNode.addLight(sunA);
         
-        //viewPort.addProcessor(pssmRenderer);
+        // add shadow renderer
+        pssmRenderer.setDirection(sunDirection);
+        viewPort.addProcessor(pssmRenderer);
     }
     
     
