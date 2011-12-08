@@ -13,24 +13,29 @@ import java.util.List;
  * @author cm
  */
 @Serializable
-
-public class ReqMessageRequestChecksum extends NetworkMessageRequest {
+public class ReqMessageSendChecksum extends NetworkMessageRequest {
 
   private String token = null;
   private List<String> files = null;
   private Integer destination = null;
 
-  public ReqMessageRequestChecksum(String token, List<String> files, Integer destination) {
+  public ReqMessageSendChecksum() {
+    super();
+  }
+
+  public ReqMessageSendChecksum(String token, List<String> files, Integer destination) {
     this(token, files);
     setDestination(destination);
   }
 
-  public ReqMessageRequestChecksum(String token, List<String> files) {
-    if(token == null || token.isEmpty() || files == null || files.isEmpty()) {
+  public ReqMessageSendChecksum(String token, List<String> files) {
+    if (token == null || token.isEmpty() || files == null || files.isEmpty()) {
       throw new InstantiationError("Some files must be specified to send a request!");
     }
     setFiles(files);
     setToken(token);
+    //TODO change!!!
+    setDestination(0);
   }
 
   public List<String> getFiles() {

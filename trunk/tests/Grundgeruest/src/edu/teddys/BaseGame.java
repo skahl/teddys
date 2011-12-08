@@ -18,9 +18,12 @@ import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageInfo;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
+import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
+import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
+import edu.teddys.protection.ChecksumManager;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -126,6 +129,9 @@ public class BaseGame extends SimpleApplication {
       return;
     }
     
+    ChecksumManager.startTimer();
+    System.out.println("Checksum timer started.");
+    
     System.out.println("Sending message ...");
     NetworkMessageInfo info = new NetworkMessageInfo("Testus est.", null);
 //    NetworkCommunicatorSpidermonkeyClient.getInstance().getNetworkClient().send(info);
@@ -149,7 +155,9 @@ public class BaseGame extends SimpleApplication {
     TeddyClient.getInstance().send(msgDam);
     TeddyClient.getInstance().send(msgDam);
     
-    client.disconnect(client);
+//    client.disconnect(client);
+    
+//    ChecksumManager.stopTimer();
   }
   
   private void initSerializer() {
@@ -159,7 +167,8 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(ManMessageSendDamage.class);
     Serializer.registerClass(ResMessageSendClientData.class);
     Serializer.registerClass(ReqMessageSendClientData.class);
-    Serializer.registerClass(ManMessageTriggerWeapon.class);
+    Serializer.registerClass(ReqMessageSendChecksum.class);
+    Serializer.registerClass(ResMessageSendChecksum.class);
     //TODO add the other ones
   }
 

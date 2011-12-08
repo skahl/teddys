@@ -59,13 +59,15 @@ public class ServerListener implements MessageListener<HostedConnection> {
       }
     } else if (message instanceof NetworkMessageResponse) {
       if (message instanceof ResMessageSendChecksum) {
+        System.out.println("Received ResMessageSendChecksum ...");
         ResMessageSendChecksum msg = (ResMessageSendChecksum) message;
         if (ChecksumManager.checkChecksum(msg.getToken(), msg.getChecksum())) {
           System.out.println("Yeah, checksum is right!");
         } else {
           System.out.println("What the ...? Checksum has to be 1!");
-          System.out.println("As soon as the function is implemented, you'll be kicked.");
-          //TODO Close active connection for the client
+          // This listener could kick the client directly, but for disallocating
+          // reasons, use the server method.
+          TeddyServer.getInstance().disconnect(source.getId());
         }
       } else if (message instanceof ResMessageMapLoaded) {
         //TODO Sync with the other clients
@@ -73,8 +75,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
         TeddyServer.getInstance().send(msg);
         //TODO Check how many clients are ready yet to start the game occassionally.
         // (use TeddyServerData)
-      } else if(message instanceof ResMessageSendClientData) {
-        ResMessageSendClientData msg = (ResMessageSendClientData)message;
+      } else if (message instanceof ResMessageSendClientData) {
+        ResMessageSendClientData msg = (ResMessageSendClientData) message;
         // Tell the server to update the data
         TeddyClient data = msg.getClientData();
         Integer clientID = data.getId();
@@ -82,7 +84,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManMessageSendPosition) {
-        ManMessageSendPosition msg = (ManMessageSendPosition)message;
+        ManMessageSendPosition msg = (ManMessageSendPosition) message;
         //TODO redistibute to the other clients
         TeddyServer.getInstance().send(msg);
         //TODO also transfer jumps

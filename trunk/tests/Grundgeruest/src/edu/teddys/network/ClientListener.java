@@ -23,7 +23,7 @@ import edu.teddys.network.messages.server.ManMessageTriggerEffect;
 import edu.teddys.network.messages.server.ReqMessageMapRequest;
 import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.network.messages.server.ReqMessageRelocateServer;
-import edu.teddys.network.messages.server.ReqMessageRequestChecksum;
+import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 
 /**
@@ -37,10 +37,11 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
   public void messageReceived(com.jme3.network.Client source, Message message) {
     if (message instanceof NetworkMessageInfo) {
       NetworkMessageInfo info = (NetworkMessageInfo) message;
+      //TODO use a method to find the ingame name of the teddy
       System.out.println(String.format(
-              "Message received at X from client %s: %s",
+              "Teddy %s says: %s",
 //              info.getTimestamp(),
-              source,
+              source.getId(),
               info.getMessage()));
       //TODO display in the HUD
     } else if(message instanceof NetworkMessageGameState) {
@@ -89,14 +90,15 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         } else {
           //TODO prepare to (seamlessly?) join the new server.
         }        
-      } else if(message instanceof ReqMessageRequestChecksum) {
-        ReqMessageRequestChecksum msg = (ReqMessageRequestChecksum)message;
+      } else if(message instanceof ReqMessageSendChecksum) {
+        ReqMessageSendChecksum msg = (ReqMessageSendChecksum)message;
         //TODO calculate the checksum (use a dummy value now)
         ResMessageSendChecksum response = new ResMessageSendChecksum(msg.getToken(), "1");
         TeddyClient.getInstance().send(response);
       } else if(message instanceof ReqMessageSendClientData) {
-        ResMessageSendClientData response = new ResMessageSendClientData(TeddyClient.getInstance());
-        TeddyClient.getInstance().send(response);
+        System.out.println("Client should send the data now ...");
+//        ResMessageSendClientData response = new ResMessageSendClientData(TeddyClient.getInstance());
+//        TeddyClient.getInstance().send(response);
       }
     }
   }

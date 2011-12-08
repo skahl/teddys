@@ -36,10 +36,9 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     NetworkCommunicatorSpidermonkeyServer.getInstance().startServer(this);
     data = new TeddyServerData();
     data.setCreated(new Date());
-    //TODO check
     data.setDiscoverable(true);
     //TODO check
-    data.setName("Todesangst");
+//    data.setName("Todesangst");
     //TODO set game mode
   }
   
@@ -54,6 +53,9 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   }
 
   public void send(NetworkMessage message) {
+    if(!getData().isDiscoverable()) {
+      System.err.println("TeddyServer not discoverable! Message not sent.");
+    }
     NetworkCommunicatorSpidermonkeyServer.getInstance().send(message);
   }
 
@@ -63,6 +65,22 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   }
 
   public void disconnect(TeddyClient client) {
+  }
+
+  public void disconnect(Integer client, String reason) {
+    HostedConnection conn = getData().getConnections().get(client);
+    if(conn == null) {
+      return;
+    }
+    conn.close(reason);
+  }
+
+  public void disconnect(Integer client) {
+    HostedConnection conn = getData().getConnections().get(client);
+    if(conn == null) {
+      return;
+    }
+    conn.close(null);
   }
 
   protected TeddyServerData getData() {

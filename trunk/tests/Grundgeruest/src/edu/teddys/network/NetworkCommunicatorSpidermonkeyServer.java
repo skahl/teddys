@@ -105,7 +105,5 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
     }
     //TODO
     System.out.println("Client should be disconnected!");
-  }
-
-  
+  }  
 }
