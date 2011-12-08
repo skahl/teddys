@@ -1,0 +1,1 @@
+In order to run this test environment, copy firstlevel.zip into the maps directory here.

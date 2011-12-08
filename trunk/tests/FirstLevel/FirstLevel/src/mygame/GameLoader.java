@@ -11,8 +11,8 @@ import com.jme3.asset.plugins.ZipLocator;
  */
 public class GameLoader {
     
-    GameMap gameMap;
-    GameMapConfig gameMapCfg;
+    private GameMap gameMap;
+    private GameMapConfig gameMapCfg;
     
     
     
