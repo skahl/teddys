@@ -23,7 +23,6 @@ import edu.teddys.network.messages.server.ReqMessageMapRequest;
 import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageRequestChecksum;
-import edu.teddys.states.Pause;
 
 /**
  *
@@ -63,7 +62,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       } else if(message instanceof ManMessageSendDamage) {
         ManMessageSendDamage msg = (ManMessageSendDamage)message;
         if(msg.getClient().equals(TeddyClient.getInstance().getId())) {
-          TeddyClient.getInstance().setHealth(msg.getDamage());
+          TeddyClient.getInstance().addDamage(msg.getDamage());
         }
       } else if(message instanceof ManMessageTransferServerData) {
         //overwrite the current data

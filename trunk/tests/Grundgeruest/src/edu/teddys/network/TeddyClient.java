@@ -152,6 +152,17 @@ public class TeddyClient implements NetworkCommunicatorAPI {
   public Integer getHealth() {
     return health;
   }
+  
+  public void addDamage(Integer damage) {
+    Integer newHealth = getHealth()-damage;
+    if(newHealth > 0) {
+      setHealth(newHealth);
+      return;
+    }
+    // You're dead, fag!
+    //TODO implement logic for this event
+    System.out.println("Your teddy is dead! Muahahaha!");
+  }
 
   public void setHealth(Integer health) {
     this.health = health;

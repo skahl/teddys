@@ -84,7 +84,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
       // Configure the client to receive messages
       networkClient.addMessageListener(new ClientListener());
       // Well done!
-      System.out.println("Client is connected!");
+      System.out.println("Client is fully connected!");
       return true;
     } catch (IOException ex) {
       Logger.getLogger(NetworkCommunicatorSpidermonkeyClient.class.getName()).log(Level.SEVERE, null, ex);

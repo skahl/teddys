@@ -15,22 +15,26 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 public class ManMessageTriggerWeapon extends NetworkMessageManipulation {
 
   private String weaponName;
-  private Integer[] clientIDs;
+  private Integer[] targets;
 
-  public ManMessageTriggerWeapon(String weapon, Integer[] clients) {
+  public ManMessageTriggerWeapon(String weapon, Integer[] targets) {
     if (weapon == null) {
       throw new InstantiationError("Weapon not specified!");
     }
     setWeaponName(weapon);
-    setClientIDs(clients);
+    setTargets(targets);
+  }
+  
+  public ManMessageTriggerWeapon() {
+    super();
   }
 
-  public Integer[] getClientIDs() {
-    return clientIDs;
+  public Integer[] getTargets() {
+    return targets;
   }
 
-  private void setClientIDs(Integer[] clientIDs) {
-    this.clientIDs = clientIDs;
+  private void setTargets(Integer[] clientIDs) {
+    this.targets = clientIDs;
   }
 
   public String getWeaponName() {

@@ -25,6 +25,10 @@ public class ManMessageSendDamage extends NetworkMessageManipulation {
     setClient(client);
     setDamage(damage);
   }
+  
+  public ManMessageSendDamage() {
+    super();
+  }
 
   public Integer getClient() {
     return client;

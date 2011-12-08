@@ -7,17 +7,17 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.network.Client;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 import edu.teddys.controls.MappingEnum;
 import edu.teddys.network.HealthListenerTest;
-import edu.teddys.network.NetworkCommunicatorSpidermonkeyClient;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageInfo;
+import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
+import edu.teddys.network.messages.server.ManMessageSendDamage;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -138,11 +138,18 @@ public class BaseGame extends SimpleApplication {
     System.out.println("Listener registered. Setting health to 50 ...");
     client.setHealth(50);
     System.out.println("Done.");
+    
+    //TEST trigger weapon
+    ManMessageTriggerWeapon msgDam = new ManMessageTriggerWeapon("bla", null);
+    TeddyClient.getInstance().send(msgDam);
+    TeddyClient.getInstance().send(msgDam);
   }
   
   private void initSerializer() {
     Serializer.registerClass(NetworkMessage.class);
     Serializer.registerClass(NetworkMessageInfo.class);
+    Serializer.registerClass(ManMessageTriggerWeapon.class);
+    Serializer.registerClass(ManMessageSendDamage.class);
     //TODO add the other ones
   }
 

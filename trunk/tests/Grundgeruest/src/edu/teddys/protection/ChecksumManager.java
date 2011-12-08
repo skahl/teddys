@@ -39,6 +39,8 @@ public class ChecksumManager {
   }
   
   protected void sendRequest() {
+    //TODO Token generation for each client? Would add a bit more security
+    //TODO Generate a token randomly!
     String currentToken = "312";
     List<String> currentFiles = new ArrayList<String>();
     //TODO add randomly files

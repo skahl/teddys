@@ -18,6 +18,12 @@ public class ReqMessageRequestChecksum extends NetworkMessageRequest {
 
   private String token = null;
   private List<String> files = null;
+  private Integer destination = null;
+
+  public ReqMessageRequestChecksum(String token, List<String> files, Integer destination) {
+    this(token, files);
+    setDestination(destination);
+  }
 
   public ReqMessageRequestChecksum(String token, List<String> files) {
     if(token == null || token.isEmpty() || files == null || files.isEmpty()) {
@@ -41,5 +47,13 @@ public class ReqMessageRequestChecksum extends NetworkMessageRequest {
 
   private void setToken(String token) {
     this.token = token;
+  }
+
+  public Integer getDestination() {
+    return destination;
+  }
+
+  private void setDestination(Integer destination) {
+    this.destination = destination;
   }
 }
