@@ -40,11 +40,11 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
     }
   }
   
-  public void startServer() {
+  public void startServer(TeddyServer server) {
     if(!networkServer.isRunning()) {
       networkServer.start();
       System.out.println("Server started!");
-      
+      networkServer.addConnectionListener(server);
     }
   }
   

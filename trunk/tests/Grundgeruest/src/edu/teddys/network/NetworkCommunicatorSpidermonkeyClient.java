@@ -40,6 +40,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
   }
 
   public void send(NetworkMessage message) {
+    //TODO check if the client is in the list of active connections ...
     networkClient.send(message);
   }
 

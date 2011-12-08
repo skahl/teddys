@@ -21,8 +21,16 @@ public class NetworkMessageInfo extends NetworkMessage {
   }
   
   public NetworkMessageInfo(String message, Integer[] recipients) {
+    super();
+    if(message == null || message.isEmpty()) {
+      throw new InstantiationError("Message can't be null or empty!");
+    }
     setMessage(message);
     setRecipients(recipients);
+  }
+  
+  public NetworkMessageInfo(String message) {
+    this(message, null);
   }
 
   public String getMessage() {

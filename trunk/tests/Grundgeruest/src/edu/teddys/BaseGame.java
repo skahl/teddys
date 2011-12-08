@@ -11,13 +11,16 @@ import com.jme3.network.serializing.Serializer;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
 import edu.teddys.controls.MappingEnum;
+import edu.teddys.network.DeathTest;
 import edu.teddys.network.HealthListenerTest;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageInfo;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
+import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
+import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -134,7 +137,8 @@ public class BaseGame extends SimpleApplication {
 //    System.out.println("Server stopped.");
     
     System.out.println("Testing attribute listener ...");
-    client.registerListener("health", new HealthListenerTest());
+    client.registerListener(TeddyClient.ListenerFields.health, new HealthListenerTest());
+    client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
     System.out.println("Listener registered. Setting health to 50 ...");
     client.setHealth(50);
     System.out.println("Done.");
@@ -143,6 +147,9 @@ public class BaseGame extends SimpleApplication {
     ManMessageTriggerWeapon msgDam = new ManMessageTriggerWeapon("bla", null);
     TeddyClient.getInstance().send(msgDam);
     TeddyClient.getInstance().send(msgDam);
+    TeddyClient.getInstance().send(msgDam);
+    
+    client.disconnect(client);
   }
   
   private void initSerializer() {
@@ -150,6 +157,9 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(NetworkMessageInfo.class);
     Serializer.registerClass(ManMessageTriggerWeapon.class);
     Serializer.registerClass(ManMessageSendDamage.class);
+    Serializer.registerClass(ResMessageSendClientData.class);
+    Serializer.registerClass(ReqMessageSendClientData.class);
+    Serializer.registerClass(ManMessageTriggerWeapon.class);
     //TODO add the other ones
   }
 

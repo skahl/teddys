@@ -69,8 +69,10 @@
             </task>
         </task>
         <task id="24" name="Pre-Alpha" color="#8cb6ce" meeting="false" start="2011-11-10" duration="6" complete="0" priority="1" expand="true">
+            <depend id="37" type="2" difference="3" hardness="Strong"/>
+            <depend id="73" type="2" difference="0" hardness="Strong"/>
             <task id="25" name="Projekt-Grundgerüst aufbauen" color="#8cb6ce" meeting="false" start="2011-11-10" duration="3" complete="0" priority="1" expand="true"/>
-            <task id="26" name="Netzwerkfunktionalität" color="#8cb6ce" meeting="false" start="2011-11-10" duration="4" complete="0" priority="1" expand="true">
+            <task id="26" name="Netzwerkfunktionalität" color="#8cb6ce" meeting="false" start="2011-11-10" duration="5" complete="0" priority="1" expand="true">
                 <notes><![CDATA[Headless Server.
 Ständig Ping messen und mitteln.
 Statusreplikation an Clients.
@@ -94,14 +96,15 @@ Abhängig von Latenz wird bei Verbindungsabbruch auf Clients gecheckt, ob der ak
                 <depend id="38" type="2" difference="0" hardness="Strong"/>
             </task>
             <task id="36" name="Steuerung der Modellfigur" meeting="false" start="2011-12-01" duration="4" complete="0" priority="1" expand="true"/>
-            <task id="37" name="Jetpack-Integration" meeting="false" start="2011-12-01" duration="4" complete="0" priority="1" expand="true"/>
+            <task id="37" name="Jetpack-Integration" meeting="false" start="2011-12-11" duration="4" complete="0" priority="1" expand="true"/>
             <task id="38" name="Erste Waffe" meeting="false" start="2011-12-08" duration="2" complete="0" priority="1" expand="true"/>
-            <task id="39" name="Weiterentwickeltes HUD" meeting="false" start="2011-12-01" duration="5" complete="0" priority="1" expand="true"/>
+            <task id="39" name="Weiterentwickeltes HUD" meeting="false" start="2011-12-01" duration="4" complete="0" priority="1" expand="true"/>
             <task id="40" name="Dummy-Gegner" meeting="false" start="2011-12-01" duration="2" complete="0" priority="1" expand="true"/>
             <task id="41" name="Kollisionshandling" meeting="false" start="2011-12-01" duration="7" complete="0" priority="1" expand="true"/>
+            <task id="73" name="Netzwerkausbau" color="#8cb6ce" meeting="false" start="2011-12-01" duration="7" complete="0" priority="1" expand="true"/>
         </task>
         <task id="42" name="[MS] Alpha-Release" color="#000000" meeting="true" start="2011-12-29" duration="1" complete="0" priority="1" expand="true"/>
-        <task id="43" name="Beta" color="#8cb6ce" meeting="false" start="2012-01-05" duration="9" complete="0" thirdDate="2012-01-01" thirdDate-constraint="1" priority="1" expand="true">
+        <task id="43" name="Beta" color="#8cb6ce" meeting="false" start="2011-12-29" duration="9" complete="0" thirdDate="2012-01-01" thirdDate-constraint="1" priority="1" expand="true">
             <task id="44" name="Ein fertiges Level" meeting="false" start="2011-12-29" duration="9" complete="0" priority="1" expand="true"/>
             <task id="45" name="Effekte" meeting="false" start="2011-12-29" duration="9" complete="0" priority="1" expand="true"/>
             <task id="46" name="Erste Items" meeting="false" start="2011-12-29" duration="7" complete="0" priority="1" expand="true"/>
@@ -204,11 +207,13 @@ Abhängig von Latenz wird bei Verbindungsabbruch auf Clients gecheckt, ob der ak
         <allocation task-id="35" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="36" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="36" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="37" resource-id="4" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="37" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="38" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="39" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="40" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="41" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
+        <allocation task-id="73" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="44" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="45" resource-id="5" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="46" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>

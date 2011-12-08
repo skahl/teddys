@@ -11,7 +11,7 @@ import edu.teddys.objects.weapons.Weapon;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +24,8 @@ public class TeddyClient implements NetworkCommunicatorAPI {
   /**
    * Field identifiers for the listeners. Info: Use this idents for the listeners!
    */
-  enum ListenerFields {
-    health,currentItem,currentWeapon
+  public enum ListenerFields {
+    health,currentItem,currentWeapon,isDead
   };
   
   /**
@@ -91,7 +91,7 @@ public class TeddyClient implements NetworkCommunicatorAPI {
    * listener HealthListener could watch the changes of health since it 
    * is notified on calls of setHealth().
    */
-  private Map<String,List<AttributeListener>> listeners = new HashMap<String,List<AttributeListener>>();
+  private Map<ListenerFields,List<AttributeListener>> listeners = new EnumMap<ListenerFields,List<AttributeListener>>(ListenerFields.class);
   
   private static TeddyClient instance = null;
   
@@ -106,10 +106,9 @@ public class TeddyClient implements NetworkCommunicatorAPI {
     return instance;
   }
   
-  public void registerListener(String field, AttributeListener listener) {
+  public void registerListener(ListenerFields field, AttributeListener listener) {
     // additional check for "permitted" fields
-    ListenerFields ident = ListenerFields.valueOf(field);
-    if(ident == null) {
+    if(field == null) {
       return;
     }
     if(!listeners.containsKey(field)) {
@@ -133,7 +132,7 @@ public class TeddyClient implements NetworkCommunicatorAPI {
 
   public void setCurrentItem(Item currentItem) {
     this.currentItem = currentItem;
-    for(AttributeListener listener : listeners.get(ListenerFields.currentItem.name())) {
+    for(AttributeListener listener : listeners.get(ListenerFields.currentItem)) {
       listener.attributeChanged(currentItem);
     }
   }
@@ -144,7 +143,7 @@ public class TeddyClient implements NetworkCommunicatorAPI {
 
   public void setCurrentWeapon(Integer currentWeapon) {
     this.currentWeapon = currentWeapon;
-    for(AttributeListener listener : listeners.get(ListenerFields.currentWeapon.name())) {
+    for(AttributeListener listener : listeners.get(ListenerFields.currentWeapon)) {
       listener.attributeChanged(currentWeapon);
     }
   }
@@ -153,6 +152,14 @@ public class TeddyClient implements NetworkCommunicatorAPI {
     return health;
   }
   
+  /**
+   * 
+   * Adds the specified damage value to the current teddy. Checks also if
+   * the teddy is dead from now on and notifies all listeners of that fact 
+   * if so.
+   * 
+   * @param damage Positive value as it is the damage to the teddy
+   */
   public void addDamage(Integer damage) {
     Integer newHealth = getHealth()-damage;
     if(newHealth > 0) {
@@ -160,13 +167,14 @@ public class TeddyClient implements NetworkCommunicatorAPI {
       return;
     }
     // You're dead, fag!
-    //TODO implement logic for this event
-    System.out.println("Your teddy is dead! Muahahaha!");
+    for(AttributeListener listener : listeners.get(ListenerFields.isDead)) {
+      listener.attributeChanged(true);
+    }
   }
 
   public void setHealth(Integer health) {
     this.health = health;
-    for(AttributeListener listener : listeners.get(ListenerFields.health.name())) {
+    for(AttributeListener listener : listeners.get(ListenerFields.health)) {
       listener.attributeChanged(health);
     }
   }
@@ -273,5 +281,16 @@ public class TeddyClient implements NetworkCommunicatorAPI {
 
   public void disconnect(TeddyClient client) {
     NetworkCommunicatorSpidermonkeyClient.getInstance().disconnect(this);
-  }  
+  }
+  
+  /**
+   * 
+   * Method to produce a dummy enemy.
+   * 
+   * @return A new teddy client for development issues.
+   */
+  @Override
+  public TeddyClient clone() {
+    return new TeddyClient();
+  }
 }

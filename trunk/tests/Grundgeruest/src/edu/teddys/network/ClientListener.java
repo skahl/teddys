@@ -13,6 +13,7 @@ import edu.teddys.network.messages.NetworkMessageRequest;
 import edu.teddys.network.messages.client.GSMessageGamePaused;
 import edu.teddys.network.messages.client.GSMessagePlayerReady;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
+import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.GSMessageEndGame;
 import edu.teddys.network.messages.server.ManMessageActivateItem;
@@ -23,6 +24,7 @@ import edu.teddys.network.messages.server.ReqMessageMapRequest;
 import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageRequestChecksum;
+import edu.teddys.network.messages.server.ReqMessageSendClientData;
 
 /**
  *
@@ -69,7 +71,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         ManMessageTransferServerData msg = (ManMessageTransferServerData)message;
         TeddyServer.getInstance().setData(msg.getData());
       } else if(message instanceof ManMessageTriggerEffect) {
-        //TODO call the appripriate effect and game state
+        //TODO call the appropriate effect and game state
       }
     } else if(message instanceof NetworkMessageRequest) {
       if(message instanceof ReqMessageMapRequest) {
@@ -91,6 +93,9 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         ReqMessageRequestChecksum msg = (ReqMessageRequestChecksum)message;
         //TODO calculate the checksum (use a dummy value now)
         ResMessageSendChecksum response = new ResMessageSendChecksum(msg.getToken(), "1");
+        TeddyClient.getInstance().send(response);
+      } else if(message instanceof ReqMessageSendClientData) {
+        ResMessageSendClientData response = new ResMessageSendClientData(TeddyClient.getInstance());
         TeddyClient.getInstance().send(response);
       }
     }
