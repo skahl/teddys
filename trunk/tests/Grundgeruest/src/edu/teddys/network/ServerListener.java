@@ -67,7 +67,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
           System.out.println("What the ...? Checksum has to be 1!");
           // This listener could kick the client directly, but for disallocating
           // reasons, use the server method.
-          TeddyServer.getInstance().disconnect(source.getId());
+          TeddyServer.getInstance().disconnect(source.getId(), "Invalid checksum!");
         }
       } else if (message instanceof ResMessageMapLoaded) {
         //TODO Sync with the other clients

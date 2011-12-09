@@ -78,32 +78,10 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
    * TODO use the client state listener for this purpose?
    */
   public boolean join() {
-//    // Check for active connection
-//    if(networkServer != null) {
-//      if(!networkServer.isRunning()) {
-//        return new NetworkMessage(NetworkMessageType.ERROR, "Server is not running!");
-//      }
-//    }
-//    // Try to add the client to the list of clients
-//    try {
-//      //TODO add
-//      networkServer.getConnections().add(client.get);
-//      // Well done!
-//      return new NetworkMessage(NetworkMessageType.ACCEPT, 
-//              String.format("New client is connected to server %d.",
-//                serverPort));
-//    } catch (IOException ex) {
-//      Logger.getLogger(NetworkCommunicatorSpidermonkeyServer.class.getName()).log(Level.SEVERE, null, ex);
-//      return new NetworkMessage(NetworkMessageType.ERROR, ex.getMessage());
-//    }
-    return false;
+    throw new UnsupportedOperationException("Handled in TeddyServer.");
   }
 
-  public void disconnect(TeddyClient client) {
-    if(!networkServer.isRunning()) {
-      System.err.println("Server is not running. Request discarded.");
-    }
-    //TODO
-    System.out.println("Client should be disconnected!");
-  }  
+  public void disconnect(Integer clientID) {
+    throw new UnsupportedOperationException("Handled in TeddyServer.");
+  }
 }

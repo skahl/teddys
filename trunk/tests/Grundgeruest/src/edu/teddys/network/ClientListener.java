@@ -93,7 +93,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       } else if(message instanceof ReqMessageSendChecksum) {
         ReqMessageSendChecksum msg = (ReqMessageSendChecksum)message;
         //TODO calculate the checksum (use a dummy value now)
-        ResMessageSendChecksum response = new ResMessageSendChecksum(msg.getToken(), "1");
+        ResMessageSendChecksum response = new ResMessageSendChecksum(msg.getToken(), "2");
         TeddyClient.getInstance().send(response);
       } else if(message instanceof ReqMessageSendClientData) {
         System.out.println("Client should send the data now ...");

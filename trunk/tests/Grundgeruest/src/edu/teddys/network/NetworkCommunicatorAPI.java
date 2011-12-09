@@ -41,7 +41,7 @@ public interface NetworkCommunicatorAPI {
    * 
    * Destroy the active session for the specified user.
    * 
-   * @param client  The client that is disconnected from the server.
+   * @param client  The client ID for the client to be disconnected. (Server implementation)
    */
-  public void disconnect(TeddyClient client);
+  public void disconnect(Integer clientID);
 }

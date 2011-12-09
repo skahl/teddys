@@ -42,7 +42,13 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     //TODO set game mode
   }
   
+  /**
+   * This function safely stops the server.
+   */
   public void stopServer() {
+    for(HostedConnection conn : getData().getConnections()) {
+      conn.close("Going down for maintenance NOW! ;)");
+    }
     NetworkCommunicatorSpidermonkeyServer.getInstance().shutdownServer();
     // reset data
     data = null;
@@ -53,8 +59,13 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   }
 
   public void send(NetworkMessage message) {
-    if(!getData().isDiscoverable()) {
+    if(getData() == null || !getData().isDiscoverable()) {
       System.err.println("TeddyServer not discoverable! Message not sent.");
+    }
+    if(getData().getConnections().isEmpty()) {
+      //TODO Save or dismiss the message?
+      System.out.println("Message could not be sent because no clients were connected!");
+      return;
     }
     NetworkCommunicatorSpidermonkeyServer.getInstance().send(message);
   }
@@ -64,9 +75,15 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     return false;
   }
 
-  public void disconnect(TeddyClient client) {
-  }
-
+  /**
+   * 
+   * Call this function instead of disconnect(Integer) if you want to send
+   * a reason for disconnecting. This is, for example, if a client gets
+   * kicked.
+   * 
+   * @param client  Client ID
+   * @param reason Reason for the disconnect
+   */
   public void disconnect(Integer client, String reason) {
     HostedConnection conn = getData().getConnections().get(client);
     if(conn == null) {
@@ -101,20 +118,30 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   public void connectionAdded(Server server, HostedConnection conn) {
     getData().getConnections().add(conn);
     String message = String.format(
-            "New connection (%s) arrived!",
-            conn.getAddress());
+            "New connection (%s) arrived! Client ID is %s",
+            conn.getAddress(),
+            conn.getId());
     NetworkMessageInfo info = new NetworkMessageInfo(message);
     send(info);
     System.out.println(message);
+    //TODO send the real name of the server
+    String serverMsg = String.format("Welcome on my server %s!", "Grunute");
+    NetworkMessageInfo clientInfo = new NetworkMessageInfo(serverMsg);
+    conn.send(clientInfo);
     ReqMessageSendClientData sendMsg = new ReqMessageSendClientData();
     conn.send(sendMsg);
+    //TODO add member to team
   }
 
   public void connectionRemoved(Server server, HostedConnection conn) {
     if(getData().getConnections().contains(conn)) {
       
-      //TODO search for the client data of the HostedConnection and remove it 
+      // Search for the client data of the HostedConnection and remove it 
       // from list
+      //TODO check
+      getData().getClients().remove(conn.getId());
+      
+      //TODO delete member from team
       
       String message = String.format(
               "Client %s committed suicide.",
@@ -126,7 +153,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
       return;
     }
     System.err.println(
-        String.format("Connection remove request failed from IP %s!",
+        String.format("Connection remove request failed from Address %s!",
         conn.getAddress()));
   }
   

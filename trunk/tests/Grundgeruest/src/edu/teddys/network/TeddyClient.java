@@ -279,8 +279,12 @@ public class TeddyClient implements NetworkCommunicatorAPI {
     return NetworkCommunicatorSpidermonkeyClient.getInstance().join();
   }
 
-  public void disconnect(TeddyClient client) {
-    NetworkCommunicatorSpidermonkeyClient.getInstance().disconnect(this);
+  public void disconnect(Integer clientID) {
+    NetworkCommunicatorSpidermonkeyClient.getInstance().disconnect(clientID);
+  }
+  
+  public void disconnect() {
+    disconnect(getId());
   }
   
   /**

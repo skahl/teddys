@@ -50,7 +50,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     if (networkClient != null) {
       if (networkClient.isConnected()) {
         // close connection
-        disconnect(client);
+        disconnect(client.getId());
       }
     }
     // Get the server settings
@@ -93,7 +93,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     }
   }
 
-  public void disconnect(TeddyClient client) {
+  public void disconnect(Integer clientID) {
     if (!networkClient.isConnected()) {
       return;
     }

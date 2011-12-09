@@ -117,6 +117,11 @@ public class BaseGame extends SimpleApplication {
     TeddyServer server = TeddyServer.getInstance();
     server.startServer();
     
+    // Start the protection mechanisms
+    ChecksumManager.startTimer();
+    System.out.println("Checksum timer started.");
+    
+    // Get the handle to the client and try to join the specified server
     TeddyClient client = TeddyClient.getInstance();
     System.out.println("Client has "+client.getHealth()+" health points at the beginning.");
     
@@ -129,25 +134,18 @@ public class BaseGame extends SimpleApplication {
       return;
     }
     
-    ChecksumManager.startTimer();
-    System.out.println("Checksum timer started.");
-    
-    System.out.println("Sending message ...");
-    NetworkMessageInfo info = new NetworkMessageInfo("Testus est.", null);
-//    NetworkCommunicatorSpidermonkeyClient.getInstance().getNetworkClient().send(info);
-    client.send(info);
-//    
-//    client.disconnect(client);
-//    
-//    server.stopServer();
-//    System.out.println("Server stopped.");
-    
-    System.out.println("Testing attribute listener ...");
+    // Create the listeners for the client
     client.registerListener(TeddyClient.ListenerFields.health, new HealthListenerTest());
     client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
-    System.out.println("Listener registered. Setting health to 50 ...");
-    client.setHealth(50);
-    System.out.println("Done.");
+  }
+  
+  private void testLogic() {
+    
+    TeddyClient client = TeddyClient.getInstance();
+    
+    System.out.println("Sending a test message ...");
+    NetworkMessageInfo info = new NetworkMessageInfo("Testus est.", null);
+    client.send(info);
     
     //TEST trigger weapon
     ManMessageTriggerWeapon msgDam = new ManMessageTriggerWeapon("bla", null);
@@ -187,6 +185,9 @@ public class BaseGame extends SimpleApplication {
     stateManager.cleanup();
 
     threadPool.shutdown();
+    
+    TeddyClient.getInstance().disconnect();
+    TeddyServer.getInstance().stopServer();
   }
 
   public void initKeys() {
