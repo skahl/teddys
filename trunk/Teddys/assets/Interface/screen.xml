@@ -8,21 +8,25 @@
     <screen id="start">
     </screen>
     
-    <screen id="hud" controller="perspectivetest.hud.TestHUD">
+    <screen id="hud" controller="perspectivetest.hud.HUDController">
        
         <layer id="hud" backgroundColor="#fff0" childLayout="vertical">
             
             <panel id="logPanel" width="100%" height="10%" childLayout="vertical" backgroundColor="#fff0">
-                <text text="log" font="Interface/Fonts/Default.fnt" width="5%" height="25%"/>
-                <text text="log" font="Interface/Fonts/Default.fnt" width="5%" height="25%"/>
-                <text text="log" font="Interface/Fonts/Default.fnt" width="5%" height="25%"/>
-                <text text="log" font="Interface/Fonts/Default.fnt" width="5%" height="25%"/>
-                <text text="log" font="Interface/Fonts/Default.fnt" width="5%" height="25%"/>
+                <control name="label" id="message4" text="" font="Interface/Fonts/Default.fnt" width="5%" height="25%" align="left"/>
+                <control name="label" id="message3" text="" font="Interface/Fonts/Default.fnt" width="5%" height="25%" align="left"/>
+                <control name="label" id="message2" text="" font="Interface/Fonts/Default.fnt" width="5%" height="25%" align="left"/>
+                <control name="label" id="message1" text="" font="Interface/Fonts/Default.fnt" width="5%" height="25%" align="left"/>
+                <control name="label" id="message0" text="" font="Interface/Fonts/Default.fnt" width="5%" height="25%" align="left"/>
             </panel>    
             
-            <panel id="spacerPanel" width="100%" height="80%" childLayout="horizontal" backgroundColor="#fff0"/>
+            <panel id="spacerPanel" width="100%" height="70%" childLayout="horizontal" backgroundColor="#fff0"/>
+            <panel id="playerPanel" width="100%" height="10%" childLayout="horizontal" backgroundColor="#fff0">
+                <control name="label" id="playerNameLabel" font="Interface/Fonts/Default.fnt" text="Unnamed" width="20%" height="100%"/>
+                <control name="label" id="playerTeamLabel" font="Interface/Fonts/Default.fnt" text="Team Red" width="20%" height="100%"/>
+            </panel>    
       
-            <panel id="hudPanel" width="100%" height="10%" childLayout="horizontal" backgroundColor="#fff0" >  
+            <panel id="playerStatsPanel" width="100%" height="10%" childLayout="horizontal" backgroundColor="#fff0" >  
         
                 <panel id="itemPanel" width="20%" height="100%" childLayout="horizontal" backgroundColor="#fff0">
                     <image filename="Interface/i.png" width="30%" height="80%"/>
@@ -45,7 +49,7 @@
                 <panel id="healthPanel" width="20%" height="100%" childLayout="horizontal" backgroundColor="#fff0">
                     <image filename="Interface/h.png" width="30%" height="80%"/>
                     <panel id="spacerPanel2" width="20%" height="100%" childLayout="horizontal" backgroundColor="#fff0"/>
-                    <control name="label" id="healthLabel" font="Interface/Fonts/Default.fnt" text="${CALL.getHealth()}%" width="25%" height="100%"/>
+                    <control name="label" id="healthLabel" font="Interface/Fonts/Default.fnt" text="" width="25%" height="100%"/>
                 </panel>
                 
             </panel>
