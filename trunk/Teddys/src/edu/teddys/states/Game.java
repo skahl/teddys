@@ -32,6 +32,7 @@ import edu.teddys.map.GameLoader;
 import java.util.logging.Logger;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import edu.teddys.hud.HUDController;
 
 /**
  *
@@ -199,8 +200,8 @@ public class Game extends AbstractAppState {
 
     inputManager.setCursorVisible(false);
 
-    PlayerControl playerInput = new PlayerControl(playerNode);
-    playerInput.registerWithInput(inputManager);
+    //PlayerControl playerInput = new PlayerControl(playerNode);
+    //playerInput.registerWithInput(inputManager);
     
     
     // TODO: Sollte auch noch schoener irgendwo verpackt werden.
@@ -217,6 +218,43 @@ public class Game extends AbstractAppState {
     Element niftyElement = nifty.getCurrentScreen().findElementByName("itemLabel");
     niftyElement.getRenderer(TextRenderer.class).setText("");
     */
+    
+    /*setDisplayFps(false);
+        setDisplayStatView(false);
+        
+        
+        ViewPort niftyView = renderManager.createPreView("NiftyView", cam);
+        NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
+        assetManager,  inputManager,  audioRenderer,  niftyView);
+        Nifty nifty = niftyDisplay.getNifty();
+        nifty.fromXml("Interface/screen.xml", "hud");
+        
+        niftyView.addProcessor(niftyDisplay);
+        FrameBuffer fb = new FrameBuffer(settings.getWidth(), settings.getHeight(), 0);
+        fb.setDepthBuffer(Format.Depth);
+        Texture2D niftytex = new Texture2D(settings.getWidth(), settings.getHeight(), Format.RGBA8);
+        fb.setColorTexture(niftytex);
+        niftyView.setClearFlags(true, false, false);
+        niftyView.setOutputFrameBuffer(fb);
+        
+        Box b = new Box(Vector3f.ZERO, 1f, 0.75f, 0.01f);
+        Geometry geom = new Geometry("Box", b);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setTexture("m_ColorMap", niftytex); 
+        mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+        geom.setMaterial(mat);
+        camNode.attachChild(geom);
+        geom.move(0,0,2);*/
+        
+        //Test HUD
+        /*HUDController hud = HUDController.getInstance();
+        hud.init(nifty);
+        hud.addMessage("1");
+        hud.addMessage("2");
+        hud.addMessage("3");
+        hud.addMessage("4");
+        hud.addMessage("5");
+        hud.addMessage("6");*/
   }
 
   @Override
