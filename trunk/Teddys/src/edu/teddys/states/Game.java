@@ -30,6 +30,8 @@ import edu.teddys.input.Cursor;
 import edu.teddys.input.PlayerControl;
 import edu.teddys.map.GameLoader;
 import java.util.logging.Logger;
+import com.jme3.bullet.util.CollisionShapeFactory;
+import com.jme3.bullet.collision.shapes.CollisionShape;
 
 /**
  *
@@ -148,6 +150,24 @@ public class Game extends AbstractAppState {
 
     playerNode.attachChild(playerGeom);
     rootNode.attachChild(playerNode);
+    
+    //Player        
+        /*Node playerNode = new Node("Player");
+        Box player = new Box(Vector3f.ZERO, 0.1f, 0.15f, 0.01f);
+        Geometry playerGeom = new Geometry("PlayerGeometry", player);
+        
+        Material playerMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        playerMat.setColor("Color", ColorRGBA.Blue);
+        playerGeom.setMaterial(playerMat);
+        
+        playerNode.attachChild(playerGeom);
+        playerNode.move(0,4,2);
+        rootNode.attachChild(playerNode);
+        
+        CollisionShape playerCollisionShape = CollisionShapeFactory.createBoxShape(playerGeom);
+        PlayerControl playerControl = new PlayerControl(playerNode, playerCollisionShape, 0.05f);
+        playerControl.registerWithInput(inputManager);
+        bulletAppState.getPhysicsSpace().add(playerControl);*/
     
     //Crosshair
     this.app.getAssetManager().loadTexture("Textures/fadenkreuz.png");
