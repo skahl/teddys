@@ -8,7 +8,7 @@
     <screen id="start">
     </screen>
     
-    <screen id="hud" controller="perspectivetest.hud.HUDController">
+    <screen id="hud" controller="edu.teddys.hud.HUDController">
        
         <layer id="hud" backgroundColor="#fff0" childLayout="vertical">
             
