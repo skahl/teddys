@@ -3,6 +3,7 @@ package edu.teddys.states;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.input.InputManager;
@@ -35,6 +36,8 @@ import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import edu.teddys.hud.HUDController;
+import edu.teddys.objects.player.Player;
+import java.util.logging.Level;
 
 /**
  *
@@ -50,6 +53,8 @@ public class Game extends AbstractAppState {
   private Node rootNode;
   private PssmShadowRenderer pssmRenderer; // Shadow rendering
   private GameLoader gameLoader;
+  
+  private Player player; // should be a list in later versions I guess..
   
   private boolean paused;
   private boolean enabled;
@@ -140,51 +145,12 @@ public class Game extends AbstractAppState {
     this.app.getViewPort().addProcessor(pssmRenderer);
     
     
-    // TODO: Player inklusive Animation und sonstige Texturen der Spielfigur auslagern.
-    // dummy player       
-    Node playerNode = new Node("Player");
-
-    Box player = new Box(new Vector3f(0,0,0), 0.1f, 0.1f, 0.05f);
-    Geometry playerGeom = new Geometry("Player", player);
-
-    Material playerMat = new Material(this.app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-    playerMat.setColor("Color", ColorRGBA.Blue);
-    playerGeom.setMaterial(playerMat);
+    // init player
+    player = new Player("Player 1", this);
     
-    playerGeom.setShadowMode(ShadowMode.CastAndReceive);
-
+    player.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -.75f));
     
-    //Player        
-        /*Node playerNode = new Node("Player");
-        Box player = new Box(Vector3f.ZERO, 0.1f, 0.15f, 0.01f);
-        Geometry playerGeom = new Geometry("PlayerGeometry", player);
-        
-        Material playerMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        playerMat.setColor("Color", ColorRGBA.Blue);
-        playerGeom.setMaterial(playerMat);
-        
-        playerNode.attachChild(playerGeom);
-        playerNode.move(0,4,2);
-        rootNode.attachChild(playerNode);
-    */    
-    
-    
-    CapsuleCollisionShape playerCollisionShape = new CapsuleCollisionShape(0.15f, 0.2f, 1);
-    PlayerControl playerControl = new PlayerControl(playerNode, playerCollisionShape, 0.01f);
-    playerControl.registerWithInput(inputManager);
-    bulletAppState.getPhysicsSpace().add(playerControl);
-    
-    
-    playerControl.setPhysicsLocation(new Vector3f(0f, 0f, -.75f));
-    
-    // skahl: toying around here...
-    playerControl.setJumpSpeed(4f);
-    playerControl.setGravity(3f);
-    playerControl.setFallSpeed(5f);
-    
-    
-    playerNode.attachChild(playerGeom);
-    rootNode.attachChild(playerNode);
+    rootNode.attachChild(player.getNode());
     
     //Crosshair
     this.app.getAssetManager().loadTexture("Textures/fadenkreuz.png");
@@ -193,7 +159,7 @@ public class Game extends AbstractAppState {
     cursor.setImage(this.app.getAssetManager(), "Textures/fadenkreuz.png", true);
     cursor.setHeight(64);
     cursor.setWidth(64);
-    playerNode.attachChild(cursor);
+    player.getNode().attachChild(cursor);
         
         
     //Camera
@@ -201,15 +167,15 @@ public class Game extends AbstractAppState {
     CameraNode camNode = new CameraNode("Camera", this.app.getCamera());
     camNode.setControlDir(ControlDirection.SpatialToCamera);
 
-    playerNode.attachChild(camNode);
+    player.getNode().attachChild(camNode);
     
     // initial distance between camera and player
     camNode.move(0, 0, 4);
     
-    camNode.lookAt(playerNode.getWorldTranslation(), new Vector3f(0,1,0));
+    camNode.lookAt(player.getNode().getWorldTranslation(), new Vector3f(0,1,0));
     
     //Input
-    CrosshairControl cameraControl = new CrosshairControl(camNode, playerNode, cursor, 
+    CrosshairControl cameraControl = new CrosshairControl(camNode, player.getNode(), cursor, 
             this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
     cameraControl.registerWithInput(inputManager);
 
@@ -326,5 +292,13 @@ public class Game extends AbstractAppState {
   
   public BulletAppState getBulletAppState() {
       return bulletAppState;
+  }
+  
+  public AssetManager getAssetManager() {
+      return app.getAssetManager();
+  }
+  
+  public InputManager getInputManager() {
+      return inputManager;
   }
 }
