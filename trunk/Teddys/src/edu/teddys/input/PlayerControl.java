@@ -12,7 +12,7 @@ import com.jme3.scene.Spatial;
 
 /**
  *
- * @author besient
+ * @author besien
  */
 public class PlayerControl extends CharacterControl implements AnalogListener {
 
@@ -25,9 +25,9 @@ public class PlayerControl extends CharacterControl implements AnalogListener {
     public PlayerControl(Spatial player, CollisionShape collisionShape, float stepHeight) {
         super(collisionShape, stepHeight);
         setPhysicsLocation(player.getWorldTranslation());
-        setFallSpeed(30);
-        setJumpSpeed(30);
-        setGravity(30);
+        setFallSpeed(1f);
+        setJumpSpeed(1f);
+        setGravity(1f);
         player.addControl(this);        
     }
         

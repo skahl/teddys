@@ -7,6 +7,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.system.AppSettings;
 import edu.teddys.controls.MappingEnum;
 import edu.teddys.network.DeathTest;
@@ -92,6 +93,7 @@ public class BaseGame extends SimpleApplication {
     flyCam.setEnabled(false);
     setDisplayFps(true);
     setDisplayStatView(false);
+    rootNode.setShadowMode(ShadowMode.Off);
 
     stateManager.attach(new Menu());
     stateManager.attach(new Game());

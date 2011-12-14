@@ -32,6 +32,7 @@ import edu.teddys.map.GameLoader;
 import java.util.logging.Logger;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import edu.teddys.hud.HUDController;
 
 /**
@@ -148,6 +149,8 @@ public class Game extends AbstractAppState {
     Material playerMat = new Material(this.app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
     playerMat.setColor("Color", ColorRGBA.Blue);
     playerGeom.setMaterial(playerMat);
+    
+    playerGeom.setShadowMode(ShadowMode.CastAndReceive);
 
     playerNode.attachChild(playerGeom);
     rootNode.attachChild(playerNode);
@@ -164,11 +167,20 @@ public class Game extends AbstractAppState {
         playerNode.attachChild(playerGeom);
         playerNode.move(0,4,2);
         rootNode.attachChild(playerNode);
-        
-        CollisionShape playerCollisionShape = CollisionShapeFactory.createBoxShape(playerGeom);
-        PlayerControl playerControl = new PlayerControl(playerNode, playerCollisionShape, 0.05f);
-        playerControl.registerWithInput(inputManager);
-        bulletAppState.getPhysicsSpace().add(playerControl);*/
+    */    
+    
+    
+    // skahl: changed that...
+    playerNode.move(0f, 0f, -.75f);
+    CollisionShape playerCollisionShape = CollisionShapeFactory.createBoxShape(playerGeom);
+    PlayerControl playerControl = new PlayerControl(playerNode, playerCollisionShape, 2f);
+    playerControl.registerWithInput(inputManager);
+    bulletAppState.getPhysicsSpace().add(playerControl);
+    
+    // skahl: toying around here...
+    playerControl.setJumpSpeed(3f);
+    playerControl.setGravity(1f);
+    playerControl.setFallSpeed(1f);
     
     //Crosshair
     this.app.getAssetManager().loadTexture("Textures/fadenkreuz.png");
@@ -187,8 +199,7 @@ public class Game extends AbstractAppState {
 
     playerNode.attachChild(camNode);
     
-    // skahl: changed that...
-    //playerNode.move(0, 0, 2);
+    // initial distance between camera and player
     camNode.move(0, 0, 4);
     
     camNode.lookAt(playerNode.getWorldTranslation(), new Vector3f(0,1,0));
