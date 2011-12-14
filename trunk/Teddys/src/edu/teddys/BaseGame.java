@@ -93,6 +93,7 @@ public class BaseGame extends SimpleApplication {
     flyCam.setEnabled(false);
     setDisplayFps(true);
     setDisplayStatView(false);
+    inputManager.setCursorVisible(false);
     rootNode.setShadowMode(ShadowMode.Off);
 
     stateManager.attach(new Menu());

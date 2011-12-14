@@ -4,6 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
@@ -121,7 +122,7 @@ public class Game extends AbstractAppState {
     gameLoader = new GameLoader("firstlevel", "maps/firstlevel.zip", this);
     
     // shed some light
-    Vector3f sunDirection = new Vector3f(1f, -1f, -1.5f);
+    Vector3f sunDirection = new Vector3f(-1f, -1f, -1.2f);
     sunDirection.normalizeLocal();
 
     DirectionalLight sunL = new DirectionalLight();
@@ -143,7 +144,7 @@ public class Game extends AbstractAppState {
     // dummy player       
     Node playerNode = new Node("Player");
 
-    Box player = new Box(new Vector3f(0,0,0), 0.05f, 0.05f, 0.01f);
+    Box player = new Box(new Vector3f(0,0,0), 0.1f, 0.1f, 0.05f);
     Geometry playerGeom = new Geometry("Player", player);
 
     Material playerMat = new Material(this.app.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
@@ -152,8 +153,6 @@ public class Game extends AbstractAppState {
     
     playerGeom.setShadowMode(ShadowMode.CastAndReceive);
 
-    playerNode.attachChild(playerGeom);
-    rootNode.attachChild(playerNode);
     
     //Player        
         /*Node playerNode = new Node("Player");
@@ -170,17 +169,22 @@ public class Game extends AbstractAppState {
     */    
     
     
-    // skahl: changed that...
-    playerNode.move(0f, 0f, -.75f);
-    CollisionShape playerCollisionShape = CollisionShapeFactory.createBoxShape(playerGeom);
-    PlayerControl playerControl = new PlayerControl(playerNode, playerCollisionShape, 2f);
+    CapsuleCollisionShape playerCollisionShape = new CapsuleCollisionShape(0.15f, 0.2f, 1);
+    PlayerControl playerControl = new PlayerControl(playerNode, playerCollisionShape, 0.01f);
     playerControl.registerWithInput(inputManager);
     bulletAppState.getPhysicsSpace().add(playerControl);
     
+    
+    playerControl.setPhysicsLocation(new Vector3f(0f, 0f, -.75f));
+    
     // skahl: toying around here...
-    playerControl.setJumpSpeed(3f);
-    playerControl.setGravity(1f);
-    playerControl.setFallSpeed(1f);
+    playerControl.setJumpSpeed(4f);
+    playerControl.setGravity(3f);
+    playerControl.setFallSpeed(5f);
+    
+    
+    playerNode.attachChild(playerGeom);
+    rootNode.attachChild(playerNode);
     
     //Crosshair
     this.app.getAssetManager().loadTexture("Textures/fadenkreuz.png");
@@ -209,7 +213,6 @@ public class Game extends AbstractAppState {
             this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
     cameraControl.registerWithInput(inputManager);
 
-    inputManager.setCursorVisible(false);
 
     //PlayerControl playerInput = new PlayerControl(playerNode);
     //playerInput.registerWithInput(inputManager);
@@ -266,6 +269,10 @@ public class Game extends AbstractAppState {
         hud.addMessage("4");
         hud.addMessage("5");
         hud.addMessage("6");*/
+    
+    
+    // physics debug (shows collission meshes):
+    //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
   }
 
   @Override

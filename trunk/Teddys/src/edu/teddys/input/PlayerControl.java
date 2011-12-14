@@ -16,7 +16,7 @@ import com.jme3.scene.Spatial;
  */
 public class PlayerControl extends CharacterControl implements AnalogListener {
 
-    private float moveSpeed = 0.1f;
+    private float moveSpeed = 0.05f;
     
     private InputManager input;
     Vector3f vel;
