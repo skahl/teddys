@@ -19,7 +19,6 @@ import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
-import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.protection.ChecksumManager;
 
 /**
@@ -78,7 +77,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
       } else if (message instanceof ResMessageSendClientData) {
         ResMessageSendClientData msg = (ResMessageSendClientData) message;
         // Tell the server to update the data
-        TeddyClient data = msg.getClientData();
+        ClientData data = msg.getClientData();
         Integer clientID = data.getId();
         TeddyServer.getInstance().setClientData(clientID, data);
       }
