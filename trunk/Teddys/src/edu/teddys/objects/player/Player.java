@@ -29,7 +29,7 @@ public class Player {
         visual = new TeddyVisual(node, game.getAssetManager());
         
         // physics
-        collisionShape = new CapsuleCollisionShape(visual.getWidth()*0.5f, visual.getHeight()*0.9f, 1);
+        collisionShape = new CapsuleCollisionShape(visual.getWidth()*0.6f, visual.getHeight()*0.8f, 1);
         
         control = new PlayerControl(node, collisionShape, 0.01f);
         control.registerWithInput(game.getInputManager());

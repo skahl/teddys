@@ -113,6 +113,7 @@ public class Game extends AbstractAppState {
     // load game
     gameLoader = new GameLoader("firstlevel", "maps/firstlevel.zip", this);
     
+    
     // shed some light
     Vector3f sunDirection = new Vector3f(-1f, -1f, -1.2f);
     sunDirection.normalizeLocal();
@@ -127,15 +128,19 @@ public class Game extends AbstractAppState {
     rootNode.addLight(sunA);
     
     // init shadow renderstate
-    pssmRenderer = new PssmShadowRenderer(this.app.getAssetManager(), 512, 2);
+    pssmRenderer = new PssmShadowRenderer(this.app.getAssetManager(), 1024, 2);
     pssmRenderer.setDirection(sunDirection);
+    pssmRenderer.setLambda(0.55f);
+    pssmRenderer.setShadowIntensity(0.5f);
+    pssmRenderer.setCompareMode(PssmShadowRenderer.CompareMode.Hardware);
+    pssmRenderer.setFilterMode(PssmShadowRenderer.FilterMode.Bilinear);
     this.app.getViewPort().addProcessor(pssmRenderer);
     
     
     // init player
     player = Player.getInstance("Player 1", this);
     
-    player.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -.75f));
+    player.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -1.2f));
     
     rootNode.attachChild(player.getNode());
     
@@ -144,6 +149,7 @@ public class Game extends AbstractAppState {
 
     Cursor cursor = new Cursor("Cursor");
     cursor.setImage(this.app.getAssetManager(), "Textures/fadenkreuz.png", true);
+    cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
     cursor.setHeight(64);
     cursor.setWidth(64);
     player.getNode().attachChild(cursor);
@@ -224,7 +230,9 @@ public class Game extends AbstractAppState {
     
     
     // physics debug (shows collission meshes):
+    
     //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
+    
   }
 
   @Override
