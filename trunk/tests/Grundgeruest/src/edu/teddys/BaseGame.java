@@ -188,6 +188,7 @@ public class BaseGame extends SimpleApplication {
     
     TeddyClient.getInstance().disconnect();
     TeddyServer.getInstance().stopServer();
+    ChecksumManager.stopTimer();
   }
 
   public void initKeys() {
