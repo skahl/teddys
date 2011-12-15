@@ -133,13 +133,13 @@ public class Game extends AbstractAppState {
     
     
     // init player
-    player = new Player("Player 1", this);
+    player = Player.getInstance("Player 1", this);
     
     player.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -.75f));
     
     rootNode.attachChild(player.getNode());
     
-    //Crosshair
+    // Crosshair
     this.app.getAssetManager().loadTexture("Textures/fadenkreuz.png");
 
     Cursor cursor = new Cursor("Cursor");
@@ -149,8 +149,7 @@ public class Game extends AbstractAppState {
     player.getNode().attachChild(cursor);
         
         
-    //Camera
-
+    // Camera
     CameraNode camNode = new CameraNode("Camera", this.app.getCamera());
     camNode.setControlDir(ControlDirection.SpatialToCamera);
 
@@ -161,7 +160,7 @@ public class Game extends AbstractAppState {
     
     camNode.lookAt(player.getNode().getWorldTranslation(), new Vector3f(0,1,0));
     
-    //Input
+    // Input
     CrosshairControl cameraControl = new CrosshairControl(camNode, player.getNode(), cursor, 
             this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
     cameraControl.registerWithInput(inputManager);
