@@ -4,11 +4,11 @@
  */
 package edu.teddys.network;
 
+import com.jme3.network.Client;
+import com.jme3.network.ClientStateListener;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.objects.box.items.Item;
-import edu.teddys.objects.Jetpack;
 import edu.teddys.objects.weapons.Weapon;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumMap;
@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * @author cm
  */
-public class TeddyClient implements NetworkCommunicatorAPI {
+public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener {
   
   /**
    * Field identifiers for the listeners. Info: Use this idents for the listeners!
@@ -206,7 +206,9 @@ public class TeddyClient implements NetworkCommunicatorAPI {
   }
 
   public boolean join() {
-    return NetworkCommunicatorSpidermonkeyClient.getInstance().join();
+    boolean status = NetworkCommunicatorSpidermonkeyClient.getInstance().join();
+    NetworkCommunicatorSpidermonkeyClient.getInstance().addClientStateListener(this);
+    return status;
   }
 
   public void disconnect(Integer clientID) {
@@ -242,5 +244,15 @@ public class TeddyClient implements NetworkCommunicatorAPI {
   @Override
   public TeddyClient clone() {
     return new TeddyClient();
+  }
+
+  public void clientConnected(Client c) {
+    TeddyClient client = TeddyClient.getInstance();
+    client.setId(c.getId());
+    client.setJoinedServer(new Date());
+  }
+
+  public void clientDisconnected(Client c, DisconnectInfo info) {
+    //TODO set game state
   }
 }

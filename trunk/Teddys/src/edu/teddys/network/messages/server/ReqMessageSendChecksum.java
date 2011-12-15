@@ -28,7 +28,7 @@ public class ReqMessageSendChecksum extends NetworkMessageRequest {
     setDestination(destination);
   }
 
-  public ReqMessageSendChecksum(String token, List<String> files) {
+  private ReqMessageSendChecksum(String token, List<String> files) {
     if (token == null || token.isEmpty() || files == null || files.isEmpty()) {
       throw new InstantiationError("Some files must be specified to send a request!");
     }

@@ -4,15 +4,22 @@
  */
 package edu.teddys.objects;
 
+import com.jme3.network.serializing.Serializable;
+
 /**
  *
  * @author cm
  */
+@Serializable
 public class Jetpack {
   
-  private Integer maxEnergy;
-  private Integer currentEnergy;
-  private boolean enabled = false;
+  private Integer maxEnergy = 100;
+  private Integer currentEnergy = 100;
+  private Boolean enabled = false;
+  
+  public Jetpack() {
+    
+  }
 
   public Integer getCurrentEnergy() {
     return currentEnergy;
@@ -22,11 +29,11 @@ public class Jetpack {
     this.currentEnergy = currentEnergy;
   }
 
-  public boolean isEnabled() {
+  public Boolean isEnabled() {
     return enabled;
   }
 
-  public void setEnabled(boolean enabled) {
+  public void setEnabled(Boolean enabled) {
     this.enabled = enabled;
   }
 

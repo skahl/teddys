@@ -5,9 +5,10 @@
 package edu.teddys.network;
 
 import com.jme3.network.Client;
+import com.jme3.network.ClientStateListener;
+import edu.teddys.BaseGame;
 import edu.teddys.network.messages.NetworkMessage;
 import java.io.IOException;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,6 +33,14 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
   }
 
   private NetworkCommunicatorSpidermonkeyClient() {
+  }
+  
+  public void addClientStateListener(ClientStateListener listener) {
+    if(networkClient == null) {
+      BaseGame.getLogger().severe("Could not add ClientStateListener because networkClient is null!");
+      return;
+    }
+    networkClient.addClientStateListener(listener);
   }
 
   public String getPubKey(String pubKeyClient) {
@@ -64,28 +73,11 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     try {
       networkClient = com.jme3.network.Network.connectToServer(serverIP, serverPort);
       networkClient.start();
-      if(networkClient.isConnected()) {
-        System.out.println("Client is connected. Setting the appropriate ID ...");
-        //TODO use the client state listener?
-      } else {
+      if(!networkClient.isConnected()) {
         System.out.println("Not fully connected yet.");
       }
-      while(networkClient.getId() == -1) {
-        try {
-          //TODO use state listener instead of polling?
-          Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-          Logger.getLogger(NetworkCommunicatorSpidermonkeyClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-      }
-      // Get the ID from the server
-      client.setId(networkClient.getId());
-      System.out.println("Client ID is "+networkClient.getId());
-      client.setJoinedServer(new Date());
       // Configure the client to receive messages
       networkClient.addMessageListener(new ClientListener());
-      // Well done!
-      System.out.println("Client is fully connected!");
       return true;
     } catch (IOException ex) {
       Logger.getLogger(NetworkCommunicatorSpidermonkeyClient.class.getName()).log(Level.SEVERE, null, ex);

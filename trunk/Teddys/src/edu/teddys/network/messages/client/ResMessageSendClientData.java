@@ -6,7 +6,6 @@ package edu.teddys.network.messages.client;
 
 import com.jme3.network.serializing.Serializable;
 import edu.teddys.network.ClientData;
-import edu.teddys.network.TeddyClient;
 import edu.teddys.network.messages.NetworkMessageResponse;
 
 /**
@@ -23,6 +22,10 @@ public class ResMessageSendClientData extends NetworkMessageResponse {
   }
 
   public ResMessageSendClientData(ClientData data) {
+    super();
+    if(data == null) {
+      throw new InstantiationError("ClientData can't be null!");
+    }
     setClientData(data);
   }
 

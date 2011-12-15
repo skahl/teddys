@@ -4,6 +4,8 @@
  */
 package edu.teddys.network;
 
+import com.jme3.network.ConnectionListener;
+import edu.teddys.BaseGame;
 import edu.teddys.network.messages.NetworkMessage;
 import java.io.IOException;
 import java.util.logging.Level;

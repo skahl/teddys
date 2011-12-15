@@ -60,13 +60,10 @@ public class ServerListener implements MessageListener<HostedConnection> {
       if (message instanceof ResMessageSendChecksum) {
         System.out.println("Received ResMessageSendChecksum ...");
         ResMessageSendChecksum msg = (ResMessageSendChecksum) message;
-        if (ChecksumManager.checkChecksum(msg.getToken(), msg.getChecksum())) {
-          System.out.println("Yeah, checksum is right!");
-        } else {
-          System.out.println("What the ...? Checksum has to be 1!");
-          // This listener could kick the client directly, but for disallocating
-          // reasons, use the server method.
-          TeddyServer.getInstance().disconnect(source.getId(), "Invalid checksum!");
+        try {
+          ChecksumManager.checkChecksum(msg.getToken(), msg.getChecksum());
+        } catch(VerifyError error) {
+          TeddyServer.getInstance().disconnect(source.getId(), error.getLocalizedMessage());
         }
       } else if (message instanceof ResMessageMapLoaded) {
         //TODO Sync with the other clients
@@ -80,6 +77,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
         ClientData data = msg.getClientData();
         Integer clientID = data.getId();
         TeddyServer.getInstance().setClientData(clientID, data);
+        //TODO Add member to a team
+        
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManMessageSendPosition) {

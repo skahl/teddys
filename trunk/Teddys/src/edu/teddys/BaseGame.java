@@ -10,8 +10,11 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.system.AppSettings;
 import edu.teddys.controls.MappingEnum;
+import edu.teddys.input.Position;
+import edu.teddys.network.ClientData;
 import edu.teddys.network.DeathTest;
 import edu.teddys.network.HealthListenerTest;
+import edu.teddys.network.SessionClientData;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.NetworkMessage;
@@ -22,9 +25,9 @@ import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
+import edu.teddys.objects.Jetpack;
 import edu.teddys.protection.ChecksumManager;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -110,8 +113,8 @@ public class BaseGame extends SimpleApplication {
     
     
     // # # # # # # # # # # # # # # NETWORK # # # # # # # # # # # # # # # #
+    
     // Register the network messages at the Serializer
-    /**
     initSerializer();
     
     // Create the server
@@ -138,7 +141,7 @@ public class BaseGame extends SimpleApplication {
     // Create the listeners for the client
     client.registerListener(TeddyClient.ListenerFields.health, new HealthListenerTest());
     client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
-    **/
+    
     // # # # # # # # # # # # # # # GAME # # # # # # # # # # # # # # # #
     
     
@@ -149,10 +152,14 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(NetworkMessageInfo.class);
     Serializer.registerClass(ManMessageTriggerWeapon.class);
     Serializer.registerClass(ManMessageSendDamage.class);
-    Serializer.registerClass(ResMessageSendClientData.class);
     Serializer.registerClass(ReqMessageSendClientData.class);
+    Serializer.registerClass(ResMessageSendClientData.class);
     Serializer.registerClass(ReqMessageSendChecksum.class);
     Serializer.registerClass(ResMessageSendChecksum.class);
+    Serializer.registerClass(SessionClientData.class);
+    Serializer.registerClass(Position.class);
+    Serializer.registerClass(Jetpack.class);
+    Serializer.registerClass(ClientData.class);
     //TODO add the other ones
   }
 
@@ -172,8 +179,8 @@ public class BaseGame extends SimpleApplication {
 
     threadPool.shutdown();
     
-    //TeddyClient.getInstance().disconnect();
-    //TeddyServer.getInstance().stopServer();
+    TeddyClient.getInstance().disconnect();
+    TeddyServer.getInstance().stopServer();
   }
 
   public ScheduledThreadPoolExecutor getThreadPool() {
