@@ -5,6 +5,7 @@
 package edu.teddys.network.messages.client;
 
 import com.jme3.network.serializing.Serializable;
+import edu.teddys.network.ClientData;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.messages.NetworkMessageResponse;
 
@@ -14,23 +15,22 @@ import edu.teddys.network.messages.NetworkMessageResponse;
  */
 @Serializable
 public class ResMessageSendClientData extends NetworkMessageResponse {
-  //TODO create a TeddyClientData class and transfer it!
-
-  private TeddyClient data;
+  
+  private ClientData data;
 
   public ResMessageSendClientData() {
     super();
   }
 
-  public ResMessageSendClientData(TeddyClient data) {
+  public ResMessageSendClientData(ClientData data) {
     setClientData(data);
   }
 
-  public TeddyClient getClientData() {
+  public ClientData getClientData() {
     return data;
   }
 
-  private void setClientData(TeddyClient data) {
+  private void setClientData(ClientData data) {
     this.data = data;
   }
 }

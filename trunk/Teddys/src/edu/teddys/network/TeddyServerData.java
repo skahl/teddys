@@ -24,7 +24,7 @@ public class TeddyServerData {
   private String name;
   private List<Team> teams = new ArrayList<Team>();
   private List<HostedConnection> connections = new ArrayList<HostedConnection>();
-  private Map<Integer,TeddyClient> clients = new HashMap<Integer,TeddyClient>();
+  private Map<Integer,ClientData> clients = new HashMap<Integer,ClientData>();
   private GameMode gameMode;
   private boolean discoverable = false;
 
@@ -68,11 +68,11 @@ public class TeddyServerData {
     this.name = name;
   }
 
-  public Map<Integer, TeddyClient> getClients() {
+  public Map<Integer, ClientData> getClients() {
     return clients;
   }
 
-  public void setClients(Map<Integer, TeddyClient> clients) {
+  public void setClients(Map<Integer, ClientData> clients) {
     this.clients = clients;
   }
 

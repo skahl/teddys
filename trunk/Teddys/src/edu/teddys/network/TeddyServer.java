@@ -11,6 +11,7 @@ import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageInfo;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -42,11 +43,23 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     //TODO set game mode
   }
   
+  protected boolean isRunning() {
+    if(data != null) {
+      return true;
+    }
+    return false;
+  }
+  
   /**
    * This function safely stops the server.
    */
   public void stopServer() {
-    for(HostedConnection conn : getData().getConnections()) {
+    if(!isRunning()) {
+      return;
+    }
+    // copy the list of connections because of the modification on calling close()
+    List<HostedConnection> copyConnections = getData().getConnections();
+    for(HostedConnection conn : copyConnections) {
       conn.close("Going down for maintenance NOW! ;)");
     }
     NetworkCommunicatorSpidermonkeyServer.getInstance().shutdownServer();
@@ -59,7 +72,10 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   }
 
   public void send(NetworkMessage message) {
-    if(getData() == null || !getData().isDiscoverable()) {
+    if(!isRunning()) {
+      return;
+    }
+    if (!getData().isDiscoverable()) {
       System.err.println("TeddyServer not discoverable! Message not sent.");
     }
     if(getData().getConnections().isEmpty()) {
@@ -85,6 +101,9 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
    * @param reason Reason for the disconnect
    */
   public void disconnect(Integer client, String reason) {
+    if(!isRunning()) {
+      return;
+    }
     HostedConnection conn = getData().getConnections().get(client);
     if(conn == null) {
       return;
@@ -93,6 +112,9 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   }
 
   public void disconnect(Integer client) {
+    if(!isRunning()) {
+      return;
+    }
     HostedConnection conn = getData().getConnections().get(client);
     if(conn == null) {
       return;
@@ -111,11 +133,19 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   /**
    * Adds client data to the current list. Existing data will be overwritten!
    */
-  public void setClientData(Integer clientID, TeddyClient client) {
+  public void setClientData(Integer clientID, ClientData client) {
+    if(!isRunning()) {
+      System.err.println("TeddyServer is not running!");
+      return;
+    }
     getData().getClients().put(clientID, client);
   }
 
   public void connectionAdded(Server server, HostedConnection conn) {
+    if(!isRunning()) {
+      System.err.println("connectionAdded() called, but no server data available!");
+      return;
+    }
     getData().getConnections().add(conn);
     String message = String.format(
             "New connection (%s) arrived! Client ID is %s",
@@ -130,18 +160,34 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     conn.send(clientInfo);
     ReqMessageSendClientData sendMsg = new ReqMessageSendClientData();
     conn.send(sendMsg);
-    //TODO add member to team
+    //TODO add member to team on new response
   }
 
   public void connectionRemoved(Server server, HostedConnection conn) {
+    if(!isRunning()) {
+      System.err.println("connectionRemoved() called, but no server data available!");
+      return;
+    }
     if(getData().getConnections().contains(conn)) {
       
       // Search for the client data of the HostedConnection and remove it 
       // from list
-      //TODO check
-      getData().getClients().remove(conn.getId());
       
-      //TODO delete member from team
+      // acquire client data because of the team allocation
+      ClientData client = getData().getClients().get(conn.getId());
+      if(client != null) {
+        // remove the player from the team list
+        List<Team> teams = getData().getTeams();
+        if(client.getTeamID() != null && teams != null) {
+          if(teams.get(client.getTeamID()) != null) {
+            Team team = teams.get(client.getTeamID());
+            team.getPlayers().remove(conn.getId());
+          }
+        }
+
+        // remove the client data from server
+        getData().getClients().remove(conn.getId());
+      }
       
       String message = String.format(
               "Client %s committed suicide.",
