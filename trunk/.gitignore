@@ -3,5 +3,6 @@
 *.jar
 private.properties
 build.xml
-dist/*
-build/*
+dist/
+build/
+nbproject/private/
