@@ -20,6 +20,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import edu.teddys.BaseGame;
+import edu.teddys.hud.HUD;
 import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.map.GameLoader;
@@ -144,6 +145,12 @@ public class Game extends AbstractAppState {
     
     rootNode.attachChild(player.getNode());
     
+    //HUD
+    HUD hud = new HUD(this.app.getGuiNode(), 
+                      this.app.getAssetManager(),
+                      this.app.getSettings().getWidth(),
+                      this.app.getSettings().getHeight());
+    
     // Crosshair
     this.app.getAssetManager().loadTexture("Textures/fadenkreuz.png");
 
@@ -152,7 +159,7 @@ public class Game extends AbstractAppState {
     cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
     cursor.setHeight(64);
     cursor.setWidth(64);
-    player.getNode().attachChild(cursor);
+    this.app.getGuiNode().attachChild(cursor);
         
         
     // Camera
@@ -172,61 +179,7 @@ public class Game extends AbstractAppState {
     cameraControl.registerWithInput(inputManager);
 
 
-    //PlayerControl playerInput = new PlayerControl(playerNode);
-    //playerInput.registerWithInput(inputManager);
     
-    
-    // TODO: Sollte auch noch schoener irgendwo verpackt werden.
-    // load hud
-    /*
-    NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(this.app.getAssetManager(), 
-            inputManager, this.app.getAudioRenderer(), this.app.getGuiViewPort());
-    Nifty nifty = niftyDisplay.getNifty();
-    nifty.fromXml("Interface/screen.xml", "hud");
-
-    this.app.getGuiViewPort().addProcessor(niftyDisplay);
-    
-
-    Element niftyElement = nifty.getCurrentScreen().findElementByName("itemLabel");
-    niftyElement.getRenderer(TextRenderer.class).setText("");
-    */
-    
-    /*setDisplayFps(false);
-        setDisplayStatView(false);
-        
-        
-        ViewPort niftyView = renderManager.createPreView("NiftyView", cam);
-        NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
-        assetManager,  inputManager,  audioRenderer,  niftyView);
-        Nifty nifty = niftyDisplay.getNifty();
-        nifty.fromXml("Interface/screen.xml", "hud");
-        
-        niftyView.addProcessor(niftyDisplay);
-        FrameBuffer fb = new FrameBuffer(settings.getWidth(), settings.getHeight(), 0);
-        fb.setDepthBuffer(Format.Depth);
-        Texture2D niftytex = new Texture2D(settings.getWidth(), settings.getHeight(), Format.RGBA8);
-        fb.setColorTexture(niftytex);
-        niftyView.setClearFlags(true, false, false);
-        niftyView.setOutputFrameBuffer(fb);
-        
-        Box b = new Box(Vector3f.ZERO, 1f, 0.75f, 0.01f);
-        Geometry geom = new Geometry("Box", b);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("m_ColorMap", niftytex); 
-        mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-        geom.setMaterial(mat);
-        camNode.attachChild(geom);
-        geom.move(0,0,2);*/
-        
-        //Test HUD
-        /*HUDController hud = HUDController.getInstance();
-        hud.init(nifty);
-        hud.addMessage("1");
-        hud.addMessage("2");
-        hud.addMessage("3");
-        hud.addMessage("4");
-        hud.addMessage("5");
-        hud.addMessage("6");*/
     
     
     // physics debug (shows collission meshes):
