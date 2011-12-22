@@ -55,4 +55,15 @@ public class ChecksumManager {
       throw new VerifyError("Checksum validation failed. Invalid checksum!");
     }
   }
+  
+  /**
+   * 
+   * Calculates the checksum of the specified files with the help of crc()
+   * 
+   * @param files List of files to be processed.
+   * @return The checksum
+   */
+  public static String calculateChecksum(List<String> files) {
+    return "1";
+  }
 }

@@ -8,6 +8,7 @@ import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.message.DisconnectMessage;
 import edu.teddys.BaseGame;
+import edu.teddys.hud.HUDController;
 import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
 import edu.teddys.network.messages.NetworkMessageManipulation;
@@ -41,20 +42,26 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
     System.out.println("New message arrived: " + message.getClass());
     if (message instanceof DisconnectMessage) {
       BaseGame.getLogger().log(Level.WARNING,
-              "Client has been disconnected from the " 
-              + "server yet. Reason: {0}", 
+              "Client has been disconnected from the "
+              + "server yet. Reason: {0}",
               ((DisconnectMessage) message).getReason());
       //TODO change game state
-    }
-    if (message instanceof NetworkMessageInfo) {
+    } else if (message instanceof NetworkMessageInfo) {
       NetworkMessageInfo info = (NetworkMessageInfo) message;
-      //TODO use a method to find the ingame name of the teddy
-      System.out.println(String.format(
+      //TODO check if the client name is displayed as it should be
+      String teddyName = "";
+      try {
+        teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
+      } catch (NullPointerException ex) {
+        teddyName = String.valueOf(source.getId());
+      }
+      String infoString = String.format(
               "Teddy %s says: %s",
               //              info.getTimestamp(),
-              source.getId(),
-              info.getMessage()));
-      //TODO display in the HUD
+              teddyName,
+              info.getMessage());
+      HUDController.getInstance().addMessage(infoString);
+      System.out.println(infoString);
     } else if (message instanceof NetworkMessageGameState) {
       if (message instanceof GSMessageGamePaused) {
         //TODO Set game state to "Paused"
@@ -64,6 +71,9 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         //TODO Set game state to "EndGame"
       } else if (message instanceof GSMessagePlayerReady) {
         //TODO Refresh the status of the other clients
+        String teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
+        String infoString = String.format("Player %s is ready yet!", teddyName);
+        HUDController.getInstance().addMessage(infoString);
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManMessageActivateItem) {
@@ -74,9 +84,18 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         if (msg.getClient().equals(TeddyClient.getInstance().getId())) {
           TeddyClient.getInstance().addDamage(msg.getDamage());
         }
+        try {
+          String goodTeddy = TeddyServer.getInstance().getClientData(msg.getClient()).getName();
+          String badTeddy = TeddyServer.getInstance().getClientData(source.getId()).getName();
+          String infoString = String.format("Teddy %s has been injured by 'Mad %s' (Damage: %s)",
+                  goodTeddy, badTeddy, msg.getDamage());
+          HUDController.getInstance().addMessage(infoString);
+        } catch (Exception ex) {
+          
+        }
       } else if (message instanceof ManMessageTransferServerData) {
-        //overwrite the current data
         ManMessageTransferServerData msg = (ManMessageTransferServerData) message;
+        //overwrite the current server data
         TeddyServer.getInstance().setData(msg.getData());
       } else if (message instanceof ManMessageTriggerEffect) {
         //TODO call the appropriate effect and game state
@@ -85,7 +104,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       if (message instanceof ReqMessageMapRequest) {
         ReqMessageMapRequest msg = (ReqMessageMapRequest) message;
         //TODO call the map loader
-
+//        GameLoader mapLoader = new GameLoader(null, null, null);
       } else if (message instanceof ReqMessagePauseRequest) {
         //TODO call the game state "pause"
       } else if (message instanceof ReqMessageRelocateServer) {

@@ -79,6 +79,9 @@ public class ServerListener implements MessageListener<HostedConnection> {
         TeddyServer.getInstance().setClientData(clientID, data);
         //TODO Add member to a team
         
+        // send a gift to the client
+        ManMessageSendDamage dmg = new ManMessageSendDamage(clientID, 10);
+        TeddyServer.getInstance().send(dmg);
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManMessageSendPosition) {
@@ -97,9 +100,6 @@ public class ServerListener implements MessageListener<HostedConnection> {
         for (int i = 0; i < affected.length; i++) {
           ManMessageSendDamage damMsg = new ManMessageSendDamage(affected[i], damage[i]);
           TeddyServer.getInstance().send(damMsg);
-          NetworkMessageInfo dmgMsg = new NetworkMessageInfo(
-                  String.format("Teddy %s got %s damage!", affected[i], damage[i]));
-          TeddyServer.getInstance().send(dmgMsg);
         }
       }
       //TODO check if trigger effect is also possible for clients

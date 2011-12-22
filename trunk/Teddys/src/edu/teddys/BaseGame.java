@@ -6,8 +6,6 @@ import edu.teddys.states.Game;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.network.serializing.Serializer;
-import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.system.AppSettings;

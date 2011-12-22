@@ -34,17 +34,6 @@ public class ChecksumManagerThread extends Thread {
     return Long.toString(Math.abs(r.nextLong()), 36);
   }
 
-  /**
-   * 
-   * Calculates the checksum of the specified files with the help of crc()
-   * 
-   * @param files List of files to be processed.
-   * @return The checksum
-   */
-  private String calculateChecksum(List<String> files) {
-    return "1";
-  }
-
   @Override
   public void run() {
     //TODO dismiss old values
@@ -52,9 +41,9 @@ public class ChecksumManagerThread extends Thread {
       // TODO choose files randomly
       List<String> files = new ArrayList<String>();
       files.add("bla.class");
-      String result = calculateChecksum(files);
+      String result = ChecksumManager.calculateChecksum(files);
       // for every client, generate a token
-      if(!TeddyServer.getInstance().getClientIDs().isEmpty()) {
+      if (!TeddyServer.getInstance().getClientIDs().isEmpty()) {
         for (Integer clientID : TeddyServer.getInstance().getClientIDs()) {
           String token = getRandomString();
           BaseGame.getLogger().log(Level.INFO, "New token generated: {0}", token);

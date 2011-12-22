@@ -126,7 +126,22 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   }
 
   public List<Integer> getClientIDs() {
-    return new ArrayList<Integer>(getData().getClients().keySet());
+    if(getData() != null && !getData().getClients().isEmpty()) {
+      return new ArrayList<Integer>(getData().getClients().keySet());
+    }
+    return new ArrayList<Integer>();
+  }
+  
+  /**
+   * 
+   * Return the client data specified by the ID in the current server context.
+   * Note: Does not check if the entry exists!
+   * 
+   * @param id  Client id
+   * @return Client data, i. e. the name, health, ...
+   */
+  public ClientData getClientData(Integer id) {
+    return getData().getClients().get(id);
   }
 
   /**
@@ -160,7 +175,6 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     conn.send(clientInfo);
     ReqMessageSendClientData sendMsg = new ReqMessageSendClientData();
     conn.send(sendMsg);
-    //TODO add member to team on new response
   }
 
   public void connectionRemoved(Server server, HostedConnection conn) {
