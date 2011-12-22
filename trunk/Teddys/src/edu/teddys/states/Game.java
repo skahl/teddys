@@ -11,14 +11,10 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.shadow.PssmShadowRenderer;
-import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
 import edu.teddys.BaseGame;
 import edu.teddys.hud.HUD;
 import edu.teddys.input.CrosshairControl;
@@ -41,19 +37,15 @@ public class Game extends AbstractAppState {
   private Node rootNode;
   private PssmShadowRenderer pssmRenderer; // Shadow rendering
   private GameLoader gameLoader;
+  public static HUD hud;
   
   private Player player; // should be a list in later versions I guess..
-  
   private boolean paused;
   private boolean enabled;
-  
-  
-  
   // ActionListener
   private ActionListener actionListener = new ActionListener() {
 
     public void onAction(String name, boolean keyPressed, float tpf) {
-      
     }
   };
 
@@ -82,7 +74,7 @@ public class Game extends AbstractAppState {
     } else if (!isActive && this.isEnabled()) {
       // deactivate
       //this.app.getRootNode().detachChild(rotationNode);
-        
+
       // TODO: Why nullpointer exception on exit?
       stateManager.cleanup();
       rootNode.detachAllChildren();
@@ -102,19 +94,19 @@ public class Game extends AbstractAppState {
     this.logger = this.app.getLogger();
     this.inputManager = this.app.getInputManager();
     this.rootNode = this.app.getRootNode();
-    
+
     paused = false;
     enabled = false;
 
-    
+
     // init physics  renderstate
     bulletAppState = new BulletAppState();
     stateManager.attach(bulletAppState);
-    
+
     // load game
     gameLoader = new GameLoader("firstlevel", "maps/firstlevel.zip", this);
-    
-    
+
+
     // shed some light
     Vector3f sunDirection = new Vector3f(-1f, -1f, -1.2f);
     sunDirection.normalizeLocal();
@@ -127,7 +119,7 @@ public class Game extends AbstractAppState {
     AmbientLight sunA = new AmbientLight();
     sunA.setColor(ColorRGBA.White.mult(0.3f));
     rootNode.addLight(sunA);
-    
+
     // init shadow renderstate
     pssmRenderer = new PssmShadowRenderer(this.app.getAssetManager(), 1024, 2);
     pssmRenderer.setDirection(sunDirection);
@@ -136,21 +128,21 @@ public class Game extends AbstractAppState {
     pssmRenderer.setCompareMode(PssmShadowRenderer.CompareMode.Hardware);
     pssmRenderer.setFilterMode(PssmShadowRenderer.FilterMode.Bilinear);
     this.app.getViewPort().addProcessor(pssmRenderer);
-    
-    
+
+
     // init player
     player = Player.getInstance("Player 1", this);
-    
+
     player.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -1.2f));
-    
+
     rootNode.attachChild(player.getNode());
-    
+
     //HUD
-    HUD hud = new HUD(this.app.getGuiNode(), 
-                      this.app.getAssetManager(),
-                      this.app.getSettings().getWidth(),
-                      this.app.getSettings().getHeight());
-    
+    hud = new HUD(this.app.getGuiNode(),
+            this.app.getAssetManager(),
+            this.app.getSettings().getWidth(),
+            this.app.getSettings().getHeight());
+
     // Crosshair
     this.app.getAssetManager().loadTexture("Textures/fadenkreuz.png");
 
@@ -160,32 +152,32 @@ public class Game extends AbstractAppState {
     cursor.setHeight(64);
     cursor.setWidth(64);
     this.app.getGuiNode().attachChild(cursor);
-        
-        
+
+
     // Camera
     CameraNode camNode = new CameraNode("Camera", this.app.getCamera());
     camNode.setControlDir(ControlDirection.SpatialToCamera);
 
     player.getNode().attachChild(camNode);
-    
+
     // initial distance between camera and player
     camNode.move(0, 0, 4);
-    
-    camNode.lookAt(player.getNode().getWorldTranslation(), new Vector3f(0,1,0));
-    
+
+    camNode.lookAt(player.getNode().getWorldTranslation(), new Vector3f(0, 1, 0));
+
     // Input
-    CrosshairControl cameraControl = new CrosshairControl(camNode, player.getNode(), cursor, 
+    CrosshairControl cameraControl = new CrosshairControl(camNode, player.getNode(), cursor,
             this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
     cameraControl.registerWithInput(inputManager);
 
 
-    
-    
-    
+
+
+
     // physics debug (shows collission meshes):
-    
+
     //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
-    
+
   }
 
   @Override
@@ -201,13 +193,10 @@ public class Game extends AbstractAppState {
       // add key mappings
       //inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_P));
       //inputManager.addMapping(MappingEnum.PARTICLE_TRIGGER.name(), new KeyTrigger(KeyInput.KEY_SPACE));
-
       // add the action listener
       //inputManager.addListener(actionListener, new String[]{MappingEnum.PARTICLE_TRIGGER.name()});
-
       // add the analog listener
       //inputManager.addListener(analogListener, new String[]{"ParticleTrigger"});
-
     } else {
       //inputManager.deleteMapping("Pause");
       //inputManager.deleteMapping(MappingEnum.PARTICLE_TRIGGER.name());
@@ -224,28 +213,28 @@ public class Game extends AbstractAppState {
 
     }
   }
-  
+
   public BaseGame getApp() {
-      return app;
+    return app;
   }
-  
+
   public Logger getLogger() {
-      return logger;
+    return logger;
   }
-  
+
   public Node getRootNode() {
-      return rootNode;
+    return rootNode;
   }
-  
+
   public BulletAppState getBulletAppState() {
-      return bulletAppState;
+    return bulletAppState;
   }
-  
+
   public AssetManager getAssetManager() {
-      return app.getAssetManager();
+    return app.getAssetManager();
   }
-  
+
   public InputManager getInputManager() {
-      return inputManager;
+    return inputManager;
   }
 }

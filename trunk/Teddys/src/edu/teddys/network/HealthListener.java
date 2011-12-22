@@ -4,13 +4,16 @@
  */
 package edu.teddys.network;
 
+import edu.teddys.states.Game;
+
 /**
  *
  * @author cm
  */
-public class HealthListenerTest implements AttributeListener<Integer> {
+public class HealthListener implements AttributeListener<Integer> {
 
   public void attributeChanged(Integer value) {
     System.out.println("Listener: Health changed to " + value + "!");
+    Game.hud.setHealth(TeddyClient.getInstance().getHealth());
   }
 }

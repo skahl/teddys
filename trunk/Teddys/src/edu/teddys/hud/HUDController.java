@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import edu.teddys.network.AttributeListener;
+import edu.teddys.states.Game;
 import java.util.logging.Level;
 
 /**
@@ -83,6 +84,7 @@ public class HUDController {
   public void addMessage(String message) {
 
     BaseGame.getLogger().log(Level.INFO, "HUD: {0}", message);
+    Game.hud.setMessage(0, message);
 
     if (isInitialized) {
 

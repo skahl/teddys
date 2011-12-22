@@ -13,7 +13,7 @@ import edu.teddys.controls.MappingEnum;
 import edu.teddys.input.Position;
 import edu.teddys.network.ClientData;
 import edu.teddys.network.DeathTest;
-import edu.teddys.network.HealthListenerTest;
+import edu.teddys.network.HealthListener;
 import edu.teddys.network.SessionClientData;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.TeddyServer;
@@ -143,7 +143,7 @@ public class BaseGame extends SimpleApplication {
     }
     
     // Create the listeners for the client
-    client.registerListener(TeddyClient.ListenerFields.health, new HealthListenerTest());
+    client.registerListener(TeddyClient.ListenerFields.health, new HealthListener());
     client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
     
     // # # # # # # # # # # # # # # GAME # # # # # # # # # # # # # # # #
