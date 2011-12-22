@@ -2,53 +2,34 @@
 package edu.teddys.objects.player;
 
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
-import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
-import com.jme3.renderer.queue.RenderQueue.ShadowMode;
-import com.jme3.scene.shape.Box;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import edu.teddys.input.PlayerControl;
 import edu.teddys.states.Game;
 
 /**
- *
+ *  Singleton Player
  * @author skahl
  */
 public class Player {
     
+    private static Player INSTANCE = null;
+    
     String name;
     Node node;
-    Box box;
-    Geometry geo;
-    Material mat;
+    TeddyVisual visual;
     Game game;
     
     PlayerControl control;
     CapsuleCollisionShape collisionShape;
     
     
-    public Player(String name, Game game) {
+    private Player(String name, Game game) {
         this.game = game;
-        
         node = new Node(name);
-
-        box = new Box(0.3f, 0.3f, 0.01f);
-        geo = new Geometry(name, box);
-
-        mat = new Material(game.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setTexture("ColorMap", game.getAssetManager().loadTexture("Textures/teddy.png"));
-        mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-        
-        geo.setMaterial(mat);
-        geo.setShadowMode(ShadowMode.CastAndReceive);
-        geo.setQueueBucket(Bucket.Transparent);
-        
-        node.attachChild(geo);
+        visual = new TeddyVisual(node, game.getAssetManager());
         
         // physics
-        collisionShape = new CapsuleCollisionShape(getHeight()*0.5f, getWidth(), 1);
+        collisionShape = new CapsuleCollisionShape(visual.getWidth()*0.6f, visual.getHeight()*0.8f, 1);
         
         control = new PlayerControl(node, collisionShape, 0.01f);
         control.registerWithInput(game.getInputManager());
@@ -63,32 +44,20 @@ public class Player {
     public String getName() {
         return name;
     }
-
-    public Geometry getGeo() {
-        return geo;
+    
+    public PlayerControl getPlayerControl() {
+        return control;
     }
-
-    public Material getMat() {
-        return mat;
-    }
-
+    
     public Node getNode() {
         return node;
     }
     
-    public float getWidth() {
-        return box.getXExtent();
-    }
-    
-    public float getHeight() {
-        return box.getYExtent();
-    }
-
-    public Box getBox() {
-        return box;
-    }
-    
-    public PlayerControl getPlayerControl() {
-        return control;
+    public static Player getInstance(String name, Game game) {
+        if(INSTANCE == null) {
+            INSTANCE = new Player(name, game);
+        }
+        
+        return INSTANCE;
     }
 }

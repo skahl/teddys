@@ -6,6 +6,8 @@ import edu.teddys.states.Game;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.network.serializing.Serializer;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.system.AppSettings;
@@ -98,6 +100,7 @@ public class BaseGame extends SimpleApplication {
     setDisplayStatView(false);
     inputManager.setCursorVisible(false);
     rootNode.setShadowMode(ShadowMode.Off);
+    renderManager.setAlphaToCoverage(false);
 
     stateManager.attach(new Menu());
     stateManager.attach(new Game());
@@ -105,6 +108,9 @@ public class BaseGame extends SimpleApplication {
 
     // init thread pool with size
     threadPool = new ScheduledThreadPoolExecutor(4);
+    
+    // Post Processing Filter initialization
+    
 
 
     // init start state

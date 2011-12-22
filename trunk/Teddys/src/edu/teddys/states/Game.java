@@ -113,6 +113,7 @@ public class Game extends AbstractAppState {
     // load game
     gameLoader = new GameLoader("firstlevel", "maps/firstlevel.zip", this);
     
+    
     // shed some light
     Vector3f sunDirection = new Vector3f(-1f, -1f, -1.2f);
     sunDirection.normalizeLocal();
@@ -127,30 +128,34 @@ public class Game extends AbstractAppState {
     rootNode.addLight(sunA);
     
     // init shadow renderstate
-    pssmRenderer = new PssmShadowRenderer(this.app.getAssetManager(), 512, 2);
+    pssmRenderer = new PssmShadowRenderer(this.app.getAssetManager(), 1024, 2);
     pssmRenderer.setDirection(sunDirection);
+    pssmRenderer.setLambda(0.55f);
+    pssmRenderer.setShadowIntensity(0.5f);
+    pssmRenderer.setCompareMode(PssmShadowRenderer.CompareMode.Hardware);
+    pssmRenderer.setFilterMode(PssmShadowRenderer.FilterMode.Bilinear);
     this.app.getViewPort().addProcessor(pssmRenderer);
     
     
     // init player
-    player = new Player("Player 1", this);
+    player = Player.getInstance("Player 1", this);
     
-    player.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -.75f));
+    player.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -1.2f));
     
     rootNode.attachChild(player.getNode());
     
-    //Crosshair
+    // Crosshair
     this.app.getAssetManager().loadTexture("Textures/fadenkreuz.png");
 
     Cursor cursor = new Cursor("Cursor");
     cursor.setImage(this.app.getAssetManager(), "Textures/fadenkreuz.png", true);
+    cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
     cursor.setHeight(64);
     cursor.setWidth(64);
     player.getNode().attachChild(cursor);
         
         
-    //Camera
-
+    // Camera
     CameraNode camNode = new CameraNode("Camera", this.app.getCamera());
     camNode.setControlDir(ControlDirection.SpatialToCamera);
 
@@ -161,7 +166,7 @@ public class Game extends AbstractAppState {
     
     camNode.lookAt(player.getNode().getWorldTranslation(), new Vector3f(0,1,0));
     
-    //Input
+    // Input
     CrosshairControl cameraControl = new CrosshairControl(camNode, player.getNode(), cursor, 
             this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
     cameraControl.registerWithInput(inputManager);
@@ -225,7 +230,9 @@ public class Game extends AbstractAppState {
     
     
     // physics debug (shows collission meshes):
+    
     //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
+    
   }
 
   @Override
