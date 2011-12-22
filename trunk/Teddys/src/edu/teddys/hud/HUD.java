@@ -10,9 +10,11 @@ import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.ui.Picture;
 import java.util.ArrayList;
@@ -50,6 +52,16 @@ public class HUD {
     imageSize = (int) (height / 14);
     healthSize = (int) (height / 12);
 
+//    Box box = new Box(10, 2, 10);
+//    Geometry boxGeom = new Geometry("MessageBox", box);
+//    Material mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+//    // 50 per cent transparency
+//    mat2.setColor("m_Color", new ColorRGBA(0.2f, 0.2f, 0.2f, .5f));
+//    mat2.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+//    boxGeom.setMaterial(mat2);
+//    boxGeom.setLocalTranslation(0, -3f, 0);
+//    hudNode.attachChild(boxGeom);
+    
     messages = new ArrayList<BitmapText>();
 
     BitmapFont messageFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
@@ -134,7 +146,6 @@ public class HUD {
 
 //    parent.attachChild(g);
     
-    
     parent.attachChild(hudNode);
   }
 
@@ -148,10 +159,8 @@ public class HUD {
 
   public void setHealth(int health) {
     //TODO call a repaint method
-    hudNode.detachChild(healthText);
+    healthText.setText(Integer.toString(health));
     
-//    healthText.setText(Integer.toString(health));
-//    hudNode.attachChild(healthText);
 //    for(Spatial node : nodes) {
 //      hudNode.attachChild(node);
 //    }
