@@ -33,6 +33,8 @@ public class HUD {
   private BitmapText healthText, playerName, team, ammoText, jetpackText;
   private Map<String, Picture> weapons;
   
+  private HealthDisplay healthDisplay;
+  
   private static HUD instance = null;
 
   private HUD(Node parent, AssetManager assetManager, float width, float height) {
@@ -173,6 +175,8 @@ public class HUD {
 //      hudNode.attachChild(node);
 //    }
     //TODO use a graphical representation of the health?
+    
+    //healthDisplay.setHealth(health);
   }
 
   public void setActiveWeapon(String name) {
