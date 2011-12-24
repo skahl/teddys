@@ -17,6 +17,7 @@ import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.shadow.PssmShadowRenderer;
 import edu.teddys.BaseGame;
 import edu.teddys.hud.HUD;
+import edu.teddys.hud.HUDController;
 import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.map.GameLoader;
@@ -130,6 +131,16 @@ public class Game extends AbstractAppState {
     this.app.getViewPort().addProcessor(pssmRenderer);
 
 
+    //HUD
+    hud = HUD.getInstance(this.app.getGuiNode(),
+            this.app.getAssetManager(),
+            this.app.getSettings().getWidth(),
+            this.app.getSettings().getHeight());
+    
+    HUDController hudController = HUDController.getInstance();
+    hudController.setHUD(hud);
+
+    
     // init player
     player = Player.getInstance("Player 1", this);
 
@@ -137,11 +148,7 @@ public class Game extends AbstractAppState {
 
     rootNode.attachChild(player.getNode());
 
-    //HUD
-    hud = new HUD(this.app.getGuiNode(),
-            this.app.getAssetManager(),
-            this.app.getSettings().getWidth(),
-            this.app.getSettings().getHeight());
+    
 
     // Crosshair
     this.app.getAssetManager().loadTexture("Textures/fadenkreuz.png");
