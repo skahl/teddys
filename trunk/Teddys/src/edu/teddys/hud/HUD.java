@@ -9,12 +9,8 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.ui.Picture;
 import java.util.ArrayList;
@@ -36,43 +32,48 @@ public class HUD {
   private Picture item, health, jetpack, weapon;
   private BitmapText healthText, playerName, team, ammoText, jetpackText;
   private Map<String, Picture> weapons;
+  
+  private static HUD instance = null;
 
-  public HUD(Node parent, AssetManager assetManager, float width, float height) {
+  private HUD(Node parent, AssetManager assetManager, float width, float height) {
 
+      
     hudNode = new Node("hudNode");
 
-    Quad q = new Quad(width, height / 6);
-    Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-    mat.setColor("Color", ColorRGBA.DarkGray);
-    mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-    Geometry g = new Geometry("BackgroundG", q);
-    g.setMaterial(mat);
-    g.setQueueBucket(Bucket.Transparent);
-
+    //temporary background boxes
+    Quad bottomBG_quad = new Quad(width, height / 6);
+    Geometry bottomBG_geo = new Geometry("BackgroundG", bottomBG_quad);
+    Material bottomBG_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    bottomBG_mat.setTexture("ColorMap", assetManager.loadTexture("Textures/HUD/hudbg.png"));
+    bottomBG_mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+    bottomBG_geo.setMaterial(bottomBG_mat);
+    bottomBG_geo.move(0,0,-1);
+    hudNode.attachChild(bottomBG_geo);
+    
+    Quad topBG_quad = new Quad(width, height / 6);
+    Geometry topBG_geo = new Geometry("BackgroundG", bottomBG_quad);
+    topBG_geo.setMaterial(bottomBG_mat);
+    topBG_geo.move(0,height - height/6,-1);
+    hudNode.attachChild(topBG_geo);
+    
+    
+    
+    
     imageSize = (int) (height / 14);
     healthSize = (int) (height / 12);
 
-//    Box box = new Box(10, 2, 10);
-//    Geometry boxGeom = new Geometry("MessageBox", box);
-//    Material mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-//    // 50 per cent transparency
-//    mat2.setColor("m_Color", new ColorRGBA(0.2f, 0.2f, 0.2f, .5f));
-//    mat2.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-//    boxGeom.setMaterial(mat2);
-//    boxGeom.setLocalTranslation(0, -3f, 0);
-//    hudNode.attachChild(boxGeom);
+
     
     messages = new ArrayList<BitmapText>();
 
-    BitmapFont messageFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+    BitmapFont messageFont = assetManager.loadFont("Interface/Fonts/Waree.fnt");
     BitmapFont font = assetManager.loadFont("Interface/Fonts/Purisa32.fnt");
     for (int i = 0; i < numMessages; i++) {
       BitmapText t = new BitmapText(messageFont);
-      //t.setSize(messageFont.getCharSet().getRenderedSize());
+      t.setSize(messageFont.getCharSet().getRenderedSize());
       t.setLocalTranslation(0, height - i * t.getLineHeight(), 0);
-      t.setText("Message " + i);
       hudNode.attachChild(t);
-      messages.add(0, t); //TODO why zero? Shouldn't it be i?
+      messages.add(0, t);
     }
 
     weapons = new HashMap<String, Picture>();
@@ -107,7 +108,7 @@ public class HUD {
     ammoText.setLocalTranslation(width / 5 + ammoText.getLineWidth() + 20,
             weapon.getLocalTranslation().y + imageSize / 2 + ammoText.getLineHeight() / 2,
             0);
-    ammoText.setText("100");
+    //ammoText.setText("100");
     hudNode.attachChild(ammoText);
 
     //Health
@@ -124,7 +125,7 @@ public class HUD {
     healthText.setLocalTranslation(width / 2 + healthText.getLineWidth() + 20,
             health.getLocalTranslation().y + healthSize / 2 + healthText.getLineHeight() / 2,
             0);
-    healthText.setText("100%");
+    //healthText.setText("");
     hudNode.attachChild(healthText);
 
     //Jetpack
@@ -141,12 +142,19 @@ public class HUD {
     jetpackText.setLocalTranslation(4 * width / 5 + jetpackText.getLineWidth() + 20,
             jetpack.getLocalTranslation().y + imageSize / 2 + jetpackText.getLineHeight() / 2,
             0);
-    jetpackText.setText("100");
+    //jetpackText.setText("100");
     hudNode.attachChild(jetpackText);
 
 //    parent.attachChild(g);
     
     parent.attachChild(hudNode);
+  }
+  
+  public static HUD getInstance(Node parent, AssetManager assetManager, float width, float height) {
+    if (instance == null) {
+      instance = new HUD(parent, assetManager, width, height);
+    }
+    return instance;
   }
 
   public void setMessage(int index, String message) {
@@ -159,7 +167,7 @@ public class HUD {
 
   public void setHealth(int health) {
     //TODO call a repaint method
-    healthText.setText(Integer.toString(health));
+    healthText.setText(Integer.toString(health)+"%");
     
 //    for(Spatial node : nodes) {
 //      hudNode.attachChild(node);
