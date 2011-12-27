@@ -19,6 +19,7 @@ import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
+import edu.teddys.network.messages.server.ManMessageTransferServerData;
 import edu.teddys.protection.ChecksumManager;
 
 /**
@@ -36,6 +37,9 @@ public class ServerListener implements MessageListener<HostedConnection> {
 //      if (msg instanceof NetworkMessageInfo) {
     //TODO get the name of the client
     if (message instanceof NetworkMessageInfo) {
+      //
+      // RECEIVED A SIMPLE MESSAGE
+      //
       NetworkMessageInfo info = (NetworkMessageInfo) message;
       System.out.println(String.format(
               "Message received at X from client %s: %s",
@@ -46,32 +50,51 @@ public class ServerListener implements MessageListener<HostedConnection> {
       TeddyServer.getInstance().send(info);
     } else if (message instanceof NetworkMessageGameState) {
       if (message instanceof GSMessageGamePaused) {
+        //
+        // USER HAS CHANGED HIS PAUSE STATUS
+        //
         // Just distribute the message to the other clients
         GSMessageGamePaused msg = (GSMessageGamePaused) message;
         TeddyServer.getInstance().send(msg);
       } else if (message instanceof GSMessagePlayerReady) {
-        //TODO Refresh client info in TeddyServerData
-
+        //
+        // USER ACCEPTED THE GAME START REQUEST
+        //
+        //TODO link to the map load status?
         // Distribute info to the other clients
         GSMessagePlayerReady msg = (GSMessagePlayerReady) message;
         TeddyServer.getInstance().send(msg);
+        // Refresh client info in TeddyServerData
+        TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
+        // Refresh server data of the clients
+        ManMessageTransferServerData sync = new ManMessageTransferServerData(TeddyServer.getInstance().getData());
+        TeddyServer.getInstance().send(sync);
       }
     } else if (message instanceof NetworkMessageResponse) {
       if (message instanceof ResMessageSendChecksum) {
-        System.out.println("Received ResMessageSendChecksum ...");
+        //
+        // PROTECTION: USER SENT HIS CHECKSUM
+        //
         ResMessageSendChecksum msg = (ResMessageSendChecksum) message;
+        // Check the transmitted checksum for some files ...
         try {
           ChecksumManager.checkChecksum(msg.getToken(), msg.getChecksum());
         } catch(VerifyError error) {
           TeddyServer.getInstance().disconnect(source.getId(), error.getLocalizedMessage());
         }
       } else if (message instanceof ResMessageMapLoaded) {
-        //TODO Sync with the other clients
+        //
+        // CLIENT HAS JUST LOADED A MAP
+        //
+        //TODO Sync with the other clients?
         ResMessageMapLoaded msg = (ResMessageMapLoaded) message;
         TeddyServer.getInstance().send(msg);
         //TODO Check how many clients are ready yet to start the game occassionally.
         // (use TeddyServerData)
       } else if (message instanceof ResMessageSendClientData) {
+        //
+        // RECEIVED USER DATA
+        //
         ResMessageSendClientData msg = (ResMessageSendClientData) message;
         // Tell the server to update the data
         ClientData data = msg.getClientData();
@@ -79,17 +102,26 @@ public class ServerListener implements MessageListener<HostedConnection> {
         TeddyServer.getInstance().setClientData(clientID, data);
         //TODO Add member to a team
         
-        // send a gift to the client
+        TeddyServer.getInstance().getData().getTeams().get(0).addPlayer(clientID);
+        
+        // send a neat "gift" to the client
         ManMessageSendDamage dmg = new ManMessageSendDamage(clientID, 10);
         TeddyServer.getInstance().send(dmg);
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManMessageSendPosition) {
+        //
+        // USER POSITION RECEIVED
+        //
         ManMessageSendPosition msg = (ManMessageSendPosition) message;
         //TODO redistibute to the other clients
         TeddyServer.getInstance().send(msg);
         //TODO also transfer jumps
       } else if (message instanceof ManMessageTriggerWeapon) {
+        //
+        // USER WANTS TO GET NASTY (-> WEAPONS)
+        //
+        
         //TODO read the target list
 
         //TODO calculate the damage and send them to the appropriate clients

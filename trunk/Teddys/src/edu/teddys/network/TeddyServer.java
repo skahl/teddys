@@ -36,13 +36,15 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   }
 
   public void startServer() {
-    NetworkCommunicatorSpidermonkeyServer.getInstance().startServer(this);
-    data = new TeddyServerData();
-    data.setCreated(new Date());
-    data.setDiscoverable(true);
-    //TODO check
-//    data.setName("Todesangst");
-    //TODO set game mode
+    if(data == null) {
+      // Check if server data is available
+      NetworkCommunicatorSpidermonkeyServer.getInstance().startServer(this);
+      data = new TeddyServerData();
+      data.setCreated(new Date());
+      data.setDiscoverable(true);
+    }
+    getData().setCreated(new Date());
+    getData().setDiscoverable(true);
   }
 
   protected boolean isRunning() {

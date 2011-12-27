@@ -41,12 +41,18 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
   public void messageReceived(com.jme3.network.Client source, Message message) {
     System.out.println("New message arrived: " + message.getClass());
     if (message instanceof DisconnectMessage) {
+      //
+      // USER HAS BEEN DISCONNECTED/KICKED FROM THE SERVER
+      //
       BaseGame.getLogger().log(Level.WARNING,
               "Client has been disconnected from the "
               + "server yet. Reason: {0}",
               ((DisconnectMessage) message).getReason());
       //TODO change game state
     } else if (message instanceof NetworkMessageInfo) {
+      //
+      // RECEIVED A SIMPLE MESSAGE
+      //
       NetworkMessageInfo info = (NetworkMessageInfo) message;
       //TODO check if the client name is displayed as it should be
       String teddyName = "";
@@ -64,22 +70,46 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       System.out.println(infoString);
     } else if (message instanceof NetworkMessageGameState) {
       if (message instanceof GSMessageGamePaused) {
-        //TODO Set game state to "Paused"
+        //
+        // RECEIVED A PAUSE STATUS CHANGE REQUEST
+        //
+        GSMessageGamePaused msg = (GSMessageGamePaused)message;
+        if(msg.isPaused()) {
+          //TODO Set game state to "Paused"
+          
+        } else {
+          //TODO Set game state to "Game"
+          
+        }
       } else if (message instanceof GSMessageBeginGame) {
+        //
+        // START THE ACCEPTED GAME
+        //
         //TODO Set game state to "Game"
       } else if (message instanceof GSMessageEndGame) {
+        //
+        // END OF THE GAME. DISPLAY STATISTICS ...
+        //
         //TODO Set game state to "EndGame"
       } else if (message instanceof GSMessagePlayerReady) {
-        //TODO Refresh the status of the other clients
+        //
+        // A PLAYER IS READY TO START THE GAME
+        //
         String teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
         String infoString = String.format("Player %s is ready yet!", teddyName);
         HUDController.getInstance().addMessage(infoString);
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManMessageActivateItem) {
+        //
+        // THE USER HAS TO ACTIVATE THE SPECIFIED ITEM YET
+        //
         ManMessageActivateItem msg = (ManMessageActivateItem) message;
 //        TeddyClient.getInstance().setCurrentItem(msg.getItemName());
       } else if (message instanceof ManMessageSendDamage) {
+        //
+        // A DAMAGE REQUEST TO BE APPLIED
+        //
         ManMessageSendDamage msg = (ManMessageSendDamage) message;
         if (msg.getClient().equals(TeddyClient.getInstance().getId())) {
           TeddyClient.getInstance().addDamage(msg.getDamage());
@@ -94,20 +124,35 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           
         }
       } else if (message instanceof ManMessageTransferServerData) {
+        //
+        // NEW SERVER DATA AVAILABLE. SYNC
+        //
         ManMessageTransferServerData msg = (ManMessageTransferServerData) message;
         //overwrite the current server data
         TeddyServer.getInstance().setData(msg.getData());
       } else if (message instanceof ManMessageTriggerEffect) {
+        //
+        // CALL THE GIVEN EFFECT
+        //
         //TODO call the appropriate effect and game state
       }
     } else if (message instanceof NetworkMessageRequest) {
       if (message instanceof ReqMessageMapRequest) {
+        //
+        // LOAD THE SPECIFIED MAP
+        //
         ReqMessageMapRequest msg = (ReqMessageMapRequest) message;
         //TODO call the map loader
 //        GameLoader mapLoader = new GameLoader(null, null, null);
       } else if (message instanceof ReqMessagePauseRequest) {
+        //
+        //TODO check if GSMessageGamePaused is better ...
+        //
         //TODO call the game state "pause"
       } else if (message instanceof ReqMessageRelocateServer) {
+        //
+        // THE ACTIVE NETWORK SERVER SHOULD BE CHANGED
+        //
         ReqMessageRelocateServer msg = (ReqMessageRelocateServer) message;
         if (msg.getDestination().equals(TeddyClient.getInstance().getId())) {
           TeddyServer.getInstance().startServer();
@@ -116,13 +161,18 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //TODO prepare to (seamlessly?) join the new server.
         }
       } else if (message instanceof ReqMessageSendChecksum) {
+        //
+        // PROTECTION: CHECKSUM REQUEST RECEIVED
+        //
         ReqMessageSendChecksum msg = (ReqMessageSendChecksum) message;
         //TODO calculate the checksum (use a dummy value now)
         ResMessageSendChecksum response = new ResMessageSendChecksum(
                 msg.getToken(), "1");
         TeddyClient.getInstance().send(response);
       } else if (message instanceof ReqMessageSendClientData) {
-        System.out.println("Client should send the data now ...");
+        //
+        // CLIENT SYNCHRONISATION REQUEST
+        //
         ResMessageSendClientData response = new ResMessageSendClientData(TeddyClient.getInstance().getData());
         TeddyClient.getInstance().send(response);
       }

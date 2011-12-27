@@ -39,6 +39,10 @@ public class ClientData {
    * Team allocation if available.
    */
   private Integer team = -1;
+  /**
+   * 
+   */
+  private Boolean ready = false;
   
   public ClientData() {
     super();
@@ -98,6 +102,14 @@ public class ClientData {
 
   public void setTeam(Integer team) {
     this.team = team;
+  }
+
+  public Boolean getReady() {
+    return ready;
+  }
+
+  public void setReady(Boolean ready) {
+    this.ready = ready;
   }
   
 }

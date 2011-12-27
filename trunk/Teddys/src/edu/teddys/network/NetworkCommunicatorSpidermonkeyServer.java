@@ -19,13 +19,12 @@ import java.util.logging.Logger;
  * @author cm
  */
 public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicatorAPI {
-  
+
   private com.jme3.network.Server networkServer;
-  
   private static NetworkCommunicatorSpidermonkeyServer instance;
-  
+
   public static NetworkCommunicatorSpidermonkeyServer getInstance() {
-    if(instance == null) {
+    if (instance == null) {
       instance = new NetworkCommunicatorSpidermonkeyServer();
     }
     return instance;
@@ -38,25 +37,51 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
       setUpServer();
     } catch (IOException ex) {
       Logger.getLogger(NetworkCommunicatorSpidermonkeyServer.class.getName()).log(Level.SEVERE, null, ex);
-      System.err.println("Error while trying to start the server!");
+      BaseGame.getLogger().log(
+              Level.SEVERE,
+              "Error while trying to start the server: {0}",
+              ex.getMessage());
     }
   }
-  
+
+  /**
+   * 
+   * Start the SpiderMonkey server. If the server is already running, just return.
+   * 
+   * @param server The TeddyServer instance. Necessary to set a ConnectionListener
+   *  that is informed of all connection-related stuff.
+   * @see ConnectionListener
+   */
   public void startServer(TeddyServer server) {
-    if(!networkServer.isRunning()) {
+    if (!networkServer.isRunning()) {
       networkServer.start();
-      System.out.println("Server started!");
+      BaseGame.getLogger().info("Server started!");
       networkServer.addConnectionListener(server);
     }
   }
-  
+
+  /**
+   * 
+   * Shut down the server if it is currently running.
+   * 
+   */
   public void shutdownServer() {
-    if(networkServer.isRunning()) {
+    if (networkServer.isRunning()) {
       networkServer.close();
-      System.out.println("Server closed.");
+      BaseGame.getLogger().info("Server closed!");
     }
   }
-  
+
+  /**
+   * 
+   * Create a new SpiderMonkey server on the specified port.
+   * @see NetworkSettings
+   * 
+   * Additionally, add a listener for network messages.
+   * @see ServerListener
+   * 
+   * @throws IOException Exception which is thrown on network errors.
+   */
   private void setUpServer() throws IOException {
     // Get the server settings
     Integer serverPort = NetworkSettings.SERVER_PORT;
@@ -72,7 +97,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
 
   public void send(NetworkMessage message) {
     //TODO check if a recipient field is available
-    
+
     networkServer.broadcast(message);
   }
 

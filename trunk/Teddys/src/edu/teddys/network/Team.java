@@ -4,18 +4,24 @@
  */
 package edu.teddys.network;
 
+import com.jme3.network.serializing.Serializable;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author cm
  */
+@Serializable
 public class Team {
   private String name;
   private String id;
-  private Color color;
-  private List<Integer> players;
+  /**
+   * Default value is a dummy.
+   */
+  private Color color = Color.BLACK;
+  private List<Integer> players = new ArrayList<Integer>();
 
   public Color getColor() {
     return color;
@@ -47,5 +53,9 @@ public class Team {
 
   public void setPlayers(List<Integer> players) {
     this.players = players;
+  }
+  
+  public void addPlayer(Integer clientID) {
+    getPlayers().add(clientID);
   }
 }
