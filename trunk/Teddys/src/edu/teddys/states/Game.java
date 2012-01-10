@@ -16,6 +16,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.shadow.PssmShadowRenderer;
 import edu.teddys.BaseGame;
+import edu.teddys.GameModeEnum;
 import edu.teddys.hud.HUD;
 import edu.teddys.hud.HUDController;
 import edu.teddys.input.CrosshairControl;
@@ -135,7 +136,7 @@ public class Game extends AbstractAppState {
     hud = HUD.getInstance(this.app.getGuiNode(),
             this.app.getAssetManager(),
             this.app.getSettings().getWidth(),
-            this.app.getSettings().getHeight());
+            this.app.getSettings().getHeight(), GameModeEnum.DEATHMATCH);
     
     HUDController hudController = HUDController.getInstance();
     hudController.setHUD(hud);
