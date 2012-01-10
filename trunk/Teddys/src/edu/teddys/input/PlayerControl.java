@@ -4,31 +4,39 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import edu.teddys.hud.HUDController;
 
 /**
  *
- * @author besien
+ * @author besient
  */
-public class PlayerControl extends CharacterControl implements AnalogListener {
+public class PlayerControl extends CharacterControl implements AnalogListener, ActionListener {
 
     private float moveSpeed = 0.02f;
+    private float totalEnergy, currentEnergy;
+    private boolean jetpackActive;
     
     private InputManager input;
-    Vector3f vel;
+    private  Vector3f vel;
     
     
     public PlayerControl(Spatial player, CollisionShape collisionShape, float stepHeight) {
         super(collisionShape, stepHeight);
         setPhysicsLocation(player.getWorldTranslation());
-        setFallSpeed(1f);
-        setJumpSpeed(1f);
-        setGravity(1f);
-        player.addControl(this);        
+//        setFallSpeed(1f);
+//        setJumpSpeed(1f);
+//        setGravity(1f);
+        player.addControl(this);   
+        
+        
+        totalEnergy = 100;
+        currentEnergy = totalEnergy;
+
     }
         
     public void registerWithInput(InputManager input) {
@@ -37,10 +45,12 @@ public class PlayerControl extends CharacterControl implements AnalogListener {
         input.addMapping("moveLeft", new KeyTrigger(KeyInput.KEY_A));
         input.addMapping("moveRight", new KeyTrigger(KeyInput.KEY_D));
         input.addMapping("jump", new KeyTrigger(KeyInput.KEY_SPACE));
+        input.addMapping("jetpack", new KeyTrigger(KeyInput.KEY_LCONTROL));
         
         input.addListener(this, new String[]{"moveLeft", 
                                             "moveRight",
-                                            "jump"});
+                                            "jump",
+                                            "jetpack"});
     }
     
     public void onAnalog(String name, float value, float tpf) {
@@ -58,5 +68,50 @@ public class PlayerControl extends CharacterControl implements AnalogListener {
         }
 
     }
+    
+    public void onAction(String name, boolean isPressed, float tpf) {
+        if (name.equals("jetpack")) {
+            if (!jetpackActive && isPressed) {
+                startJetpack();                
+            } else {
+                stopJetpack();
+            }    
+        }
+    }
+    
+    private void startJetpack() {
+        if (currentEnergy > 0f) {
+            setGravity(-4f);
+            jetpackActive = true;
+        } else {
+            stopJetpack();
+        }
+    }
+    
+    private void stopJetpack() {
+        setGravity(4f);
+        jetpackActive = false;
+    }
+    
+    @Override
+    public void update(float tpf) {
+        super.update(tpf);
+        if (jetpackActive) {
+            if (currentEnergy > 0) {
+                currentEnergy -= 75f * tpf;
+            } else {
+                stopJetpack();
+            }    
+        } else {
+            if (currentEnergy < totalEnergy) {
+                currentEnergy += 25f * tpf;
+            }
+        }
+        
+        HUDController.getInstance().setJetpackEnergy((int)currentEnergy);
+    }
+
+    
+
     
 }
