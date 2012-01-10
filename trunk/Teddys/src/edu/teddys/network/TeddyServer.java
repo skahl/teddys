@@ -35,18 +35,29 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     return instance;
   }
 
+  /**
+   * 
+   * Start the server. Refresh the server data regarding creation timestamp
+   * and discoverability in every case, even when the server is already
+   * running.
+   * 
+   */
   public void startServer() {
-    if(data == null) {
-      // Check if server data is available
-      NetworkCommunicatorSpidermonkeyServer.getInstance().startServer(this);
+    NetworkCommunicatorSpidermonkeyServer.getInstance().startServer(this);
+    if(!isRunning()) {
       data = new TeddyServerData();
-      data.setCreated(new Date());
-      data.setDiscoverable(true);
     }
     getData().setCreated(new Date());
     getData().setDiscoverable(true);
   }
 
+  /**
+   * 
+   * Check if the server is currently running. That is when getData() returns
+   * a non-null value.
+   * 
+   * @return true if the server is running, else false.
+   */
   protected boolean isRunning() {
     if (data != null) {
       return true;
@@ -158,6 +169,13 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     BaseGame.getLogger().log(Level.INFO, "setClientData() called from client {0}", clientID);
   }
 
+  /**
+   * 
+   * Called when a new client has joined the server.
+   * 
+   * @param server
+   * @param conn The client information.
+   */
   public void connectionAdded(Server server, HostedConnection conn) {
     if (!isRunning()) {
       System.err.println("connectionAdded() called, but no server data available!");
@@ -179,10 +197,17 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     conn.send(sendMsg);
   }
 
+  /**
+   * 
+   * Called when a client has been disconnected.
+   * 
+   * @param server
+   * @param conn The client information.
+   */
   public void connectionRemoved(Server server, HostedConnection conn) {
     
     if (!isRunning()) {
-      System.err.println("connectionRemoved() called, but no server data available!");
+      BaseGame.getLogger().severe("connectionRemoved() called, but no server data available!");
       return;
     }
     if (getData().getConnections().contains(conn)) {

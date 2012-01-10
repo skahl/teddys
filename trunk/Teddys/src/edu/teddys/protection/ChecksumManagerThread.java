@@ -21,11 +21,11 @@ public class ChecksumManagerThread extends Thread {
 
   /**
    * 
-   * Used for token generation.
+   * Generate a new random string.
    * 
    * @return A randomly generated string.
    */
-  private String getRandomString() {
+  private String getNewToken() {
     Random r = new Random();
     /*
      * Taken from http://bright-green.com/blog/2005_04_05/generating_a_random_string.html
@@ -40,13 +40,18 @@ public class ChecksumManagerThread extends Thread {
     for (;;) {
       // TODO choose files randomly
       List<String> files = new ArrayList<String>();
-      files.add("bla.class");
+      // Get the current working directory
+//      String wd = System.getProperty("user.dir") + "/";
+      files.add("/edu/teddys/BaseGame.class");
+//      files.add("BaseGame.java");
       String result = ChecksumManager.calculateChecksum(files);
       // for every client, generate a token
       if (!TeddyServer.getInstance().getClientIDs().isEmpty()) {
         for (Integer clientID : TeddyServer.getInstance().getClientIDs()) {
-          String token = getRandomString();
-          BaseGame.getLogger().log(Level.INFO, "New token generated: {0}", token);
+          String token = getNewToken();
+          BaseGame.getLogger().log(
+                  Level.INFO, "New token generated ({0}. Expected checksum: {1}",
+                  new Object[]{token, result});
           ChecksumManager.files.put(token, files);
           ChecksumManager.result.put(token, result);
           // Send a message to the clients

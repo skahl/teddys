@@ -28,6 +28,7 @@ import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
+import edu.teddys.protection.ChecksumManager;
 import java.util.logging.Level;
 
 /**
@@ -156,6 +157,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         ReqMessageRelocateServer msg = (ReqMessageRelocateServer) message;
         if (msg.getDestination().equals(TeddyClient.getInstance().getId())) {
           TeddyServer.getInstance().startServer();
+          //TODO Force the clients to join the new server ^^
           System.out.println("Server is ready to get connections.");
         } else {
           //TODO prepare to (seamlessly?) join the new server.
@@ -166,9 +168,14 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         //
         ReqMessageSendChecksum msg = (ReqMessageSendChecksum) message;
         //TODO calculate the checksum (use a dummy value now)
-        ResMessageSendChecksum response = new ResMessageSendChecksum(
-                msg.getToken(), "1");
-        TeddyClient.getInstance().send(response);
+        try {
+          ResMessageSendChecksum response = new ResMessageSendChecksum(
+                msg.getToken(), ChecksumManager.calculateChecksum(msg.getFiles()));
+          TeddyClient.getInstance().send(response);
+        } catch(IllegalArgumentException ex) {
+          ex.printStackTrace();
+          BaseGame.getLogger().severe(ex.getMessage());
+        }
       } else if (message instanceof ReqMessageSendClientData) {
         //
         // CLIENT SYNCHRONISATION REQUEST

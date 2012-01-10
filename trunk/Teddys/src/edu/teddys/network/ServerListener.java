@@ -21,6 +21,7 @@ import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;
 import edu.teddys.protection.ChecksumManager;
+import java.awt.Color;
 
 /**
  * 
@@ -77,9 +78,10 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //
         ResMessageSendChecksum msg = (ResMessageSendChecksum) message;
         // Check the transmitted checksum for some files ...
+        System.out.println("User submitted " + msg.getChecksum() + " for token " + msg.getToken());
         try {
           ChecksumManager.checkChecksum(msg.getToken(), msg.getChecksum());
-        } catch(VerifyError error) {
+        } catch (VerifyError error) {
           TeddyServer.getInstance().disconnect(source.getId(), error.getLocalizedMessage());
         }
       } else if (message instanceof ResMessageMapLoaded) {
@@ -101,9 +103,13 @@ public class ServerListener implements MessageListener<HostedConnection> {
         Integer clientID = data.getId();
         TeddyServer.getInstance().setClientData(clientID, data);
         //TODO Add member to a team
-        
+
+        if(TeddyServer.getInstance().getData().getTeams().isEmpty()) {
+          // Create a new team
+          TeddyServer.getInstance().getData().getTeams().add(new Team(Color.BLUE, "Grampen"));
+        }
         TeddyServer.getInstance().getData().getTeams().get(0).addPlayer(clientID);
-        
+
         // send a neat "gift" to the client
         ManMessageSendDamage dmg = new ManMessageSendDamage(clientID, 10);
         TeddyServer.getInstance().send(dmg);
@@ -121,7 +127,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //
         // USER WANTS TO GET NASTY (-> WEAPONS)
         //
-        
+
         //TODO read the target list
 
         //TODO calculate the damage and send them to the appropriate clients

@@ -4,11 +4,16 @@
  */
 package edu.teddys.protection;
 
+import edu.teddys.BaseGame;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.Adler32;
+import java.util.zip.CheckedInputStream;
 
 /**
  *
@@ -34,36 +39,78 @@ public class ChecksumManager {
       return;
     }
     thread.start();
-    System.out.println("Checksum timer thread spawned. Sending a request every " + timerIntervall / 1000 + " seconds.");
+    BaseGame.getLogger().log(
+            Level.INFO,
+            "Checksum timer thread spawned. Sending a request every {0} seconds.",
+            timerIntervall / 1000);
   }
 
   public static void stopTimer() {
     try {
       thread.join();
-      System.out.println("The checksum timer has been stopped.");
+      BaseGame.getLogger().info("The checksum timer has been stopped.");
     } catch (InterruptedException ex) {
-      Logger.getLogger(ChecksumManager.class.getName()).log(Level.SEVERE, null, ex);
+      BaseGame.getLogger().log(
+              Level.INFO,
+              "The checksum timer could not be stopped:{0}",
+              ex.getMessage());
     }
   }
 
   public static void checkChecksum(String token, String input) throws VerifyError {
     // check if the key has been invalidated
-    if(!result.containsKey(token)) {
+    if (!result.containsKey(token)) {
       throw new VerifyError("Checksum validation failed. Token is invalid!");
     }
     if (!input.equals(result.get(token))) {
       throw new VerifyError("Checksum validation failed. Invalid checksum!");
     }
   }
-  
+
   /**
    * 
-   * Calculates the checksum of the specified files with the help of crc()
+   * Calculates the checksum of the specified files.
+   * Note: For performance reasons use the Adler32 implementation of the
+   * java Checksum interface.
+   * 
+   * @see Adler32
+   * @see Checksum
    * 
    * @param files List of files to be processed.
    * @return The checksum
    */
   public static String calculateChecksum(List<String> files) {
-    return "1";
+    Adler32 crc = new Adler32();
+    for (String fileName : files) {
+      try {
+        InputStream in = BaseGame.class.getClassLoader().getResourceAsStream(fileName);
+        if (in == null) {
+          BaseGame.getLogger().log(
+                  Level.SEVERE,
+                  "InputStream could not be created for {0}",
+                  fileName);
+          throw new IllegalArgumentException("Error while trying to read " + fileName);
+        }
+        CheckedInputStream cin = new CheckedInputStream(in, crc);
+        if (cin == null) {
+          BaseGame.getLogger().log(
+                  Level.SEVERE,
+                  "InputStream could not be created for {0}",
+                  fileName);
+          throw new IllegalArgumentException("Error while trying to read " + fileName);
+        }
+        while (cin.read() != -1) {
+          // Processing is done via CheckedInputStream
+        }
+        in.close();
+      } catch (IOException ex) {
+        Logger.getLogger(ChecksumManager.class.getName()).log(Level.SEVERE, null, ex);
+        BaseGame.getLogger().log(
+                Level.SEVERE,
+                "Error during checksum calculation! {0}",
+                ex.getMessage());
+      }
+    }
+    return String.valueOf(crc.getValue());
   }
 }

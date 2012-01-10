@@ -39,4 +39,8 @@ public class GameSettings {
    * Resolution Height
    */
   public static final Integer HEIGHT = 600;
+  /**
+   * Default game mode.
+   */
+  public static final Class<? extends GameMode> DEFAULT_GAME_MODE = Deathmatch.class;
 }

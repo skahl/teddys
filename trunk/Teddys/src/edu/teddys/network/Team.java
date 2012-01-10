@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Serializable
 public class Team {
+
   private String name;
   private String id;
   /**
@@ -23,11 +24,24 @@ public class Team {
   private Color color = Color.BLACK;
   private List<Integer> players = new ArrayList<Integer>();
 
+  public Team() {
+  }
+
+  public Team(String teamName) {
+    this();
+    setName(teamName);
+  }
+  
+  public Team(Color color, String teamName) {
+    this(teamName);
+    setColor(color);
+  }
+
   public Color getColor() {
     return color;
   }
 
-  public void setColor(Color color) {
+  public final void setColor(Color color) {
     this.color = color;
   }
 
@@ -43,7 +57,7 @@ public class Team {
     return name;
   }
 
-  public void setName(String name) {
+  public final void setName(String name) {
     this.name = name;
   }
 
@@ -54,7 +68,7 @@ public class Team {
   public void setPlayers(List<Integer> players) {
     this.players = players;
   }
-  
+
   public void addPlayer(Integer clientID) {
     getPlayers().add(clientID);
   }

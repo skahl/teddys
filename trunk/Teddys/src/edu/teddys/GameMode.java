@@ -4,10 +4,13 @@
  */
 package edu.teddys;
 
+import com.jme3.network.serializing.Serializable;
+
 /**
  *
  * @author cm
  */
+@Serializable
 abstract public class GameMode {
   
   private Integer minutesToPlay = 10;
