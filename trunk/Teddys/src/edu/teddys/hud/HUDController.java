@@ -84,4 +84,12 @@ public class HUDController {
       }
     }
   }
+  
+  public void setHealth(int health) {
+      hud.setHealth(health);
+  }
+  
+  public void setJetpackEnergy(int energy) {
+      hud.setJetpackEnergy(energy);
+  }
 }
