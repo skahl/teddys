@@ -22,6 +22,7 @@ public class BarIndicator {
     
     private Geometry geom;
     private float width, height, geomWidth, geomHeight;
+    private int percentage;
     
     public BarIndicator(float width, float height, float x, float y, AssetManager assetManager, ColorRGBA color, Node parent) {
         Quad bar = new Quad(width, height);
@@ -39,6 +40,11 @@ public class BarIndicator {
     
     public void setValue(int percentage) {
         geom.setLocalScale(geomWidth * percentage/100, geomHeight, 0);
+        this.percentage = percentage;
+    }
+    
+    public int getValue() {
+        return percentage;
     }
     
     public Spatial getSpatial() {

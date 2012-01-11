@@ -12,6 +12,7 @@ import com.jme3.scene.Node;
 import com.jme3.ui.Picture;
 import edu.teddys.GameModeEnum;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,13 +23,24 @@ import java.util.Map;
 public class HUD {
 
   public Node hudNode;
+    
+  
   private final int numMessages = 5;
-  private int imageSize;
   private List<BitmapText> messages;
-  private Picture item, health, jetpack, weapon;
+  
+  private int imageSize;
+  private Picture health, jetpack, weapon;
+  private BarIndicator healthIndicator, jetpackIndicator, weaponIndicator;
+  
+  private Map<String, Picture> items;
+  
+  private String activeWeapon;
+  private Map<String, Picture> weaponImages;
+  private Map<String, BarIndicator> weaponBars;
+  
   private BitmapText playerName, team;
   
-  private BarIndicator healthIndicator, jetpackIndicator, weaponIndicator;
+  
   
   private static HUD instance = null;
 
@@ -59,7 +71,6 @@ public class HUD {
     hudNode.attachChild(bottomBG);
     
 
-    
     imageSize = (int) (height / 12);
 
 
@@ -91,13 +102,15 @@ public class HUD {
     hudNode.attachChild(team);
 
     //display a collected item
-    item = new Picture("item");
+    Picture item = new Picture("item");
     item.setImage(assetManager, "Interface/i.png", true);
     item.setLocalTranslation(width / 20, 2 * height / 3, 0);
     item.setWidth(imageSize);
     item.setHeight(imageSize);
     //parent.attachChild(item);
 
+    items = new HashMap<String, Picture>();
+    items.put("default", item);
     
 
     //health
@@ -251,15 +264,28 @@ public class HUD {
   }
 
   public void setActiveWeapon(String name) {
-      
+      if (!name.equals(activeWeapon)) {
+        activeWeapon = name;
+        weaponIndicator.setValue(weaponBars.get(name).getValue());
+      }
   }
   
   public void setAmmo(String weapon, int ammo) {
-      
+      weaponBars.get(weapon).setValue(ammo);
+      if (weapon.equals(activeWeapon))
+              setAmmo(ammo);
   }
   
   public void setItem(String item) {
-      
+      if (hudNode.getChild("item") != null)
+        hudNode.detachChildNamed("item");
+      if (items.containsKey(item))
+        hudNode.attachChild(items.get(item));
+  }
+  
+  public void removeItem(String item) {
+      if (hudNode.getChild("item") != null) 
+        hudNode.detachChild(items.get(item));
   }
 
   public void setPlayerName(String name) {
