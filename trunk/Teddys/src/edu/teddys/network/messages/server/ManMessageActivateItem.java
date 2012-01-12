@@ -16,6 +16,10 @@ public class ManMessageActivateItem extends NetworkMessageManipulation {
 
   private Integer affectedClient;
   private String itemName;
+  
+  public ManMessageActivateItem() {
+    super();
+  }
 
   public ManMessageActivateItem(Integer client, String item) {
     if (client == null || client == 0 || item == null) {

@@ -104,15 +104,25 @@ public class ServerListener implements MessageListener<HostedConnection> {
         TeddyServer.getInstance().setClientData(clientID, data);
         //TODO Add member to a team
 
-        if(TeddyServer.getInstance().getData().getTeams().isEmpty()) {
+        //TEST
+        Team newTeam = new Team(Color.BLUE, "Grampen");
+        if (TeddyServer.getInstance().getData().getTeams().isEmpty()) {
           // Create a new team
-          TeddyServer.getInstance().getData().getTeams().add(new Team(Color.BLUE, "Grampen"));
+          TeddyServer.getInstance().getData().getTeams().add(newTeam);
         }
         TeddyServer.getInstance().getData().getTeams().get(0).addPlayer(clientID);
+        NetworkMessageInfo teamInfoMsg = new NetworkMessageInfo(data.getName()
+                + " belongs to the team " + newTeam.getName() + "!");
+        TeddyServer.getInstance().send(teamInfoMsg);
 
-        // send a neat "gift" to the client
-        ManMessageSendDamage dmg = new ManMessageSendDamage(clientID, 10);
+        // send a neat "gift" to the new client
+        ManMessageSendDamage dmg = new ManMessageSendDamage(clientID, (int)Math.random()*20);
         TeddyServer.getInstance().send(dmg);
+
+        NetworkMessageInfo dmgInfo = new NetworkMessageInfo("Come on, " 
+                + data.getName() + ". Don't worry about the damage I gave to you! "
+                + "I like you, really! :P", clientID);
+        TeddyServer.getInstance().send(dmgInfo);
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManMessageSendPosition) {
@@ -122,9 +132,9 @@ public class ServerListener implements MessageListener<HostedConnection> {
         ManMessageSendPosition msg = (ManMessageSendPosition) message;
         //TODO redistibute to the other clients
         TeddyServer.getInstance().send(msg);
-        
+
         //TODO calculate the position vector
-        
+
         //TODO in case of a larger time frame, reset the position of the client to the last
         // known one
       } else if (message instanceof ManMessageTriggerWeapon) {

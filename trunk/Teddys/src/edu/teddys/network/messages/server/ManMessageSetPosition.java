@@ -4,8 +4,8 @@
  */
 package edu.teddys.network.messages.server;
 
+import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.input.Position;
 import edu.teddys.network.messages.NetworkMessageManipulation;
 
 /**
@@ -13,24 +13,24 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
  * @author cm
  */
 @Serializable
-public class ManMessageSetPosition extends NetworkMessageManipulation {
+public final class ManMessageSetPosition extends NetworkMessageManipulation {
 
-  private Position newPosition;
+  private Vector3f newPosition;
 
   public ManMessageSetPosition() {
     super();
   }
 
-  public ManMessageSetPosition(Position pos) {
+  public ManMessageSetPosition(Vector3f pos) {
     super();
     setNewPosition(pos);
   }
 
-  public Position getNewPosition() {
+  public Vector3f getNewPosition() {
     return newPosition;
   }
 
-  public void setNewPosition(Position newPosition) {
+  public void setNewPosition(Vector3f newPosition) {
     this.newPosition = newPosition;
   }
 }

@@ -15,6 +15,10 @@ import edu.teddys.network.messages.NetworkMessageRequest;
 public class ReqMessageMapRequest extends NetworkMessageRequest {
 
   private String map;
+  
+  public ReqMessageMapRequest() {
+    super();
+  }
 
   public ReqMessageMapRequest(String map) {
     setMap(map);

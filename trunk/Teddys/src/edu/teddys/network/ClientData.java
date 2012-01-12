@@ -6,7 +6,6 @@ package edu.teddys.network;
 
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.input.Position;
 import edu.teddys.objects.Jetpack;
 
 /**
@@ -26,7 +25,7 @@ public class ClientData {
   /**
    * Displayed name.
    */
-  private String name = "Player";
+  private String name = "Anton";
   /**
    * Position in the current map. 
    */

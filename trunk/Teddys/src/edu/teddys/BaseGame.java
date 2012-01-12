@@ -22,11 +22,19 @@ import edu.teddys.network.messages.client.GSMessageGamePaused;
 import edu.teddys.network.messages.client.GSMessagePlayerReady;
 import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
+import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.GSMessageEndGame;
+import edu.teddys.network.messages.server.ManMessageActivateItem;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
+import edu.teddys.network.messages.server.ManMessageSetPosition;
+import edu.teddys.network.messages.server.ManMessageTransferServerData;
+import edu.teddys.network.messages.server.ManMessageTriggerEffect;
+import edu.teddys.network.messages.server.ReqMessageMapRequest;
+import edu.teddys.network.messages.server.ReqMessagePauseRequest;
+import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.objects.Jetpack;
@@ -159,23 +167,34 @@ public class BaseGame extends SimpleApplication {
   }
   
   private void initSerializer() {
+    // General
     Serializer.registerClass(NetworkMessage.class);
     Serializer.registerClass(NetworkMessageInfo.class);
-    Serializer.registerClass(ManMessageTriggerWeapon.class);
-    Serializer.registerClass(ManMessageSendDamage.class);
-    Serializer.registerClass(ManMessageSendPosition.class);
-    Serializer.registerClass(ReqMessageSendClientData.class);
-    Serializer.registerClass(ResMessageSendClientData.class);
-    Serializer.registerClass(ReqMessageSendChecksum.class);
-    Serializer.registerClass(ResMessageSendChecksum.class);
-    Serializer.registerClass(GSMessageBeginGame.class);
-    Serializer.registerClass(GSMessageEndGame.class);
-    Serializer.registerClass(GSMessageGamePaused.class);
-    Serializer.registerClass(GSMessagePlayerReady.class);
+    // Internal data to be serialized
     Serializer.registerClass(SessionClientData.class);
     Serializer.registerClass(Jetpack.class);
     Serializer.registerClass(ClientData.class);
-    //TODO add the other ones
+    // Client
+    Serializer.registerClass(GSMessageGamePaused.class);
+    Serializer.registerClass(GSMessagePlayerReady.class);
+    Serializer.registerClass(ManMessageSendPosition.class);
+    Serializer.registerClass(ManMessageTriggerWeapon.class);
+    Serializer.registerClass(ResMessageMapLoaded.class);
+    Serializer.registerClass(ResMessageSendChecksum.class);
+    Serializer.registerClass(ResMessageSendClientData.class);
+    // Server
+    Serializer.registerClass(GSMessageBeginGame.class);
+    Serializer.registerClass(GSMessageEndGame.class);
+    Serializer.registerClass(ManMessageActivateItem.class);
+    Serializer.registerClass(ManMessageSendDamage.class);
+    Serializer.registerClass(ManMessageSetPosition.class);
+    Serializer.registerClass(ManMessageTransferServerData.class);
+    Serializer.registerClass(ManMessageTriggerEffect.class);
+    Serializer.registerClass(ReqMessageMapRequest.class);
+    Serializer.registerClass(ReqMessagePauseRequest.class);
+    Serializer.registerClass(ReqMessageRelocateServer.class);
+    Serializer.registerClass(ReqMessageSendChecksum.class);
+    Serializer.registerClass(ReqMessageSendClientData.class);
   }
 
   @Override
