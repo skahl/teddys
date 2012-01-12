@@ -30,7 +30,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   private float jetpackChargeRate = 25f;
   private float totalJetpackEnergy = 100f;
   private float currentEnergy = totalJetpackEnergy;
-  private float gravity = 4f;
+  private float oldGravity = 4f;
   private InputManager input;
   private Vector3f vel, left, right;
 
@@ -79,7 +79,8 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
   private void startJetpack() {
     if (currentEnergy > 0f) {
-      setGravity(-gravity);
+      oldGravity = getGravity();
+      setGravity(-getGravity());
       jetpackActive = true;
     } else {
       stopJetpack();
@@ -87,14 +88,13 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   }
 
   private void stopJetpack() {
-    setGravity(gravity);
+    setGravity(oldGravity);
     jetpackActive = false;
   }
 
   @Override
   public void setGravity(float value) {
     super.setGravity(value);
-    gravity = value;
   }
 
   @Override
