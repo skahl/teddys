@@ -21,28 +21,26 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
    * The enum for the event types.
    */
   private enum MAPPING_CONTROL {
-    MOVE_LEFT, MOVE_RIGHT, JUMP, JETPACK
+
+    MOVE_LEFT, MOVE_RIGHT, JETPACK
   }
-  private float moveSpeed = 0.02f;
-  private float totalEnergy, currentEnergy;
+  private float moveSpeed = 1f;
   private boolean jetpackActive;
+  private float jetpackDischargeRate = 75f;
+  private float jetpackChargeRate = 25f;
+  private float totalJetpackEnergy = 100f;
+  private float currentEnergy = totalJetpackEnergy;
+  private float gravity = 4f;
   private InputManager input;
-  private Vector3f vel;
-  private static final Float energyChargeRate = 25f;
-  private static final Float energyDischargeRate = 75f;
+  private Vector3f vel, left, right;
 
   public PlayerControl(Spatial player, CollisionShape collisionShape, float stepHeight) {
     super(collisionShape, stepHeight);
     setPhysicsLocation(player.getWorldTranslation());
-//        setFallSpeed(1f);
-//        setJumpSpeed(1f);
-//        setGravity(1f);
     player.addControl(this);
 
-
-    totalEnergy = 100;
-    currentEnergy = totalEnergy;
-
+    left = new Vector3f(-1, 0, 0);
+    right = new Vector3f(1, 0, 0);
   }
 
   public void registerWithInput(InputManager input) {
@@ -50,28 +48,21 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
     input.addMapping(MAPPING_CONTROL.MOVE_LEFT.name(), new KeyTrigger(KeyInput.KEY_A));
     input.addMapping(MAPPING_CONTROL.MOVE_RIGHT.name(), new KeyTrigger(KeyInput.KEY_D));
-    input.addMapping(MAPPING_CONTROL.JUMP.name(), new KeyTrigger(KeyInput.KEY_SPACE));
-    input.addMapping(MAPPING_CONTROL.JETPACK.name(), new KeyTrigger(KeyInput.KEY_LCONTROL));
-    input.addMapping(MAPPING_CONTROL.JETPACK.name(), new KeyTrigger(KeyInput.KEY_RCONTROL));
+    input.addMapping(MAPPING_CONTROL.JETPACK.name(), new KeyTrigger(KeyInput.KEY_SPACE));
 
     input.addListener(this, new String[]{MAPPING_CONTROL.MOVE_LEFT.name(),
               MAPPING_CONTROL.MOVE_RIGHT.name(),
-              MAPPING_CONTROL.JUMP.name(),
               MAPPING_CONTROL.JETPACK.name()});
   }
 
   public void onAnalog(String name, float value, float tpf) {
 
     if (name.equals(MAPPING_CONTROL.MOVE_LEFT.name())) {
-      vel = new Vector3f(-1, 0, 0);
-      vel.multLocal(moveSpeed);
+      vel = left.mult(moveSpeed * tpf);
       warp(getPhysicsLocation().add(vel));
     } else if (name.equals(MAPPING_CONTROL.MOVE_RIGHT.name())) {
-      vel = new Vector3f(1, 0, 0);
-      vel.multLocal(moveSpeed);
+      vel = right.mult(moveSpeed * tpf);
       warp(getPhysicsLocation().add(vel));
-    } else if (name.equals(MAPPING_CONTROL.JETPACK.name())) {
-      jump();
     }
 
   }
@@ -88,7 +79,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
   private void startJetpack() {
     if (currentEnergy > 0f) {
-      setGravity(-4f);
+      setGravity(-gravity);
       jetpackActive = true;
     } else {
       stopJetpack();
@@ -96,8 +87,14 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   }
 
   private void stopJetpack() {
-    setGravity(4f);
+    setGravity(gravity);
     jetpackActive = false;
+  }
+
+  @Override
+  public void setGravity(float value) {
+    super.setGravity(value);
+    gravity = value;
   }
 
   @Override
@@ -105,13 +102,13 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     super.update(tpf);
     if (jetpackActive) {
       if (currentEnergy > 0) {
-        currentEnergy -= energyDischargeRate * tpf;
+        currentEnergy -= jetpackDischargeRate * tpf;
       } else {
         stopJetpack();
       }
     } else {
-      if (currentEnergy < totalEnergy) {
-        currentEnergy += energyChargeRate * tpf;
+      if (currentEnergy < totalJetpackEnergy) {
+        currentEnergy += jetpackChargeRate * tpf;
       }
     }
 
