@@ -10,7 +10,6 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.system.AppSettings;
 import edu.teddys.controls.MappingEnum;
-import edu.teddys.input.Position;
 import edu.teddys.network.ClientData;
 import edu.teddys.network.DeathTest;
 import edu.teddys.network.HealthListener;
@@ -19,10 +18,14 @@ import edu.teddys.network.TeddyClient;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageInfo;
+import edu.teddys.network.messages.client.GSMessageGamePaused;
+import edu.teddys.network.messages.client.GSMessagePlayerReady;
 import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
+import edu.teddys.network.messages.server.GSMessageBeginGame;
+import edu.teddys.network.messages.server.GSMessageEndGame;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
@@ -102,7 +105,7 @@ public class BaseGame extends SimpleApplication {
     renderManager.setAlphaToCoverage(false);
 
     stateManager.attach(new Menu());
-    stateManager.attach(new Game());
+    stateManager.attach(Game.getInstance());
     stateManager.attach(new Pause());
 
     // init thread pool with size
@@ -147,13 +150,15 @@ public class BaseGame extends SimpleApplication {
     client.registerListener(TeddyClient.ListenerFields.health, new HealthListener());
     client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
     
+    GSMessageBeginGame bgMsg = new GSMessageBeginGame();
+    TeddyServer.getInstance().send(bgMsg);
+    
     // # # # # # # # # # # # # # # GAME # # # # # # # # # # # # # # # #
     
     
   }
   
   private void initSerializer() {
-    Serializer.registerClass(Position.class);
     Serializer.registerClass(NetworkMessage.class);
     Serializer.registerClass(NetworkMessageInfo.class);
     Serializer.registerClass(ManMessageTriggerWeapon.class);
@@ -163,6 +168,10 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(ResMessageSendClientData.class);
     Serializer.registerClass(ReqMessageSendChecksum.class);
     Serializer.registerClass(ResMessageSendChecksum.class);
+    Serializer.registerClass(GSMessageBeginGame.class);
+    Serializer.registerClass(GSMessageEndGame.class);
+    Serializer.registerClass(GSMessageGamePaused.class);
+    Serializer.registerClass(GSMessagePlayerReady.class);
     Serializer.registerClass(SessionClientData.class);
     Serializer.registerClass(Jetpack.class);
     Serializer.registerClass(ClientData.class);

@@ -4,8 +4,8 @@
  */
 package edu.teddys.network.messages.client;
 
+import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.input.Position;
 import edu.teddys.network.messages.NetworkMessageManipulation;
 
 /**
@@ -18,7 +18,7 @@ public class ManMessageSendPosition extends NetworkMessageManipulation {
   /**
    * The position on which the player is currently located.
    */
-  private Position position;
+  private Vector3f position;
   /**
    * The current animation to be displayed on the other clients.
    */
@@ -28,17 +28,17 @@ public class ManMessageSendPosition extends NetworkMessageManipulation {
     super();
   }
   
-  public ManMessageSendPosition(Position position) {
+  public ManMessageSendPosition(Vector3f position) {
     super();
     //TODO ignore too large distances (according to the map)?
     setPosition(position);
   }
 
-  public Position getPosition() {
+  public Vector3f getPosition() {
     return position;
   }
 
-  private void setPosition(Position position) {
+  private void setPosition(Vector3f position) {
     this.position = position;
   }
 

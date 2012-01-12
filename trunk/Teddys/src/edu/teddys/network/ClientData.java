@@ -4,6 +4,7 @@
  */
 package edu.teddys.network;
 
+import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import edu.teddys.input.Position;
 import edu.teddys.objects.Jetpack;
@@ -29,7 +30,7 @@ public class ClientData {
   /**
    * Position in the current map. 
    */
-  private Position position = new Position();
+  private Vector3f position = new Vector3f();
   private Jetpack jetpack = new Jetpack();
   /**
    * Session-related information, that is the number of deaths, kills, rounds etc.
@@ -80,11 +81,11 @@ public class ClientData {
     this.name = name;
   }
 
-  public Position getPosition() {
+  public Vector3f getPosition() {
     return position;
   }
 
-  public void setPosition(Position position) {
+  public void setPosition(Vector3f position) {
     this.position = position;
   }
 

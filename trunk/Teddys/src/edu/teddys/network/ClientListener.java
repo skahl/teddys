@@ -8,6 +8,7 @@ import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.message.DisconnectMessage;
 import edu.teddys.BaseGame;
+import edu.teddys.controls.SendPositionController;
 import edu.teddys.hud.HUDController;
 import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
@@ -86,7 +87,11 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         //
         // START THE ACCEPTED GAME
         //
+        
         //TODO Set game state to "Game"
+        
+        // Spawn the position controller
+        SendPositionController.startTimer();
       } else if (message instanceof GSMessageEndGame) {
         //
         // END OF THE GAME. DISPLAY STATISTICS ...

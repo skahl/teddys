@@ -18,11 +18,13 @@ public final class Position {
   private Integer x = 0;
   private Integer y = 0;
   
-  public Position() {
+  public Position(int x, int y) {
     super();
-    if(getX() < 0 || getY() < 0) {
+    if(x < 0 || y < 0) {
       throw new InstantiationError("Position must be defined by positive values!");
     }
+    setX(x);
+    setY(y);
   }
 
   public Integer getX() {

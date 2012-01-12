@@ -31,19 +31,29 @@ import edu.teddys.objects.player.Player;
  */
 public class Game extends AbstractAppState {
 
+  private static Game instance;
   private BaseGame app;
   private AppStateManager stateManager;
-  private Logger logger;
   private InputManager inputManager;
   private BulletAppState bulletAppState;
   private Node rootNode;
   private PssmShadowRenderer pssmRenderer; // Shadow rendering
   private GameLoader gameLoader;
   public static HUD hud;
-  
   private Player player; // should be a list in later versions I guess..
   private boolean paused;
   private boolean enabled;
+
+  protected Game() {
+    super();
+  }
+
+  public static Game getInstance() {
+    if (instance == null) {
+      instance = new Game();
+    }
+    return instance;
+  }
   // ActionListener
   private ActionListener actionListener = new ActionListener() {
 
@@ -93,7 +103,6 @@ public class Game extends AbstractAppState {
     super.initialize(stateManager, app);
     this.app = (BaseGame) app;
     this.stateManager = stateManager;
-    this.logger = this.app.getLogger();
     this.inputManager = this.app.getInputManager();
     this.rootNode = this.app.getRootNode();
 
@@ -137,11 +146,11 @@ public class Game extends AbstractAppState {
             this.app.getAssetManager(),
             this.app.getSettings().getWidth(),
             this.app.getSettings().getHeight(), GameModeEnum.DEATHMATCH);
-    
+
     HUDController hudController = HUDController.getInstance();
     hudController.setHUD(hud);
 
-    
+
     // init player
     player = Player.getInstance("Player 1", this);
 
@@ -149,7 +158,7 @@ public class Game extends AbstractAppState {
 
     rootNode.attachChild(player.getNode());
 
-    
+
 
     // Crosshair
     this.app.getAssetManager().loadTexture("Textures/fadenkreuz.png");
@@ -226,10 +235,6 @@ public class Game extends AbstractAppState {
     return app;
   }
 
-  public Logger getLogger() {
-    return logger;
-  }
-
   public Node getRootNode() {
     return rootNode;
   }
@@ -244,5 +249,9 @@ public class Game extends AbstractAppState {
 
   public InputManager getInputManager() {
     return inputManager;
+  }
+
+  public Player getPlayer() {
+    return player;
   }
 }

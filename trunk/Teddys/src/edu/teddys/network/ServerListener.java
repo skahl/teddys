@@ -122,7 +122,11 @@ public class ServerListener implements MessageListener<HostedConnection> {
         ManMessageSendPosition msg = (ManMessageSendPosition) message;
         //TODO redistibute to the other clients
         TeddyServer.getInstance().send(msg);
-        //TODO also transfer jumps
+        
+        //TODO calculate the position vector
+        
+        //TODO in case of a larger time frame, reset the position of the client to the last
+        // known one
       } else if (message instanceof ManMessageTriggerWeapon) {
         //
         // USER WANTS TO GET NASTY (-> WEAPONS)
@@ -133,7 +137,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //TODO calculate the damage and send them to the appropriate clients
 
         //TEST
-        Integer[] affected = new Integer[]{0};
+        Integer[] affected = (Integer[]) TeddyServer.getInstance().getClientIDs().toArray();
         Integer[] damage = new Integer[]{40};
         for (int i = 0; i < affected.length; i++) {
           ManMessageSendDamage damMsg = new ManMessageSendDamage(affected[i], damage[i]);

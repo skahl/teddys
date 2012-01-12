@@ -15,6 +15,10 @@ import edu.teddys.network.messages.NetworkMessageGameState;
 public class GSMessageGamePaused extends NetworkMessageGameState {
 
   private boolean paused = true;
+  
+  public GSMessageGamePaused() {
+    super();
+  }
 
   public GSMessageGamePaused(boolean paused) {
     setPaused(paused);
