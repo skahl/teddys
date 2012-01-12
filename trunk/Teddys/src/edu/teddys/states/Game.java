@@ -14,7 +14,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.CameraControl.ControlDirection;
-import com.jme3.shadow.PssmShadowRenderer;
+import com.jme3.shadow.BasicShadowRenderer;
 import edu.teddys.BaseGame;
 import edu.teddys.GameModeEnum;
 import edu.teddys.hud.HUD;
@@ -37,7 +37,7 @@ public class Game extends AbstractAppState {
   private InputManager inputManager;
   private BulletAppState bulletAppState;
   private Node rootNode;
-  private PssmShadowRenderer pssmRenderer; // Shadow rendering
+  private BasicShadowRenderer shadowRenderer; // Shadow rendering
   private GameLoader gameLoader;
   public static HUD hud;
   private Player player; // should be a list in later versions I guess..
@@ -132,13 +132,9 @@ public class Game extends AbstractAppState {
     rootNode.addLight(sunA);
 
     // init shadow renderstate
-    pssmRenderer = new PssmShadowRenderer(this.app.getAssetManager(), 1024, 2);
-    pssmRenderer.setDirection(sunDirection);
-    pssmRenderer.setLambda(0.55f);
-    pssmRenderer.setShadowIntensity(0.5f);
-    pssmRenderer.setCompareMode(PssmShadowRenderer.CompareMode.Hardware);
-    pssmRenderer.setFilterMode(PssmShadowRenderer.FilterMode.Bilinear);
-    this.app.getViewPort().addProcessor(pssmRenderer);
+    shadowRenderer = new BasicShadowRenderer(this.app.getAssetManager(), 256);
+    shadowRenderer.setDirection(sunDirection);
+    this.app.getViewPort().addProcessor(shadowRenderer);
 
 
     //HUD

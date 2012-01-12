@@ -29,16 +29,16 @@ public class Player {
         visual = new TeddyVisual(node, game.getAssetManager());
         
         // physics
-        collisionShape = new CapsuleCollisionShape(visual.getWidth()*0.6f, visual.getHeight()*0.8f, 1);
+        collisionShape = new CapsuleCollisionShape(visual.getWidth()*0.3f, visual.getHeight()*0.35f, 1);
         
-        control = new PlayerControl(node, collisionShape, 0.01f);
+        control = new PlayerControl(node, collisionShape, 0.02f);
         control.registerWithInput(game.getInputManager());
         game.getBulletAppState().getPhysicsSpace().add(control);
     
         
-        control.setJumpSpeed(4f);
-        control.setGravity(4);
-        control.setFallSpeed(4);
+        control.setJumpSpeed(5);
+        control.setGravity(5);
+        control.setFallSpeed(5);
     }
 
     public String getName() {

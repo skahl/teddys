@@ -5,11 +5,12 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture.WrapMode;
 
 /**
@@ -18,23 +19,27 @@ import com.jme3.texture.Texture.WrapMode;
  */
 public class TeddyVisual {
     
-    Box box;
+    Quad quad;
     Geometry geo;
     Material mat;
     
     public TeddyVisual(Node node, AssetManager assetManager) {
 
-        box = new Box(0.3f, 0.3f, 0.01f);
-        geo = new Geometry(node.getName(), box);
+        quad = new Quad(0.6f, 0.6f); //Box(0.3f, 0.3f, 0.01f);
+        geo = new Geometry(node.getName(), quad);
+        geo.setLocalTranslation(new Vector3f(-0.3f,-0.3f, 0.0f));
         
         mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setTexture("ColorMap", assetManager.loadTexture(new TextureKey("Textures/teddy.png", true)));
+       
+        mat.getTextureParam("ColorMap").getTextureValue().setWrap(WrapMode.EdgeClamp);
+        
         //mat.getTextureParam("ColorMap").getTextureValue().setWrap(WrapMode.EdgeClamp);
         //mat.getAdditionalRenderState().setAlphaFallOff(0.5f);
         mat.getAdditionalRenderState().setAlphaTest(true);
         //mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
         //mat.getAdditionalRenderState().setPointSprite(true);
-        //mat.getAdditionalRenderState().set
+        
         
         geo.setMaterial(mat);
         geo.setShadowMode(ShadowMode.Cast);
@@ -52,14 +57,14 @@ public class TeddyVisual {
     }
     
     public float getWidth() {
-        return box.getXExtent();
+        return quad.getWidth();//.getXExtent();
     }
     
     public float getHeight() {
-        return box.getYExtent();
+        return quad.getHeight();//.getYExtent();
     }
 
-    public Box getBox() {
-        return box;
+    public Quad getBox() {
+        return quad;
     }
 }
