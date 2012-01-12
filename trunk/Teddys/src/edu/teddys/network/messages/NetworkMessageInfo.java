@@ -29,8 +29,12 @@ public class NetworkMessageInfo extends NetworkMessage {
     setRecipients(recipients);
   }
   
+  public NetworkMessageInfo(String message, Integer recipient) {
+    this(message, new Integer[]{recipient});
+  }
+  
   public NetworkMessageInfo(String message) {
-    this(message, null);
+    this(message, new Integer[]{});
   }
 
   public String getMessage() {

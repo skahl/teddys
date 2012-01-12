@@ -5,7 +5,6 @@
 package edu.teddys.network.messages.server;
 
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.network.NetworkSettings;
 import edu.teddys.network.messages.NetworkMessageManipulation;
 
 /**
@@ -17,6 +16,10 @@ public class ManMessageTriggerEffect extends NetworkMessageManipulation {
   
   private Integer affectedClient;
   private String effectName;
+  
+  public ManMessageTriggerEffect() {
+    super();
+  }
   
   public ManMessageTriggerEffect(Integer client, String effect) {
     if(client == null || client == 0 || effect == null) {

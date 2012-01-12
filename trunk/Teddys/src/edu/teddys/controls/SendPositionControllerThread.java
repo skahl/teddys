@@ -5,7 +5,6 @@
 package edu.teddys.controls;
 
 import com.jme3.math.Vector3f;
-import edu.teddys.input.Position;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.states.Game;

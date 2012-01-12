@@ -5,7 +5,6 @@
 package edu.teddys.network.messages.server;
 
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.network.NetworkSettings;
 import edu.teddys.network.messages.NetworkMessageRequest;
 
 /**
@@ -16,6 +15,10 @@ import edu.teddys.network.messages.NetworkMessageRequest;
 public class ReqMessageRelocateServer extends NetworkMessageRequest {
 
   private Integer destination;
+  
+  public ReqMessageRelocateServer() {
+    super();
+  }
 
   public ReqMessageRelocateServer(Integer destination) {
     if(destination == null) {
