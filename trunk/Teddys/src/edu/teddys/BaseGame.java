@@ -19,6 +19,7 @@ import edu.teddys.network.TeddyClient;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageInfo;
+import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
@@ -152,16 +153,17 @@ public class BaseGame extends SimpleApplication {
   }
   
   private void initSerializer() {
+    Serializer.registerClass(Position.class);
     Serializer.registerClass(NetworkMessage.class);
     Serializer.registerClass(NetworkMessageInfo.class);
     Serializer.registerClass(ManMessageTriggerWeapon.class);
     Serializer.registerClass(ManMessageSendDamage.class);
+    Serializer.registerClass(ManMessageSendPosition.class);
     Serializer.registerClass(ReqMessageSendClientData.class);
     Serializer.registerClass(ResMessageSendClientData.class);
     Serializer.registerClass(ReqMessageSendChecksum.class);
     Serializer.registerClass(ResMessageSendChecksum.class);
     Serializer.registerClass(SessionClientData.class);
-    Serializer.registerClass(Position.class);
     Serializer.registerClass(Jetpack.class);
     Serializer.registerClass(ClientData.class);
     //TODO add the other ones
