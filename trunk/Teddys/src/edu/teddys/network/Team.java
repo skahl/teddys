@@ -72,4 +72,8 @@ public class Team {
   public void addPlayer(Integer clientID) {
     getPlayers().add(clientID);
   }
+  
+  public void removePlayer(Integer clientID) {
+    getPlayers().remove(clientID);
+  }
 }

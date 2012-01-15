@@ -89,9 +89,9 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         //
         
         //TODO Set game state to "Game"
-        
+        System.out.println("GSMessageBeginGame received. Starting SendPositionController timer");
         // Spawn the position controller
-        SendPositionController.startTimer();
+//        SendPositionController.startTimer();
       } else if (message instanceof GSMessageEndGame) {
         //
         // END OF THE GAME. DISPLAY STATISTICS ...

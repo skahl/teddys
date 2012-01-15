@@ -2,19 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.teddys.controls;
+package edu.teddys.network;
 
 import edu.teddys.BaseGame;
 import java.util.logging.Level;
 
 /**
+ * 
+ * Triggers a network message to sync the current server data.
  *
  * @author cm
  */
-public class SendPositionController {
+public class ServerDataSync {
 
-  static Integer timerIntervall = new Integer(30);
-  private static SendPositionControllerThread thread = new SendPositionControllerThread();
+  /**
+   * Intervall in ms
+   */
+  static Integer timerIntervall = new Integer(2000);
+  private static ServerDataSyncThread thread = new ServerDataSyncThread();
 
   /**
    * Start the checksum manager timer. This sends checksum requests every intervall
@@ -28,7 +33,7 @@ public class SendPositionController {
     thread.start();
     BaseGame.getLogger().log(
             Level.INFO,
-            "SendPosition timer thread spawned. Sending a request every {0} ms.",
+            "ServerDataSync timer thread spawned. Sending a request every {0} ms.",
             timerIntervall);
   }
 
@@ -42,7 +47,7 @@ public class SendPositionController {
     } catch (InterruptedException ex) {
       BaseGame.getLogger().log(
               Level.INFO,
-              "The SendPosition timer could not be stopped:{0}",
+              "The ServerDataSync timer could not be stopped:{0}",
               ex.getMessage());
     }
   }

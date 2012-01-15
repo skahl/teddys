@@ -18,6 +18,7 @@ import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
+import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;
 import edu.teddys.protection.ChecksumManager;
@@ -110,16 +111,22 @@ public class ServerListener implements MessageListener<HostedConnection> {
           // Create a new team
           TeddyServer.getInstance().getData().getTeams().add(newTeam);
         }
-        TeddyServer.getInstance().getData().getTeams().get(0).addPlayer(clientID);
+        Integer teamId = 0;
+        TeddyServer.getInstance().getData().getTeams().get(teamId).addPlayer(clientID);
+        data.setTeam(teamId);
         NetworkMessageInfo teamInfoMsg = new NetworkMessageInfo(data.getName()
                 + " belongs to the team " + newTeam.getName() + "!");
         TeddyServer.getInstance().send(teamInfoMsg);
 
+        //TEST
+        GSMessageBeginGame bgMsg = new GSMessageBeginGame();
+        TeddyServer.getInstance().send(bgMsg);
+
         // send a neat "gift" to the new client
-        ManMessageSendDamage dmg = new ManMessageSendDamage(clientID, (int)Math.random()*20);
+        ManMessageSendDamage dmg = new ManMessageSendDamage(clientID, (int) (Math.random() * 20f));
         TeddyServer.getInstance().send(dmg);
 
-        NetworkMessageInfo dmgInfo = new NetworkMessageInfo("Come on, " 
+        NetworkMessageInfo dmgInfo = new NetworkMessageInfo("Come on, "
                 + data.getName() + ". Don't worry about the damage I gave to you! "
                 + "I like you, really! :P", clientID);
         TeddyServer.getInstance().send(dmgInfo);
