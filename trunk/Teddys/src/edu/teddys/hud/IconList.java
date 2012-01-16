@@ -7,7 +7,6 @@ package edu.teddys.hud;
 import com.jme3.asset.AssetManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import com.jme3.ui.Picture;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,16 +17,19 @@ import java.util.Map;
  *
  * @author besient
  */
-public class IconList {
+public abstract class IconList {
     
-   private List<String> indices; 
-   private Map<String, Picture> pictures;
-   private Map<String, BarIndicator> bars;
+   protected List<String> indices; 
+   protected Map<String, Picture> pictures;
+   protected Map<String, BarIndicator> bars;
+   protected Map<String, Picture> frames;
    
-   private float pictureSize, x, y;
+   protected float pictureSize, x, y;
    
-   private AssetManager assetManager;
-   private Node listNode;
+   protected AssetManager assetManager;
+   protected Node listNode, parent;
+   
+   private int highlightedItem = -1;
    
    
    public IconList(float entrySize, float x, float y, AssetManager assetManager, Node parent) {
@@ -35,64 +37,59 @@ public class IconList {
        this.x = x;
        this.y = y;
        pictureSize = entrySize;
+       this.parent = parent;
        
        indices = new ArrayList<String>();
        pictures = new HashMap<String, Picture>();
        bars = new HashMap<String, BarIndicator>();
+       frames = new HashMap<String, Picture>();
        listNode = new Node("List");
-       parent.attachChild(listNode);
    }
    
-   public void addItem(String name, Integer position, String path, ColorRGBA color) {
-       
-    if (!indices.contains(name)) {
-        Picture picture = new Picture(name);
-        picture.setImage(assetManager, path, true);
-        picture.setLocalTranslation(x, y - (position+1)*pictureSize, 0);
-        picture.setWidth(pictureSize);
-        picture.setHeight(pictureSize);
-        
-        BarIndicator bar = new BarIndicator(pictureSize, 
-                pictureSize/5, 
-                x + 1.25f*pictureSize, 
-                y - (position+1)*pictureSize + pictureSize/2, 
-                assetManager, color, listNode);
-        
-        if ((position != null) && (position <= indices.size())) {
-            indices.add(position, name);
-            pictures.put(name, picture);
-            bars.put(name, bar);
-        }
-        listNode.attachChild(picture);
-        
-        for (int i = position; i < indices.size(); i++) {
-           pictures.get(indices.get(i)).move(0, -pictureSize, 0);
-           bars.get(indices.get(i)).getSpatial().move(0, -pictureSize, 0);
-        }
-    }
-   }
+   public abstract void addItem(String name, Integer position, String path, ColorRGBA color);
    
-   public void removeItem(String name) {
-       
-       int index = indices.indexOf(name);
-       Picture p = pictures.get(name);
-       Spatial b = bars.get(name).getSpatial();
-       
-       for (int i = index; i < indices.size(); i++) {
-           pictures.get(indices.get(i)).move(0, pictureSize, 0);
-           bars.get(indices.get(i)).getSpatial().move(0, pictureSize, 0);
-       }
-       
-       listNode.detachChild(p);
-       listNode.detachChild(b);
-       indices.remove(index);
-       pictures.remove(name);
-       bars.remove(name);
-       
-   }
+   public abstract void removeItem(String name);
    
    public void setValue(String name, int percentage) {
        bars.get(name).setValue(percentage);
    }
+   
+   public void show() {
+       if (!parent.hasChild(listNode))
+           parent.attachChild(listNode);
+   }
+   
+   public void hide() {
+       if (parent.hasChild(listNode))
+           parent.detachChild(listNode);
+   }
+   
+   public void highlight(int index) {
+        if ((index >= 0) && (index < indices.size())) {
+            if (highlightedItem >= 0) {
+                listNode.detachChild(frames.get(indices.get(highlightedItem)));
+            }
+            listNode.attachChild(frames.get(indices.get(index)));
+            highlightedItem = index;
+        }
+    }
+    
+    public void highlightNext() {
+        if (highlightedItem == indices.size() - 1) {
+            highlight(0);
+        } else {
+            highlight(highlightedItem + 1);
+        }
+    }
+    
+    public void highlightPrevious() {
+        if (highlightedItem <= 0) {
+            highlight(indices.size() - 1);
+        } else {
+            highlight(highlightedItem - 1);
+        }
+    }
+   
+   
 
 }

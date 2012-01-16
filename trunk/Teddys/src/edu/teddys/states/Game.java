@@ -145,7 +145,7 @@ public class Game extends AbstractAppState {
 
     HUDController hudController = HUDController.getInstance();
     hudController.setHUD(hud);
-
+    hudController.registerWithInput(inputManager);
 
     // init player
     player = Player.getInstance("Player 1", this);

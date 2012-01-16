@@ -4,7 +4,20 @@
  */
 package edu.teddys.hud;
 
+import com.jme3.export.JmeExporter;
+import com.jme3.export.JmeImporter;
+import com.jme3.input.InputManager;
+import com.jme3.input.MouseInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.MouseAxisTrigger;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.control.AbstractControl;
+import com.jme3.scene.control.Control;
+import com.jme3.scene.control.UpdateControl;
 import edu.teddys.BaseGame;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +29,7 @@ import java.util.logging.Level;
  *
  * @author besient
  */
-public class HUDController {
+public class HUDController extends UpdateControl implements ActionListener {
 
 
   private List<String> messages;
@@ -27,6 +40,12 @@ public class HUDController {
   private static HUDController instance = null;
   private HUD hud;
 
+  private boolean weaponsShown;
+  private float timeToShow = 5;
+  private float timeShown;
+  
+  private InputManager input;
+  
   private HUDController() {     
     messages = new ArrayList<String>();
       
@@ -50,6 +69,7 @@ public class HUDController {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }; 
+                
   }
 
   public void setHUD(final HUD hud) {
@@ -92,4 +112,50 @@ public class HUDController {
   public void setJetpackEnergy(int energy) {
       hud.setJetpackEnergy(energy);
   }
+  
+  private void nextWeapon() {
+      hud.getWeaponList().highlightNext();
+  }
+  
+  private void previousWeapon() {
+      hud.getWeaponList().highlightPrevious();
+  }
+  
+  private void showWeapons() {
+      hud.getWeaponList().show();
+      weaponsShown = true;
+      timeShown = 0;
+  }
+  
+  private void hideWeapons() {
+      hud.getWeaponList().hide();
+      weaponsShown = false;
+  }
+  
+  public void selectWeapon(String name) {
+      
+  }
+
+ public void onAction(String name, boolean isPressed, float tpf) {
+     if (name.equals("previousWeapon")) {
+         showWeapons();
+         previousWeapon();
+     } else if (name.equals("nextWeapon")) {
+         showWeapons();
+         nextWeapon();
+     }
+ }
+  
+ public void registerWithInput(InputManager input) {
+     this.input = input;
+     input.addMapping("nextWeapon", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+     input.addMapping("previousWeapon", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
+     
+     input.addListener(this, new String[]{"nextWeapon", "previousWeapon"});
+ }
+ 
+    @Override
+ public void update(float tpf) {
+
+ }
 }
