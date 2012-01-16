@@ -157,13 +157,14 @@ public class Game extends AbstractAppState {
 
 
     // Crosshair
-    this.app.getAssetManager().loadTexture("Textures/fadenkreuz.png");
+    int crosshairSize = this.app.getSettings().getHeight() / 15;
+    this.app.getAssetManager().loadTexture("Interface/HUD/crosshair.png");
 
     Cursor cursor = new Cursor("Cursor");
-    cursor.setImage(this.app.getAssetManager(), "Textures/fadenkreuz.png", true);
+    cursor.setImage(this.app.getAssetManager(), "Interface/HUD/crosshair.png", true);
     cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
-    cursor.setHeight(64);
-    cursor.setWidth(64);
+    cursor.setHeight(crosshairSize);
+    cursor.setWidth(crosshairSize);
     this.app.getGuiNode().attachChild(cursor);
 
 
@@ -174,9 +175,10 @@ public class Game extends AbstractAppState {
     player.getNode().attachChild(camNode);
 
     // initial distance between camera and player
-    camNode.move(0, 0, 4);
+    camNode.move(0, 1, 5);
 
-    camNode.lookAt(player.getNode().getWorldTranslation(), new Vector3f(0, 1, 0));
+    Vector3f dir = player.getNode().getWorldTranslation().add(0, 0.5f, 0);
+    camNode.lookAt(dir, new Vector3f(0, 1, 0));
 
     // Input
     CrosshairControl cameraControl = new CrosshairControl(camNode, player.getNode(), cursor,
