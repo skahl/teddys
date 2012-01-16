@@ -13,6 +13,12 @@ import com.jme3.app.state.AppStateManager;
  */
 public class AppStateSwitcher {
     
+    public enum AppStateEnum {
+        GAME,
+        PAUSE,
+        MENU
+    };
+    
     private static AppStateSwitcher instance = null;
     private AppStateManager manager;
     
@@ -20,11 +26,27 @@ public class AppStateSwitcher {
         this.manager = manager;
     }
     
-    public void setState(AppState state) {
-        manager.detach(manager.getState(AppState.class));
-        manager.attach(state);
+    public void activateState(AppStateEnum state) {
+        switch (state) {
+            case GAME:
+                manager.getState(Menu.class).setEnabled(false);
+                manager.getState(Pause.class).setEnabled(false);
+                manager.getState(Game.class).setEnabled(true);
+                break;
+            case MENU:
+                manager.getState(Menu.class).setEnabled(true);
+                manager.getState(Pause.class).setEnabled(false);
+                manager.getState(Game.class).setEnabled(false);
+                break;
+            case PAUSE:
+                manager.getState(Menu.class).setEnabled(false);
+                manager.getState(Pause.class).setEnabled(true);
+                manager.getState(Game.class).setEnabled(false);
+                
+        }
     }
     
+        
     public static AppStateSwitcher getInstance(AppStateManager manager) {
         if (instance == null) 
             instance = new AppStateSwitcher(manager);        
