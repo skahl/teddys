@@ -174,7 +174,7 @@ public class Game extends AbstractAppState {
     player.getNode().attachChild(camNode);
 
     // initial distance between camera and player
-    camNode.move(0, 0, 4);
+    camNode.move(0, 0, 6);
 
     camNode.lookAt(player.getNode().getWorldTranslation(), new Vector3f(0, 1, 0));
 

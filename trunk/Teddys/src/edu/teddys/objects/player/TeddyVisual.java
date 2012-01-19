@@ -31,7 +31,7 @@ public class TeddyVisual {
         
         mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setTexture("ColorMap", assetManager.loadTexture(new TextureKey("Textures/teddy.png", true)));
-       
+        //mat.getTextureParam("ColorMap").getValue().
         mat.getTextureParam("ColorMap").getTextureValue().setWrap(WrapMode.EdgeClamp);
         
         //mat.getTextureParam("ColorMap").getTextureValue().setWrap(WrapMode.EdgeClamp);
