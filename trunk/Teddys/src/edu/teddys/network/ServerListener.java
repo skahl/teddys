@@ -21,7 +21,7 @@ import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;
-import edu.teddys.protection.ChecksumManager;
+import edu.teddys.timer.ChecksumManager;
 import java.awt.Color;
 
 /**

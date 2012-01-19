@@ -2,16 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.teddys.protection;
+package edu.teddys.timer;
 
+import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -62,9 +61,9 @@ public class ChecksumManagerThread extends Thread {
       }
       // ... and sleep an amount of time.
       try {
-        sleep(ChecksumManager.timerIntervall);
+        sleep(GameSettings.CHECKSUM_INTERVAL);
       } catch (InterruptedException ex) {
-        Logger.getLogger(ChecksumManager.class.getName()).log(Level.SEVERE, null, ex);
+        MegaLogger.debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
     }
   }

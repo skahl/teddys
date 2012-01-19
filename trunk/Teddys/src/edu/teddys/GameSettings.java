@@ -15,7 +15,7 @@ public class GameSettings {
   /**
    * The title displayed on the window
    */
-  public static final String TITLE = "Teddys (pre-alpha)";
+  public static final String TITLE = "Teddys (pre-beta)";
   /**
     * Set multisampling to 0 to switch antialiasing off (harder edges, faster.) 
     * Set multisampling to 2 or 4 to activate antialising (softer edges, may be slower.) 
@@ -43,4 +43,16 @@ public class GameSettings {
    * Default game mode.
    */
   public static final Class<? extends GameMode> DEFAULT_GAME_MODE = Deathmatch.class;
+  /**
+   * Client update rate per second (Default: 20 -> interval ^= 50 ms)
+   */
+  public static final Integer SENDPOSITION_TIMER_RATE = 20;
+  /**
+   * Checksum interval in milliseconds (Default: 3000 ms)
+   */
+  public static final Integer CHECKSUM_INTERVAL = 3000;
+  /**
+   * Server synchronization interval in milliseconds (Default: 2000 ms)
+   */
+  public static final Integer SERVER_SYNC_INTERVAL = 2000;
 }

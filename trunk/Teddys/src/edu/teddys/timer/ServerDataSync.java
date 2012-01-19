@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.teddys.network;
+package edu.teddys.timer;
 
 import edu.teddys.BaseGame;
+import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import java.util.logging.Level;
 
@@ -16,12 +17,6 @@ import java.util.logging.Level;
  */
 public class ServerDataSync {
 
-  //TODO put into the settings class
-  /**
-   * Intervall in ms
-   * 
-   */
-  static Integer timerIntervall = new Integer(2000);
   private static ServerDataSyncThread thread = new ServerDataSyncThread();
 
   /**
@@ -33,12 +28,16 @@ public class ServerDataSync {
       return;
     }
     thread.start();
-    MegaLogger.debug("ServerDataSync timer thread spawned. "
-            + "Sending a request every "+timerIntervall+" ms.");
+    String tempMsg = String.format(
+            "Checksum timer thread spawned (Rate: %f, Interval: %d ms)",
+            (Float) (1f / GameSettings.SERVER_SYNC_INTERVAL),
+            GameSettings.SERVER_SYNC_INTERVAL
+            );
+    MegaLogger.debug(tempMsg);
   }
 
   public static void stopTimer() {
-    if(!thread.isAlive()) {
+    if (!thread.isAlive()) {
       return;
     }
     thread.interrupt();

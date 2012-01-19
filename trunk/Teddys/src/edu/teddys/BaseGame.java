@@ -38,7 +38,7 @@ import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.objects.Jetpack;
-import edu.teddys.protection.ChecksumManager;
+import edu.teddys.timer.ChecksumManager;
 import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Logger;

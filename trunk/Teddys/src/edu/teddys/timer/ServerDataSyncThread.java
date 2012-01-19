@@ -2,11 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.teddys.network;
+package edu.teddys.timer;
 
+import edu.teddys.GameSettings;
+import edu.teddys.MegaLogger;
+import edu.teddys.network.TeddyClient;
+import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -22,9 +24,9 @@ public class ServerDataSyncThread extends Thread {
       TeddyClient.getInstance().send(msg);
       // ... and sleep an amount of time.
       try {
-        sleep(ServerDataSync.timerIntervall);
+        sleep(GameSettings.SERVER_SYNC_INTERVAL);
       } catch (InterruptedException ex) {
-        Logger.getLogger(ServerDataSync.class.getName()).log(Level.SEVERE, null, ex);
+        MegaLogger.debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
     }
   }

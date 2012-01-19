@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.teddys.controls;
+package edu.teddys.timer;
 
+import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 
 /**
@@ -12,8 +13,6 @@ import edu.teddys.MegaLogger;
  */
 public class SendPositionController {
 
-  //TODO Put into the settings class
-  static Integer timerIntervall = new Integer(50);
   private static SendPositionControllerThread thread = new SendPositionControllerThread();
 
   /**
@@ -26,8 +25,12 @@ public class SendPositionController {
       return;
     }
     thread.start();
-    MegaLogger.debug("SendPosition timer thread spawned. "
-            + "Sending a request every " + timerIntervall + " ms.");
+    String tempMsg = String.format(
+            "SendPosition timer thread spawned (Rate: %d, Interval: %f ms)",
+            GameSettings.SENDPOSITION_TIMER_RATE,
+            (int) (1 / GameSettings.SENDPOSITION_TIMER_RATE)
+            );
+    MegaLogger.debug(tempMsg);
   }
 
   public static void stopTimer() {

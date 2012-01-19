@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.teddys.controls;
+package edu.teddys.timer;
 
 import com.jme3.math.Vector3f;
+import edu.teddys.GameSettings;
+import edu.teddys.MegaLogger;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.states.Game;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -28,9 +28,9 @@ public class SendPositionControllerThread extends Thread {
       TeddyClient.getInstance().send(msg);
       // ... and sleep an amount of time.
       try {
-        sleep(SendPositionController.timerIntervall);
+        sleep((int) (1 / GameSettings.SENDPOSITION_TIMER_RATE));
       } catch (InterruptedException ex) {
-        Logger.getLogger(SendPositionController.class.getName()).log(Level.SEVERE, null, ex);
+        MegaLogger.debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
     }
   }

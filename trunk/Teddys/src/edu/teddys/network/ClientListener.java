@@ -29,7 +29,7 @@ import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
-import edu.teddys.protection.ChecksumManager;
+import edu.teddys.timer.ChecksumManager;
 import java.util.Arrays;
 
 /**

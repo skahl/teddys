@@ -2,19 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.teddys.protection;
+package edu.teddys.timer;
 
 import edu.teddys.BaseGame;
+import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.Adler32;
 import java.util.zip.CheckedInputStream;
+import java.util.zip.Checksum;
 
 /**
  *
@@ -22,10 +22,6 @@ import java.util.zip.CheckedInputStream;
  */
 public class ChecksumManager {
 
-  /**
-   * The intervall for checksum checks
-   */
-  static Integer timerIntervall = new Integer(3000);
   private static ChecksumManagerThread thread = new ChecksumManagerThread();
   static Map<String, String> result = new HashMap<String, String>();
   static Map<String, List<String>> files = new HashMap<String, List<String>>();
@@ -40,10 +36,12 @@ public class ChecksumManager {
       return;
     }
     thread.start();
-    MegaLogger.getLogger().debug(
-            String.format(
-            "Checksum timer thread spawned. Sending a request every %d seconds.",
-            timerIntervall / 1000));
+    String tempMsg = String.format(
+            "Checksum timer thread spawned (Rate: %f, Interval: %d ms)",
+            (Float) (1f / GameSettings.CHECKSUM_INTERVAL),
+            GameSettings.CHECKSUM_INTERVAL
+            );
+    MegaLogger.debug(tempMsg);
   }
 
   public static void stopTimer() {

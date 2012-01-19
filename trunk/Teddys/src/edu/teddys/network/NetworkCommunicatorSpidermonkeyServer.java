@@ -5,12 +5,9 @@
 package edu.teddys.network;
 
 import com.jme3.network.ConnectionListener;
-import edu.teddys.BaseGame;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -32,8 +29,6 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   }
 
   private NetworkCommunicatorSpidermonkeyServer() {
-    // The serializer must be called to know what class can be persisted.
-//    Serializer.registerClass(NetworkMessage.class);
     try {
       setUpServer();
     } catch (IOException ex) {
@@ -94,7 +89,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
 
   public void send(NetworkMessage message) {
     //TODO check if a recipient field is available?
-
+    message.setTimestamp(NetworkMessage.getSystemTimestamp());
     networkServer.broadcast(message);
   }
 

@@ -133,7 +133,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     disconnect(client, null);
   }
 
-  protected TeddyServerData getData() {
+  public TeddyServerData getData() {
     return data;
   }
 

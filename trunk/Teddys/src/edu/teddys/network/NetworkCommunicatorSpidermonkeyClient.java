@@ -20,11 +20,10 @@ import java.io.IOException;
 public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicatorAPI {
 
   private com.jme3.network.Client networkClient;
-  
   private static NetworkCommunicatorSpidermonkeyClient instance = null;
-  
+
   public static NetworkCommunicatorSpidermonkeyClient getInstance() {
-    if(instance == null) {
+    if (instance == null) {
       instance = new NetworkCommunicatorSpidermonkeyClient();
     }
     return instance;
@@ -32,9 +31,16 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
 
   private NetworkCommunicatorSpidermonkeyClient() {
   }
-  
+
+  protected Boolean isValidConnection() {
+    if (networkClient == null) {
+      return false;
+    }
+    return networkClient.isConnected();
+  }
+
   public void addClientStateListener(ClientStateListener listener) {
-    if(networkClient == null) {
+    if (networkClient == null) {
       MegaLogger.error(new Throwable("Could not add ClientStateListener because networkClient is null!"));
       return;
     }
@@ -47,18 +53,19 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
   }
 
   public void send(NetworkMessage message) {
-    //TODO check if the client is in the list of active connections ...
-    networkClient.send(message);
+    if (isValidConnection()) {
+      // Set the timestamp
+      message.setTimestamp(NetworkMessage.getSystemTimestamp());
+      networkClient.send(message);
+    }
   }
 
   public boolean join() {
     TeddyClient client = TeddyClient.getInstance();
     // Check for active connection
-    if (networkClient != null) {
-      if (networkClient.isConnected()) {
-        // close the active connection
-        disconnect(client.getId());
-      }
+    if (isValidConnection()) {
+      // close the active connection
+      disconnect(client.getId());
     }
     // Get the server settings
     String serverIP = client.getServerIP();
