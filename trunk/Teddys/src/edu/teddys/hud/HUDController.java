@@ -86,7 +86,6 @@ public class HUDController extends UpdateControl implements ActionListener {
 
   public void addMessage(String message) {
 
-    BaseGame.getLogger().log(Level.INFO, "HUD: {0}", message);
     //Game.hud.setMessage(0, message);
 
     messages.add(0, message);

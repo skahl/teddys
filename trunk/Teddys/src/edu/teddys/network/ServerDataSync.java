@@ -5,6 +5,7 @@
 package edu.teddys.network;
 
 import edu.teddys.BaseGame;
+import edu.teddys.MegaLogger;
 import java.util.logging.Level;
 
 /**
@@ -15,26 +16,25 @@ import java.util.logging.Level;
  */
 public class ServerDataSync {
 
+  //TODO put into the settings class
   /**
    * Intervall in ms
+   * 
    */
   static Integer timerIntervall = new Integer(2000);
   private static ServerDataSyncThread thread = new ServerDataSyncThread();
 
   /**
    * Start the checksum manager timer. This sends checksum requests every intervall
-   * to the clients of the server. Note: If all clients responded, use ready()
-   * to generate a new list of files to be checked.
+   * to the clients of the server.
    */
   public static void startTimer() {
     if (thread.isAlive()) {
       return;
     }
     thread.start();
-    BaseGame.getLogger().log(
-            Level.INFO,
-            "ServerDataSync timer thread spawned. Sending a request every {0} ms.",
-            timerIntervall);
+    MegaLogger.debug("ServerDataSync timer thread spawned. "
+            + "Sending a request every "+timerIntervall+" ms.");
   }
 
   public static void stopTimer() {
@@ -44,11 +44,9 @@ public class ServerDataSync {
     thread.interrupt();
     try {
       thread.join();
+      MegaLogger.debug("ServerDataSync timer thread joined.");
     } catch (InterruptedException ex) {
-      BaseGame.getLogger().log(
-              Level.INFO,
-              "The ServerDataSync timer could not be stopped:{0}",
-              ex.getMessage());
+      MegaLogger.debug(new Throwable("Error while trying to join the thread!", ex));
     }
   }
 }

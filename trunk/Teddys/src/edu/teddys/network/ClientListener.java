@@ -8,7 +8,7 @@ import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.message.DisconnectMessage;
 import edu.teddys.BaseGame;
-import edu.teddys.controls.SendPositionController;
+import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUDController;
 import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
@@ -30,7 +30,7 @@ import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.protection.ChecksumManager;
-import java.util.logging.Level;
+import java.util.Arrays;
 
 /**
  *
@@ -41,15 +41,15 @@ import java.util.logging.Level;
 public class ClientListener implements MessageListener<com.jme3.network.Client> {
 
   public void messageReceived(com.jme3.network.Client source, Message message) {
-    System.out.println("New message arrived: " + message.getClass());
+    MegaLogger.debug("Received a NetworkMessage: " + message.getClass().getName());
     if (message instanceof DisconnectMessage) {
       //
       // USER HAS BEEN DISCONNECTED/KICKED FROM THE SERVER
       //
-      BaseGame.getLogger().log(Level.WARNING,
-              "Client has been disconnected from the "
-              + "server yet. Reason: {0}",
-              ((DisconnectMessage) message).getReason());
+      String reason = ((DisconnectMessage) message).getReason();
+      String logMsg = "Client has been disconnected from the server!";
+      logMsg += (!reason.isEmpty()) ? " Reason: " + reason : "";
+      MegaLogger.info(new Throwable(logMsg));
       //TODO change game state
     } else if (message instanceof NetworkMessageInfo) {
       //
@@ -57,6 +57,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       //
       NetworkMessageInfo info = (NetworkMessageInfo) message;
       //TODO check if the client name is displayed as it should be
+      //TODO check if the server sent the message
       String teddyName = "";
       try {
         teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
@@ -68,29 +69,24 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
               //              info.getTimestamp(),
               teddyName,
               info.getMessage());
-      HUDController.getInstance().addMessage(infoString);
-      System.out.println(infoString);
+      MegaLogger.info(infoString);
     } else if (message instanceof NetworkMessageGameState) {
       if (message instanceof GSMessageGamePaused) {
         //
         // RECEIVED A PAUSE STATUS CHANGE REQUEST
         //
-        GSMessageGamePaused msg = (GSMessageGamePaused)message;
-        if(msg.isPaused()) {
+        GSMessageGamePaused msg = (GSMessageGamePaused) message;
+        if (msg.isPaused()) {
           //TODO Set game state to "Paused"
-          
         } else {
           //TODO Set game state to "Game"
-          
         }
       } else if (message instanceof GSMessageBeginGame) {
         //
         // START THE ACCEPTED GAME
         //
-        
         //TODO Set game state to "Game"
-        System.out.println("GSMessageBeginGame received. Starting SendPositionController timer");
-        // Spawn the position controller
+        //TODO Spawn the position controller
 //        SendPositionController.startTimer();
       } else if (message instanceof GSMessageEndGame) {
         //
@@ -103,7 +99,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         //
         String teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
         String infoString = String.format("Player %s is ready yet!", teddyName);
-        HUDController.getInstance().addMessage(infoString);
+        MegaLogger.info(infoString);
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManMessageActivateItem) {
@@ -123,11 +119,10 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         try {
           String goodTeddy = TeddyServer.getInstance().getClientData(msg.getClient()).getName();
           String badTeddy = TeddyServer.getInstance().getClientData(source.getId()).getName();
-          String infoString = String.format("Teddy %s has been injured by 'Mad %s' (Damage: %s)",
-                  goodTeddy, badTeddy, msg.getDamage());
-          HUDController.getInstance().addMessage(infoString);
+          String infoString = String.format("Mad Teddy %s attacked 'Good Old %s'! %s: %s",
+                  badTeddy, goodTeddy, getDamageMessage(msg.getDamage()), msg.getDamage());
+          MegaLogger.info(infoString);
         } catch (Exception ex) {
-          
         }
       } else if (message instanceof ManMessageTransferServerData) {
         //
@@ -163,7 +158,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         if (msg.getDestination().equals(TeddyClient.getInstance().getId())) {
           TeddyServer.getInstance().startServer();
           //TODO Force the clients to join the new server ^^
-          System.out.println("Server is ready to get connections.");
+          MegaLogger.debug("Relocated server.");
         } else {
           //TODO prepare to (seamlessly?) join the new server.
         }
@@ -173,14 +168,9 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         //
         ReqMessageSendChecksum msg = (ReqMessageSendChecksum) message;
         //TODO calculate the checksum (use a dummy value now)
-        try {
-          ResMessageSendChecksum response = new ResMessageSendChecksum(
+        ResMessageSendChecksum response = new ResMessageSendChecksum(
                 msg.getToken(), ChecksumManager.calculateChecksum(msg.getFiles()));
-          TeddyClient.getInstance().send(response);
-        } catch(IllegalArgumentException ex) {
-          ex.printStackTrace();
-          BaseGame.getLogger().severe(ex.getMessage());
-        }
+        TeddyClient.getInstance().send(response);
       } else if (message instanceof ReqMessageSendClientData) {
         //
         // CLIENT SYNCHRONISATION REQUEST
@@ -189,5 +179,46 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         TeddyClient.getInstance().send(response);
       }
     }
+  }
+
+  /**
+   * 
+   * Generate a string in the format "(Attribute) Damage" where Attribute is
+   * dynamically defined, for example "Enchanting Damage".
+   * 
+   * @param value The damage of the teddy.
+   * @return A string specified above.
+   */
+  private static String getDamageMessage(Integer value) {
+    String suffix = "Damage";
+    String out = "";
+    String[] strings;
+    if (value == 0) {
+      out = "No ";
+    } else if (value < 20) {
+      strings = new String[]{"Laughable", "Ridiculous", "Cheery", "Gay", "Funny", "Mini", "Atomic", "Pintsize", "Tiny little", "Miniscule"};
+      out = strings[getRandomInt(strings.length)];
+    } else if (value < 40) {
+      strings = new String[]{"Amusing", "Comical", "Jokey", "Enjoyable", "Cheery", "Entertaining", "Charming", "Lovely", "Minor", "Negligible"};
+      out = strings[getRandomInt(strings.length)];
+    } else if (value < 60) {
+      strings = new String[]{"Honorable", "Playful", "Strange", "Soulless", "Enchanting", "Magical", "Delightful", "Ravishing"};
+      out = strings[getRandomInt(strings.length)];
+    } else if (value < 80) {
+      strings = new String[]{"Absurd", "Hysterical", "Bizarre", "Freaky", "Crazy", "Glamorous", "Gorgeous", "Scattering"};
+      out = strings[getRandomInt(strings.length)];
+    }
+    return out + suffix;
+  }
+
+  /**
+   * 
+   * Generate a random int value where 0 <= result <= max.
+   * 
+   * @param max The maximum int value.
+   * @return An int value described above.
+   */
+  private static int getRandomInt(int max) {
+    return (int) (Math.random() * max);
   }
 }

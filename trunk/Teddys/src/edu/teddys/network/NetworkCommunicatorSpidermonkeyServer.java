@@ -6,6 +6,7 @@ package edu.teddys.network;
 
 import com.jme3.network.ConnectionListener;
 import edu.teddys.BaseGame;
+import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -36,11 +37,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
     try {
       setUpServer();
     } catch (IOException ex) {
-      Logger.getLogger(NetworkCommunicatorSpidermonkeyServer.class.getName()).log(Level.SEVERE, null, ex);
-      BaseGame.getLogger().log(
-              Level.SEVERE,
-              "Error while trying to start the server: {0}",
-              ex.getMessage());
+      MegaLogger.fatal(new Throwable("The server could not be started!", ex));
     }
   }
 
@@ -55,8 +52,8 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   public void startServer(TeddyServer server) {
     if (!networkServer.isRunning()) {
       networkServer.start();
-      BaseGame.getLogger().info("Server started!");
       networkServer.addConnectionListener(server);
+      MegaLogger.debug("The server has started successfully!");
     }
   }
 
@@ -68,7 +65,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   public void shutdownServer() {
     if (networkServer.isRunning()) {
       networkServer.close();
-      BaseGame.getLogger().info("Server closed!");
+      MegaLogger.debug("Server closed!");
     }
   }
 
@@ -96,7 +93,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   }
 
   public void send(NetworkMessage message) {
-    //TODO check if a recipient field is available
+    //TODO check if a recipient field is available?
 
     networkServer.broadcast(message);
   }
@@ -105,10 +102,10 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
    * TODO use the client state listener for this purpose?
    */
   public boolean join() {
-    throw new UnsupportedOperationException("Handled in TeddyServer.");
+    throw new UnsupportedOperationException("Not necessary.");
   }
 
   public void disconnect(Integer clientID) {
-    throw new UnsupportedOperationException("Handled in TeddyServer.");
+    throw new UnsupportedOperationException("Not necessary.");
   }
 }

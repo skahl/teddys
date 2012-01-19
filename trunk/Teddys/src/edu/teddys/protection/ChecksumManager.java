@@ -5,6 +5,7 @@
 package edu.teddys.protection;
 
 import edu.teddys.BaseGame;
+import edu.teddys.MegaLogger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -39,24 +40,21 @@ public class ChecksumManager {
       return;
     }
     thread.start();
-    BaseGame.getLogger().log(
-            Level.INFO,
-            "Checksum timer thread spawned. Sending a request every {0} seconds.",
-            timerIntervall / 1000);
+    MegaLogger.getLogger().debug(
+            String.format(
+            "Checksum timer thread spawned. Sending a request every %d seconds.",
+            timerIntervall / 1000));
   }
 
   public static void stopTimer() {
-    if(!thread.isAlive()) {
+    if (!thread.isAlive()) {
       return;
     }
     try {
       thread.join();
-      BaseGame.getLogger().info("The checksum timer has been stopped.");
+      MegaLogger.getLogger().debug("The checksum timer has been stopped.");
     } catch (InterruptedException ex) {
-      BaseGame.getLogger().log(
-              Level.INFO,
-              "The checksum timer could not be stopped:{0}",
-              ex.getMessage());
+      MegaLogger.getLogger().debug(new Throwable(ex));
     }
   }
 
@@ -88,18 +86,17 @@ public class ChecksumManager {
       try {
         InputStream in = BaseGame.class.getClassLoader().getResourceAsStream(fileName);
         if (in == null) {
-          BaseGame.getLogger().log(
-                  Level.SEVERE,
-                  "InputStream could not be created for {0}",
-                  fileName);
+          MegaLogger.getLogger().error(new Throwable(
+                  String.format("Input stream for the CRC calculation of %s is null!", 
+                  fileName)
+                  ));
           throw new IllegalArgumentException("Error while trying to read " + fileName);
         }
         CheckedInputStream cin = new CheckedInputStream(in, crc);
         if (cin == null) {
-          BaseGame.getLogger().log(
-                  Level.SEVERE,
-                  "InputStream could not be created for {0}",
-                  fileName);
+          MegaLogger.getLogger().error(new Throwable(
+                  String.format("Checked input stream for %s is null!", fileName)
+                  ));
           throw new IllegalArgumentException("Error while trying to read " + fileName);
         }
         while (cin.read() != -1) {
@@ -107,11 +104,7 @@ public class ChecksumManager {
         }
         in.close();
       } catch (IOException ex) {
-        Logger.getLogger(ChecksumManager.class.getName()).log(Level.SEVERE, null, ex);
-        BaseGame.getLogger().log(
-                Level.SEVERE,
-                "Error during checksum calculation! {0}",
-                ex.getMessage());
+        MegaLogger.getLogger().fatal(new Throwable("Checksum calculation failed!", ex));
       }
     }
     return String.valueOf(crc.getValue());

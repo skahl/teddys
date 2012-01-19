@@ -6,11 +6,9 @@ package edu.teddys.network;
 
 import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener;
-import edu.teddys.BaseGame;
+import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -37,7 +35,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
   
   public void addClientStateListener(ClientStateListener listener) {
     if(networkClient == null) {
-      BaseGame.getLogger().severe("Could not add ClientStateListener because networkClient is null!");
+      MegaLogger.error(new Throwable("Could not add ClientStateListener because networkClient is null!"));
       return;
     }
     networkClient.addClientStateListener(listener);
@@ -58,7 +56,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     // Check for active connection
     if (networkClient != null) {
       if (networkClient.isConnected()) {
-        // close connection
+        // close the active connection
         disconnect(client.getId());
       }
     }
@@ -67,20 +65,23 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     Integer serverPort = NetworkSettings.SERVER_PORT;
     if (serverIP == null || serverPort == null) {
       //TODO dirty?
-      throw new RuntimeException("Please check your server settings!");
+      String msg = "serverIP or serverPort is null. Please check your network settings!";
+      MegaLogger.fatal(new Throwable(msg));
+      throw new RuntimeException(msg);
     }
     // Try to connect to the server
     try {
       networkClient = com.jme3.network.Network.connectToServer(serverIP, serverPort);
       networkClient.start();
-      if(!networkClient.isConnected()) {
-        System.out.println("Not fully connected yet.");
-      }
+//      if(!networkClient.isConnected()) {
+//        System.out.println("Not fully connected yet.");
+//      }
       // Configure the client to receive messages
       networkClient.addMessageListener(new ClientListener());
+      MegaLogger.debug("Client: Join request sent.");
       return true;
     } catch (IOException ex) {
-      Logger.getLogger(NetworkCommunicatorSpidermonkeyClient.class.getName()).log(Level.SEVERE, null, ex);
+      MegaLogger.error(new Throwable("Client: Join request failed!", ex));
       return false;
     }
   }
@@ -90,7 +91,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
       return;
     }
     networkClient.close();
-    System.out.println("Client is now disconnected!");
+    MegaLogger.info("The client is disconnected now!");
   }
 
   public Client getNetworkClient() {

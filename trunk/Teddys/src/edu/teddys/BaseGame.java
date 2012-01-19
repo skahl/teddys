@@ -39,8 +39,13 @@ import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.objects.Jetpack;
 import edu.teddys.protection.ChecksumManager;
+import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Logger;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.DailyRollingFileAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.PatternLayout;
 
 /**
  * BaseGame
@@ -84,6 +89,19 @@ public class BaseGame extends SimpleApplication {
   };
 
   public static void main(String[] args) {
+
+    BasicConfigurator.configure();
+    // Set the log level to ALL in order to be informed of all loggable events
+    MegaLogger.getLogger().setLevel(Level.ALL);
+    PatternLayout layout = new PatternLayout("%d{ISO8601} %-5p [%t] %c: %m%n");
+    // Set up a daily log file. If a new day has begun, empty the log file and
+    // save it with the specified date format in logs/.
+    try {
+      DailyRollingFileAppender fileAppender = new DailyRollingFileAppender(layout, "logs/teddys.log", "'.'yyyy-MM-dd_HH");
+    MegaLogger.getLogger().addAppender(fileAppender);
+    } catch (IOException ex) {
+      MegaLogger.error(new Throwable("Creation of the log file appender aborted!", ex));
+    }
 
     AppSettings settings = new AppSettings(true);
 
@@ -210,7 +228,7 @@ public class BaseGame extends SimpleApplication {
     threadPool.shutdown();
 
     TeddyClient.getInstance().disconnect();
-    
+
     TeddyServer.getInstance().stopServer();
   }
 

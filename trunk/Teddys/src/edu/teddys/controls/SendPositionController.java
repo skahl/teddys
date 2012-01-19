@@ -4,8 +4,7 @@
  */
 package edu.teddys.controls;
 
-import edu.teddys.BaseGame;
-import java.util.logging.Level;
+import edu.teddys.MegaLogger;
 
 /**
  *
@@ -13,7 +12,8 @@ import java.util.logging.Level;
  */
 public class SendPositionController {
 
-  static Integer timerIntervall = new Integer(30);
+  //TODO Put into the settings class
+  static Integer timerIntervall = new Integer(50);
   private static SendPositionControllerThread thread = new SendPositionControllerThread();
 
   /**
@@ -26,24 +26,20 @@ public class SendPositionController {
       return;
     }
     thread.start();
-    BaseGame.getLogger().log(
-            Level.INFO,
-            "SendPosition timer thread spawned. Sending a request every {0} ms.",
-            timerIntervall);
+    MegaLogger.debug("SendPosition timer thread spawned. "
+            + "Sending a request every " + timerIntervall + " ms.");
   }
 
   public static void stopTimer() {
-    if(!thread.isAlive()) {
+    if (!thread.isAlive()) {
       return;
     }
     thread.interrupt();
     try {
       thread.join();
+      MegaLogger.debug("SendPosition timer thread joined.");
     } catch (InterruptedException ex) {
-      BaseGame.getLogger().log(
-              Level.INFO,
-              "The SendPosition timer could not be stopped:{0}",
-              ex.getMessage());
+      MegaLogger.debug(new Throwable("Error while trying to join the thread!", ex));
     }
   }
 }

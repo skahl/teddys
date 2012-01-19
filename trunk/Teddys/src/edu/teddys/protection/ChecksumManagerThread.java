@@ -4,7 +4,7 @@
  */
 package edu.teddys.protection;
 
-import edu.teddys.BaseGame;
+import edu.teddys.MegaLogger;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import java.util.ArrayList;
@@ -49,15 +49,15 @@ public class ChecksumManagerThread extends Thread {
       if (!TeddyServer.getInstance().getClientIDs().isEmpty()) {
         for (Integer clientID : TeddyServer.getInstance().getClientIDs()) {
           String token = getNewToken();
-          BaseGame.getLogger().log(
-                  Level.INFO, "New token generated ({0}. Expected checksum: {1}",
-                  new Object[]{token, result});
           ChecksumManager.files.put(token, files);
           ChecksumManager.result.put(token, result);
           // Send a message to the clients
           ReqMessageSendChecksum request = new ReqMessageSendChecksum(token, files, clientID);
           TeddyServer.getInstance().send(request);
-          BaseGame.getLogger().info(String.format("Token request sent (Token: %s)", token));
+          MegaLogger.getLogger().debug(
+                  String.format("New token (%s) generated and sent. Expected checksum: %s", 
+                  token, result)
+                  );
         }
       }
       // ... and sleep an amount of time.
