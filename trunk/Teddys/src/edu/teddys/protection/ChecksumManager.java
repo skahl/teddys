@@ -46,6 +46,9 @@ public class ChecksumManager {
   }
 
   public static void stopTimer() {
+    if(!thread.isAlive()) {
+      return;
+    }
     try {
       thread.join();
       BaseGame.getLogger().info("The checksum timer has been stopped.");

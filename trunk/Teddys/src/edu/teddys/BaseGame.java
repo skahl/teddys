@@ -52,7 +52,6 @@ public class BaseGame extends SimpleApplication {
 
   private static final Logger logger = Logger.getLogger("baseGameLogger"); // Event loggin
   public ScheduledThreadPoolExecutor threadPool; // Multithreading
-  
   // ActionListener
   private ActionListener actionListener = new ActionListener() {
 
@@ -94,7 +93,7 @@ public class BaseGame extends SimpleApplication {
     settings.setVSync(GameSettings.VSYNC);
     settings.setSamples(GameSettings.MSAA);
     settings.setResolution(GameSettings.WIDTH, GameSettings.HEIGHT);
-    
+
     app.start();
   }
 
@@ -104,7 +103,7 @@ public class BaseGame extends SimpleApplication {
 
   @Override
   public void simpleInitApp() {
-    
+
     flyCam.setEnabled(false);
     setDisplayFps(true);
     setDisplayStatView(false);
@@ -118,54 +117,51 @@ public class BaseGame extends SimpleApplication {
 
     // init thread pool with size
     threadPool = new ScheduledThreadPoolExecutor(4);
-    
+
     // Post Processing Filter initialization
-    
+
 
 
     // init start state
     stateManager.getState(Game.class).initialize(stateManager, this);
     stateManager.getState(Game.class).setEnabled(true);
-    
-    
+
+
     // # # # # # # # # # # # # # # NETWORK # # # # # # # # # # # # # # # #
-    
+
     // Register the network messages at the Serializer
     initSerializer();
-    
+
     // Create the server
     TeddyServer server = TeddyServer.getInstance();
     server.startServer();
-    
+
     // Start the protection mechanisms
     ChecksumManager.startTimer();
     System.out.println("Checksum timer started.");
-    
+
     // Get the handle to the client and try to join the specified server
     TeddyClient client = TeddyClient.getInstance();
-    System.out.println("Client has "+client.getHealth()+" health points at the beginning.");
-    
+    System.out.println("Client has " + client.getHealth() + " health points at the beginning.");
+
     // Trying to connect to the server
-    if(client.join()) {
-      System.out.println("Client had tried to join the server ("+client.getServerIP()+")");
-      System.out.println("Client ID is "+client.getId());
+    if (client.join()) {
+      System.out.println("Client had tried to join the server (" + client.getServerIP() + ")");
+      System.out.println("Client ID is " + client.getId());
     } else {
       System.err.println("Error while connecting the server!");
       return;
     }
-    
+
     // Create the listeners for the client
     client.registerListener(TeddyClient.ListenerFields.health, new HealthListener());
     client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
-    
-    GSMessageBeginGame bgMsg = new GSMessageBeginGame();
-    TeddyServer.getInstance().send(bgMsg);
-    
+
     // # # # # # # # # # # # # # # GAME # # # # # # # # # # # # # # # #
-    
-    
+
+
   }
-  
+
   private void initSerializer() {
     // General
     Serializer.registerClass(NetworkMessage.class);
@@ -212,8 +208,9 @@ public class BaseGame extends SimpleApplication {
     stateManager.cleanup();
 
     threadPool.shutdown();
-    
+
     TeddyClient.getInstance().disconnect();
+    
     TeddyServer.getInstance().stopServer();
   }
 

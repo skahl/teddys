@@ -6,6 +6,7 @@ package edu.teddys.network;
 
 import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener;
+import edu.teddys.controls.SendPositionController;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.objects.box.items.Item;
 import edu.teddys.objects.weapons.Weapon;
@@ -254,5 +255,6 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
 
   public void clientDisconnected(Client c, DisconnectInfo info) {
     //TODO set game state
+    SendPositionController.stopTimer();
   }
 }

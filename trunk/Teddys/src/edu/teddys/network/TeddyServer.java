@@ -72,11 +72,10 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     if (!isRunning()) {
       return;
     }
-    // copy the list of connections because of the modification on calling close()
-    List<HostedConnection> copyConnections = getData().getConnections();
-    for (HostedConnection conn : copyConnections) {
-      conn.close("Going down for maintenance NOW! ;)");
+    for(int i=0; i<getData().getConnections().size(); i++) {
+      getData().getConnections().get(i).close("Going down for maintenance NOW! ;)");
     }
+    
     NetworkCommunicatorSpidermonkeyServer.getInstance().shutdownServer();
     // reset data
     data = null;
@@ -182,14 +181,20 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
       return;
     }
     getData().getConnections().add(conn);
+    // Check if the ServerDataSync thread should be started.
+    checkServerSync();
+    
+    // Send a status text
     String message = String.format(
             "New connection (%s) arrived! Client ID is %s",
             conn.getAddress(),
             conn.getId());
     NetworkMessageInfo info = new NetworkMessageInfo(message);
     send(info);
-    System.out.println(message);
+    BaseGame.getLogger().info(message);
+    
     //TODO send the real name of the server
+    // Send some welcome text
     String serverMsg = String.format("Welcome on my server %s!", "Grunute");
     NetworkMessageInfo clientInfo = new NetworkMessageInfo(serverMsg);
     conn.send(clientInfo);
@@ -210,6 +215,12 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
       BaseGame.getLogger().severe("connectionRemoved() called, but no server data available!");
       return;
     }
+    
+    if(conn == null) {
+      // can be true if the server has been shutdown in the meantime.
+      return;
+    }
+    
     if (getData().getConnections().contains(conn)) {
 
       // Search for the client data of the HostedConnection and remove it 
@@ -219,11 +230,9 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
       ClientData client = getData().getClients().get(conn.getId());
       if (client != null) {
         // remove the player from the team list
-        List<Team> teams = getData().getTeams();
-        if (client.getTeamID() != null && teams != null) {
+        if (client.getTeamID() != null) {
           try {
-            Team team = teams.get(client.getTeamID());
-            team.getPlayers().remove(conn.getId());
+            getData().getTeams().get(client.getTeamID()).removePlayer(client.getId());
           } catch(ArrayIndexOutOfBoundsException ex) {
             //TODO ignore?
             BaseGame.getLogger().log(Level.INFO,
@@ -232,20 +241,38 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
         }
 
         // remove the client data from server
-        getData().getClients().remove(conn.getId());
+        getData().getClients().remove(client.getId());
       }
 
       String message = String.format(
-              "Client %s committed suicide.",
+              "Client %s disconnected.",
               conn.getId());
       getData().getConnections().remove(conn);
       NetworkMessageInfo info = new NetworkMessageInfo(message);
       send(info);
-      System.out.println(message);
+      BaseGame.getLogger().info(message);
+      
+      // Check if the ServerDataSync thread should be terminated.
+      checkServerSync();
+      
       return;
     }
     System.err.println(
             String.format("Connection remove request failed from Address %s!",
             conn.getAddress()));
+  }
+
+  /**
+   * If there is more than one client connected, send the clients a request to
+   * synchronize the server data. Otherwise, stop the appropriate thread.
+   * 
+   * @see ServerDataSync
+   */
+  private void checkServerSync() {
+    if(getData().getConnections().isEmpty() || getData().getConnections().size() < 2) {
+      ServerDataSync.stopTimer();
+      return;
+    }
+    ServerDataSync.startTimer();
   }
 }

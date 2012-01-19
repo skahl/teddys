@@ -38,7 +38,17 @@ public class HUD {
   private Map<String, Picture> weaponImages;
   private Map<String, BarIndicator> weaponBars;
   
+  private IconList weaponList;
+  
   private BitmapText playerName, team;
+  
+  private final String bar = "Interface/HUD/bar_bar_white.png";
+  private final String bar_tail = "Interface/HUD/bar_tail_white.png";
+  private final String bar_icon_health = "Interface/HUD/bar_icon_health_white.png";
+  private final String bar_icon_jetpack = "Interface/HUD/bar_icon_jetpack_white.png";
+  private final String bar_icon_weapon = "Interface/HUD/bar_icon_weapon_white.png";
+  
+  private float iconOffset;
   
   
   
@@ -49,42 +59,30 @@ public class HUD {
       
     hudNode = new Node("hudNode");
 
-    //trasparent background boxes
-    Picture topLeftBG = new Picture("TopLeftBG");
-    topLeftBG.setImage(assetManager, "Interface/grey.png", true);
-    topLeftBG.setWidth(width/2);
-    topLeftBG.setHeight(height/6);
-    topLeftBG.move(0, height - height/6, 0);
-    hudNode.attachChild(topLeftBG);
+    imageSize = (int) (height / 20);
+    iconOffset = 3*imageSize;
     
-    Picture topRightBG = new Picture("TopRightBG");
-    topRightBG.setImage(assetManager, "Interface/grey.png", true);
-    topRightBG.setWidth(width/4);
-    topRightBG.setHeight(height/6);
-    topRightBG.move(width - width/4, height - height/6, 0);
-    hudNode.attachChild(topRightBG);
+    BitmapFont messageFont = assetManager.loadFont("Interface/Fonts/Waree.fnt");
+    BitmapFont font = assetManager.loadFont("Interface/Fonts/Purisa32.fnt");
+
     
     Picture bottomBG = new Picture("BottomBG");
-    bottomBG.setImage(assetManager, "Interface/grey.png", true);
-    bottomBG.setWidth(width);
-    bottomBG.setHeight(height/6);
+    bottomBG.setImage(assetManager, "Interface/HUD/grey.png", true);
+    bottomBG.setWidth(2*width/3 + 67/12*imageSize);
+    bottomBG.setHeight(1.5f*imageSize);
+    bottomBG.move(2.5f*imageSize, height/30f - imageSize/4.5f, 0);
     hudNode.attachChild(bottomBG);
     
-
-    imageSize = (int) (height / 12);
-
-
     
     //message area
     messages = new ArrayList<BitmapText>();
 
-    BitmapFont messageFont = assetManager.loadFont("Interface/Fonts/Waree.fnt");
-    BitmapFont font = assetManager.loadFont("Interface/Fonts/Purisa32.fnt");
+    
     for (int i = 0; i < numMessages; i++) {
       BitmapText t = new BitmapText(messageFont);
       t.setSize(messageFont.getCharSet().getRenderedSize());
       t.setLocalTranslation(0, height - i * t.getLineHeight(), 0);
-      t.setColor(ColorRGBA.White);
+      t.setColor(ColorRGBA.Black);
       hudNode.attachChild(t);
       messages.add(0, t);
     }
@@ -94,124 +92,128 @@ public class HUD {
     playerName = new BitmapText(messageFont);
     playerName.setLocalTranslation(9 * width / 10, height, 0);
     playerName.setText("Dr. Unnamed");
+    playerName.setColor(ColorRGBA.Black);
     hudNode.attachChild(playerName);
     team = new BitmapText(messageFont);
     team.setLocalTranslation(9 * width / 10, height - team.getLineHeight(), 0);
     team.setText("Team Red");
-
+    team.setColor(ColorRGBA.Black);
     hudNode.attachChild(team);
 
     //display a collected item
-    Picture item = new Picture("item");
-    item.setImage(assetManager, "Interface/i.png", true);
-    item.setLocalTranslation(width / 20, 2 * height / 3, 0);
-    item.setWidth(imageSize);
-    item.setHeight(imageSize);
+//    Picture item = new Picture("item");
+//    item.setImage(assetManager, "Interface/HUD/placeholder.png", true);
+//    item.setLocalTranslation(width / 20, 2 * height / 3, 0);
+//    item.setWidth(imageSize);
+//    item.setHeight(imageSize);
     //parent.attachChild(item);
 
-    items = new HashMap<String, Picture>();
-    items.put("default", item);
+//    items = new HashMap<String, Picture>();
+//    items.put("default", item);
     
 
     //health
-    healthIndicator = new BarIndicator(imageSize*2.5f, height/25, 
-            width / 3 + imageSize + imageSize, 
-            height / 30 + imageSize/2 - height/55, 
+    healthIndicator = new BarIndicator(imageSize*2.5f, imageSize/2, 
+            width / 3 + iconOffset + imageSize, 
+            height/30 + imageSize/4, 
             assetManager, 
             ColorRGBA.Red, 
             hudNode);
     
     health = new Picture("health");
-    health.setImage(assetManager, "Interface/health_bar_icon_white.png", true);
-    health.setLocalTranslation(width / 3 + imageSize, height / 30, 0);
+    health.setImage(assetManager, bar_icon_health, true);
+    health.setLocalTranslation(width / 3 + iconOffset, height / 30, 0);
     health.setWidth(imageSize);
     health.setHeight(imageSize);
     hudNode.attachChild(health);
     
     Picture healthBar = new Picture("HealthBar");
-    healthBar.setImage(assetManager, "Interface/health_bar_bar_white.png", true);
-    healthBar.setLocalTranslation(width / 3 + 2 * imageSize, height / 30-1, 0);
+    healthBar.setImage(assetManager, bar, true);
+    healthBar.setLocalTranslation(width/3 + iconOffset + imageSize, height / 30-1, 0);
     healthBar.setWidth(imageSize*2.5f);
-    healthBar.setHeight(imageSize+2);
+    healthBar.setHeight(imageSize+1);
     hudNode.attachChild(healthBar);
     
     Picture healthTail = new Picture("HealthTail");
-    healthTail.setImage(assetManager, "Interface/health_bar_tail_white2.png", true);
-    healthTail.setLocalTranslation(width / 3 + 2 * imageSize + imageSize*2.5f, height / 30-1, 0);
+    healthTail.setImage(assetManager, bar_tail, true);
+    healthTail.setLocalTranslation(width/3 + iconOffset + imageSize + imageSize*2.5f, height / 30-1, 0);
     healthTail.setWidth(imageSize/12);
-    healthTail.setHeight(imageSize+2);
+    healthTail.setHeight(imageSize+1);
     hudNode.attachChild(healthTail);
     
 
     //jeatpack energy
-    jetpackIndicator = new BarIndicator(imageSize*2.5f, height/25,
-            2*width/3+2* imageSize, 
-            height/30 + imageSize/2 - height/55,
+    jetpackIndicator = new BarIndicator(imageSize*2.5f, imageSize/2,
+            2*width/3 + iconOffset + imageSize, 
+            height/30 + imageSize/4,
             assetManager, 
             ColorRGBA.Blue, 
             hudNode);
         
     jetpack = new Picture("jetpack");
-    jetpack.setImage(assetManager, "Interface/jetpack_bar_icon_white.png", true);
-    jetpack.setLocalTranslation(2*width / 3 + imageSize, height / 30, 0);
+    jetpack.setImage(assetManager, bar_icon_jetpack, true);
+    jetpack.setLocalTranslation(2*width/3 + iconOffset, height / 30, 0);
     jetpack.setWidth(imageSize);
     jetpack.setHeight(imageSize);
     hudNode.attachChild(jetpack);
     
     Picture jetpackBar = new Picture("JetpackBar");
-    jetpackBar.setImage(assetManager, "Interface/health_bar_bar_white.png", true);
-    jetpackBar.setLocalTranslation(2*width / 3 + 2 * imageSize, height / 30-1, 0);
+    jetpackBar.setImage(assetManager, bar, true);
+    jetpackBar.setLocalTranslation(2*width/3 + iconOffset + imageSize, height / 30-1, 0);
     jetpackBar.setWidth(imageSize*2.5f);
-    jetpackBar.setHeight(imageSize+2);
+    jetpackBar.setHeight(imageSize+1);
     hudNode.attachChild(jetpackBar);
     
     Picture jetpackTail = new Picture("JetpackTail");
-    jetpackTail.setImage(assetManager, "Interface/health_bar_tail_white2.png", true);
-    jetpackTail.setLocalTranslation(2*width / 3 + 2 * imageSize + imageSize*2.5f, height / 30-1, 0);
+    jetpackTail.setImage(assetManager, bar_tail, true);
+    jetpackTail.setLocalTranslation(2*width/3 + iconOffset + imageSize + imageSize*2.5f, height / 30-1, 0);
     jetpackTail.setWidth(imageSize/12);
-    jetpackTail.setHeight(imageSize+2);
+    jetpackTail.setHeight(imageSize+1);
     hudNode.attachChild(jetpackTail);
     
     
     //ammo
-    weaponIndicator = new BarIndicator(imageSize*2.5f, height/25,
-            2* imageSize, 
-            height/30 + imageSize/2 - height/55,
+    weaponIndicator = new BarIndicator(imageSize*2.5f, imageSize/2,
+            iconOffset + imageSize, 
+            height/30 + imageSize/4,
             assetManager, 
             ColorRGBA.Yellow, 
             hudNode);
         
     weapon = new Picture("weapon");
-    weapon.setImage(assetManager, "Interface/weapon_bar_icon_white.png", true);
-    weapon.setLocalTranslation(imageSize, height / 30, 0);
+    weapon.setImage(assetManager, bar_icon_weapon, true);
+    weapon.setLocalTranslation(iconOffset, height / 30, 0);
     weapon.setWidth(imageSize);
     weapon.setHeight(imageSize);
     hudNode.attachChild(weapon);
     
     Picture weaponBar = new Picture("WeaponBar");
-    weaponBar.setImage(assetManager, "Interface/health_bar_bar_white.png", true);
-    weaponBar.setLocalTranslation(2 * imageSize, height / 30-1, 0);
+    weaponBar.setImage(assetManager, bar, true);
+    weaponBar.setLocalTranslation(iconOffset + imageSize, height / 30-1, 0);
     weaponBar.setWidth(imageSize*2.5f);
-    weaponBar.setHeight(imageSize+2);
+    weaponBar.setHeight(imageSize+1);
     hudNode.attachChild(weaponBar);
     
     Picture weaponTail = new Picture("WeaponTail");
-    weaponTail.setImage(assetManager, "Interface/health_bar_tail_white2.png", true);
-    weaponTail.setLocalTranslation(2 * imageSize + imageSize*2.5f, height / 30-1, 0);
+    weaponTail.setImage(assetManager, bar_tail, true);
+    weaponTail.setLocalTranslation(iconOffset + imageSize + imageSize*2.5f, height / 30-1, 0);
     weaponTail.setWidth(imageSize/12);
-    weaponTail.setHeight(imageSize+2);
+    weaponTail.setHeight(imageSize+1);
     hudNode.attachChild(weaponTail);
     
-    parent.attachChild(hudNode);
     
-    //test the iconlist
-    IconList icons = new IconList(40, width/50, height/2, assetManager, hudNode);
-    icons.addItem("Test", 0, "Interface/placeholder.png", ColorRGBA.Red);
-    icons.setValue("Test", 50);
-    icons.addItem("Test2", 1, "Interface/placeholder.png", ColorRGBA.Blue);
-    icons.addItem("Test3", 2, "Interface/placeholder.png", ColorRGBA.Green);
-    icons.removeItem("Test2");
-    icons.addItem("Test4", 1, "Interface/placeholder.png", ColorRGBA.Orange);
+    weaponList = new HorizontalIconList(imageSize, iconOffset, 2 * imageSize, assetManager, hudNode);
+    
+    //test weapon list
+    weaponList.addItem("Test1", 0, "Interface/HUD/placeholder.png", ColorRGBA.Blue);
+    weaponList.addItem("Test2", 1, "Interface/HUD/placeholder.png", ColorRGBA.Red);
+    weaponList.addItem("Test3", 2, "Interface/HUD/placeholder.png", ColorRGBA.Yellow);
+    weaponList.addItem("Test4", 3, "Interface/HUD/placeholder.png", ColorRGBA.Orange);
+    weaponList.addItem("Test5", 2, "Interface/HUD/placeholder.png", ColorRGBA.Green);
+    weaponList.show();
+    
+    parent.attachChild(hudNode);
+
     
     
     switch(mode) {
@@ -294,5 +296,9 @@ public class HUD {
 
   public void setTeam(String team) {
     this.team.setText(team);
+  }
+  
+  public IconList getWeaponList() {
+      return weaponList;
   }
 }
