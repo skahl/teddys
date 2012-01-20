@@ -7,6 +7,7 @@ package edu.teddys.network;
 import com.jme3.network.ConnectionListener;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
+import edu.teddys.timer.ServerTimer;
 import java.io.IOException;
 
 /**
@@ -48,7 +49,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
     if (!networkServer.isRunning()) {
       networkServer.start();
       networkServer.addConnectionListener(server);
-      MegaLogger.debug("The server has started successfully!");
+      MegaLogger.debug("The Spidermonkey server has started successfully.");
     }
   }
 
@@ -60,7 +61,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   public void shutdownServer() {
     if (networkServer.isRunning()) {
       networkServer.close();
-      MegaLogger.debug("Server closed!");
+      MegaLogger.debug("Spidermonkey server closed.");
     }
   }
 
@@ -89,7 +90,8 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
 
   public void send(NetworkMessage message) {
     //TODO check if a recipient field is available?
-    message.setTimestamp(NetworkMessage.getSystemTimestamp());
+    message.setLocalTimestamp(NetworkMessage.getSystemTimestamp());
+    message.setServerTimestamp(ServerTimer.getServerTimestamp());
     networkServer.broadcast(message);
   }
 

@@ -32,8 +32,4 @@ public class NetworkSettings {
    * have to be given IDs > 0.
    */
   public static final Integer SERVER_ID = 0;
-  /**
-   * The server name which is displayed on occasion. Can be overwritten ...
-   */
-  public static String ServerName = "Big Fat Server";
 }

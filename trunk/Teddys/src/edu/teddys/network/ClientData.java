@@ -30,6 +30,13 @@ public class ClientData {
    * Position in the current map. 
    */
   private Vector3f position = new Vector3f();
+  /**
+   * Last position that is used for the lag compensation.
+   */
+  private Vector3f lastPosition = new Vector3f();
+  /**
+   * A Jetpack is constantly bounded to the user.
+   */
   private Jetpack jetpack = new Jetpack();
   /**
    * Session-related information, that is the number of deaths, kills, rounds etc.
@@ -40,7 +47,7 @@ public class ClientData {
    */
   private Integer team = -1;
   /**
-   * 
+   * Indicates whether the player is ready to play the game.
    */
   private Boolean ready = false;
   
@@ -90,6 +97,14 @@ public class ClientData {
 
   public SessionClientData getSession() {
     return session;
+  }
+
+  public Vector3f getLastPosition() {
+    return lastPosition;
+  }
+
+  public void setLastPosition(Vector3f lastPosition) {
+    this.lastPosition = lastPosition;
   }
 
   public void setSession(SessionClientData session) {

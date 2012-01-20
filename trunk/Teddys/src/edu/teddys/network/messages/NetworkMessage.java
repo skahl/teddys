@@ -22,24 +22,36 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class NetworkMessage extends AbstractMessage {
 
-  private Long timestamp;
+  private Long localTimestamp;
+  /**
+   * This is a so-called "tick" which describes a world state.
+   */
+  private Long serverTimestamp;
 
-  public Long getTimestamp() {
-    return timestamp;
+  public Long getLocalTimestamp() {
+    return localTimestamp;
   }
 
   /**
-   * Must be set because of the latency calculation.
+   * Should be set because of the latency calculation.
    * 
    * @param timestamp 
    */
-  public void setTimestamp(Long timestamp) {
-    this.timestamp = timestamp;
+  public void setLocalTimestamp(Long timestamp) {
+    this.localTimestamp = timestamp;
+  }
+
+  public Long getServerTimestamp() {
+    return serverTimestamp;
+  }
+
+  public void setServerTimestamp(Long serverTimestamp) {
+    this.serverTimestamp = serverTimestamp;
   }
   
   public NetworkMessage() {
     // initialize the timestamp value
-    setTimestamp(getSystemTimestamp());
+    setLocalTimestamp(getSystemTimestamp());
   }
   
   public static Long getSystemTimestamp() {

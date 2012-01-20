@@ -12,6 +12,7 @@ import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageInfo;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
+import edu.teddys.timer.ServerTimer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +51,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     }
     getData().setCreated(new Date());
     getData().setDiscoverable(true);
+    ServerTimer.startTimer();
     MegaLogger.debug("New server started.");
   }
 
@@ -77,7 +79,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     for (int i = 0; i < getData().getConnections().size(); i++) {
       getData().getConnections().get(i).close("Going down for maintenance NOW! ;)");
     }
-
+    ServerTimer.stopTimer();
     NetworkCommunicatorSpidermonkeyServer.getInstance().shutdownServer();
     // reset data
     data = null;
@@ -193,8 +195,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     NetworkMessageInfo info = new NetworkMessageInfo(message);
     send(info);
     MegaLogger.info(message);
-
-    String serverMsg = String.format("Welcome to %s!", NetworkSettings.ServerName);
+    String serverMsg = String.format("Welcome to %s!", getData().getName());
     NetworkMessageInfo clientInfo = new NetworkMessageInfo(serverMsg);
     conn.send(clientInfo);
     ReqMessageSendClientData sendMsg = new ReqMessageSendClientData();

@@ -55,7 +55,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
   public void send(NetworkMessage message) {
     if (isValidConnection()) {
       // Set the timestamp
-      message.setTimestamp(NetworkMessage.getSystemTimestamp());
+      message.setLocalTimestamp(NetworkMessage.getSystemTimestamp());
       networkClient.send(message);
     }
   }

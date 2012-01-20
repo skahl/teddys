@@ -20,6 +20,7 @@ public class ServerDataSyncThread extends Thread {
   public void run() {
     //TODO dismiss old values
     for (;;) {
+      //TODO(nice to have) delta compression?
       ManMessageTransferServerData msg = new ManMessageTransferServerData(TeddyServer.getInstance().getData());
       TeddyClient.getInstance().send(msg);
       // ... and sleep an amount of time.

@@ -4,6 +4,7 @@
  */
 package edu.teddys.network;
 
+import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
 import edu.teddys.GameMode;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  *
@@ -23,8 +25,17 @@ import java.util.Map;
  */
 @Serializable
 public class TeddyServerData {
+  /**
+   * The date on which the server started.
+   */
   private Date created = new Date();
-  private String name = "TeddyServer";
+  /**
+   * The server name which is displayed on occasion.
+   */
+  private String name = "Big Fat Server";
+  /**
+   * The list of teams registered on the server.
+   */
   private List<Team> teams = new ArrayList<Team>();
   //TODO check if ok ......
   private List<HostedConnection> connections = new ArrayList<HostedConnection>();
@@ -32,8 +43,18 @@ public class TeddyServerData {
    * Save the client data here ...
    */
   private Map<Integer,ClientData> clients = new HashMap<Integer,ClientData>();
+  /**
+   * The game mode which is currently active.
+   */
   private Class<? extends GameMode> gameMode = GameSettings.DEFAULT_GAME_MODE;
+  /**
+   * True if the server should be visible to other clients.
+   */
   private boolean discoverable = false;
+  /**
+   * History of the clients' positions for the lag compensation.
+   */
+  private Map<Integer,LinkedBlockingQueue<Vector3f>> clientPositions = new HashMap<Integer,LinkedBlockingQueue<Vector3f>>();
 
   public TeddyServerData() {
     super();
@@ -94,5 +115,20 @@ public class TeddyServerData {
 
   public void setTeams(List<Team> teams) {
     this.teams = teams;
+  }
+
+  public Map<Integer, LinkedBlockingQueue<Vector3f>> getClientPositions() {
+    return clientPositions;
+  }
+
+  public void setClientPositions(Map<Integer, LinkedBlockingQueue<Vector3f>> clientPositions) {
+    this.clientPositions = clientPositions;
+  }
+  
+  public void addClientPosition(Integer clientId, Vector3f pos) {
+    if(!getClientPositions().containsKey(clientId)) {
+      getClientPositions().put(clientId, new LinkedBlockingQueue<Vector3f>(GameSettings.MAX_SERVER_POS_CAPACITY));
+    }
+    getClientPositions().get(clientId).offer(pos);
   }
 }

@@ -4,10 +4,8 @@
  */
 package edu.teddys.timer;
 
-import edu.teddys.BaseGame;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
-import java.util.logging.Level;
 
 /**
  * 
