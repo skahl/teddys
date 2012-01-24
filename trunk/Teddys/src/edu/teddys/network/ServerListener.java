@@ -94,6 +94,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         TeddyServer.getInstance().send(msg);
         //TODO Check how many clients are ready yet to start the game occassionally.
         // (use TeddyServerData)
+        //TODO Set the player to a random position in the scene
       } else if (message instanceof ResMessageSendClientData) {
         //
         // RECEIVED USER DATA

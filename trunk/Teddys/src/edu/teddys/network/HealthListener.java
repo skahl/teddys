@@ -14,6 +14,6 @@ public class HealthListener implements AttributeListener<Integer> {
 
   public void attributeChanged(Integer value) {
     System.out.println("Listener: Health changed to " + value + "!");
-    Game.hud.setHealth(TeddyClient.getInstance().getHealth());
+    Game.hud.setHealth(TeddyClient.getInstance().getData().getHealth());
   }
 }

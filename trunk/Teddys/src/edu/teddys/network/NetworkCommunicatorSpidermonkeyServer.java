@@ -33,7 +33,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
     try {
       setUpServer();
     } catch (IOException ex) {
-      MegaLogger.fatal(new Throwable("The server could not be started!", ex));
+      MegaLogger.getLogger().fatal(new Throwable("The server could not be started!", ex));
     }
   }
 
@@ -49,7 +49,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
     if (!networkServer.isRunning()) {
       networkServer.start();
       networkServer.addConnectionListener(server);
-      MegaLogger.debug("The Spidermonkey server has started successfully.");
+      MegaLogger.getLogger().debug("The Spidermonkey server has started successfully.");
     }
   }
 
@@ -61,7 +61,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   public void shutdownServer() {
     if (networkServer.isRunning()) {
       networkServer.close();
-      MegaLogger.debug("Spidermonkey server closed.");
+      MegaLogger.getLogger().debug("Spidermonkey server closed.");
     }
   }
 

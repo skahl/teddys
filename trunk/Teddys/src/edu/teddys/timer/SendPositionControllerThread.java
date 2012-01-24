@@ -9,7 +9,7 @@ import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.messages.client.ManMessageSendPosition;
-import edu.teddys.states.Game;
+import edu.teddys.objects.player.Player;
 
 /**
  *
@@ -22,7 +22,7 @@ public class SendPositionControllerThread extends Thread {
     //TODO dismiss old values
     for (;;) {
       // get the current position
-      Vector3f playerVector = Game.getInstance().getPlayer().getPlayerControl().getPhysicsLocation();
+      Vector3f playerVector = Player.getInstance(Player.LOCAL_PLAYER).getPlayerControl().getPhysicsLocation();
       TeddyClient.getInstance().getData().setPosition(playerVector);
       ManMessageSendPosition msg = new ManMessageSendPosition(playerVector);
       TeddyClient.getInstance().send(msg);
@@ -30,7 +30,7 @@ public class SendPositionControllerThread extends Thread {
       try {
         sleep((int) (1 / GameSettings.SENDPOSITION_TIMER_RATE));
       } catch (InterruptedException ex) {
-        MegaLogger.debug(new Throwable("Sleep request from timer interrupted!", ex));
+        MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
     }
   }

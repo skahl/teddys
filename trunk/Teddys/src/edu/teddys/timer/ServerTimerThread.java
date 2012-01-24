@@ -13,7 +13,7 @@ import edu.teddys.MegaLogger;
  */
 public class ServerTimerThread extends Thread {
   
-  private volatile Long tick;
+  private volatile Long tick = new Long(0);
 
   @Override
   public void run() {
@@ -24,7 +24,7 @@ public class ServerTimerThread extends Thread {
     try {
         sleep(GameSettings.SERVER_TIMESTAMP_INTERVAL);
       } catch (InterruptedException ex) {
-        MegaLogger.debug(new Throwable("Sleep request from timer interrupted!", ex));
+        MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
   }
 

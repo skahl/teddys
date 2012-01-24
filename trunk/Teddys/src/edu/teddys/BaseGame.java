@@ -41,7 +41,6 @@ import edu.teddys.objects.Jetpack;
 import edu.teddys.timer.ChecksumManager;
 import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.logging.Logger;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.DailyRollingFileAppender;
 import org.apache.log4j.Level;
@@ -55,8 +54,8 @@ import org.apache.log4j.PatternLayout;
 public class BaseGame extends SimpleApplication {
   // init java logging
 
-  private static final Logger logger = Logger.getLogger("baseGameLogger"); // Event loggin
   public ScheduledThreadPoolExecutor threadPool; // Multithreading
+  
   // ActionListener
   private ActionListener actionListener = new ActionListener() {
 
@@ -98,10 +97,12 @@ public class BaseGame extends SimpleApplication {
     // save it with the specified date format in logs/.
     try {
       DailyRollingFileAppender fileAppender = new DailyRollingFileAppender(layout, "logs/teddys.log", "'.'yyyy-MM-dd_HH");
-    MegaLogger.getLogger().addAppender(fileAppender);
+      MegaLogger.getLogger().addAppender(fileAppender);
     } catch (IOException ex) {
-      MegaLogger.error(new Throwable("Creation of the log file appender aborted!", ex));
+      MegaLogger.getLogger().error(new Throwable("Creation of the log file appender aborted!", ex));
     }
+    // add the custom appender to react on some infos
+    MegaLogger.getLogger().addAppender(new MegaLoggerListener(layout));
 
     AppSettings settings = new AppSettings(true);
 
@@ -156,20 +157,20 @@ public class BaseGame extends SimpleApplication {
 
     // Start the protection mechanisms
     ChecksumManager.startTimer();
-    System.out.println("Checksum timer started.");
-
+    
     // Get the handle to the client and try to join the specified server
     TeddyClient client = TeddyClient.getInstance();
-    System.out.println("Client has " + client.getHealth() + " health points at the beginning.");
+    MegaLogger.getLogger().info("Client has " + client.getData().getHealth() + " health points at the beginning.");
 
     // Trying to connect to the server
     if (client.join()) {
-      System.out.println("Client had tried to join the server (" + client.getServerIP() + ")");
-      System.out.println("Client ID is " + client.getId());
+      MegaLogger.getLogger().debug(String.format("Client started a join request to %s ", client.getServerIP()));
     } else {
-      System.err.println("Error while connecting the server!");
+      MegaLogger.getLogger().error("Error while connecting the server!");
       return;
     }
+    
+    //TODO send a PlayerReady and MapLoaded message
 
     // Create the listeners for the client
     client.registerListener(TeddyClient.ListenerFields.health, new HealthListener());
@@ -234,10 +235,6 @@ public class BaseGame extends SimpleApplication {
 
   public ScheduledThreadPoolExecutor getThreadPool() {
     return threadPool;
-  }
-
-  public static Logger getLogger() {
-    return logger;
   }
 
   public void menuFeedback(String feedback) {

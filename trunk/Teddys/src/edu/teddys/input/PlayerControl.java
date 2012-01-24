@@ -53,6 +53,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     input.addListener(this, new String[]{MAPPING_CONTROL.MOVE_LEFT.name(),
               MAPPING_CONTROL.MOVE_RIGHT.name(),
               MAPPING_CONTROL.JETPACK.name()});
+    input.addRawInputListener(new ControllerInputListener());
   }
 
   public void onAnalog(String name, float value, float tpf) {

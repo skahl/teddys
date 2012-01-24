@@ -34,10 +34,10 @@ public class ClientTimer {
     thread.start();
     String tempMsg = String.format(
             "Client timer thread spawned (Rate: %f, Interval: %d ms)",
-            (Float) (1f / GameSettings.SERVER_TIMESTAMP_INTERVAL),
+            (Float) (1f / GameSettings.SERVER_TIMESTAMP_INTERVAL * 1000),
             GameSettings.SERVER_TIMESTAMP_INTERVAL
             );
-    MegaLogger.debug(tempMsg);
+    MegaLogger.getLogger().debug(tempMsg);
   }
 
   public static void stopTimer() {
@@ -47,9 +47,9 @@ public class ClientTimer {
     thread.interrupt();
     try {
       thread.join();
-      MegaLogger.debug("Client timer thread joined.");
+      MegaLogger.getLogger().debug("Client timer thread joined.");
     } catch (InterruptedException ex) {
-      MegaLogger.debug(new Throwable("Error while trying to join the thread!", ex));
+      MegaLogger.getLogger().debug(new Throwable("Error while trying to join the thread!", ex));
     }
   }
 }

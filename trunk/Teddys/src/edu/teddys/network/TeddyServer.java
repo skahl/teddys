@@ -52,7 +52,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     getData().setCreated(new Date());
     getData().setDiscoverable(true);
     ServerTimer.startTimer();
-    MegaLogger.debug("New server started.");
+    MegaLogger.getLogger().debug("New server started.");
   }
 
   /**
@@ -83,7 +83,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     NetworkCommunicatorSpidermonkeyServer.getInstance().shutdownServer();
     // reset data
     data = null;
-    MegaLogger.debug("Server stopped.");
+    MegaLogger.getLogger().debug("Server stopped.");
   }
 
   public String getPubKey(String pubKeyClient) {
@@ -95,11 +95,11 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
       return;
     }
     if (!getData().isDiscoverable()) {
-      MegaLogger.warn("TeddyServer not discoverable! Message not sent.");
+      MegaLogger.getLogger().warn("TeddyServer not discoverable! Message not sent.");
     }
     if (getData().getConnections().isEmpty()) {
       //TODO Save or dismiss the message?
-      MegaLogger.debug("Message could not be sent because no clients were connected!");
+      MegaLogger.getLogger().debug("Message could not be sent because no clients were connected!");
       return;
     }
     NetworkCommunicatorSpidermonkeyServer.getInstance().send(message);
@@ -128,7 +128,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
       return;
     }
     conn.close(reason);
-    MegaLogger.debug(String.format("The specified client (%d) has been disconnected yet.", client));
+    MegaLogger.getLogger().debug(String.format("The specified client (%d) has been disconnected yet.", client));
   }
 
   public void disconnect(Integer client) {
@@ -167,7 +167,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
    */
   public void setClientData(Integer clientID, ClientData client) {
     if (!isRunning()) {
-      MegaLogger.error(new Throwable("TeddyServer is not running! Could not set client data!"));
+      MegaLogger.getLogger().error(new Throwable("TeddyServer is not running! Could not set client data!"));
       return;
     }
     getData().getClients().put(clientID, client);
@@ -182,7 +182,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
    */
   public void connectionAdded(Server server, HostedConnection conn) {
     if (!isRunning()) {
-      MegaLogger.error(new Throwable("connectionAdded() called, but the server is not running actually (or not discoverable)!"));
+      MegaLogger.getLogger().error(new Throwable("connectionAdded() called, but the server is not running actually (or not discoverable)!"));
       return;
     }
     getData().getConnections().add(conn);
@@ -194,7 +194,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
             conn.getId());
     NetworkMessageInfo info = new NetworkMessageInfo(message);
     send(info);
-    MegaLogger.info(message);
+    MegaLogger.getLogger().info(message);
     String serverMsg = String.format("Welcome to %s!", getData().getName());
     NetworkMessageInfo clientInfo = new NetworkMessageInfo(serverMsg);
     conn.send(clientInfo);
@@ -212,7 +212,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   public void connectionRemoved(Server server, HostedConnection conn) {
 
     if (!isRunning()) {
-      MegaLogger.error(new Throwable("connectionRemoved() called, but the server is not running (or not discoverable)!"));
+      MegaLogger.getLogger().error(new Throwable("connectionRemoved() called, but the server is not running (or not discoverable)!"));
       return;
     }
 
@@ -222,7 +222,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     }
 
     if (!getData().getConnections().contains(conn)) {
-      MegaLogger.warn(
+      MegaLogger.getLogger().warn(
               String.format("Connection remove request (Client ID: %d) failed from address %s!",
               conn.getId(), conn.getAddress()));
       return;
@@ -240,7 +240,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
           getData().getTeams().get(client.getTeamID()).removePlayer(client.getId());
         } catch (ArrayIndexOutOfBoundsException ex) {
           //TODO ignore?
-          MegaLogger.warn(
+          MegaLogger.getLogger().warn(
                   new Throwable(
                   String.format("No team with ID %d could be found!", 
                   client.getTeamID()), ex)
@@ -258,6 +258,6 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     getData().getConnections().remove(conn);
     NetworkMessageInfo info = new NetworkMessageInfo(message);
     send(info);
-    MegaLogger.info(message);
+    MegaLogger.getLogger().info(message);
   }
 }

@@ -38,10 +38,10 @@ public class ChecksumManager {
     thread.start();
     String tempMsg = String.format(
             "Checksum timer thread spawned (Rate: %f, Interval: %d ms)",
-            (Float) (1f / GameSettings.CHECKSUM_INTERVAL),
+            (Float) (1f / GameSettings.CHECKSUM_INTERVAL * 1000),
             GameSettings.CHECKSUM_INTERVAL
             );
-    MegaLogger.debug(tempMsg);
+    MegaLogger.getLogger().debug(tempMsg);
   }
 
   public static void stopTimer() {

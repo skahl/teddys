@@ -9,6 +9,7 @@ import com.jme3.network.ClientStateListener;
 import edu.teddys.timer.SendPositionController;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.objects.box.items.Item;
+import edu.teddys.objects.player.Player;
 import edu.teddys.objects.weapons.Weapon;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,17 +22,18 @@ import java.util.Map;
  * @author cm
  */
 public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener {
-  
+
   /**
    * Field identifiers for the listeners. Info: Use this idents for the listeners!
    */
   public enum ListenerFields {
-    health,currentItem,currentWeapon,isDead
+
+    health, currentItem, currentWeapon, isDead
   };
-  /**
-   * The player information, such as name, health etc.
-   */
-  private ClientData data = new ClientData();
+//  /**
+//   * The player information, such as name, health etc.
+//   */
+//  private ClientData data = new ClientData();
   /**
    * Server ip the client uses for the gameplay.
    */
@@ -70,33 +72,32 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
    * listener HealthListener could watch the changes of health since it 
    * is notified on calls of setHealth().
    */
-  private Map<ListenerFields,List<AttributeListener>> listeners = new EnumMap<ListenerFields,List<AttributeListener>>(ListenerFields.class);
-  
+  private Map<ListenerFields, List<AttributeListener>> listeners = new EnumMap<ListenerFields, List<AttributeListener>>(ListenerFields.class);
   private static TeddyClient instance = null;
-  
+
   private TeddyClient() {
     super();
   }
-  
+
   public static TeddyClient getInstance() {
-    if(instance == null) {
+    if (instance == null) {
       instance = new TeddyClient();
     }
     return instance;
   }
-  
+
   public void registerListener(ListenerFields field, AttributeListener listener) {
     // additional check for "permitted" fields
-    if(field == null) {
+    if (field == null) {
       return;
     }
-    if(!listeners.containsKey(field)) {
+    if (!listeners.containsKey(field)) {
       // create list for the field
       listeners.put(field, new ArrayList<AttributeListener>());
     }
     listeners.get(field).add(listener);
   }
-  
+
   public boolean isCurrentConnection() {
     return currentConnection;
   }
@@ -111,7 +112,7 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
 
   public void setCurrentItem(Item currentItem) {
     this.currentItem = currentItem;
-    for(AttributeListener listener : listeners.get(ListenerFields.currentItem)) {
+    for (AttributeListener listener : listeners.get(ListenerFields.currentItem)) {
       listener.attributeChanged(currentItem);
     }
   }
@@ -122,15 +123,11 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
 
   public void setCurrentWeapon(Integer currentWeapon) {
     this.currentWeapon = currentWeapon;
-    for(AttributeListener listener : listeners.get(ListenerFields.currentWeapon)) {
+    for (AttributeListener listener : listeners.get(ListenerFields.currentWeapon)) {
       listener.attributeChanged(currentWeapon);
     }
   }
 
-  public Integer getHealth() {
-    return getData().getHealth();
-  }
-  
   /**
    * 
    * Adds the specified damage value to the current teddy. Checks also if
@@ -140,20 +137,20 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
    * @param damage Positive value as it is the damage to the teddy
    */
   public void addDamage(Integer damage) {
-    Integer newHealth = getHealth()-damage;
-    if(newHealth > 0) {
+    Integer newHealth = getData().getHealth() - damage;
+    if (newHealth > 0) {
       setHealth(newHealth);
       return;
     }
     // You're dead, fag!
-    for(AttributeListener listener : listeners.get(ListenerFields.isDead)) {
+    for (AttributeListener listener : listeners.get(ListenerFields.isDead)) {
       listener.attributeChanged(true);
     }
   }
 
   public void setHealth(Integer health) {
     getData().setHealth(health);
-    for(AttributeListener listener : listeners.get(ListenerFields.health)) {
+    for (AttributeListener listener : listeners.get(ListenerFields.health)) {
       listener.attributeChanged(health);
     }
   }
@@ -215,27 +212,11 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
   public void disconnect(Integer clientID) {
     NetworkCommunicatorSpidermonkeyClient.getInstance().disconnect(clientID);
   }
-  
+
   public void disconnect() {
-    disconnect(getData().getId());
+    disconnect(Player.getInstance(Player.LOCAL_PLAYER).getData().getId());
   }
 
-  public ClientData getData() {
-    return data;
-  }
-
-  public void setData(ClientData data) {
-    this.data = data;
-  }
-  
-  public Integer getId() {
-    return getData().getId();
-  }
-  
-  public void setId(Integer id) {
-    getData().setId(id);
-  }
-  
   /**
    * 
    * Method to produce a dummy enemy.
@@ -248,13 +229,17 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
   }
 
   public void clientConnected(Client c) {
-    TeddyClient client = TeddyClient.getInstance();
-    client.setId(c.getId());
-    client.setJoinedServer(new Date());
+    getData().setId(c.getId());
+    TeddyClient.getInstance().setJoinedServer(new Date());
   }
 
   public void clientDisconnected(Client c, DisconnectInfo info) {
     //TODO set game state
     SendPositionController.stopTimer();
+  }
+
+  public ClientData getData() {
+    //TODO replace the calls to Player.getInstance(LOCAL_PLAYER)!!
+    return Player.getInstance(Player.LOCAL_PLAYER).getData();
   }
 }

@@ -15,5 +15,6 @@ import edu.teddys.network.messages.NetworkMessageGameState;
 public class GSMessagePlayerReady extends NetworkMessageGameState {
 
   public GSMessagePlayerReady() {
+    
   }
 }

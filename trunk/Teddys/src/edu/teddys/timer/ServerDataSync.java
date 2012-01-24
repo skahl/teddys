@@ -28,10 +28,10 @@ public class ServerDataSync {
     thread.start();
     String tempMsg = String.format(
             "Checksum timer thread spawned (Rate: %f, Interval: %d ms)",
-            (Float) (1f / GameSettings.SERVER_SYNC_INTERVAL),
+            (Float) (1f / GameSettings.SERVER_SYNC_INTERVAL * 1000),
             GameSettings.SERVER_SYNC_INTERVAL
             );
-    MegaLogger.debug(tempMsg);
+    MegaLogger.getLogger().debug(tempMsg);
   }
 
   public static void stopTimer() {
@@ -41,9 +41,9 @@ public class ServerDataSync {
     thread.interrupt();
     try {
       thread.join();
-      MegaLogger.debug("ServerDataSync timer thread joined.");
+      MegaLogger.getLogger().debug("ServerDataSync timer thread joined.");
     } catch (InterruptedException ex) {
-      MegaLogger.debug(new Throwable("Error while trying to join the thread!", ex));
+      MegaLogger.getLogger().debug(new Throwable("Error while trying to join the thread!", ex));
     }
   }
 }

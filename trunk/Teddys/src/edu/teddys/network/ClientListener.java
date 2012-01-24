@@ -40,7 +40,7 @@ import edu.teddys.timer.ClientTimer;
 public class ClientListener implements MessageListener<com.jme3.network.Client> {
 
   public void messageReceived(com.jme3.network.Client source, Message message) {
-    MegaLogger.debug("Received a NetworkMessage: " + message.getClass().getName());
+    MegaLogger.getLogger().debug("Received a NetworkMessage: " + message.getClass().getName());
     if (message instanceof DisconnectMessage) {
       //
       // USER HAS BEEN DISCONNECTED/KICKED FROM THE SERVER
@@ -48,7 +48,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       String reason = ((DisconnectMessage) message).getReason();
       String logMsg = "Client has been disconnected from the server!";
       logMsg += (!reason.isEmpty()) ? " Reason: " + reason : "";
-      MegaLogger.info(new Throwable(logMsg));
+      MegaLogger.getLogger().info(new Throwable(logMsg));
       //TODO change game state
     } else if (message instanceof NetworkMessage) {
       // get the server timestamp
@@ -75,7 +75,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
                 //              info.getTimestamp(),
                 teddyName,
                 info.getMessage());
-        MegaLogger.info(infoString);
+        MegaLogger.getLogger().info(infoString);
       } else if (message instanceof NetworkMessageGameState) {
         if (message instanceof GSMessageGamePaused) {
           //
@@ -105,7 +105,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           String teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
           String infoString = String.format("Player %s is ready yet!", teddyName);
-          MegaLogger.info(infoString);
+          MegaLogger.getLogger().info(infoString);
         }
       } else if (message instanceof NetworkMessageManipulation) {
         if (message instanceof ManMessageActivateItem) {
@@ -119,7 +119,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // A DAMAGE REQUEST TO BE APPLIED
           //
           ManMessageSendDamage msg = (ManMessageSendDamage) message;
-          if (msg.getClient().equals(TeddyClient.getInstance().getId())) {
+          if (msg.getClient().equals(TeddyClient.getInstance().getData())) {
             TeddyClient.getInstance().addDamage(msg.getDamage());
           }
           try {
@@ -127,7 +127,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
             String badTeddy = TeddyServer.getInstance().getClientData(source.getId()).getName();
             String infoString = String.format("Mad Teddy %s attacked 'Good Old %s'! %s: %s",
                     badTeddy, goodTeddy, getDamageMessage(msg.getDamage()), msg.getDamage());
-            MegaLogger.info(infoString);
+            MegaLogger.getLogger().info(infoString);
           } catch (Exception ex) {
           }
         } else if (message instanceof ManMessageTransferServerData) {
@@ -161,10 +161,10 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // THE ACTIVE NETWORK SERVER SHOULD BE CHANGED
           //
           ReqMessageRelocateServer msg = (ReqMessageRelocateServer) message;
-          if (msg.getDestination().equals(TeddyClient.getInstance().getId())) {
+          if (msg.getDestination().equals(TeddyClient.getInstance().getData().getId())) {
             TeddyServer.getInstance().startServer();
             //TODO Force the clients to join the new server ^^
-            MegaLogger.debug("Relocated server.");
+            MegaLogger.getLogger().debug("Relocated server.");
           } else {
             //TODO prepare to (seamlessly?) join the new server.
           }

@@ -28,9 +28,9 @@ public class SendPositionController {
     String tempMsg = String.format(
             "SendPosition timer thread spawned (Rate: %d, Interval: %f ms)",
             GameSettings.SENDPOSITION_TIMER_RATE,
-            (int) (1 / GameSettings.SENDPOSITION_TIMER_RATE)
+            (int) (1 / GameSettings.SENDPOSITION_TIMER_RATE * 1000)
             );
-    MegaLogger.debug(tempMsg);
+    MegaLogger.getLogger().debug(tempMsg);
   }
 
   public static void stopTimer() {
@@ -40,9 +40,9 @@ public class SendPositionController {
     thread.interrupt();
     try {
       thread.join();
-      MegaLogger.debug("SendPosition timer thread joined.");
+      MegaLogger.getLogger().debug("SendPosition timer thread joined.");
     } catch (InterruptedException ex) {
-      MegaLogger.debug(new Throwable("Error while trying to join the thread!", ex));
+      MegaLogger.getLogger().debug(new Throwable("Error while trying to join the thread!", ex));
     }
   }
 }

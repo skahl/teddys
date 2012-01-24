@@ -63,7 +63,7 @@ public class ChecksumManagerThread extends Thread {
       try {
         sleep(GameSettings.CHECKSUM_INTERVAL);
       } catch (InterruptedException ex) {
-        MegaLogger.debug(new Throwable("Sleep request from timer interrupted!", ex));
+        MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
     }
   }

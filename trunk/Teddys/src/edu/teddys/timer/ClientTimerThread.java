@@ -17,10 +17,11 @@ public class ClientTimerThread extends Thread {
   public void run() {
     //TODO send a snapshot of the keyboard and mouse state
     
+    
     try {
         sleep(GameSettings.SERVER_TIMESTAMP_INTERVAL);
       } catch (InterruptedException ex) {
-        MegaLogger.debug(new Throwable("Sleep request from timer interrupted!", ex));
+        MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
   }
 }

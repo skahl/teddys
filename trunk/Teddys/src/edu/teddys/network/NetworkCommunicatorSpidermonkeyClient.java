@@ -41,7 +41,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
 
   public void addClientStateListener(ClientStateListener listener) {
     if (networkClient == null) {
-      MegaLogger.error(new Throwable("Could not add ClientStateListener because networkClient is null!"));
+      MegaLogger.getLogger().error(new Throwable("Could not add ClientStateListener because networkClient is null!"));
       return;
     }
     networkClient.addClientStateListener(listener);
@@ -65,7 +65,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     // Check for active connection
     if (isValidConnection()) {
       // close the active connection
-      disconnect(client.getId());
+      disconnect(client.getData().getId());
     }
     // Get the server settings
     String serverIP = client.getServerIP();
@@ -73,7 +73,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     if (serverIP == null || serverPort == null) {
       //TODO dirty?
       String msg = "serverIP or serverPort is null. Please check your network settings!";
-      MegaLogger.fatal(new Throwable(msg));
+      MegaLogger.getLogger().fatal(new Throwable(msg));
       throw new RuntimeException(msg);
     }
     // Try to connect to the server
@@ -85,10 +85,10 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
 //      }
       // Configure the client to receive messages
       networkClient.addMessageListener(new ClientListener());
-      MegaLogger.debug("Client: Join request sent.");
+      MegaLogger.getLogger().debug("Client: Join request sent.");
       return true;
     } catch (IOException ex) {
-      MegaLogger.error(new Throwable("Client: Join request failed!", ex));
+      MegaLogger.getLogger().error(new Throwable("Client: Join request failed!", ex));
       return false;
     }
   }
@@ -98,7 +98,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
       return;
     }
     networkClient.close();
-    MegaLogger.info("The client is disconnected now!");
+    MegaLogger.getLogger().info("The client is disconnected now!");
   }
 
   public Client getNetworkClient() {

@@ -22,7 +22,6 @@ import edu.teddys.hud.HUDController;
 import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.map.GameLoader;
-import java.util.logging.Logger;
 import edu.teddys.objects.player.Player;
 
 /**
@@ -40,7 +39,6 @@ public class Game extends AbstractAppState {
   private BasicShadowRenderer shadowRenderer; // Shadow rendering
   private GameLoader gameLoader;
   public static HUD hud;
-  private Player player; // should be a list in later versions I guess..
   private boolean paused;
   private boolean enabled;
 
@@ -148,13 +146,13 @@ public class Game extends AbstractAppState {
     hudController.registerWithInput(inputManager);
 
     // init player
-    player = Player.getInstance("Player 1", this);
-
+    Player player = Player.getInstance(Player.LOCAL_PLAYER);
     player.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -1.2f));
+    
+    Player player2 = Player.getInstance(1);
+    player2.getPlayerControl().setPhysicsLocation(new Vector3f(1f, 2f, -1.2f));
 
     rootNode.attachChild(player.getNode());
-
-
 
     // Crosshair
     int crosshairSize = this.app.getSettings().getHeight() / 15;
@@ -166,7 +164,6 @@ public class Game extends AbstractAppState {
     cursor.setHeight(crosshairSize);
     cursor.setWidth(crosshairSize);
     this.app.getGuiNode().attachChild(cursor);
-
 
     // Camera
     CameraNode camNode = new CameraNode("Camera", this.app.getCamera());
@@ -184,9 +181,6 @@ public class Game extends AbstractAppState {
     CrosshairControl cameraControl = new CrosshairControl(camNode, player.getNode(), cursor,
             this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
     cameraControl.registerWithInput(inputManager);
-
-
-
 
 
     // physics debug (shows collission meshes):
@@ -247,9 +241,5 @@ public class Game extends AbstractAppState {
 
   public InputManager getInputManager() {
     return inputManager;
-  }
-
-  public Player getPlayer() {
-    return player;
   }
 }
