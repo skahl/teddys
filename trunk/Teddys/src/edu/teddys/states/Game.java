@@ -189,6 +189,8 @@ public class Game extends AbstractAppState {
     // physics debug (shows collission meshes):
 
     //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
+    
+    addPlayerToWorld(Player.getInstance(1));
 
   }
 

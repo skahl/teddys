@@ -104,8 +104,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // START THE ACCEPTED GAME
           //
           //TODO Set game state to "Game"
-          //TODO Spawn the position controller
-//        SendPositionController.startTimer();
           GSMessageBeginGame msg = (GSMessageBeginGame)message;
           // Set the initial server timestamp
           //TODO compensate the difference in transmission?

@@ -234,7 +234,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     // from list
 
     // acquire client data because of the team allocation
-    if(!getData().getClients().isEmpty()) {
+    if(getData() != null && !getData().getClients().isEmpty()) {
       ClientData client = getData().getClients().get(conn.getId());
       if (client != null) {
         // remove the player from the team list

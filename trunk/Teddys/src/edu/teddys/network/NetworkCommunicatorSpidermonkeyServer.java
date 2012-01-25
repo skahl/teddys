@@ -47,11 +47,12 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
    * @see ConnectionListener
    */
   public void startServer(TeddyServer server) {
-    if (!networkServer.isRunning()) {
-      networkServer.start();
-      networkServer.addConnectionListener(server);
-      MegaLogger.getLogger().debug("The Spidermonkey server has started successfully.");
+    if (networkServer != null && networkServer.isRunning()) {
+      return;
     }
+    networkServer.start();
+    networkServer.addConnectionListener(server);
+    MegaLogger.getLogger().debug("The Spidermonkey server has started successfully.");
   }
 
   /**
@@ -60,11 +61,12 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
    * 
    */
   public void shutdownServer() {
-    if (networkServer.isRunning()) {
-      networkServer.close();
-      //TODO check if all connections must be closed
-      MegaLogger.getLogger().debug("Spidermonkey server closed.");
+    if (networkServer == null || !networkServer.isRunning()) {
+      return;
     }
+    networkServer.close();
+    //TODO check if all connections must be closed
+    MegaLogger.getLogger().debug("Spidermonkey server closed.");
   }
 
   /**
@@ -91,6 +93,9 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   }
 
   public void send(NetworkMessage message) {
+    if (networkServer == null || !networkServer.isRunning()) {
+      return;
+    }
     networkServer.broadcast(message);
   }
 
@@ -104,8 +109,12 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   public void disconnect(Integer clientID) {
     throw new UnsupportedOperationException("Not necessary.");
   }
-  
+
   public Collection<HostedConnection> getConnections() {
+    if (networkServer == null) {
+      MegaLogger.getLogger().debug("networkServer has not yet started, can't get the connections.");
+      return null;
+    }
     return networkServer.getConnections();
   }
 }
