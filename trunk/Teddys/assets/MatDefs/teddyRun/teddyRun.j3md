@@ -1,0 +1,27 @@
+MaterialDef teddyRunMaterial {
+
+    MaterialParameters {
+        Texture2D TexMap
+
+        Float Speed
+        Int MaxTilesX
+        Int MaxTilesY
+        Int SelectedTile
+        Boolean Reverse
+        Boolean Mirrored
+    }
+
+    Technique {
+        VertexShader GLSL100:   Shaders/teddyRun/teddyRun.vert
+        FragmentShader GLSL100: Shaders/teddyRun/teddyRun.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+            Time
+        }
+
+        Defines {
+        }
+    }
+
+}
