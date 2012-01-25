@@ -28,7 +28,10 @@ public class HUD {
   private final int numMessages = 5;
   private List<BitmapText> messages;
   
-  private int imageSize;
+  private final int imageSize;
+  private final float iconOffset, hudHeight, weaponXLocation, healthXLocation, jetpackXLocation, 
+          barYOffset, barWidth, barHeight, tailWidth;
+  
   private Picture health, jetpack, weapon;
   private BarIndicator healthIndicator, jetpackIndicator, weaponIndicator;
   
@@ -46,10 +49,7 @@ public class HUD {
   private final String bar_tail = "Interface/HUD/bar_tail_white.png";
   private final String bar_icon_health = "Interface/HUD/bar_icon_health_white.png";
   private final String bar_icon_jetpack = "Interface/HUD/bar_icon_jetpack_white.png";
-  private final String bar_icon_weapon = "Interface/HUD/bar_icon_weapon_white.png";
-  
-  private float iconOffset;
-  
+  private final String bar_icon_weapon = "Interface/HUD/bar_icon_weapon_white.png";  
   
   
   private static HUD instance = null;
@@ -60,7 +60,17 @@ public class HUD {
     hudNode = new Node("hudNode");
 
     imageSize = (int) (height / 20);
-    iconOffset = 3*imageSize;
+    iconOffset = 3 * imageSize;
+    hudHeight = height / 30;
+    
+    weaponXLocation = 0 + iconOffset;
+    healthXLocation = width / 3 + iconOffset;
+    jetpackXLocation = 2 * width / 3 + iconOffset;
+    
+    barWidth = imageSize * 2.5f;
+    barHeight = imageSize / 2;
+    tailWidth = imageSize / 12;
+    barYOffset = imageSize / 4;
     
     BitmapFont messageFont = assetManager.loadFont("Interface/Fonts/Waree.fnt");
     BitmapFont font = assetManager.loadFont("Interface/Fonts/Purisa32.fnt");
@@ -76,8 +86,6 @@ public class HUD {
     
     //message area
     messages = new ArrayList<BitmapText>();
-
-    
     for (int i = 0; i < numMessages; i++) {
       BitmapText t = new BitmapText(messageFont);
       t.setSize(messageFont.getCharSet().getRenderedSize());
@@ -113,92 +121,92 @@ public class HUD {
     
 
     //health
-    healthIndicator = new BarIndicator(imageSize*2.5f, imageSize/2, 
-            width / 3 + iconOffset + imageSize, 
-            height/30 + imageSize/4, 
+    healthIndicator = new BarIndicator(barWidth, barHeight, 
+            healthXLocation + imageSize, 
+            hudHeight + barYOffset, 
             assetManager, 
             ColorRGBA.Red, 
             hudNode);
     
     health = new Picture("health");
     health.setImage(assetManager, bar_icon_health, true);
-    health.setLocalTranslation(width / 3 + iconOffset, height / 30, 0);
+    health.setLocalTranslation(healthXLocation, hudHeight, 0);
     health.setWidth(imageSize);
     health.setHeight(imageSize);
     hudNode.attachChild(health);
     
     Picture healthBar = new Picture("HealthBar");
     healthBar.setImage(assetManager, bar, true);
-    healthBar.setLocalTranslation(width/3 + iconOffset + imageSize, height / 30-1, 0);
-    healthBar.setWidth(imageSize*2.5f);
-    healthBar.setHeight(imageSize+1);
+    healthBar.setLocalTranslation(healthXLocation + imageSize, hudHeight, 0);
+    healthBar.setWidth(barWidth);
+    healthBar.setHeight(imageSize);
     hudNode.attachChild(healthBar);
     
     Picture healthTail = new Picture("HealthTail");
     healthTail.setImage(assetManager, bar_tail, true);
-    healthTail.setLocalTranslation(width/3 + iconOffset + imageSize + imageSize*2.5f, height / 30-1, 0);
-    healthTail.setWidth(imageSize/12);
-    healthTail.setHeight(imageSize+1);
+    healthTail.setLocalTranslation(healthXLocation + imageSize + barWidth, hudHeight, 0);
+    healthTail.setWidth(tailWidth);
+    healthTail.setHeight(imageSize);
     hudNode.attachChild(healthTail);
     
 
     //jeatpack energy
-    jetpackIndicator = new BarIndicator(imageSize*2.5f, imageSize/2,
-            2*width/3 + iconOffset + imageSize, 
-            height/30 + imageSize/4,
+    jetpackIndicator = new BarIndicator(barWidth, barHeight,
+            jetpackXLocation + imageSize, 
+            hudHeight + barYOffset,
             assetManager, 
             ColorRGBA.Blue, 
             hudNode);
         
     jetpack = new Picture("jetpack");
     jetpack.setImage(assetManager, bar_icon_jetpack, true);
-    jetpack.setLocalTranslation(2*width/3 + iconOffset, height / 30, 0);
+    jetpack.setLocalTranslation(jetpackXLocation, hudHeight, 0);
     jetpack.setWidth(imageSize);
     jetpack.setHeight(imageSize);
     hudNode.attachChild(jetpack);
     
     Picture jetpackBar = new Picture("JetpackBar");
     jetpackBar.setImage(assetManager, bar, true);
-    jetpackBar.setLocalTranslation(2*width/3 + iconOffset + imageSize, height / 30-1, 0);
-    jetpackBar.setWidth(imageSize*2.5f);
-    jetpackBar.setHeight(imageSize+1);
+    jetpackBar.setLocalTranslation(jetpackXLocation + imageSize, hudHeight, 0);
+    jetpackBar.setWidth(barWidth);
+    jetpackBar.setHeight(imageSize);
     hudNode.attachChild(jetpackBar);
     
     Picture jetpackTail = new Picture("JetpackTail");
     jetpackTail.setImage(assetManager, bar_tail, true);
-    jetpackTail.setLocalTranslation(2*width/3 + iconOffset + imageSize + imageSize*2.5f, height / 30-1, 0);
-    jetpackTail.setWidth(imageSize/12);
-    jetpackTail.setHeight(imageSize+1);
+    jetpackTail.setLocalTranslation(jetpackXLocation + imageSize + barWidth, hudHeight, 0);
+    jetpackTail.setWidth(tailWidth);
+    jetpackTail.setHeight(imageSize);
     hudNode.attachChild(jetpackTail);
     
     
     //ammo
-    weaponIndicator = new BarIndicator(imageSize*2.5f, imageSize/2,
-            iconOffset + imageSize, 
-            height/30 + imageSize/4,
+    weaponIndicator = new BarIndicator(barWidth, barHeight,
+            weaponXLocation + imageSize, 
+            hudHeight + barYOffset,
             assetManager, 
             ColorRGBA.Yellow, 
             hudNode);
         
     weapon = new Picture("weapon");
     weapon.setImage(assetManager, bar_icon_weapon, true);
-    weapon.setLocalTranslation(iconOffset, height / 30, 0);
+    weapon.setLocalTranslation(iconOffset, hudHeight, 0);
     weapon.setWidth(imageSize);
     weapon.setHeight(imageSize);
     hudNode.attachChild(weapon);
     
     Picture weaponBar = new Picture("WeaponBar");
     weaponBar.setImage(assetManager, bar, true);
-    weaponBar.setLocalTranslation(iconOffset + imageSize, height / 30-1, 0);
-    weaponBar.setWidth(imageSize*2.5f);
-    weaponBar.setHeight(imageSize+1);
+    weaponBar.setLocalTranslation(weaponXLocation + imageSize, hudHeight, 0);
+    weaponBar.setWidth(barWidth);
+    weaponBar.setHeight(imageSize);
     hudNode.attachChild(weaponBar);
     
     Picture weaponTail = new Picture("WeaponTail");
     weaponTail.setImage(assetManager, bar_tail, true);
-    weaponTail.setLocalTranslation(iconOffset + imageSize + imageSize*2.5f, height / 30-1, 0);
-    weaponTail.setWidth(imageSize/12);
-    weaponTail.setHeight(imageSize+1);
+    weaponTail.setLocalTranslation(weaponXLocation + imageSize + barWidth, hudHeight, 0);
+    weaponTail.setWidth(tailWidth);
+    weaponTail.setHeight(imageSize);
     hudNode.attachChild(weaponTail);
     
     

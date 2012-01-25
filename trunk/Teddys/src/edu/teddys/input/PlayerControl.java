@@ -24,7 +24,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
     MOVE_LEFT, MOVE_RIGHT, JETPACK
   }
-  private float moveSpeed = 1f;
+  private float moveSpeed = 2f;
   private boolean jetpackActive;
   private float jetpackDischargeRate = 75f;
   private float jetpackChargeRate = 25f;
