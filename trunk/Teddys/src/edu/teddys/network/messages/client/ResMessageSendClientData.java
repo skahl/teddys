@@ -22,7 +22,7 @@ public class ResMessageSendClientData extends NetworkMessageResponse {
   }
 
   public ResMessageSendClientData(ClientData data) {
-    super();
+    this();
     if(data == null) {
       throw new InstantiationError("ClientData can't be null!");
     }

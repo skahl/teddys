@@ -6,7 +6,7 @@ package edu.teddys;
 
 import edu.teddys.network.TeddyServerData;
 import edu.teddys.timer.ChecksumManager;
-import edu.teddys.timer.SendPositionController;
+import edu.teddys.timer.ClientTimer;
 import edu.teddys.timer.ServerDataSync;
 import edu.teddys.timer.ServerTimer;
 
@@ -51,9 +51,9 @@ public class GameSettings {
   public static final Class<? extends GameMode> DEFAULT_GAME_MODE = Deathmatch.class;
   /**
    * Client update rate per second (Default: 20 -> interval ^= 50 ms)
-   * @see SendPositionController
+   * @see ClientTimer
    */
-  public static final Integer SENDPOSITION_TIMER_RATE = 20;
+  public static final Integer CLIENT_TIMER_RATE = 20;
   /**
    * The number of rates to shift the user back in time.
    * @see CLIENT_INTERPO_DELAY
@@ -67,12 +67,12 @@ public class GameSettings {
    * Always go back CLIENT_POS_QUEUE_SIZE steps in the current scene.
    * This allows n-1 packets to get lost.
    * 
-   * Default: 2*(1/SENDPOSITION_TIMER_RATE) (-> 100ms)
+   * Default: 2*(1/CLIENT_TIMER_RATE) (-> 100ms)
    */
-  public static final Integer CLIENT_INTERPOL_DELAY = (int) (2 * (1f / SENDPOSITION_TIMER_RATE));
+  public static final Integer CLIENT_INTERPOL_DELAY = (int) (2 * (1f / CLIENT_TIMER_RATE));
   /**
    * The maximum number of client positions for the interpolation of movements.
-   * Default: 5 (that means there is a history of 5*(1/SENDPOSITION_TIMER_RATE) ms)
+   * Default: 5 (that means there is a history of 5*(1/CLIENT_TIMER_RATE) ms)
    * (-> 250 ms)
    */
   public static final Integer MAX_CLIENT_INTERPOL_CAPACITY = 5;
@@ -93,8 +93,7 @@ public class GameSettings {
   public static final Integer SERVER_TIMESTAMP_INTERVAL = 15;
   /**
    * The maximum number of client positions on the server.
-   * Default: SENDPOSITION_TIMER_RATE which is one second ^^
    * @see TeddyServerData
    */
-  public static final Integer MAX_SERVER_POS_CAPACITY = SENDPOSITION_TIMER_RATE;
+  public static final Integer MAX_SERVER_POS_CAPACITY = 10;
 }

@@ -132,7 +132,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         TeddyServer.getInstance().send(teamInfoMsg);
 
         // send a neat "gift" to the new client
-        ManMessageSendDamage dmg = new ManMessageSendDamage(clientID, (int) (Math.random() * 20f));
+        ManMessageSendDamage dmg = new ManMessageSendDamage(clientID, (int) (Math.random() * 20f + 1));
         TeddyServer.getInstance().send(dmg);
 
         NetworkMessageInfo dmgInfo = new NetworkMessageInfo("Come on, "

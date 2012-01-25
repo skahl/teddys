@@ -22,6 +22,7 @@ public class ManMessageActivateItem extends NetworkMessageManipulation {
   }
 
   public ManMessageActivateItem(Integer client, String item) {
+    this();
     if (client == null || client == 0 || item == null) {
       throw new InstantiationError("Client or item must be specified!");
     }

@@ -23,6 +23,7 @@ public class ManControllerInput extends NetworkMessageManipulation {
   }
   
   public ManControllerInput(LinkedList<Entry<String, Object>> list) {
+    this();
     input = list;
   }
 

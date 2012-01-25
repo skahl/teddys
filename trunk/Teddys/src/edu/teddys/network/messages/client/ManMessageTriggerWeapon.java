@@ -16,17 +16,18 @@ public class ManMessageTriggerWeapon extends NetworkMessageManipulation {
 
   private String weaponName = "";
   private Integer[] targets;
+  
+  public ManMessageTriggerWeapon() {
+    super();
+  }
 
   public ManMessageTriggerWeapon(String weapon, Integer[] targets) {
+    this();
     if (weapon == null) {
       throw new InstantiationError("Weapon not specified!");
     }
     setWeaponName(weapon);
     setTargets(targets);
-  }
-  
-  public ManMessageTriggerWeapon() {
-    super();
   }
 
   public Integer[] getTargets() {

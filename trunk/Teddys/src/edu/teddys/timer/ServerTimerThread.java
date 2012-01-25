@@ -12,20 +12,23 @@ import edu.teddys.MegaLogger;
  * @author cm
  */
 public class ServerTimerThread extends Thread {
-  
-  private volatile Long tick = new Long(0);
+
+  private Long tick = new Long(0);
 
   @Override
   public void run() {
-    //TODO parse game events
     
-    // increment the tick by one
-    setTick(++tick);
-    try {
-        sleep(GameSettings.SERVER_TIMESTAMP_INTERVAL);
+    for(;;) {
+      //TODO parse game events
+
+      // increment the tick by one
+      ++tick;
+      try {
+          sleep(GameSettings.SERVER_TIMESTAMP_INTERVAL);
       } catch (InterruptedException ex) {
         MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
+    }
   }
 
   protected Long getTick() {
@@ -33,7 +36,7 @@ public class ServerTimerThread extends Thread {
     return tick;
   }
 
-  synchronized void setTick(Long tick) {
-    this.tick = tick;
+  public synchronized void setTick(Long ts) {
+    tick = ts;
   }
 }

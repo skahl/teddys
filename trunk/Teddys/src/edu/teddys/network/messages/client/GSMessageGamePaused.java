@@ -21,6 +21,7 @@ public class GSMessageGamePaused extends NetworkMessageGameState {
   }
 
   public GSMessageGamePaused(boolean paused) {
+    this();
     setPaused(paused);
   }
 

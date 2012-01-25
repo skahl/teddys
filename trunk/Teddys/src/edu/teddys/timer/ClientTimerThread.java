@@ -17,15 +17,17 @@ public class ClientTimerThread extends Thread {
 
   @Override
   public void run() {
-    
-    ManControllerInput input = new ManControllerInput(ClientTimer.input);
-    TeddyClient.getInstance().send(input);
-    ClientTimer.input.clear();
-    
-    try {
+
+    for (;;) {
+      ManControllerInput input = new ManControllerInput(ClientTimer.input);
+      TeddyClient.getInstance().send(input);
+      ClientTimer.input.clear();
+
+      try {
         sleep(GameSettings.SERVER_TIMESTAMP_INTERVAL);
       } catch (InterruptedException ex) {
         MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
+    }
   }
 }

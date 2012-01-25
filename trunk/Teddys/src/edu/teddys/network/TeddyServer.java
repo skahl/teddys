@@ -96,8 +96,9 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
       MegaLogger.getLogger().warn("TeddyServer not discoverable! Message not sent.");
     }
     //TODO check if a recipient field is available?
-    
-    message.setServerTimestamp(ServerTimer.getServerTimestamp());
+    if(ServerTimer.isActive()) {
+      message.setServerTimestamp(ServerTimer.getServerTimestamp());
+    }
     NetworkCommunicatorSpidermonkeyServer.getInstance().send(message);
   }
 

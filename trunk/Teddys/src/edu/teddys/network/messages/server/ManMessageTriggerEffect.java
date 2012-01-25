@@ -22,6 +22,7 @@ public class ManMessageTriggerEffect extends NetworkMessageManipulation {
   }
   
   public ManMessageTriggerEffect(Integer client, String effect) {
+    this();
     if(client == null || client == 0 || effect == null) {
       throw new InstantiationError("Client or effect name must be specified!");
     }

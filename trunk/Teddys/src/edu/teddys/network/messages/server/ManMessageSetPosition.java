@@ -22,7 +22,7 @@ public final class ManMessageSetPosition extends NetworkMessageManipulation {
   }
 
   public ManMessageSetPosition(Vector3f pos) {
-    super();
+    this();
     setNewPosition(pos);
   }
 

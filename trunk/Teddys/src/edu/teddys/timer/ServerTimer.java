@@ -21,7 +21,7 @@ import edu.teddys.MegaLogger;
  */
 public class ServerTimer {
   
-  private static ServerTimerThread thread = new ServerTimerThread();
+  private static ServerTimerThread thread;
   /**
    * Start the server timer.
    */
@@ -29,35 +29,29 @@ public class ServerTimer {
     if (thread != null) {
       return;
     }
-    try {
-      thread = new ServerTimerThread();
-      thread.start();
-      String tempMsg = String.format(
-              "Server timer thread spawned (Rate: %f, Interval: %d ms)",
-              (Float) (1f / GameSettings.SERVER_TIMESTAMP_INTERVAL * 1000),
-              GameSettings.SERVER_TIMESTAMP_INTERVAL
-              );
-      MegaLogger.getLogger().debug(tempMsg);
-    } catch(RuntimeException ex) {
-      MegaLogger.getLogger().error(ex);
-      //TODO do something!!
-    }
+    thread = new ServerTimerThread();
+    thread.start();
+    String tempMsg = String.format(
+            "Server timer thread spawned (Rate: %f, Interval: %d ms)",
+            (Float) (1f / GameSettings.SERVER_TIMESTAMP_INTERVAL * 1000),
+            GameSettings.SERVER_TIMESTAMP_INTERVAL
+            );
+    MegaLogger.getLogger().debug(tempMsg);
   }
 
   public static void stopTimer() {
-    if (!thread.isAlive()) {
+    if (thread == null || !thread.isAlive()) {
       return;
     }
     thread.interrupt();
-    try {
-      thread.join();
-      MegaLogger.getLogger().debug("Server timer thread joined.");
-    } catch (InterruptedException ex) {
-      MegaLogger.getLogger().debug(new Throwable("Error while trying to join the thread!", ex));
-    }
+    thread = null;
+    MegaLogger.getLogger().debug("Server timer stopped.");
   }
   
   public static boolean isActive() {
+    if(thread == null) {
+      return false;
+    }
     return thread.isAlive();
   }
   

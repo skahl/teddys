@@ -15,22 +15,22 @@ import edu.teddys.MegaLogger;
  */
 public class ServerDataSync {
 
-  private static ServerDataSyncThread thread = new ServerDataSyncThread();
+  private static ServerDataSyncThread thread;
 
   /**
    * Start the checksum manager timer. This sends checksum requests every intervall
    * to the clients of the server.
    */
   public static void startTimer() {
-    if (thread.isAlive()) {
+    if (thread != null) {
       return;
     }
+    thread = new ServerDataSyncThread();
     thread.start();
     String tempMsg = String.format(
             "Checksum timer thread spawned (Rate: %f, Interval: %d ms)",
             (Float) (1f / GameSettings.SERVER_SYNC_INTERVAL * 1000),
-            GameSettings.SERVER_SYNC_INTERVAL
-            );
+            GameSettings.SERVER_SYNC_INTERVAL);
     MegaLogger.getLogger().debug(tempMsg);
   }
 
@@ -39,11 +39,7 @@ public class ServerDataSync {
       return;
     }
     thread.interrupt();
-    try {
-      thread.join();
-      MegaLogger.getLogger().debug("ServerDataSync timer thread joined.");
-    } catch (InterruptedException ex) {
-      MegaLogger.getLogger().debug(new Throwable("Error while trying to join the thread!", ex));
-    }
+    thread = null;
+    MegaLogger.getLogger().debug("ServerDataSync timer thread joined.");
   }
 }

@@ -22,6 +22,7 @@ public class ResMessageSendChecksum extends NetworkMessageResponse {
   }
 
   public ResMessageSendChecksum(String token, String checksum) {
+    this();
     if (checksum == null || checksum.isEmpty() || token == null || token.isEmpty()) {
       throw new InstantiationError("Checksum or token not specified!");
     }

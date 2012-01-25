@@ -30,6 +30,7 @@ public class ReqMessageSendChecksum extends NetworkMessageRequest {
   }
 
   private ReqMessageSendChecksum(String token, List<String> files) {
+    this();
     if (token == null || token.isEmpty() || files == null || files.isEmpty()) {
       throw new InstantiationError("Some files must be specified to send a request!");
     }

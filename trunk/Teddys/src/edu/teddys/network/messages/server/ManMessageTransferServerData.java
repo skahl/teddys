@@ -22,7 +22,7 @@ public class ManMessageTransferServerData extends NetworkMessageManipulation {
   }
   
   public ManMessageTransferServerData(TeddyServerData data) {
-    super();
+    this();
     setData(data);
   }
 

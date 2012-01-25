@@ -20,39 +20,36 @@ import java.util.Map.Entry;
  * @author cm
  */
 public class ClientTimer {
-  
-  private static ClientTimerThread thread = new ClientTimerThread();
+
+  private static ClientTimerThread thread;
   /**
    * The last known server timestamp extracted from a server message
    */
-  public static volatile Long lastServerTimestamp = 0L;
+  public static Long lastServerTimestamp = 0L;
   public static LinkedList<Entry<String, Object>> input = new LinkedList<Entry<String, Object>>();
+
   /**
    * Start the server timer.
    */
   public static void startTimer() {
-    if (thread.isAlive()) {
+    if (thread != null) {
       return;
     }
+    thread = new ClientTimerThread();
     thread.start();
     String tempMsg = String.format(
             "Client timer thread spawned (Rate: %f, Interval: %d ms)",
             (Float) (1f / GameSettings.SERVER_TIMESTAMP_INTERVAL * 1000),
-            GameSettings.SERVER_TIMESTAMP_INTERVAL
-            );
+            GameSettings.SERVER_TIMESTAMP_INTERVAL);
     MegaLogger.getLogger().debug(tempMsg);
   }
 
   public static void stopTimer() {
-    if (!thread.isAlive()) {
+    if (thread == null || !thread.isAlive()) {
       return;
     }
     thread.interrupt();
-    try {
-      thread.join();
-      MegaLogger.getLogger().debug("Client timer thread joined.");
-    } catch (InterruptedException ex) {
-      MegaLogger.getLogger().debug(new Throwable("Error while trying to join the thread!", ex));
-    }
+    thread = null;
+    MegaLogger.getLogger().debug("Client timer thread joined.");
   }
 }

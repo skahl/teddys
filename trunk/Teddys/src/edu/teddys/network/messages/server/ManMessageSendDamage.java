@@ -16,17 +16,18 @@ public class ManMessageSendDamage extends NetworkMessageManipulation {
 
   private Integer client;
   private Integer damage;
+  
+  public ManMessageSendDamage() {
+    super();
+  }
 
   public ManMessageSendDamage(Integer client, Integer damage) {
+    this();
     if (client == null || damage == null || damage <= 0) {
       throw new InstantiationError("Client or positive damage value must be specified!");
     }
     setClient(client);
     setDamage(damage);
-  }
-  
-  public ManMessageSendDamage() {
-    super();
   }
 
   public Integer getClient() {

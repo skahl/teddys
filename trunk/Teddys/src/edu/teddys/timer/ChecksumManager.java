@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.Adler32;
 import java.util.zip.CheckedInputStream;
-import java.util.zip.Checksum;
 
 /**
  *
@@ -22,7 +21,7 @@ import java.util.zip.Checksum;
  */
 public class ChecksumManager {
 
-  private static ChecksumManagerThread thread = new ChecksumManagerThread();
+  private static ChecksumManagerThread thread;
   static Map<String, String> result = new HashMap<String, String>();
   static Map<String, List<String>> files = new HashMap<String, List<String>>();
 
@@ -32,28 +31,25 @@ public class ChecksumManager {
    * to generate a new list of files to be checked.
    */
   public static void startTimer() {
-    if (thread.isAlive()) {
+    if (thread != null) {
       return;
     }
+    thread = new ChecksumManagerThread();
     thread.start();
     String tempMsg = String.format(
             "Checksum timer thread spawned (Rate: %f, Interval: %d ms)",
             (Float) (1f / GameSettings.CHECKSUM_INTERVAL * 1000),
-            GameSettings.CHECKSUM_INTERVAL
-            );
+            GameSettings.CHECKSUM_INTERVAL);
     MegaLogger.getLogger().debug(tempMsg);
   }
 
   public static void stopTimer() {
-    if (!thread.isAlive()) {
+    if (thread == null || !thread.isAlive()) {
       return;
     }
-    try {
-      thread.join();
-      MegaLogger.getLogger().debug("The checksum timer has been stopped.");
-    } catch (InterruptedException ex) {
-      MegaLogger.getLogger().debug(new Throwable(ex));
-    }
+    thread.interrupt();
+    thread = null;
+    MegaLogger.getLogger().debug("The checksum timer has been stopped.");
   }
 
   public static void checkChecksum(String token, String input) throws VerifyError {
@@ -85,16 +81,14 @@ public class ChecksumManager {
         InputStream in = BaseGame.class.getClassLoader().getResourceAsStream(fileName);
         if (in == null) {
           MegaLogger.getLogger().error(new Throwable(
-                  String.format("Input stream for the CRC calculation of %s is null!", 
-                  fileName)
-                  ));
+                  String.format("Input stream for the CRC calculation of %s is null!",
+                  fileName)));
           throw new IllegalArgumentException("Error while trying to read " + fileName);
         }
         CheckedInputStream cin = new CheckedInputStream(in, crc);
         if (cin == null) {
           MegaLogger.getLogger().error(new Throwable(
-                  String.format("Checked input stream for %s is null!", fileName)
-                  ));
+                  String.format("Checked input stream for %s is null!", fileName)));
           throw new IllegalArgumentException("Error while trying to read " + fileName);
         }
         while (cin.read() != -1) {

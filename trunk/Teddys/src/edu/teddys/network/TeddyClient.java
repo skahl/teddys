@@ -6,13 +6,12 @@ package edu.teddys.network;
 
 import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener;
-import edu.teddys.timer.SendPositionController;
 import edu.teddys.network.messages.NetworkMessage;
-import edu.teddys.network.messages.client.GSMessagePlayerReady;
-import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.objects.box.items.Item;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.weapons.Weapon;
+import edu.teddys.timer.ClientTimer;
+import edu.teddys.timer.ServerTimer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumMap;
@@ -238,7 +237,8 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
 
   public void clientDisconnected(Client c, DisconnectInfo info) {
     //TODO set game state
-    SendPositionController.stopTimer();
+    ClientTimer.stopTimer();
+    ServerTimer.stopTimer();
   }
 
   public ClientData getData() {

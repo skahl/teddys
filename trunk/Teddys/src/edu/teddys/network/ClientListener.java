@@ -42,7 +42,17 @@ import edu.teddys.timer.ServerTimer;
 public class ClientListener implements MessageListener<com.jme3.network.Client> {
 
   public void messageReceived(com.jme3.network.Client source, Message message) {
-    MegaLogger.getLogger().debug("Client received a NetworkMessage: " + message.getClass().getName());
+    String inputMessage = String.format(
+            "Client received a NetworkMessage: %s",
+            message.getClass().getName());
+    if(message instanceof NetworkMessage) {
+      inputMessage += String.format("\nTimestamps: Local: %d, Server: %d",
+              ((NetworkMessage)message).getLocalTimestamp(),
+              ((NetworkMessage)message).getServerTimestamp()
+              );
+    }
+    MegaLogger.getLogger().debug(inputMessage);
+    
     if (message instanceof DisconnectMessage) {
       //
       // USER HAS BEEN DISCONNECTED/KICKED FROM THE SERVER
@@ -99,8 +109,9 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           GSMessageBeginGame msg = (GSMessageBeginGame)message;
           // Set the initial server timestamp
           //TODO compensate the difference in transmission?
-          ServerTimer.setServerTimestamp(msg.getServerTimestamp());
-          ServerTimer.startTimer();
+          
+//          ServerTimer.setServerTimestamp(msg.getServerTimestamp());
+//          ServerTimer.startTimer();
         } else if (message instanceof GSMessageEndGame) {
           //
           // END OF THE GAME. DISPLAY STATISTICS ...

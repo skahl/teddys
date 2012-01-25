@@ -21,6 +21,7 @@ public class ReqMessagePauseRequest extends NetworkMessageRequest {
   }
   
   public ReqMessagePauseRequest(boolean paused) {
+    this();
     setPaused(paused);
   }
 

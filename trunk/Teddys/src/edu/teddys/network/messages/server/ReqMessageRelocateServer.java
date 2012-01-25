@@ -21,6 +21,7 @@ public class ReqMessageRelocateServer extends NetworkMessageRequest {
   }
 
   public ReqMessageRelocateServer(Integer destination) {
+    this();
     if(destination == null) {
       throw new InstantiationError("Destination for the server relocation "
               + "must be specified (Client ID is missing)!");

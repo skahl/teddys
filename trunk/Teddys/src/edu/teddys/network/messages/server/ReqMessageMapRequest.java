@@ -21,6 +21,7 @@ public class ReqMessageMapRequest extends NetworkMessageRequest {
   }
 
   public ReqMessageMapRequest(String map) {
+    this();
     setMap(map);
   }
 

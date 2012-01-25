@@ -29,7 +29,7 @@ public class ManMessageSendPosition extends NetworkMessageManipulation {
   }
   
   public ManMessageSendPosition(Vector3f position) {
-    super();
+    this();
     //TODO ignore too large distances (according to the map)?
     setPosition(position);
   }
