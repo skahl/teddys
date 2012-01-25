@@ -7,16 +7,17 @@ package edu.teddys.network;
 import com.jme3.network.ConnectionListener;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Server;
-import edu.teddys.BaseGame;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageInfo;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
+import edu.teddys.objects.player.Player;
+import edu.teddys.states.Game;
 import edu.teddys.timer.ServerTimer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  *
@@ -76,9 +77,6 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     if (!isRunning()) {
       return;
     }
-    for (int i = 0; i < getData().getConnections().size(); i++) {
-      getData().getConnections().get(i).close("Going down for maintenance NOW! ;)");
-    }
     ServerTimer.stopTimer();
     NetworkCommunicatorSpidermonkeyServer.getInstance().shutdownServer();
     // reset data
@@ -97,11 +95,9 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     if (!getData().isDiscoverable()) {
       MegaLogger.getLogger().warn("TeddyServer not discoverable! Message not sent.");
     }
-    if (getData().getConnections().isEmpty()) {
-      //TODO Save or dismiss the message?
-      MegaLogger.getLogger().debug("Message could not be sent because no clients were connected!");
-      return;
-    }
+    //TODO check if a recipient field is available?
+    
+    message.setServerTimestamp(ServerTimer.getServerTimestamp());
     NetworkCommunicatorSpidermonkeyServer.getInstance().send(message);
   }
 
@@ -123,11 +119,12 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     if (!isRunning()) {
       return;
     }
-    HostedConnection conn = getData().getConnections().get(client);
-    if (conn == null) {
-      return;
-    }
-    conn.close(reason);
+    //TODO iterate over the connections
+//    HostedConnection conn = getConnections().;
+//    if (conn == null) {
+//      return;
+//    }
+//    conn.close(reason);
     MegaLogger.getLogger().debug(String.format("The specified client (%d) has been disconnected yet.", client));
   }
 
@@ -185,21 +182,27 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
       MegaLogger.getLogger().error(new Throwable("connectionAdded() called, but the server is not running actually (or not discoverable)!"));
       return;
     }
-    getData().getConnections().add(conn);
 
+    // Initialize a new player
+    Player.getInstance(conn.getId());
+    
     // Send a status text
     String message = String.format(
             "New connection (%s) arrived! Client ID is %s",
             conn.getAddress(),
             conn.getId());
+    
     NetworkMessageInfo info = new NetworkMessageInfo(message);
-    send(info);
+    TeddyServer.getInstance().send(info);
     MegaLogger.getLogger().info(message);
+    
     String serverMsg = String.format("Welcome to %s!", getData().getName());
     NetworkMessageInfo clientInfo = new NetworkMessageInfo(serverMsg);
-    conn.send(clientInfo);
+    TeddyServer.getInstance().send(clientInfo);
+    
+    // Request the client data
     ReqMessageSendClientData sendMsg = new ReqMessageSendClientData();
-    conn.send(sendMsg);
+    TeddyServer.getInstance().send(sendMsg);
   }
 
   /**
@@ -221,11 +224,15 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
       return;
     }
 
-    if (!getData().getConnections().contains(conn)) {
-      MegaLogger.getLogger().warn(
-              String.format("Connection remove request (Client ID: %d) failed from address %s!",
-              conn.getId(), conn.getAddress()));
-      return;
+    MegaLogger.getLogger().debug("Connection with ID " + conn.getId() + " removed!");
+
+    // check if the player exists in the current game
+    Player curPlayer = Player.getInstance(conn.getId());
+    if (Game.getInstance().getRootNode().hasChild(curPlayer.getNode())) {
+      MegaLogger.getLogger().debug("Removing client from the game.");
+      Game.getInstance().getRootNode().detachChild(curPlayer.getNode());
+    } else {
+      MegaLogger.getLogger().debug("Current player does not exist in the game!");
     }
 
     // Now search the client data of the HostedConnection and remove it 
@@ -242,9 +249,8 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
           //TODO ignore?
           MegaLogger.getLogger().warn(
                   new Throwable(
-                  String.format("No team with ID %d could be found!", 
-                  client.getTeamID()), ex)
-                  );
+                  String.format("No team with ID %d could be found!",
+                  client.getTeamID()), ex));
         }
       }
 
@@ -255,9 +261,14 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     String message = String.format(
             "Client %s disconnected.",
             conn.getId());
-    getData().getConnections().remove(conn);
+    //TODO necessary?
+//    getConnections().remove(conn);
     NetworkMessageInfo info = new NetworkMessageInfo(message);
     send(info);
     MegaLogger.getLogger().info(message);
+  }
+  
+  protected Collection<HostedConnection> getConnections() {
+    return NetworkCommunicatorSpidermonkeyServer.getInstance().getConnections();
   }
 }

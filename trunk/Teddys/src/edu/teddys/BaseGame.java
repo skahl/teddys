@@ -14,12 +14,19 @@ import edu.teddys.network.ClientData;
 import edu.teddys.network.DeathTest;
 import edu.teddys.network.HealthListener;
 import edu.teddys.network.SessionClientData;
+import edu.teddys.network.Team;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.TeddyServer;
+import edu.teddys.network.TeddyServerData;
 import edu.teddys.network.messages.NetworkMessage;
+import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
+import edu.teddys.network.messages.NetworkMessageManipulation;
+import edu.teddys.network.messages.NetworkMessageRequest;
+import edu.teddys.network.messages.NetworkMessageResponse;
 import edu.teddys.network.messages.client.GSMessageGamePaused;
 import edu.teddys.network.messages.client.GSMessagePlayerReady;
+import edu.teddys.network.messages.client.ManControllerInput;
 import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
@@ -38,7 +45,6 @@ import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.objects.Jetpack;
-import edu.teddys.timer.ChecksumManager;
 import java.io.IOException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import org.apache.log4j.BasicConfigurator;
@@ -156,7 +162,7 @@ public class BaseGame extends SimpleApplication {
     server.startServer();
 
     // Start the protection mechanisms
-    ChecksumManager.startTimer();
+//    ChecksumManager.startTimer();
     
     // Get the handle to the client and try to join the specified server
     TeddyClient client = TeddyClient.getInstance();
@@ -170,8 +176,6 @@ public class BaseGame extends SimpleApplication {
       return;
     }
     
-    //TODO send a PlayerReady and MapLoaded message
-
     // Create the listeners for the client
     client.registerListener(TeddyClient.ListenerFields.health, new HealthListener());
     client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
@@ -184,14 +188,21 @@ public class BaseGame extends SimpleApplication {
   private void initSerializer() {
     // General
     Serializer.registerClass(NetworkMessage.class);
+    Serializer.registerClass(NetworkMessageGameState.class);
     Serializer.registerClass(NetworkMessageInfo.class);
+    Serializer.registerClass(NetworkMessageManipulation.class);
+    Serializer.registerClass(NetworkMessageRequest.class);
+    Serializer.registerClass(NetworkMessageResponse.class);
     // Internal data to be serialized
     Serializer.registerClass(SessionClientData.class);
     Serializer.registerClass(Jetpack.class);
     Serializer.registerClass(ClientData.class);
+    Serializer.registerClass(Team.class);
+    Serializer.registerClass(TeddyServerData.class);
     // Client
     Serializer.registerClass(GSMessageGamePaused.class);
     Serializer.registerClass(GSMessagePlayerReady.class);
+    Serializer.registerClass(ManControllerInput.class);
     Serializer.registerClass(ManMessageSendPosition.class);
     Serializer.registerClass(ManMessageTriggerWeapon.class);
     Serializer.registerClass(ResMessageMapLoaded.class);

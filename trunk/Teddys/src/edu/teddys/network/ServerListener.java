@@ -7,6 +7,7 @@ package edu.teddys.network;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
+import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
 import edu.teddys.network.messages.NetworkMessageManipulation;
@@ -14,6 +15,7 @@ import edu.teddys.network.messages.NetworkMessageResponse;
 import edu.teddys.network.messages.client.GSMessageGamePaused;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.GSMessagePlayerReady;
+import edu.teddys.network.messages.client.ManControllerInput;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
@@ -21,6 +23,8 @@ import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;
+import edu.teddys.objects.player.Player;
+import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
 import java.awt.Color;
 
@@ -67,10 +71,15 @@ public class ServerListener implements MessageListener<HostedConnection> {
         GSMessagePlayerReady msg = (GSMessagePlayerReady) message;
         TeddyServer.getInstance().send(msg);
         // Refresh client info in TeddyServerData
+        if(TeddyServer.getInstance().getClientData(source.getId()) == null) {
+          MegaLogger.getLogger().error("User has not yet specified his client data!");
+          return;
+        }
         TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
         // Refresh server data of the clients
-        ManMessageTransferServerData sync = new ManMessageTransferServerData(TeddyServer.getInstance().getData());
-        TeddyServer.getInstance().send(sync);
+        //TODO
+//        ManMessageTransferServerData sync = new ManMessageTransferServerData(TeddyServer.getInstance().getData());
+//        TeddyServer.getInstance().send(sync);
       }
     } else if (message instanceof NetworkMessageResponse) {
       if (message instanceof ResMessageSendChecksum) {
@@ -95,6 +104,20 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //TODO Check how many clients are ready yet to start the game occassionally.
         // (use TeddyServerData)
         //TODO Set the player to a random position in the scene
+        Player newPlayer = Player.getInstance(source.getId());
+        // set the client data for local access on demand
+        //TODO always sync the data! use a thread for that
+        newPlayer.setData(TeddyServer.getInstance().getClientData(source.getId()));
+        //TODO add the player to the game if not already joined
+        if (!Game.getInstance().getRootNode().hasChild(newPlayer.getNode())) {
+          MegaLogger.getLogger().debug("User has loaded the map. Adding a new player!");
+          Game.getInstance().getRootNode().attachChild(newPlayer.getNode());
+        } else {
+          MegaLogger.getLogger().debug("User already exists in the game!");
+        }
+        // Now start a game
+        GSMessageBeginGame beginGame = new GSMessageBeginGame();
+        TeddyServer.getInstance().send(beginGame);
       } else if (message instanceof ResMessageSendClientData) {
         //
         // RECEIVED USER DATA
@@ -115,7 +138,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
         Integer teamId = 0;
         TeddyServer.getInstance().getData().getTeams().get(teamId).addPlayer(clientID);
         data.setTeam(teamId);
-        NetworkMessageInfo teamInfoMsg = new NetworkMessageInfo(data.getName()
+        NetworkMessageInfo teamInfoMsg = new NetworkMessageInfo(
+                "Teddy has sent his client data. " + data.getName()
                 + " belongs to the team " + newTeam.getName() + "!");
         TeddyServer.getInstance().send(teamInfoMsg);
 
@@ -133,7 +157,11 @@ public class ServerListener implements MessageListener<HostedConnection> {
         TeddyServer.getInstance().send(dmgInfo);
       }
     } else if (message instanceof NetworkMessageManipulation) {
-      if (message instanceof ManMessageSendPosition) {
+      if (message instanceof ManControllerInput) {
+        ManControllerInput input = (ManControllerInput) message;
+        // refresh the player
+        Player.getInstance(source.getId()).newInput(input.getInput());
+      } else if (message instanceof ManMessageSendPosition) {
         //
         // USER POSITION RECEIVED
         //

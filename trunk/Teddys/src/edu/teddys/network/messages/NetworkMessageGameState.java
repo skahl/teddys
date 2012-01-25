@@ -14,5 +14,6 @@ import com.jme3.network.serializing.Serializable;
 public class NetworkMessageGameState extends NetworkMessage {
 
   public NetworkMessageGameState() {
+    super();
   }
 }

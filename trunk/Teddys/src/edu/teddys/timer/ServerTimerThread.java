@@ -33,7 +33,7 @@ public class ServerTimerThread extends Thread {
     return tick;
   }
 
-  private synchronized void setTick(Long tick) {
+  synchronized void setTick(Long tick) {
     this.tick = tick;
   }
 }

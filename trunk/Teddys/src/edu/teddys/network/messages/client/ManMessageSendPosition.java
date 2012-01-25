@@ -18,11 +18,11 @@ public class ManMessageSendPosition extends NetworkMessageManipulation {
   /**
    * The position on which the player is currently located.
    */
-  private Vector3f position;
+  private Vector3f position = new Vector3f();
   /**
    * The current animation to be displayed on the other clients.
    */
-  private String currentAnimSequence;
+  private String currentAnimSequence = "";
   
   public ManMessageSendPosition() {
     super();

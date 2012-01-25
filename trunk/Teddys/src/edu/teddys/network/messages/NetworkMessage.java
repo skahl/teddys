@@ -6,6 +6,7 @@ package edu.teddys.network.messages;
 
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
+import edu.teddys.timer.ServerTimer;
 
 /**
  * 
@@ -22,11 +23,11 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class NetworkMessage extends AbstractMessage {
 
-  private Long localTimestamp;
+  private Long localTimestamp = 0L;
   /**
    * This is a so-called "tick" which describes a world state.
    */
-  private Long serverTimestamp;
+  private Long serverTimestamp = 0L;
 
   public Long getLocalTimestamp() {
     return localTimestamp;
@@ -48,13 +49,11 @@ public class NetworkMessage extends AbstractMessage {
   public void setServerTimestamp(Long serverTimestamp) {
     this.serverTimestamp = serverTimestamp;
   }
-  
+
   public NetworkMessage() {
     // initialize the timestamp value
-    setLocalTimestamp(getSystemTimestamp());
-  }
-  
-  public static Long getSystemTimestamp() {
-    return System.currentTimeMillis();
+    if (ServerTimer.isActive()) {
+      localTimestamp = ServerTimer.getServerTimestamp();
+    }
   }
 }

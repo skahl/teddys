@@ -5,10 +5,11 @@
 package edu.teddys.network;
 
 import com.jme3.network.ConnectionListener;
+import com.jme3.network.HostedConnection;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
-import edu.teddys.timer.ServerTimer;
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  *
@@ -61,6 +62,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   public void shutdownServer() {
     if (networkServer.isRunning()) {
       networkServer.close();
+      //TODO check if all connections must be closed
       MegaLogger.getLogger().debug("Spidermonkey server closed.");
     }
   }
@@ -89,9 +91,6 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   }
 
   public void send(NetworkMessage message) {
-    //TODO check if a recipient field is available?
-    message.setLocalTimestamp(NetworkMessage.getSystemTimestamp());
-    message.setServerTimestamp(ServerTimer.getServerTimestamp());
     networkServer.broadcast(message);
   }
 
@@ -104,5 +103,9 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
 
   public void disconnect(Integer clientID) {
     throw new UnsupportedOperationException("Not necessary.");
+  }
+  
+  public Collection<HostedConnection> getConnections() {
+    return networkServer.getConnections();
   }
 }

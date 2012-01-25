@@ -4,11 +4,10 @@
  */
 package edu.teddys.network.messages.client;
 
-import com.jme3.input.controls.Trigger;
 import com.jme3.network.serializing.Serializable;
 import edu.teddys.network.messages.NetworkMessageManipulation;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Map.Entry;
 
 /**
  *
@@ -17,21 +16,17 @@ import java.util.List;
 @Serializable
 public class ManControllerInput extends NetworkMessageManipulation {
 
-  List<Trigger> triggers = new ArrayList<Trigger>();
-
+  private LinkedList<Entry<String, Object>> input = new LinkedList<Entry<String, Object>>();
+  
   public ManControllerInput() {
     super();
   }
-
-  public ManControllerInput(List<Trigger> triggers) {
-    this.triggers = triggers;
+  
+  public ManControllerInput(LinkedList<Entry<String, Object>> list) {
+    input = list;
   }
 
-  public List<Trigger> getTriggers() {
-    return triggers;
-  }
-
-  public void setTriggers(List<Trigger> triggers) {
-    this.triggers = triggers;
+  public LinkedList<Entry<String, Object>> getInput() {
+    return input;
   }
 }

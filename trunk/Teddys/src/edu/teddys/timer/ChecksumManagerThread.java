@@ -41,7 +41,7 @@ public class ChecksumManagerThread extends Thread {
       List<String> files = new ArrayList<String>();
       // Get the current working directory
 //      String wd = System.getProperty("user.dir") + "/";
-      files.add("/edu/teddys/BaseGame.class");
+//      files.add("/edu/teddys/BaseGame.class");
 //      files.add("BaseGame.java");
       String result = ChecksumManager.calculateChecksum(files);
       // for every client, generate a token

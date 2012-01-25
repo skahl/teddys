@@ -6,6 +6,8 @@ package edu.teddys.timer;
 
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
+import edu.teddys.network.TeddyClient;
+import edu.teddys.network.messages.client.ManControllerInput;
 
 /**
  *
@@ -15,8 +17,10 @@ public class ClientTimerThread extends Thread {
 
   @Override
   public void run() {
-    //TODO send a snapshot of the keyboard and mouse state
     
+    ManControllerInput input = new ManControllerInput(ClientTimer.input);
+    TeddyClient.getInstance().send(input);
+    ClientTimer.input.clear();
     
     try {
         sleep(GameSettings.SERVER_TIMESTAMP_INTERVAL);

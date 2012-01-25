@@ -8,6 +8,8 @@ import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener;
 import edu.teddys.timer.SendPositionController;
 import edu.teddys.network.messages.NetworkMessage;
+import edu.teddys.network.messages.client.GSMessagePlayerReady;
+import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.objects.box.items.Item;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.weapons.Weapon;
@@ -229,6 +231,7 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
   }
 
   public void clientConnected(Client c) {
+
     getData().setId(c.getId());
     TeddyClient.getInstance().setJoinedServer(new Date());
   }

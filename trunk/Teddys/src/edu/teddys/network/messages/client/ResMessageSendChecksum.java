@@ -14,8 +14,8 @@ import edu.teddys.network.messages.NetworkMessageResponse;
 @Serializable
 public class ResMessageSendChecksum extends NetworkMessageResponse {
 
-  private String token;
-  private String checksum;
+  private String token = "";
+  private String checksum = "";
   
   public ResMessageSendChecksum() {
     super();

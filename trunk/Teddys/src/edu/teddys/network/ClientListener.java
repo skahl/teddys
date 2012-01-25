@@ -15,6 +15,7 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 import edu.teddys.network.messages.NetworkMessageRequest;
 import edu.teddys.network.messages.client.GSMessageGamePaused;
 import edu.teddys.network.messages.client.GSMessagePlayerReady;
+import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
@@ -30,6 +31,7 @@ import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
+import edu.teddys.timer.ServerTimer;
 
 /**
  *
@@ -55,7 +57,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       //TODO check if it is a message from the server!!
       NetworkMessage tempMsg = (NetworkMessage) message;
       if(tempMsg.getServerTimestamp() != null) {
-        ClientTimer.serverTimestamp = tempMsg.getServerTimestamp();
+        ClientTimer.lastServerTimestamp = tempMsg.getServerTimestamp();
       }
       if (message instanceof NetworkMessageInfo) {
         //
@@ -94,11 +96,17 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //TODO Set game state to "Game"
           //TODO Spawn the position controller
 //        SendPositionController.startTimer();
+          GSMessageBeginGame msg = (GSMessageBeginGame)message;
+          // Set the initial server timestamp
+          //TODO compensate the difference in transmission?
+          ServerTimer.setServerTimestamp(msg.getServerTimestamp());
+          ServerTimer.startTimer();
         } else if (message instanceof GSMessageEndGame) {
           //
           // END OF THE GAME. DISPLAY STATISTICS ...
           //
           //TODO Set game state to "EndGame"
+          ServerTimer.stopTimer();
         } else if (message instanceof GSMessagePlayerReady) {
           //
           // A PLAYER IS READY TO START THE GAME
@@ -119,6 +127,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // A DAMAGE REQUEST TO BE APPLIED
           //
           ManMessageSendDamage msg = (ManMessageSendDamage) message;
+          //TODO wont work!!
           if (msg.getClient().equals(TeddyClient.getInstance().getData())) {
             TeddyClient.getInstance().addDamage(msg.getDamage());
           }
@@ -183,6 +192,15 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           ResMessageSendClientData response = new ResMessageSendClientData(TeddyClient.getInstance().getData());
           TeddyClient.getInstance().send(response);
+          
+          //TEMPORARY
+          
+          //TODO adapt to the game flow
+          GSMessagePlayerReady playerReady = new GSMessagePlayerReady();
+          TeddyClient.getInstance().send(playerReady);
+
+          ResMessageMapLoaded mapLoaded = new ResMessageMapLoaded();
+          TeddyClient.getInstance().send(mapLoaded);
         }
       }
     }

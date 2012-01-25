@@ -29,13 +29,18 @@ public class ServerTimer {
     if (thread.isAlive()) {
       return;
     }
-    thread.start();
-    String tempMsg = String.format(
-            "Server timer thread spawned (Rate: %f, Interval: %d ms)",
-            (Float) (1f / GameSettings.SERVER_TIMESTAMP_INTERVAL * 1000),
-            GameSettings.SERVER_TIMESTAMP_INTERVAL
-            );
-    MegaLogger.getLogger().debug(tempMsg);
+    try {
+      thread.start();
+      String tempMsg = String.format(
+              "Server timer thread spawned (Rate: %f, Interval: %d ms)",
+              (Float) (1f / GameSettings.SERVER_TIMESTAMP_INTERVAL * 1000),
+              GameSettings.SERVER_TIMESTAMP_INTERVAL
+              );
+      MegaLogger.getLogger().debug(tempMsg);
+    } catch(RuntimeException ex) {
+      MegaLogger.getLogger().error(ex);
+      //TODO do something!!
+    }
   }
 
   public static void stopTimer() {
@@ -51,7 +56,15 @@ public class ServerTimer {
     }
   }
   
+  public static boolean isActive() {
+    return thread.isAlive();
+  }
+  
   public static Long getServerTimestamp() {
     return thread.getTick();
+  }
+  
+  public synchronized static void setServerTimestamp(Long ts) {
+    thread.setTick(ts);
   }
 }

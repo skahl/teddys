@@ -15,7 +15,7 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 @Serializable
 public class ManMessageTransferServerData extends NetworkMessageManipulation {
 
-  private TeddyServerData data;
+  private TeddyServerData data = new TeddyServerData();
   
   public ManMessageTransferServerData() {
     super();

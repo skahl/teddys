@@ -6,6 +6,7 @@ package edu.teddys.network.messages.server;
 
 import com.jme3.network.serializing.Serializable;
 import edu.teddys.network.messages.NetworkMessageRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,9 +16,9 @@ import java.util.List;
 @Serializable
 public class ReqMessageSendChecksum extends NetworkMessageRequest {
 
-  private String token = null;
-  private List<String> files = null;
-  private Integer destination = null;
+  private String token = "";
+  private List<String> files = new ArrayList<String>();
+  private Integer destination;
 
   public ReqMessageSendChecksum() {
     super();

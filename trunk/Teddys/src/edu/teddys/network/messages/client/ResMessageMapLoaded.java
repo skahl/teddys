@@ -15,5 +15,6 @@ import edu.teddys.network.messages.NetworkMessageResponse;
 public class ResMessageMapLoaded extends NetworkMessageResponse {
 
   public ResMessageMapLoaded() {
+    super();
   }
 }

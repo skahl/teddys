@@ -14,7 +14,7 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 @Serializable
 public class ManMessageTriggerWeapon extends NetworkMessageManipulation {
 
-  private String weaponName;
+  private String weaponName = "";
   private Integer[] targets;
 
   public ManMessageTriggerWeapon(String weapon, Integer[] targets) {

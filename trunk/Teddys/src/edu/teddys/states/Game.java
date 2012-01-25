@@ -147,12 +147,13 @@ public class Game extends AbstractAppState {
 
     // init player
     Player player = Player.getInstance(Player.LOCAL_PLAYER);
-    player.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -1.2f));
-    
-    Player player2 = Player.getInstance(1);
-    player2.getPlayerControl().setPhysicsLocation(new Vector3f(1f, 2f, -1.2f));
+    player.getPlayerControl().setPhysicsLocation(new Vector3f(1f, 0f, -1.2f));
+//    
+//    Player player2 = Player.getInstance(1);
+//    player2.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -1.2f));
 
-    rootNode.attachChild(player.getNode());
+//    rootNode.attachChild(player.getNode());
+//    rootNode.attachChild(player2.getNode());
 
     // Crosshair
     int crosshairSize = this.app.getSettings().getHeight() / 15;

@@ -13,10 +13,11 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class NetworkMessageInfo extends NetworkMessage {
   
-  private String message;
+  private String message = "";
   private Integer[] recipients;
   
   public NetworkMessageInfo() {
+    super();
 //    throw new InstantiationError("Source, message and optionally recipients are not defined!");
   }
   

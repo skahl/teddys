@@ -6,6 +6,9 @@ package edu.teddys.timer;
 
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
 
 /**
  *
@@ -19,11 +22,12 @@ import edu.teddys.MegaLogger;
  */
 public class ClientTimer {
   
-  private static ServerTimerThread thread = new ServerTimerThread();
+  private static ClientTimerThread thread = new ClientTimerThread();
   /**
    * The last known server timestamp extracted from a server message
    */
-  public static volatile Long serverTimestamp = 0L;
+  public static volatile Long lastServerTimestamp = 0L;
+  public static LinkedList<Entry<String, Object>> input = new LinkedList<Entry<String, Object>>();
   /**
    * Start the server timer.
    */

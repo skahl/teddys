@@ -15,7 +15,7 @@ import edu.teddys.network.messages.NetworkMessageResponse;
 @Serializable
 public class ResMessageSendClientData extends NetworkMessageResponse {
   
-  private ClientData data;
+  private ClientData data = new ClientData();
 
   public ResMessageSendClientData() {
     super();

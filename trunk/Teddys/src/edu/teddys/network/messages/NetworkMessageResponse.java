@@ -14,5 +14,6 @@ import com.jme3.network.serializing.Serializable;
 public class NetworkMessageResponse extends NetworkMessage {
 
   public NetworkMessageResponse() {
+    super();
   }
 }

@@ -5,7 +5,6 @@
 package edu.teddys.network.messages.server;
 
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.network.NetworkSettings;
 import edu.teddys.network.messages.NetworkMessageManipulation;
 
 /**

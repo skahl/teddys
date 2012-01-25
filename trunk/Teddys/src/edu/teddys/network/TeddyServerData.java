@@ -37,16 +37,13 @@ public class TeddyServerData {
    * The list of teams registered on the server.
    */
   private List<Team> teams = new ArrayList<Team>();
-  //TODO check if ok ......
-  private List<HostedConnection> connections = new ArrayList<HostedConnection>();
   /**
    * Save the client data here ...
    */
   private Map<Integer,ClientData> clients = new HashMap<Integer,ClientData>();
-  /**
-   * The game mode which is currently active.
+  /*
+   * //TODO integrate a singleton gameMode
    */
-  private Class<? extends GameMode> gameMode = GameSettings.DEFAULT_GAME_MODE;
   /**
    * True if the server should be visible to other clients.
    */
@@ -60,14 +57,6 @@ public class TeddyServerData {
     super();
     //TODO Create a GameMode object which is not persisted
   }
-  
-  public List<HostedConnection> getConnections() {
-    return connections;
-  }
-
-  public void setConnections(List<HostedConnection> connections) {
-    this.connections = connections;
-  }
 
   public Date getCreated() {
     return created;
@@ -75,14 +64,6 @@ public class TeddyServerData {
 
   public void setCreated(Date created) {
     this.created = created;
-  }
-
-  public Class<? extends GameMode> getGameMode() {
-    return gameMode;
-  }
-
-  public void setGameMode(Class<? extends GameMode> gameMode) {
-    this.gameMode = gameMode;
   }
 
   public boolean isDiscoverable() {
