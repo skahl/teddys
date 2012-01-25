@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
+
+  <useControls filename="nifty-default-controls.xml"/>
+  <useStyles filename="nifty-default-styles.xml"/>
+  
+  <screen id="JOIN_GAME" controller="edu.teddys.menu.JoinScreenController">
+      
+    <layer id="background" backgroundColor="#000f">
+       
+    </layer>
+    
+    <layer id="foreground" backgroundColor="#0000" childLayout="vertical">
+        
+        <panel id="top_panel" height="30%" width="100%" align="center" childLayout="center" backgroundColor="#f008">  
+            <text text="Join Game" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
+        </panel>
+        
+        <panel id="mid_panel" height="60%" width="100%" align="center" childLayout="center" backgroundColor="#0f08">  
+        
+        </panel>
+        
+        <panel id="bottom_panel" height="10%" width="100%" align="center" childLayout="center" backgroundColor="#88f8"> 
+        
+        </panel>
+        
+    </layer>
+    
+    <layer id="entries" backgroundColor="#0000" childLayout="vertical">
+    
+        <panel id="entries_top_panel" height="30%" width="100%" align="center" childLayout="center" backgroundColor="#f008"/>
+        
+        <panel id="entries_mid_panel" height="60%" width="100%" align="center" childLayout="vertical" backgroundColor="#0f08"> 
+        
+            
+            
+        </panel>
+        
+        <panel id="entries_bottom_panel" height="10%" width="100%" align="center" childLayout="center" backgroundColor="#88f8"/>
+        
+    </layer>
+    
+  </screen>
+
+</nifty>

@@ -20,7 +20,14 @@ import java.util.List;
  */
 public class PlayerControl extends CharacterControl implements AnalogListener, ActionListener {
 
-  private float moveSpeed = 1f;
+  /**
+   * The enum for the event types.
+   */
+  private enum MAPPING_CONTROL {
+
+    MOVE_LEFT, MOVE_RIGHT, JETPACK
+  }
+  private float moveSpeed = 2f;
   private boolean jetpackActive;
   private float jetpackDischargeRate = 75f;
   private float jetpackChargeRate = 25f;
