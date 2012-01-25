@@ -31,7 +31,6 @@ import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
-import edu.teddys.timer.ServerTimer;
 
 /**
  *
@@ -105,7 +104,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           //TODO Set game state to "Game"
           GSMessageBeginGame msg = (GSMessageBeginGame)message;
-          // Set the initial server timestamp
+          // start sending input data
+          ClientTimer.startTimer();
           //TODO compensate the difference in transmission?
           
 //          ServerTimer.setServerTimestamp(msg.getServerTimestamp());
@@ -115,7 +115,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // END OF THE GAME. DISPLAY STATISTICS ...
           //
           //TODO Set game state to "EndGame"
-          ServerTimer.stopTimer();
+//          ServerTimer.stopTimer();
+          ClientTimer.stopTimer();
         } else if (message instanceof GSMessagePlayerReady) {
           //
           // A PLAYER IS READY TO START THE GAME

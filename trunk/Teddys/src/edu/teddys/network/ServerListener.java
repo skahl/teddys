@@ -143,6 +143,11 @@ public class ServerListener implements MessageListener<HostedConnection> {
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManControllerInput) {
         ManControllerInput input = (ManControllerInput) message;
+        if(source.getId() == Player.LOCAL_PLAYER) {
+          // ignore it, it is handled by the input manager attached to the local
+          // player
+          return;
+        }
         // refresh the player
         Player.getInstance(source.getId()).newInput(input.getInput());
       } else if (message instanceof ManMessageSendPosition) {

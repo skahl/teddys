@@ -78,6 +78,13 @@ public class Player {
     return instance;
   }
 
+  /**
+   * 
+   * New input data has arrived, that means some events can be triggered,
+   * such as jumps, jetpack activation etc.
+   * 
+   * @param input A queue of actions gathered in the last time frame.
+   */
   public void newInput(LinkedList<Entry<String, Object>> input) {
     MegaLogger.getLogger().debug("New data received!!");
     for(Entry<String, Object> entry : input) {
