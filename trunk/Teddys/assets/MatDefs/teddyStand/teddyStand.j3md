@@ -1,0 +1,23 @@
+MaterialDef teddyStandMaterial {
+
+    MaterialParameters {
+        Texture2D TexMap
+
+        Int MaxTiles
+        Int SelectedTile
+        Boolean Mirrored
+    }
+
+    Technique {
+        VertexShader GLSL100:   Shaders/teddyStand/teddyStand.vert
+        FragmentShader GLSL100: Shaders/teddyStand/teddyStand.frag
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+
+        Defines {
+        }
+    }
+
+}

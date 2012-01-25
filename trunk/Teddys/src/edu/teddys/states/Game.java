@@ -121,7 +121,7 @@ public class Game extends AbstractAppState {
     sunDirection.normalizeLocal();
 
     DirectionalLight sunL = new DirectionalLight();
-    sunL.setColor(ColorRGBA.White.mult(0.6f));
+    sunL.setColor(ColorRGBA.White.mult(0.5f));
     sunL.setDirection(sunDirection);
     rootNode.addLight(sunL);
 

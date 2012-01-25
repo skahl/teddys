@@ -1,0 +1,15 @@
+Material teddyStand : MatDefs/teddyRun/teddyRun.j3md {
+     MaterialParameters {
+        SelectedTile : 1
+        TexMap : Flip Textures/teddy_blue_baerenpistole_run.png
+        Speed : 8.0
+        Reverse : false
+        MaxTilesY : 1
+        MaxTilesX : 1
+        Mirrored : false
+     }
+     AdditionalRenderState {
+      Blend Alpha
+      Wireframe Off
+     }
+}

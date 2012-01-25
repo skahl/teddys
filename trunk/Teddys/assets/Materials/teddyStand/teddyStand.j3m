@@ -1,0 +1,12 @@
+Material teddyStand : MatDefs/teddyStand/teddyStand.j3md {
+     MaterialParameters {
+        SelectedTile : 1
+        MaxTiles : 1
+        TexMap : Flip Textures/teddy_blue_baerenpistole_stand.png
+        Mirrored : false
+     }
+     AdditionalRenderState {
+      Blend Alpha
+      Wireframe Off
+     }
+}
