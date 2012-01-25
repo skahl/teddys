@@ -42,7 +42,7 @@ import edu.teddys.timer.ServerTimer;
 public class ClientListener implements MessageListener<com.jme3.network.Client> {
 
   public void messageReceived(com.jme3.network.Client source, Message message) {
-    MegaLogger.getLogger().debug("Received a NetworkMessage: " + message.getClass().getName());
+    MegaLogger.getLogger().debug("Client received a NetworkMessage: " + message.getClass().getName());
     if (message instanceof DisconnectMessage) {
       //
       // USER HAS BEEN DISCONNECTED/KICKED FROM THE SERVER
@@ -219,7 +219,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
     String out = "";
     String[] strings;
     if (value == 0) {
-      out = "No ";
+      out = "No";
     } else if (value < 20) {
       strings = new String[]{"Laughable", "Ridiculous", "Cheery", "Gay", "Funny", "Mini", "Atomic", "Pintsize", "Tiny little", "Miniscule"};
       out = strings[getRandomInt(strings.length)];
@@ -233,6 +233,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       strings = new String[]{"Absurd", "Hysterical", "Bizarre", "Freaky", "Crazy", "Glamorous", "Gorgeous", "Scattering"};
       out = strings[getRandomInt(strings.length)];
     }
+    out += " ";
     return out + suffix;
   }
 

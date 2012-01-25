@@ -17,12 +17,14 @@ import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.shadow.BasicShadowRenderer;
 import edu.teddys.BaseGame;
 import edu.teddys.GameModeEnum;
+import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUD;
 import edu.teddys.hud.HUDController;
 import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.map.GameLoader;
 import edu.teddys.objects.player.Player;
+import java.util.Random;
 
 /**
  *
@@ -146,8 +148,7 @@ public class Game extends AbstractAppState {
     hudController.registerWithInput(inputManager);
 
     // init player
-    Player player = Player.getInstance(Player.LOCAL_PLAYER);
-    player.getPlayerControl().setPhysicsLocation(new Vector3f(1f, 0f, -1.2f));
+//    player.getPlayerControl().setPhysicsLocation(new Vector3f(1f, 0f, -1.2f));
 //    
 //    Player player2 = Player.getInstance(1);
 //    player2.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -1.2f));
@@ -170,6 +171,7 @@ public class Game extends AbstractAppState {
     CameraNode camNode = new CameraNode("Camera", this.app.getCamera());
     camNode.setControlDir(ControlDirection.SpatialToCamera);
 
+    Player player = Player.getInstance(Player.LOCAL_PLAYER);
     player.getNode().attachChild(camNode);
 
     // initial distance between camera and player
@@ -188,6 +190,23 @@ public class Game extends AbstractAppState {
 
     //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
 
+  }
+
+  public void addPlayerToWorld(Player player) {
+    getRootNode().attachChild(player.getNode());
+    MegaLogger.getLogger().debug("Added player to the world.");
+    Random rnd = new Random();
+    //TODO set to the maximum dimension of the world
+    Vector3f pos = new Vector3f(rnd.nextFloat() * 6, rnd.nextFloat() * 2, -1.2f);
+    player.getPlayerControl().setPhysicsLocation(pos);
+    MegaLogger.getLogger().debug("Position of the player has been set: " + pos);
+  }
+
+  public void removePlayerFromWorld(Player player) {
+    if (getRootNode().hasChild(player.getNode())) {
+      getRootNode().detachChild(player.getNode());
+      MegaLogger.getLogger().debug("Player removed from the world.");
+    }
   }
 
   @Override

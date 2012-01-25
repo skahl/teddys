@@ -26,10 +26,11 @@ public class ServerTimer {
    * Start the server timer.
    */
   public static void startTimer() {
-    if (thread.isAlive()) {
+    if (thread != null) {
       return;
     }
     try {
+      thread = new ServerTimerThread();
       thread.start();
       String tempMsg = String.format(
               "Server timer thread spawned (Rate: %f, Interval: %d ms)",

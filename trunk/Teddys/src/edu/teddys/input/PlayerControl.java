@@ -56,8 +56,8 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
         input.addMapping(value.name(), new KeyTrigger(keyCode));
       }
     }
-    //TODO check
-    input.addListener(this, (String[])names.toArray());
+    
+    input.addListener(this, (String[])names.toArray(new String[names.size()]));
   }
 
   public void onAnalog(String name, float value, float tpf) {

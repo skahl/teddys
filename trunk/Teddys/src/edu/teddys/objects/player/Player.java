@@ -44,9 +44,8 @@ public class Player {
 
     control = new PlayerControl(node, collisionShape, 0.02f);
     if(id == LOCAL_PLAYER) {
-      //TODO should be changed in later versions
       //TODO check
-//      control.registerWithInput(game.getInputManager());
+      control.registerWithInput(game.getInputManager());
     } else {
       /*
        * TODO A network listener should get the appropriate actions from 

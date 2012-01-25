@@ -227,35 +227,31 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     MegaLogger.getLogger().debug("Connection with ID " + conn.getId() + " removed!");
 
     // check if the player exists in the current game
-    Player curPlayer = Player.getInstance(conn.getId());
-    if (Game.getInstance().getRootNode().hasChild(curPlayer.getNode())) {
-      MegaLogger.getLogger().debug("Removing client from the game.");
-      Game.getInstance().getRootNode().detachChild(curPlayer.getNode());
-    } else {
-      MegaLogger.getLogger().debug("Current player does not exist in the game!");
-    }
+    Game.getInstance().removePlayerFromWorld(Player.getInstance(conn.getId()));
 
     // Now search the client data of the HostedConnection and remove it 
     // from list
 
     // acquire client data because of the team allocation
-    ClientData client = getData().getClients().get(conn.getId());
-    if (client != null) {
-      // remove the player from the team list
-      if (client.getTeamID() != null) {
-        try {
-          getData().getTeams().get(client.getTeamID()).removePlayer(client.getId());
-        } catch (ArrayIndexOutOfBoundsException ex) {
-          //TODO ignore?
-          MegaLogger.getLogger().warn(
-                  new Throwable(
-                  String.format("No team with ID %d could be found!",
-                  client.getTeamID()), ex));
+    if(!getData().getClients().isEmpty()) {
+      ClientData client = getData().getClients().get(conn.getId());
+      if (client != null) {
+        // remove the player from the team list
+        if (client.getTeamID() != null) {
+          try {
+            getData().getTeams().get(client.getTeamID()).removePlayer(client.getId());
+          } catch (ArrayIndexOutOfBoundsException ex) {
+            //TODO ignore?
+            MegaLogger.getLogger().warn(
+                    new Throwable(
+                    String.format("No team with ID %d could be found!",
+                    client.getTeamID()), ex));
+          }
         }
-      }
 
-      // remove the client data from server
-      getData().getClients().remove(client.getId());
+        // remove the client data from server
+        getData().getClients().remove(client.getId());
+      }
     }
 
     String message = String.format(
