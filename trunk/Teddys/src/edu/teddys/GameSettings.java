@@ -54,10 +54,10 @@ public class GameSettings {
    */
   public static final boolean ENABLE_CHECKSUM_CHECK = false;
   /**
-   * Client update rate per second (Default: 20 -> interval ^= 50 ms)
+   * Client update rate per second (Default: 40 -> interval ^= 25 ms)
    * @see ClientTimer
    */
-  public static final Integer CLIENT_TIMER_RATE = 20;
+  public static final Integer CLIENT_TIMER_RATE = 40;
   /**
    * The number of rates to shift the user back in time.
    * @see CLIENT_INTERPO_DELAY
