@@ -8,6 +8,8 @@ import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.messages.client.ManControllerInput;
+import edu.teddys.input.SimpleTriple;
+import java.util.LinkedList;
 
 /**
  *
@@ -19,12 +21,16 @@ public class ClientTimerThread extends Thread {
   public void run() {
 
     for (;;) {
-      ManControllerInput input = new ManControllerInput(ClientTimer.input);
-      TeddyClient.getInstance().send(input);
+
+      LinkedList<SimpleTriple> inputList = (LinkedList<SimpleTriple>) ClientTimer.getInput().clone();
       ClientTimer.input.clear();
+      if (!inputList.isEmpty()) {
+        ManControllerInput input = new ManControllerInput(inputList);
+        TeddyClient.getInstance().send(input);
+      }
 
       try {
-        sleep(GameSettings.SERVER_TIMESTAMP_INTERVAL);
+        sleep((int) ((float) GameSettings.CLIENT_TIMER_RATE / 10));
       } catch (InterruptedException ex) {
         MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }

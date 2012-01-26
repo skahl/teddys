@@ -5,11 +5,14 @@ import edu.teddys.states.Menu;
 import edu.teddys.states.Game;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.Trigger;
 import com.jme3.network.serializing.Serializer;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.system.AppSettings;
 import edu.teddys.controls.MappingEnum;
+import edu.teddys.input.ControllerEvents;
+import edu.teddys.input.InputType;
 import edu.teddys.network.ClientData;
 import edu.teddys.network.DeathTest;
 import edu.teddys.network.HealthListener;
@@ -32,6 +35,7 @@ import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
+import edu.teddys.input.SimpleTriple;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.GSMessageEndGame;
 import edu.teddys.network.messages.server.ManMessageActivateItem;
@@ -46,6 +50,9 @@ import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.objects.Jetpack;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.DailyRollingFileAppender;
@@ -61,7 +68,6 @@ public class BaseGame extends SimpleApplication {
   // init java logging
 
   public ScheduledThreadPoolExecutor threadPool; // Multithreading
-  
   // ActionListener
   private ActionListener actionListener = new ActionListener() {
 
@@ -98,17 +104,18 @@ public class BaseGame extends SimpleApplication {
     BasicConfigurator.configure();
     // Set the log level to ALL in order to be informed of all loggable events
     MegaLogger.getLogger().setLevel(Level.ALL);
-    PatternLayout layout = new PatternLayout("%d{ISO8601} %-5p (%F:%L): %m%n");
+    PatternLayout basicLayout = new PatternLayout("%d{ISO8601} %-5p (%F:%L): %m%n");
+    PatternLayout guiLayout = new PatternLayout("%d{ISO8601} %-3p %m%n");
     // Set up a daily log file. If a new day has begun, empty the log file and
     // save it with the specified date format in logs/.
     try {
-      DailyRollingFileAppender fileAppender = new DailyRollingFileAppender(layout, "logs/teddys.log", "'.'yyyy-MM-dd_HH");
+      DailyRollingFileAppender fileAppender = new DailyRollingFileAppender(basicLayout, "logs/teddys.log", "'.'yyyy-MM-dd_HH");
       MegaLogger.getLogger().addAppender(fileAppender);
     } catch (IOException ex) {
       MegaLogger.getLogger().error(new Throwable("Creation of the log file appender aborted!", ex));
     }
-    // add the custom appender to react on some infos
-    MegaLogger.getLogger().addAppender(new MegaLoggerListener(layout));
+    // add the custom appender to react to some infos
+    MegaLogger.getLogger().addAppender(new MegaLoggerListener(guiLayout));
 
     AppSettings settings = new AppSettings(true);
 
@@ -146,6 +153,14 @@ public class BaseGame extends SimpleApplication {
     // Post Processing Filter initialization
 
 
+    Map<String, List<Trigger>> map = ControllerEvents.getAllEvents();
+    // add the mapping
+    MegaLogger.getLogger().debug(map);
+    for (Entry<String, List<Trigger>> entry : map.entrySet()) {
+      for (Trigger trigger : entry.getValue()) {
+        getInputManager().addMapping(entry.getKey(), trigger);
+      }
+    }
 
     // init start state
     stateManager.getState(Game.class).initialize(stateManager, this);
@@ -161,9 +176,6 @@ public class BaseGame extends SimpleApplication {
     TeddyServer server = TeddyServer.getInstance();
     server.startServer();
 
-    // Start the protection mechanisms
-//    ChecksumManager.startTimer();
-    
     // Get the handle to the client and try to join the specified server
     TeddyClient client = TeddyClient.getInstance();
     MegaLogger.getLogger().info("Client has " + client.getData().getHealth() + " health points at the beginning.");
@@ -175,7 +187,7 @@ public class BaseGame extends SimpleApplication {
       MegaLogger.getLogger().error("Error while connecting the server!");
       return;
     }
-    
+
     // Create the listeners for the client
     client.registerListener(TeddyClient.ListenerFields.health, new HealthListener());
     client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
@@ -199,6 +211,7 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(ClientData.class);
     Serializer.registerClass(Team.class);
     Serializer.registerClass(TeddyServerData.class);
+    Serializer.registerClass(SimpleTriple.class);
     // Client
     Serializer.registerClass(GSMessageGamePaused.class);
     Serializer.registerClass(GSMessagePlayerReady.class);

@@ -4,10 +4,10 @@
  */
 package edu.teddys.network.messages.client;
 
+import edu.teddys.input.SimpleTriple;
 import com.jme3.network.serializing.Serializable;
 import edu.teddys.network.messages.NetworkMessageManipulation;
 import java.util.LinkedList;
-import java.util.Map.Entry;
 
 /**
  *
@@ -16,18 +16,22 @@ import java.util.Map.Entry;
 @Serializable
 public class ManControllerInput extends NetworkMessageManipulation {
 
-  private LinkedList<Entry<String, Object>> input = new LinkedList<Entry<String, Object>>();
+  private LinkedList<SimpleTriple> input = new LinkedList<SimpleTriple>();
   
   public ManControllerInput() {
     super();
   }
   
-  public ManControllerInput(LinkedList<Entry<String, Object>> list) {
+  public ManControllerInput(LinkedList<SimpleTriple> list) {
     this();
+    if(list == null) {
+      // Always return a list
+      return;
+    }
     input = list;
   }
 
-  public LinkedList<Entry<String, Object>> getInput() {
+  public LinkedList<SimpleTriple> getInput() {
     return input;
   }
 }

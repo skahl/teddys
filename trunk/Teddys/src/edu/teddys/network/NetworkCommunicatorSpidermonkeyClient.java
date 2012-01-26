@@ -36,6 +36,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     if (networkClient == null) {
       return false;
     }
+    //TODO add a delay for this check
     return networkClient.isConnected();
   }
 
@@ -69,8 +70,8 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     String serverIP = client.getServerIP();
     Integer serverPort = NetworkSettings.SERVER_PORT;
     if (serverIP == null || serverPort == null) {
-      //TODO dirty?
-      String msg = "serverIP or serverPort is null. Please check your network settings!";
+      String msg = "Invalid server configuration! serverIP or serverPort is null. "
+              + "Please check your network settings!";
       MegaLogger.getLogger().fatal(new Throwable(msg));
       throw new RuntimeException(msg);
     }
@@ -78,9 +79,6 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     try {
       networkClient = com.jme3.network.Network.connectToServer(serverIP, serverPort);
       networkClient.start();
-//      if(!networkClient.isConnected()) {
-//        System.out.println("Not fully connected yet.");
-//      }
       // Configure the client to receive messages
       networkClient.addMessageListener(new ClientListener());
       MegaLogger.getLogger().debug("Client: Join request sent.");

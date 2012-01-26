@@ -50,10 +50,14 @@ public class GameSettings {
    */
   public static final Class<? extends GameMode> DEFAULT_GAME_MODE = Deathmatch.class;
   /**
+   * Enable checks of randomly chosen game files.
+   */
+  public static final boolean ENABLE_CHECKSUM_CHECK = false;
+  /**
    * Client update rate per second (Default: 20 -> interval ^= 50 ms)
    * @see ClientTimer
    */
-  public static final Integer CLIENT_TIMER_RATE = 20;
+  public static final Integer CLIENT_TIMER_RATE = 1;
   /**
    * The number of rates to shift the user back in time.
    * @see CLIENT_INTERPO_DELAY

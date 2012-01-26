@@ -7,12 +7,14 @@ package edu.teddys.network;
 import com.jme3.network.ConnectionListener;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Server;
+import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageInfo;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
+import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ServerTimer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,6 +55,11 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     getData().setCreated(new Date());
     getData().setDiscoverable(true);
     ServerTimer.startTimer();
+
+    // Start the protection mechanisms
+    if(GameSettings.ENABLE_CHECKSUM_CHECK) {
+      ChecksumManager.startTimer();
+    }
     MegaLogger.getLogger().debug("New server started.");
   }
 
@@ -77,10 +84,15 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     if (!isRunning()) {
       return;
     }
+    // Start the protection mechanisms
+    if(GameSettings.ENABLE_CHECKSUM_CHECK) {
+      ChecksumManager.stopTimer();
+    }
     ServerTimer.stopTimer();
     NetworkCommunicatorSpidermonkeyServer.getInstance().shutdownServer();
     // reset data
     data = null;
+
     MegaLogger.getLogger().debug("Server stopped.");
   }
 

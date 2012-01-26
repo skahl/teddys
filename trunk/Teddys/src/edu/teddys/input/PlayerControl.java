@@ -5,14 +5,13 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
-import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import edu.teddys.controls.ActionControllerEnum;
-import edu.teddys.controls.AnalogControllerEnum;
+import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUDController;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -20,13 +19,6 @@ import java.util.List;
  */
 public class PlayerControl extends CharacterControl implements AnalogListener, ActionListener {
 
-  /**
-   * The enum for the event types.
-   */
-  private enum MAPPING_CONTROL {
-
-    MOVE_LEFT, MOVE_RIGHT, JETPACK
-  }
   private float moveSpeed = 2f;
   private boolean jetpackActive;
   private float jetpackDischargeRate = 75f;
@@ -49,26 +41,12 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   public void registerWithInput(InputManager input) {
     this.input = input;
 
-    List<String> names = new ArrayList<String>();
-    for(ActionControllerEnum value : ActionControllerEnum.values()) {
-      names.add(value.name());
-      for(Integer keyCode : value.getKeys()) {
-        input.addMapping(value.name(), new KeyTrigger(keyCode));
-      }
-    }
-    
-    for(AnalogControllerEnum value : AnalogControllerEnum.values()) {
-      names.add(value.name());
-      for(Integer keyCode : value.getKeys()) {
-        input.addMapping(value.name(), new KeyTrigger(keyCode));
-      }
-    }
-    
-    input.addListener(this, (String[])names.toArray(new String[names.size()]));
+    Map<String, List<Trigger>> map = ControllerEvents.getAllEvents();
+
+    input.addListener(this, map.keySet().toArray(new String[map.keySet().size()]));
   }
 
   public void onAnalog(String name, float value, float tpf) {
-
     if (name.equals(AnalogControllerEnum.MOVE_LEFT.name())) {
       vel = left.mult(moveSpeed * tpf);
       warp(getPhysicsLocation().add(vel));

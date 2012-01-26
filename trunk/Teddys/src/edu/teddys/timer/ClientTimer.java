@@ -6,8 +6,8 @@ package edu.teddys.timer;
 
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
+import edu.teddys.input.SimpleTriple;
 import java.util.LinkedList;
-import java.util.Map.Entry;
 
 /**
  *
@@ -26,7 +26,7 @@ public class ClientTimer {
    * The last known server timestamp extracted from a server message
    */
   public static Long lastServerTimestamp = 0L;
-  public static LinkedList<Entry<String, Object>> input = new LinkedList<Entry<String, Object>>();
+  public static LinkedList<SimpleTriple> input = new LinkedList<SimpleTriple>();
 
   /**
    * Start the server timer.
@@ -38,9 +38,9 @@ public class ClientTimer {
     thread = new ClientTimerThread();
     thread.start();
     String tempMsg = String.format(
-            "Client timer thread spawned (Rate: %f, Interval: %d ms)",
-            (Float) (1f / GameSettings.SERVER_TIMESTAMP_INTERVAL * 1000),
-            GameSettings.SERVER_TIMESTAMP_INTERVAL);
+            "Client timer thread spawned (Rate: %d, Interval: %f ms)",
+            GameSettings.CLIENT_TIMER_RATE,
+            (Float) (1f / GameSettings.CLIENT_TIMER_RATE * 1000));
     MegaLogger.getLogger().debug(tempMsg);
   }
 
@@ -50,6 +50,11 @@ public class ClientTimer {
     }
     thread.interrupt();
     thread = null;
+    input.clear();
     MegaLogger.getLogger().debug("Client timer thread joined.");
+  }
+  
+  public synchronized static LinkedList<SimpleTriple> getInput() {
+    return input;
   }
 }

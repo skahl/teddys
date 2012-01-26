@@ -4,10 +4,13 @@
  */
 package edu.teddys.network;
 
+import com.jme3.input.controls.Trigger;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.message.DisconnectMessage;
 import edu.teddys.MegaLogger;
+import edu.teddys.input.ControllerEvents;
+import edu.teddys.input.ControllerInputListener;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
@@ -29,8 +32,12 @@ import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
+import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  *
@@ -44,14 +51,13 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
     String inputMessage = String.format(
             "Client received a NetworkMessage: %s",
             message.getClass().getName());
-    if(message instanceof NetworkMessage) {
+    if (message instanceof NetworkMessage) {
       inputMessage += String.format("\nTimestamps: Local: %d, Server: %d",
-              ((NetworkMessage)message).getLocalTimestamp(),
-              ((NetworkMessage)message).getServerTimestamp()
-              );
+              ((NetworkMessage) message).getLocalTimestamp(),
+              ((NetworkMessage) message).getServerTimestamp());
     }
     MegaLogger.getLogger().debug(inputMessage);
-    
+
     if (message instanceof DisconnectMessage) {
       //
       // USER HAS BEEN DISCONNECTED/KICKED FROM THE SERVER
@@ -65,7 +71,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       // get the server timestamp
       //TODO check if it is a message from the server!!
       NetworkMessage tempMsg = (NetworkMessage) message;
-      if(tempMsg.getServerTimestamp() != null) {
+      if (tempMsg.getServerTimestamp() != null) {
         ClientTimer.lastServerTimestamp = tempMsg.getServerTimestamp();
       }
       if (message instanceof NetworkMessageInfo) {
@@ -73,7 +79,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         // RECEIVED A SIMPLE MESSAGE
         //
         NetworkMessageInfo info = (NetworkMessageInfo) message;
-        //TODO check if the client name is displayed as it should be
         //TODO check if the server sent the message
         String teddyName = "";
         try {
@@ -103,13 +108,19 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // START THE ACCEPTED GAME
           //
           //TODO Set game state to "Game"
-          GSMessageBeginGame msg = (GSMessageBeginGame)message;
+          GSMessageBeginGame msg = (GSMessageBeginGame) message;
           // start sending input data
           ClientTimer.startTimer();
           //TODO compensate the difference in transmission?
-          
+
 //          ServerTimer.setServerTimestamp(msg.getServerTimestamp());
 //          ServerTimer.startTimer();
+          Map<String, List<Trigger>> map = ControllerEvents.getAllEvents();
+          Game.getInstance().getInputManager().addListener(
+                  ControllerInputListener.getInstance(),
+                  map.keySet().toArray(new String[map.keySet().size()])
+                  );
+          ClientTimer.startTimer();
         } else if (message instanceof GSMessageEndGame) {
           //
           // END OF THE GAME. DISPLAY STATISTICS ...
@@ -117,6 +128,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //TODO Set game state to "EndGame"
 //          ServerTimer.stopTimer();
           ClientTimer.stopTimer();
+          Game.getInstance().getInputManager().removeListener(ControllerInputListener.getInstance());
         } else if (message instanceof GSMessagePlayerReady) {
           //
           // A PLAYER IS READY TO START THE GAME
@@ -137,8 +149,9 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // A DAMAGE REQUEST TO BE APPLIED
           //
           ManMessageSendDamage msg = (ManMessageSendDamage) message;
-          //TODO wont work!!
-          if (msg.getClient().equals(TeddyClient.getInstance().getData())) {
+          // If this is the destination Teddy ...
+          if (msg.getClient().equals(TeddyClient.getInstance().getData().getId())) {
+            // Add a painful scar
             TeddyClient.getInstance().addDamage(msg.getDamage());
           }
           try {
@@ -202,9 +215,9 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           ResMessageSendClientData response = new ResMessageSendClientData(TeddyClient.getInstance().getData());
           TeddyClient.getInstance().send(response);
-          
+
           //TEMPORARY
-          
+
           //TODO adapt to the game flow
           GSMessagePlayerReady playerReady = new GSMessagePlayerReady();
           TeddyClient.getInstance().send(playerReady);

@@ -6,10 +6,13 @@ package edu.teddys.network;
 
 import com.jme3.network.Client;
 import com.jme3.network.ClientStateListener;
+import edu.teddys.MegaLogger;
+import edu.teddys.input.ControllerInputListener;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.objects.box.items.Item;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.weapons.Weapon;
+import edu.teddys.states.Game;
 import edu.teddys.timer.ClientTimer;
 import edu.teddys.timer.ServerTimer;
 import java.util.ArrayList;
@@ -230,15 +233,16 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
   }
 
   public void clientConnected(Client c) {
-
     getData().setId(c.getId());
     TeddyClient.getInstance().setJoinedServer(new Date());
+    MegaLogger.getLogger().debug("Client joined the server at "
+            + TeddyClient.getInstance().getJoinedServer().toLocaleString());
   }
 
   public void clientDisconnected(Client c, DisconnectInfo info) {
     //TODO set game state
-    ClientTimer.stopTimer();
     ServerTimer.stopTimer();
+    MegaLogger.getLogger().debug("Client has been disconnected from the server.");
   }
 
   public ClientData getData() {
