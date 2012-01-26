@@ -57,7 +57,7 @@ public class GameSettings {
    * Client update rate per second (Default: 20 -> interval ^= 50 ms)
    * @see ClientTimer
    */
-  public static final Integer CLIENT_TIMER_RATE = 1;
+  public static final Integer CLIENT_TIMER_RATE = 20;
   /**
    * The number of rates to shift the user back in time.
    * @see CLIENT_INTERPO_DELAY
