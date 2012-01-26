@@ -10,6 +10,7 @@ import edu.teddys.network.TeddyClient;
 import edu.teddys.network.messages.client.ManControllerInput;
 import edu.teddys.input.SimpleTriple;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -22,11 +23,11 @@ public class ClientTimerThread extends Thread {
 
     for (;;) {
 
-      LinkedList<SimpleTriple> inputList = (LinkedList<SimpleTriple>) ClientTimer.getInput().clone();
-      ClientTimer.input.clear();
+      List<SimpleTriple> inputList = ClientTimer.getInput();
       if (!inputList.isEmpty()) {
-        ManControllerInput input = new ManControllerInput(inputList);
+        ManControllerInput input = new ManControllerInput(new LinkedList<SimpleTriple>(inputList));
         TeddyClient.getInstance().send(input);
+        ClientTimer.input.clear();
       }
 
       try {

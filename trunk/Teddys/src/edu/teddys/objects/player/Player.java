@@ -90,7 +90,6 @@ public class Player {
     SimpleTriple entry = null;
     while (input.size() > 0) {
       entry = input.pop();
-    }
 //    MegaLogger.getLogger().debug("input: " + entry);
     switch (entry.getType()) {
       case Analog:

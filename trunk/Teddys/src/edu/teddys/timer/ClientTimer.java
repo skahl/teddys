@@ -7,7 +7,9 @@ package edu.teddys.timer;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.input.SimpleTriple;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -26,7 +28,7 @@ public class ClientTimer {
    * The last known server timestamp extracted from a server message
    */
   public static Long lastServerTimestamp = 0L;
-  public static LinkedList<SimpleTriple> input = new LinkedList<SimpleTriple>();
+  public static List<SimpleTriple> input = Collections.synchronizedList(new ArrayList<SimpleTriple>());
 
   /**
    * Start the server timer.
@@ -54,7 +56,7 @@ public class ClientTimer {
     MegaLogger.getLogger().debug("Client timer thread joined.");
   }
   
-  public synchronized static LinkedList<SimpleTriple> getInput() {
+  public static List<SimpleTriple> getInput() {
     return input;
   }
 }
