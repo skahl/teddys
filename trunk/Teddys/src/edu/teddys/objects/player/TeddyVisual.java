@@ -3,6 +3,7 @@ package edu.teddys.objects.player;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
@@ -51,26 +52,26 @@ public class TeddyVisual {
         Texture blueStand = assetManager.loadTexture("Textures/teddy_blue_baerenpistole_stand.png");
         
         standing = assetManager.loadMaterial("Materials/teddyStand/teddyStand.j3m");
+        standing.getAdditionalRenderState().setAlphaTest(true);
         standing.setTexture("TexMap", blueStand);
         standing.setInt("SelectedTile", 3);
         standing.setInt("MaxTiles", 7);
         standing.setBoolean("Mirrored", false);
-        standing.getAdditionalRenderState().setAlphaTest(true);
         
         // texture and material for running teddy (with animation)
         Texture blueRun = assetManager.loadTexture("Textures/teddy_blue_baerenpistole_run.png");
         
         running = assetManager.loadMaterial("Materials/teddyRun/teddyRun.j3m");
+        running.getAdditionalRenderState().setAlphaTest(true);
         running.setTexture("TexMap", blueRun);
         running.setInt("SelectedTile", 3);
         running.setInt("MaxTilesX", 7);
         running.setInt("MaxTilesY", 4);
         running.setFloat("Speed", 8.0f);
         running.setBoolean("Reverse", false);
-        running.getAdditionalRenderState().setAlphaTest(true);
         
         
-        geo.setMaterial(standing);
+        geo.setMaterial(running);
         
         // shadow and transparency settings
         geo.setShadowMode(ShadowMode.Cast);

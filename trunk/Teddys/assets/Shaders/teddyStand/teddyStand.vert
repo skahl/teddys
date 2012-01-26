@@ -8,12 +8,12 @@ attribute vec3 inPosition;
 attribute vec2 inTexCoord;
 
 void main() { 
+    float tileSelector;
+    float curTile = float(m_SelectedTile);
 
     gl_Position = g_WorldViewProjectionMatrix * vec4(inPosition, 1.0);
     texCoord = inTexCoord;
 
-    float tileSelector;
-    float curTile = float(m_SelectedTile);
 
     if(m_Mirrored) {
         curTile = float(m_MaxTiles) - 1.0 - curTile;

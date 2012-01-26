@@ -14,11 +14,13 @@ attribute vec2 inTexCoord;
 
 void main() { 
 
+    float curAnim = 0.0;
+    float tileSelector;
+    float curTile = float(m_SelectedTile);
+
     gl_Position = g_WorldViewProjectionMatrix * vec4(inPosition, 1.0);
     texCoord = inTexCoord;
 
-    float tileSelector;
-    float curTile = float(m_SelectedTile);
 
     if(m_Mirrored) {
         curTile = float(m_MaxTilesX) - 1.0 - curTile;
@@ -38,7 +40,6 @@ void main() {
     }
 
     // switch through run animation on Y-Axis, time dependent
-    float curAnim = 0.0;
 
     if(m_Reverse) {
         curAnim += g_Time * m_Speed;
@@ -46,6 +47,5 @@ void main() {
         curAnim -= g_Time * m_Speed;
     }
 
-    //texCoord.t = texCoord.t / float(m_MaxTilesY) + curAnim / float(m_MaxTilesY);
     texCoord.t = texCoord.t / float(m_MaxTilesY) + (floor(mod(curAnim, float(m_MaxTilesY))) / float(m_MaxTilesY));
 }

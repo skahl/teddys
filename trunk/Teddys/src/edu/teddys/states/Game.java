@@ -105,6 +105,8 @@ public class Game extends AbstractAppState {
     this.stateManager = stateManager;
     this.inputManager = this.app.getInputManager();
     this.rootNode = this.app.getRootNode();
+    
+    app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
 
     paused = false;
     enabled = false;
