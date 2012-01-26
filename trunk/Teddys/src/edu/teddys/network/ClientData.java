@@ -6,7 +6,6 @@ package edu.teddys.network;
 
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.objects.player.Jetpack;
 
 /**
  *
@@ -34,10 +33,6 @@ public class ClientData {
    * Last position that is used for the lag compensation.
    */
   private Vector3f lastPosition = new Vector3f();
-  /**
-   * A Jetpack is constantly bounded to the user.
-   */
-  private Jetpack jetpack = new Jetpack();
   /**
    * Session-related information, that is the number of deaths, kills, rounds etc.
    */
@@ -69,14 +64,6 @@ public class ClientData {
 
   public void setId(Integer id) {
     this.id = id;
-  }
-
-  public Jetpack getJetpack() {
-    return jetpack;
-  }
-
-  public void setJetpack(Jetpack jetpack) {
-    this.jetpack = jetpack;
   }
 
   public String getName() {

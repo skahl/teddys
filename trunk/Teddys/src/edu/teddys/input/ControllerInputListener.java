@@ -10,11 +10,11 @@ public class ControllerInputListener implements AnalogListener, ActionListener {
   private static ControllerInputListener instance;
 
   public void onAnalog(String name, float value, float tpf) {
-    ClientTimer.input.addLast(new SimpleTriple(InputType.Analog, name, value, tpf));
+    ClientTimer.input.add(new SimpleTriple(InputType.Analog, name, value, tpf));
   }
 
   public void onAction(String name, boolean isPressed, float tpf) {
-    ClientTimer.input.addLast(new SimpleTriple(InputType.Action, name, isPressed, tpf));
+    ClientTimer.input.add(new SimpleTriple(InputType.Action, name, isPressed, tpf));
   }
 
   public static ControllerInputListener getInstance() {

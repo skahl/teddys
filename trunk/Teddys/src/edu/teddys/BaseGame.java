@@ -12,7 +12,6 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.system.AppSettings;
 import edu.teddys.controls.MappingEnum;
 import edu.teddys.input.ControllerEvents;
-import edu.teddys.input.InputType;
 import edu.teddys.network.ClientData;
 import edu.teddys.network.DeathTest;
 import edu.teddys.network.HealthListener;
@@ -48,9 +47,8 @@ import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
-import edu.teddys.objects.player.Jetpack;
 import java.io.IOException;
-import java.util.List;
+import java.util.List; 
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -207,7 +205,6 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(NetworkMessageResponse.class);
     // Internal data to be serialized
     Serializer.registerClass(SessionClientData.class);
-    Serializer.registerClass(Jetpack.class);
     Serializer.registerClass(ClientData.class);
     Serializer.registerClass(Team.class);
     Serializer.registerClass(TeddyServerData.class);
