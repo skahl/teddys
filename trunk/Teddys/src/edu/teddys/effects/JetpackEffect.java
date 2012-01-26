@@ -1,16 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package edu.teddys.effects;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.effect.Particle;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
-import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -33,7 +27,7 @@ public class JetpackEffect {
         this.name = name;
         this.assetManager = assetManager;
         particlesPerSec = 30f;
-        enabled = true;
+        enabled = false;
         
         mother = new Node("node_"+name);
         pe = new ParticleEmitter("jetPack",
@@ -45,9 +39,9 @@ public class JetpackEffect {
     
     private void init() {
         
-        mat.setTexture("Texture", assetManager.loadTexture("Textures/Effects/Explosion/flame.png"));
+        mat.setTexture("Texture", assetManager.loadTexture("Textures/Effects/Smoke/Smoke.png"));
         pe.setMaterial(mat);
-        pe.setImagesX(2); pe.setImagesY(2);
+        pe.setImagesX(15); pe.setImagesY(1);
         pe.setEndColor(new ColorRGBA(1f, 0f, 0f, 1f));   // red
         pe.setStartColor(new ColorRGBA(1f, 1f, 0.5f, 1f)); // yellow-ish
         pe.getParticleInfluencer().setInitialVelocity(new Vector3f(-1f,-4f,0f));
@@ -57,7 +51,7 @@ public class JetpackEffect {
         pe.setLowLife(0.2f);
         pe.setHighLife(0.4f);
         pe.getParticleInfluencer().setVelocityVariation(0.1f);  
-        pe.setParticlesPerSec(particlesPerSec);
+        pe.setParticlesPerSec(0f);
         
         
         mother.attachChild(pe);

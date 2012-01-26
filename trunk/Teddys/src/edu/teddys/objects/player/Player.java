@@ -95,10 +95,12 @@ public class Player {
     switch (entry.getType()) {
       case Analog:
         getPlayerControl().onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
+        visual.onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
         break;
       case Action:
         if(entry.getValue() instanceof Boolean) {
           getPlayerControl().onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
+          visual.onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
         } else {
           MegaLogger.getLogger().error(new Throwable("Action event invalid! Value is not a Boolean!"));
         }

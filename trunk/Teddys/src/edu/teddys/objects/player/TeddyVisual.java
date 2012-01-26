@@ -3,7 +3,6 @@ package edu.teddys.objects.player;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
@@ -12,6 +11,9 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 import edu.teddys.effects.JetpackEffect;
+import edu.teddys.effects.ShotBaerenpistole;
+import edu.teddys.input.ActionControllerEnum;
+import edu.teddys.input.AnalogControllerEnum;
 
 /**
  *
@@ -33,6 +35,8 @@ public class TeddyVisual {
     // effect attributes
     JetpackEffect jetpackFx;
     
+    ShotBaerenpistole baerenpistole;
+    
     public TeddyVisual(Node node, AssetManager assetManager) {
         // control init
         isRunning = false;
@@ -42,6 +46,10 @@ public class TeddyVisual {
         jetpackFx = new JetpackEffect(node.getName(), assetManager);
         jetpackFx.getNode().setLocalTranslation(-0.25f, -0.25f, 0.0f);
         node.attachChild(jetpackFx.getNode());
+        
+        // gun init
+        baerenpistole = new ShotBaerenpistole(assetManager);
+        node.attachChild(baerenpistole.getNode());
         
         // quad and materials init
         quad = new Quad(0.6f, 0.79f); //Box(0.3f, 0.3f, 0.01f);
@@ -139,7 +147,30 @@ public class TeddyVisual {
     
     public void viewDir(int dir) {
         lookDir = dir;
+    }
+    
+    public void onAnalog(String name, float value, float tpf) {
+        if (name.equals(AnalogControllerEnum.MOVE_LEFT.name())) {
+            runLeft();
+        } else if (name.equals(AnalogControllerEnum.MOVE_RIGHT.name())) {
+            runRight();
+        }
+
+    }
+
+    public void onAction(String name, boolean isPressed, float tpf) {
+        if (name.equals(ActionControllerEnum.JETPACK.name())) {
+            if (isPressed) {
+                jetpackFx.setEnabled(true);
+            } else {
+                jetpackFx.setEnabled(false);
+            }
+        }
         
-        
+        if (name.equals(ActionControllerEnum.WEAPON.name())) {
+            if (isPressed) {
+                baerenpistole.shoot();
+            }
+        }
     }
 }
