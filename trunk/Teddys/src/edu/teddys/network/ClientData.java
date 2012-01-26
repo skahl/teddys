@@ -6,7 +6,7 @@ package edu.teddys.network;
 
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.objects.Jetpack;
+import edu.teddys.objects.player.Jetpack;
 
 /**
  *

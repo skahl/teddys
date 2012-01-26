@@ -58,6 +58,7 @@ public class GameMap {
             }
         }**/
         
+        
         sceneShape = CollisionShapeFactory.createMeshShape(mapModel);
         mapPhysics = new RigidBodyControl(sceneShape, 0);
         mapModel.addControl(mapPhysics);
