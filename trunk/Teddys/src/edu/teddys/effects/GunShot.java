@@ -20,12 +20,14 @@ public class GunShot {
     AssetManager assetManager;
     
     
-    protected void init(AssetManager assetManager, String texture) {
+    protected void init(String name, AssetManager assetManager, String texture) {
         
         this.assetManager = assetManager;
-        mother = new Node("gun");
-        pe = new ParticleEmitter("gunshots", ParticleMesh.Type.Triangle, 1);
+        mother = new Node(name+"_gun");
+        pe = new ParticleEmitter(name+"_gunshots", ParticleMesh.Type.Triangle, 1);
         mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        
+        mat.getAdditionalRenderState().setAlphaTest(true);
         
         mat.setTexture("Texture", assetManager.loadTexture(texture));
         pe.setMaterial(mat);
@@ -36,9 +38,10 @@ public class GunShot {
         pe.setStartSize(0.25f);
         pe.setEndSize(0.25f);
         pe.setGravity(0,0,0);
-        pe.setLowLife(1f);
+        pe.setLowLife(0.9f);
         pe.setHighLife(1f);
         pe.getParticleInfluencer().setVelocityVariation(0f);
+        pe.setParticlesPerSec(0.0f);
         
         
         mother.attachChild(pe);

@@ -11,10 +11,10 @@ import com.jme3.asset.AssetManager;
  */
 public class ShotBaerenpistole extends GunShot {
     
-    public ShotBaerenpistole(AssetManager assetManager) {
+    public ShotBaerenpistole(String name, AssetManager assetManager) {
         
         // init Baerenpistole
-        this.init(assetManager, "Textures/Effects/kugel_pistole.png");
+        this.init(name, assetManager, "Textures/Effects/kugel_pistole.png");
             
         
     }

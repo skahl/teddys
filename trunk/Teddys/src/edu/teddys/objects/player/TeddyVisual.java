@@ -10,6 +10,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
+import edu.teddys.effects.GunShot;
 import edu.teddys.effects.JetpackEffect;
 import edu.teddys.effects.ShotBaerenpistole;
 import edu.teddys.input.ActionControllerEnum;
@@ -36,6 +37,7 @@ public class TeddyVisual {
     JetpackEffect jetpackFx;
     
     ShotBaerenpistole baerenpistole;
+    GunShot currentWeapon;
     
     public TeddyVisual(Node node, AssetManager assetManager) {
         // control init
@@ -48,8 +50,9 @@ public class TeddyVisual {
         node.attachChild(jetpackFx.getNode());
         
         // gun init
-        baerenpistole = new ShotBaerenpistole(assetManager);
-        node.attachChild(baerenpistole.getNode());
+        baerenpistole = new ShotBaerenpistole(node.getName(), assetManager);
+        currentWeapon = baerenpistole;
+        node.attachChild(currentWeapon.getNode());
         
         // quad and materials init
         quad = new Quad(0.6f, 0.79f); //Box(0.3f, 0.3f, 0.01f);
@@ -79,7 +82,7 @@ public class TeddyVisual {
         running.setBoolean("Reverse", false);
         
         
-        geo.setMaterial(running);
+        geo.setMaterial(standing);
         
         // shadow and transparency settings
         geo.setShadowMode(ShadowMode.Cast);
@@ -119,7 +122,8 @@ public class TeddyVisual {
             running.setBoolean("Mirrored", runLeft);
             
             // move jetpack
-            //jetpackFx.getNode().setLocalTranslation(-0.5f, 0.0f, 0.0f);
+            //jetpackFx.getNode().setLocalTranslation(0.5f, 0.0f, 0.0f);
+            //jetpackFx.switchVelocity();
         }
     }
     
@@ -134,7 +138,8 @@ public class TeddyVisual {
             running.setBoolean("Mirrored", runLeft);
             
             // move jetpack
-            //jetpackFx.getNode().setLocalTranslation(0.5f, 0.0f, 0.0f);
+            //jetpackFx.getNode().setLocalTranslation(-0.5f, 0.0f, 0.0f);
+            //jetpackFx.switchVelocity();
         }
     }
     
@@ -169,7 +174,7 @@ public class TeddyVisual {
         
         if (name.equals(ActionControllerEnum.WEAPON.name())) {
             if (isPressed) {
-                baerenpistole.shoot();
+                currentWeapon.shoot();
             }
         }
     }

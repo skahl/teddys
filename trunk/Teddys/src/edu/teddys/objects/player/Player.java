@@ -3,6 +3,7 @@ package edu.teddys.objects.player;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.scene.Node;
 import edu.teddys.MegaLogger;
+import edu.teddys.input.InputType;
 import edu.teddys.input.PlayerControl;
 import edu.teddys.network.ClientData;
 import edu.teddys.input.SimpleTriple;
@@ -91,19 +92,20 @@ public class Player {
     while (input.size() > 0) {
       entry = input.pop();
 //    MegaLogger.getLogger().debug("input: " + entry);
-      switch (entry.getType()) {
-        case Analog:
+      if(entry.getType() == InputType.Analog) {
           getPlayerControl().onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
           visual.onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
-          break;
-        case Action:
+      } else {
+          visual.stand();
+      }
+      
+      if(entry.getType() == InputType.Action) {
           if (entry.getValue() instanceof Boolean) {
             getPlayerControl().onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
             visual.onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
           } else {
             MegaLogger.getLogger().error(new Throwable("Action event invalid! Value is not a Boolean!"));
           }
-          break;
       }
     }
   }

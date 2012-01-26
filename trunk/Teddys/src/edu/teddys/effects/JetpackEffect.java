@@ -20,6 +20,7 @@ public class JetpackEffect {
     AssetManager assetManager;
     String name;
     float particlesPerSec;
+    Vector3f velocity;
     
     boolean enabled;
     
@@ -28,6 +29,7 @@ public class JetpackEffect {
         this.assetManager = assetManager;
         particlesPerSec = 30f;
         enabled = false;
+        velocity = new Vector3f(-1f, 4f, 0f);
         
         mother = new Node("node_"+name);
         pe = new ParticleEmitter("jetPack",
@@ -73,6 +75,10 @@ public class JetpackEffect {
     
     public Node getNode() {
         return mother;
+    }
+    
+    public void switchVelocity() {
+        velocity.x = velocity.x * -1f;
     }
     
 }
