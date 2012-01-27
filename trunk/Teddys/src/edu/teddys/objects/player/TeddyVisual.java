@@ -10,6 +10,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
+import edu.teddys.MegaLogger;
 import edu.teddys.effects.GunShot;
 import edu.teddys.effects.JetpackEffect;
 import edu.teddys.effects.ShotBaerenpistole;
@@ -36,22 +37,21 @@ public class TeddyVisual {
     // effect attributes
     JetpackEffect jetpackFx;
     
-    ShotBaerenpistole baerenpistole;
     GunShot currentWeapon;
     
     public TeddyVisual(Node node, AssetManager assetManager) {
         // control init
         isRunning = false;
         runLeft = false;
+        lookDir = 3; // default: look streight ahead!
         
         // effect init
         jetpackFx = new JetpackEffect(node.getName(), assetManager);
-        jetpackFx.getNode().setLocalTranslation(-0.25f, -0.25f, 0.0f);
+        jetpackFx.getNode().setLocalTranslation(-0.3f, -0.25f, 0.0f);
         node.attachChild(jetpackFx.getNode());
         
         // gun init
-        baerenpistole = new ShotBaerenpistole(node.getName(), assetManager);
-        currentWeapon = baerenpistole;
+        currentWeapon = new ShotBaerenpistole(node.getName(), assetManager);
         node.attachChild(currentWeapon.getNode());
         
         // quad and materials init
@@ -65,7 +65,7 @@ public class TeddyVisual {
         standing = assetManager.loadMaterial("Materials/teddyStand/teddyStand.j3m");
         standing.getAdditionalRenderState().setAlphaTest(true);
         standing.setTexture("TexMap", blueStand);
-        standing.setInt("SelectedTile", 3);
+        standing.setInt("SelectedTile", lookDir);
         standing.setInt("MaxTiles", 7);
         standing.setBoolean("Mirrored", false);
         
@@ -75,10 +75,11 @@ public class TeddyVisual {
         running = assetManager.loadMaterial("Materials/teddyRun/teddyRun.j3m");
         running.getAdditionalRenderState().setAlphaTest(true);
         running.setTexture("TexMap", blueRun);
-        running.setInt("SelectedTile", 3);
+        running.setInt("SelectedTile", lookDir);
         running.setInt("MaxTilesX", 7);
         running.setInt("MaxTilesY", 4);
         running.setFloat("Speed", 8.0f);
+        running.setBoolean("Mirrored", false);
         running.setBoolean("Reverse", false);
         
         
@@ -122,8 +123,8 @@ public class TeddyVisual {
             running.setBoolean("Mirrored", runLeft);
             
             // move jetpack
-            //jetpackFx.getNode().setLocalTranslation(0.5f, 0.0f, 0.0f);
-            //jetpackFx.switchVelocity();
+            jetpackFx.getNode().setLocalTranslation(0.30f, -0.25f, 0.0f);
+            jetpackFx.switchVelocity();
         }
     }
     
@@ -138,15 +139,18 @@ public class TeddyVisual {
             running.setBoolean("Mirrored", runLeft);
             
             // move jetpack
-            //jetpackFx.getNode().setLocalTranslation(-0.5f, 0.0f, 0.0f);
-            //jetpackFx.switchVelocity();
+            jetpackFx.getNode().setLocalTranslation(-0.30f, -0.25f, 0.0f);
+            jetpackFx.switchVelocity();
         }
     }
     
     public void stand() {
         if(isRunning) {
             isRunning = false;
+            
             geo.setMaterial(standing);
+            standing.setInt("SelectedTile", lookDir);
+            standing.setBoolean("Mirrored", runLeft);
         }
     }
     
@@ -175,6 +179,8 @@ public class TeddyVisual {
         if (name.equals(ActionControllerEnum.WEAPON.name())) {
             if (isPressed) {
                 currentWeapon.shoot();
+                
+                MegaLogger.getLogger().info(new Throwable("Shooting!"));
             }
         }
     }

@@ -152,7 +152,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
 //          return;
 //        }
         // refresh the player
-        Player.getInstance(source.getId()).newInput(input.getInput());
+        Player.getInstance(source.getId()).getPlayerControl().newInput(input.getInput());
       } else if (message instanceof ManMessageSendPosition) {
         //
         // USER POSITION RECEIVED

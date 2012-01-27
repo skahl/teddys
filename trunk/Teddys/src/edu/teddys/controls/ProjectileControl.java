@@ -5,18 +5,20 @@
 package edu.teddys.controls;
 
 import com.jme3.bullet.control.RigidBodyControl;
-import edu.teddys.objects.weapons.Projectile;
+import edu.teddys.effects.GunShot;
 
 /**
  *
- * @author besient
+ * @author besient, skahl
  */
 public class ProjectileControl extends RigidBodyControl {
     
-    private Projectile projectile;
+    private GunShot projectile;
     
-    public ProjectileControl(Projectile projectile) {
-        
+    public ProjectileControl(GunShot projectile) {
+        this.projectile = projectile;
     }
+    
+    
     
 }

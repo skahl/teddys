@@ -19,7 +19,7 @@ public class JetpackEffect {
     Material mat;
     AssetManager assetManager;
     String name;
-    float particlesPerSec;
+    int particlesPerSec;
     Vector3f velocity;
     
     boolean enabled;
@@ -27,9 +27,9 @@ public class JetpackEffect {
     public JetpackEffect(String name, AssetManager assetManager) {
         this.name = name;
         this.assetManager = assetManager;
-        particlesPerSec = 30f;
+        particlesPerSec = 30;
         enabled = false;
-        velocity = new Vector3f(-1f, 4f, 0f);
+        velocity = new Vector3f(-1f, -4f, 0f);
         
         mother = new Node("node_"+name);
         pe = new ParticleEmitter("jetPack",
@@ -46,14 +46,14 @@ public class JetpackEffect {
         pe.setImagesX(15); pe.setImagesY(1);
         pe.setEndColor(new ColorRGBA(1f, 0f, 0f, 1f));   // red
         pe.setStartColor(new ColorRGBA(1f, 1f, 0.5f, 1f)); // yellow-ish
-        pe.getParticleInfluencer().setInitialVelocity(new Vector3f(-1f,-4f,0f));
+        pe.getParticleInfluencer().setInitialVelocity(velocity);
         pe.setStartSize(0.25f);
         pe.setEndSize(0.08f);
         pe.setGravity(0,0,0);
         pe.setLowLife(0.2f);
         pe.setHighLife(0.4f);
         pe.getParticleInfluencer().setVelocityVariation(0.1f);  
-        pe.setParticlesPerSec(0f);
+        pe.setParticlesPerSec(0);
         
         
         mother.attachChild(pe);

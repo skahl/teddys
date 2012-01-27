@@ -146,7 +146,7 @@ public class BaseGame extends SimpleApplication {
     stateManager.attach(new Pause());
 
     // init thread pool with size
-    threadPool = new ScheduledThreadPoolExecutor(4);
+    threadPool = new ScheduledThreadPoolExecutor(6);
 
     // Post Processing Filter initialization
 
@@ -245,13 +245,11 @@ public class BaseGame extends SimpleApplication {
   public void stop() {
     super.stop();
 
-    stateManager.cleanup();
-
-    threadPool.shutdown();
-
     TeddyClient.getInstance().disconnect();
 
     TeddyServer.getInstance().stopServer();
+
+    threadPool.shutdown();
   }
 
   public ScheduledThreadPoolExecutor getThreadPool() {

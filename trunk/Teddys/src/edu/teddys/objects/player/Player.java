@@ -2,13 +2,9 @@ package edu.teddys.objects.player;
 
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.scene.Node;
-import edu.teddys.MegaLogger;
-import edu.teddys.input.InputType;
-import edu.teddys.input.PlayerControl;
+import edu.teddys.controls.PlayerControl;
 import edu.teddys.network.ClientData;
-import edu.teddys.input.SimpleTriple;
 import edu.teddys.states.Game;
-import java.util.LinkedList;
 
 /**
  *  Singleton Player
@@ -43,7 +39,7 @@ public class Player {
     // physics
     collisionShape = new CapsuleCollisionShape(visual.getWidth() * 0.3f, visual.getHeight() * 0.35f, 1);
 
-    control = new PlayerControl(node, collisionShape, 0.02f);
+    control = new PlayerControl(node, collisionShape, 0.02f, visual);
     if (id == LOCAL_PLAYER) {
       //TODO check
 //      control.registerWithInput(game.getInputManager());
@@ -79,34 +75,4 @@ public class Player {
     return instance;
   }
 
-  /**
-   * 
-   * New input data has arrived, that means some events can be triggered,
-   * such as jumps, jetpack activation etc.
-   * 
-   * @param input A queue of actions gathered in the last time frame.
-   */
-  public void newInput(LinkedList<SimpleTriple> input) {
-
-    SimpleTriple entry = null;
-    while (input.size() > 0) {
-      entry = input.pop();
-//    MegaLogger.getLogger().debug("input: " + entry);
-      if(entry.getType() == InputType.Analog) {
-          getPlayerControl().onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
-          visual.onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
-      } else {
-          visual.stand();
-      }
-      
-      if(entry.getType() == InputType.Action) {
-          if (entry.getValue() instanceof Boolean) {
-            getPlayerControl().onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
-            visual.onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
-          } else {
-            MegaLogger.getLogger().error(new Throwable("Action event invalid! Value is not a Boolean!"));
-          }
-      }
-    }
-  }
 }

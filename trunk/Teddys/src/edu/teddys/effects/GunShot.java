@@ -24,24 +24,22 @@ public class GunShot {
         
         this.assetManager = assetManager;
         mother = new Node(name+"_gun");
-        pe = new ParticleEmitter(name+"_gunshots", ParticleMesh.Type.Triangle, 1);
+        pe = new ParticleEmitter(name+"_gunshots", ParticleMesh.Type.Triangle, 20);
         mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         
-        mat.getAdditionalRenderState().setAlphaTest(true);
         
         mat.setTexture("Texture", assetManager.loadTexture(texture));
         pe.setMaterial(mat);
         pe.setImagesX(1); pe.setImagesY(1);
         pe.setEndColor(new ColorRGBA(0f, 0f, 0f, 1f));   // red
         pe.setStartColor(new ColorRGBA(0f, 0f, 0f, 1f)); // yellow-ish
-        pe.getParticleInfluencer().setInitialVelocity(new Vector3f(10f,0f,0f));
+        pe.getParticleInfluencer().setInitialVelocity(new Vector3f(1f,0f,0f));
         pe.setStartSize(0.25f);
         pe.setEndSize(0.25f);
         pe.setGravity(0,0,0);
         pe.setLowLife(0.9f);
         pe.setHighLife(1f);
-        pe.getParticleInfluencer().setVelocityVariation(0f);
-        pe.setParticlesPerSec(0.0f);
+        //pe.getParticleInfluencer().setVelocityVariation(0f);
         
         
         mother.attachChild(pe);
