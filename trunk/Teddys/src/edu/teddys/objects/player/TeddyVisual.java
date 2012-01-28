@@ -36,8 +36,8 @@ public class TeddyVisual {
     
     // effect attributes
     JetpackEffect jetpackFx;
-    
     GunShot currentWeapon;
+    
     
     public TeddyVisual(Node node, AssetManager assetManager) {
         // control init
@@ -52,6 +52,7 @@ public class TeddyVisual {
         
         // gun init
         currentWeapon = new ShotBaerenpistole(node.getName(), assetManager);
+        currentWeapon.getNode().setLocalTranslation(0.2f, 0.1f, 0f);
         node.attachChild(currentWeapon.getNode());
         
         // quad and materials init
@@ -112,6 +113,10 @@ public class TeddyVisual {
         return quad;
     }
     
+    public GunShot getWeapon() {
+        return currentWeapon;
+    }
+    
     public void runLeft() {
         if(!isRunning) {
             isRunning = true;
@@ -164,6 +169,10 @@ public class TeddyVisual {
         } else if (name.equals(AnalogControllerEnum.MOVE_RIGHT.name())) {
             runRight();
         }
+        
+        if (name.equals(AnalogControllerEnum.WEAPON.name())) {
+            currentWeapon.shoot();
+        }
 
     }
 
@@ -173,14 +182,6 @@ public class TeddyVisual {
                 jetpackFx.setEnabled(true);
             } else {
                 jetpackFx.setEnabled(false);
-            }
-        }
-        
-        if (name.equals(ActionControllerEnum.WEAPON.name())) {
-            if (isPressed) {
-                currentWeapon.shoot();
-                
-                MegaLogger.getLogger().info(new Throwable("Shooting!"));
             }
         }
     }

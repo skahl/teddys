@@ -26,7 +26,8 @@ import java.util.Map;
  */
 public class PlayerControl extends CharacterControl implements AnalogListener, ActionListener {
 
-  private TeddyVisual visual; 
+  private TeddyVisual visual;
+  
   private float moveSpeed = 2f;
   private boolean jetpackActive;
   private float jetpackDischargeRate = 75f;
@@ -40,6 +41,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   // player control input from server
   private LinkedList<SimpleTriple> serverControlInput;
   private short controlTimer = 0;
+  private short weaponTimer = 0;
   private short hudUpdateTimer = 0;
 
   public PlayerControl(Spatial player, CollisionShape collisionShape, float stepHeight, TeddyVisual vis) {
@@ -64,11 +66,22 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
   public void onAnalog(String name, float value, float tpf) {
     if (name.equals(AnalogControllerEnum.MOVE_LEFT.name())) {
+      
+      // reset control timer
+      controlTimer = 0;  
+        
       vel = left.mult(moveSpeed * tpf);
       warp(getPhysicsLocation().add(vel));
     } else if (name.equals(AnalogControllerEnum.MOVE_RIGHT.name())) {
+      
+      // reset control timer
+      controlTimer = 0;  
+        
       vel = right.mult(moveSpeed * tpf);
       warp(getPhysicsLocation().add(vel));
+    } else if (name.equals(AnalogControllerEnum.WEAPON.name())) {
+      // reset weapon timer
+      weaponTimer = 0;
     }
 
   }
@@ -129,6 +142,13 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
         controlTimer = 0;
     }
     
+    // increase weapon timer
+    weaponTimer++;
+    if(weaponTimer > 10) {
+        visual.getWeapon().stop();
+        weaponTimer = 0;
+    }
+    
     // increase HUD timer and act on it, if necessary
     hudUpdateTimer++;
     if(hudUpdateTimer > 3) {
@@ -139,8 +159,6 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     
     SimpleTriple entry = null;
     while (serverControlInput.size() > 0) {
-      // reset control timer
-      controlTimer = 0;
         
       entry = serverControlInput.pop();
 //    MegaLogger.getLogger().debug("input: " + entry);

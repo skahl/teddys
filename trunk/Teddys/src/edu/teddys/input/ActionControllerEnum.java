@@ -16,8 +16,7 @@ import com.jme3.input.controls.Trigger;
  */
 public enum ActionControllerEnum {
   
-  JETPACK(new Trigger[]{new KeyTrigger(KeyInput.KEY_SPACE)}),
-  WEAPON(new Trigger[]{new MouseButtonTrigger(MouseInput.BUTTON_LEFT)});
+  JETPACK(new Trigger[]{new KeyTrigger(KeyInput.KEY_SPACE)});
   
   private final Trigger[] keys;
 
