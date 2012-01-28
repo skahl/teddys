@@ -18,7 +18,7 @@ public enum AnalogControllerEnum {
 
   MOVE_LEFT(new Trigger[]{new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_LEFT)}),
   MOVE_RIGHT(new Trigger[]{new KeyTrigger(KeyInput.KEY_D), new KeyTrigger(KeyInput.KEY_RIGHT)}),
-  
+  JETPACK(new Trigger[]{new KeyTrigger(KeyInput.KEY_SPACE)}),
   WEAPON(new Trigger[]{new MouseButtonTrigger(MouseInput.BUTTON_LEFT)});
 
   

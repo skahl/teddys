@@ -5,6 +5,8 @@ import com.jme3.asset.AssetManager;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -42,13 +44,17 @@ public class JetpackEffect {
     private void init() {
         
         mat.setTexture("Texture", assetManager.loadTexture("Textures/Effects/Smoke/Smoke.png"));
+        mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+        mat.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
+        mat.getAdditionalRenderState().setAlphaTest(true);
+        
         pe.setMaterial(mat);
         pe.setImagesX(15); pe.setImagesY(1);
         pe.setEndColor(new ColorRGBA(1f, 0f, 0f, 1f));   // red
-        pe.setStartColor(new ColorRGBA(1f, 1f, 0.5f, 1f)); // yellow-ish
+        pe.setStartColor(new ColorRGBA(1f, 1f, 0.7f, 1f)); // yellow-ish
         pe.getParticleInfluencer().setInitialVelocity(velocity);
         pe.setStartSize(0.25f);
-        pe.setEndSize(0.08f);
+        pe.setEndSize(0.04f);
         pe.setGravity(0,0,0);
         pe.setLowLife(0.2f);
         pe.setHighLife(0.4f);
@@ -79,6 +85,7 @@ public class JetpackEffect {
     
     public void switchVelocity() {
         velocity.x = velocity.x * -1f;
+        pe.getParticleInfluencer().setInitialVelocity(velocity);
     }
     
 }

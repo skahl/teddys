@@ -6,6 +6,7 @@ import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.Trigger;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 import edu.teddys.MegaLogger;
@@ -28,6 +29,12 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
   private TeddyVisual visual;
   
+  // screen positions of cursor and player
+  private Vector2f vectorPlayerToCursor = new Vector2f(1f, 0f);
+  private Vector2f defaultVectorPlayerToCursor = new Vector2f(1f, 0f);
+  // angle between player and cursor on screen
+  private Float angleToDefaultVector = 0f;
+  
   private float moveSpeed = 2f;
   private boolean jetpackActive;
   private float jetpackDischargeRate = 75f;
@@ -36,11 +43,12 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   private float currentEnergy = totalJetpackEnergy;
   private float oldGravity = 4f;
   private InputManager input;
-  private Vector3f vel, left, right;
+  private Vector3f left, right;
   
   // player control input from server
   private LinkedList<SimpleTriple> serverControlInput;
   private short controlTimer = 0;
+  private short jetpackTimer = 0;
   private short weaponTimer = 0;
   private short hudUpdateTimer = 0;
 
@@ -54,6 +62,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
     left = new Vector3f(-1, 0, 0);
     right = new Vector3f(1, 0, 0);
+    
   }
 
   public void registerWithInput(InputManager input) {
@@ -69,38 +78,72 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
       
       // reset control timer
       controlTimer = 0;  
-        
-      vel = left.mult(moveSpeed * tpf);
-      warp(getPhysicsLocation().add(vel));
+      
+      // better for physics than warp(getPhysicsLocation().add(vel));
+      setWalkDirection(left.mult(moveSpeed * tpf));
+      
+      // visual
+      if(!jetpackActive && onGround()) {
+        visual.runLeft();
+      } else {
+        visual.standLeft();
+      }
+      
     } else if (name.equals(AnalogControllerEnum.MOVE_RIGHT.name())) {
       
       // reset control timer
       controlTimer = 0;  
-        
-      vel = right.mult(moveSpeed * tpf);
-      warp(getPhysicsLocation().add(vel));
-    } else if (name.equals(AnalogControllerEnum.WEAPON.name())) {
+      
+      // better for physics than warp(getPhysicsLocation().add(vel));
+      setWalkDirection(right.mult(moveSpeed * tpf));
+      
+      // visual
+      if(!jetpackActive && onGround()) {
+        visual.runRight();
+      } else {
+        visual.standRight();
+      }
+      
+    }
+    
+    if (name.equals(AnalogControllerEnum.WEAPON.name())) {
       // reset weapon timer
       weaponTimer = 0;
+      
+      // visual
+      visual.getWeapon().shoot();
+      
+    }
+    
+    if (name.contains(AnalogControllerEnum.JETPACK.name())) {
+        
+      jetpackTimer = 0;
+      
+      if (!jetpackActive) {
+        startJetpack();
+      }
     }
 
   }
 
   public void onAction(String name, boolean isPressed, float tpf) {
-    if (name.equals(ActionControllerEnum.JETPACK.name())) {
-      if (!jetpackActive && isPressed) {
-        startJetpack();
-      } else {
-        stopJetpack();
-      }
-    }
+//    if (name.equals(ActionControllerEnum.JETPACK.name())) {
+//      if (!jetpackActive && isPressed) {
+//        startJetpack();
+//      } else {
+//        stopJetpack();
+//      }
+//    }
   }
 
   private void startJetpack() {
-    if (currentEnergy > 0f) {
+    if (currentEnergy > 25f) {
       oldGravity = getGravity();
       setGravity(-getGravity());
       jetpackActive = true;
+      
+      visual.stand();
+      visual.getJetpack().setEnabled(true);
     } else {
       stopJetpack();
     }
@@ -109,11 +152,19 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   private void stopJetpack() {
     setGravity(oldGravity);
     jetpackActive = false;
+    
+    visual.getJetpack().setEnabled(false);
   }
 
   @Override
   public void setGravity(float value) {
     super.setGravity(value);
+  }
+  
+  public void setScreenPositions(Vector2f playerPos, Vector2f cursorPos) {
+      
+      vectorPlayerToCursor = (cursorPos.subtract(playerPos)).normalizeLocal();
+      visual.getWeapon().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
   }
 
   @Override
@@ -136,10 +187,19 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     
     // increase control timer and act on it, if necessary
     controlTimer++;
-    if(controlTimer > 10) {
+    if(controlTimer > 5) {
+        setWalkDirection(Vector3f.ZERO);
         visual.stand(); // enough running without input, stand still!
         
         controlTimer = 0;
+    }
+    
+    // increase jetpack timer and act on it
+    jetpackTimer++;
+    if(jetpackTimer > 5) {
+        stopJetpack();
+        
+        jetpackTimer = 0;
     }
     
     // increase weapon timer
@@ -151,9 +211,14 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     
     // increase HUD timer and act on it, if necessary
     hudUpdateTimer++;
-    if(hudUpdateTimer > 3) {
+    if(hudUpdateTimer > 4) {
         hudUpdateTimer = 0;
         
+        // calculate the angle from the default up vector of the player, to the cursor's position:
+        angleToDefaultVector = defaultVectorPlayerToCursor.angleBetween(vectorPlayerToCursor);
+        //MegaLogger.getLogger().info(new Throwable(angleToDefaultVector.toString()));
+        
+        // update HUD 
         HUDController.getInstance().setJetpackEnergy((int) currentEnergy);
     }
     
@@ -164,11 +229,9 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 //    MegaLogger.getLogger().debug("input: " + entry);
       if(entry.getType() == InputType.Analog) {
           onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
-          visual.onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
       } else if(entry.getType() == InputType.Action) {
           if (entry.getValue() instanceof Boolean) {
             onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
-            visual.onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
           } else {
             MegaLogger.getLogger().error(new Throwable("Action event invalid! Value is not a Boolean!"));
           }

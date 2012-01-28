@@ -10,6 +10,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Spatial;
+import edu.teddys.objects.player.Player;
 
 /**
  *
@@ -29,13 +30,13 @@ public class CrosshairControl implements AnalogListener {
     private Camera cam;
 
     private CameraNode camNode;
-    private Spatial player;
+    private Player player;
     private Cursor crosshair;
     private float minCamX, maxCamX, minCamY, maxCamY, minMouseX, minMouseY, maxMouseX, maxMouseY, width, height;
 
     
     
-    public CrosshairControl(CameraNode camNode, Spatial player, Cursor crosshair, int width, int height) {
+    public CrosshairControl(CameraNode camNode, Player player, Cursor crosshair, int width, int height) {
 
         this.camNode = camNode;
         cam = camNode.getCamera();
@@ -120,7 +121,7 @@ public class CrosshairControl implements AnalogListener {
         crosshair.setPosition(newPos.x, newPos.y);
         
         boolean move = true;
-        Vector3f playerPos = cam.getScreenCoordinates(player.getWorldTranslation());
+        Vector3f playerPos = cam.getScreenCoordinates(player.getNode().getWorldTranslation());
 
         
         if (playerPos.x < minCamX) 
@@ -142,6 +143,10 @@ public class CrosshairControl implements AnalogListener {
         
         if (move) 
             camNode.move(camVel); 
+        
+        
+        // inform the player about the cursor's position
+        player.getPlayerControl().setScreenPositions(new Vector2f(playerPos.x, playerPos.y), crosshair.getPosition());
         
     }
 

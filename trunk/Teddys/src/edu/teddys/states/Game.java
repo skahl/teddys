@@ -183,7 +183,7 @@ public class Game extends AbstractAppState {
     camNode.lookAt(dir, new Vector3f(0, 1, 0));
 
     // Input
-    CrosshairControl cameraControl = new CrosshairControl(camNode, player.getNode(), cursor,
+    CrosshairControl cameraControl = new CrosshairControl(camNode, player, cursor,
             this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
     cameraControl.registerWithInput(inputManager);
 

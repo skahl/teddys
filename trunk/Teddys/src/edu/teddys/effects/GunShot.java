@@ -23,6 +23,8 @@ public class GunShot {
     AssetManager assetManager;
     int numParticles;
     boolean shooting;
+    float velocity;
+    Vector3f vector;
     
     
     protected void init(String name, AssetManager assetManager, String texture) {
@@ -60,8 +62,14 @@ public class GunShot {
         pe.setEndColor(rgba);
     }
     
+    public void setVelocity(float velocity) {
+        this.velocity = velocity;
+    } 
+    
     public void setVector(Vector3f initialVector) {
-        pe.getParticleInfluencer().setInitialVelocity(initialVector);
+        
+        vector = initialVector;
+        pe.getParticleInfluencer().setInitialVelocity(vector.mult(velocity));
     }
     
     public void setNumParticles(int numParticles) {

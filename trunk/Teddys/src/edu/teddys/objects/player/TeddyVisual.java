@@ -14,8 +14,6 @@ import edu.teddys.MegaLogger;
 import edu.teddys.effects.GunShot;
 import edu.teddys.effects.JetpackEffect;
 import edu.teddys.effects.ShotBaerenpistole;
-import edu.teddys.input.ActionControllerEnum;
-import edu.teddys.input.AnalogControllerEnum;
 
 /**
  *
@@ -117,20 +115,17 @@ public class TeddyVisual {
         return currentWeapon;
     }
     
+    public JetpackEffect getJetpack() {
+        return jetpackFx;
+    }
+    
     public void runLeft() {
         if(!isRunning) {
             isRunning = true;
             geo.setMaterial(running);
         }
     
-        if(!runLeft) {
-            runLeft = true;
-            running.setBoolean("Mirrored", runLeft);
-            
-            // move jetpack
-            jetpackFx.getNode().setLocalTranslation(0.30f, -0.25f, 0.0f);
-            jetpackFx.switchVelocity();
-        }
+        lookLeft();
     }
     
     public void runRight() {
@@ -139,9 +134,26 @@ public class TeddyVisual {
             geo.setMaterial(running);
         }
         
+        lookRight();
+    }
+    
+    public void lookLeft() {
+        if(!runLeft) {
+            runLeft = true;
+            running.setBoolean("Mirrored", runLeft);
+            standing.setBoolean("Mirrored", runLeft);
+            
+            // move jetpack
+            jetpackFx.getNode().setLocalTranslation(0.30f, -0.25f, 0.0f);
+            jetpackFx.switchVelocity();
+        }
+    }
+    
+    public void lookRight() {
         if(runLeft) {
             runLeft = false;
             running.setBoolean("Mirrored", runLeft);
+            standing.setBoolean("Mirrored", runLeft);
             
             // move jetpack
             jetpackFx.getNode().setLocalTranslation(-0.30f, -0.25f, 0.0f);
@@ -159,30 +171,19 @@ public class TeddyVisual {
         }
     }
     
-    public void viewDir(int dir) {
-        lookDir = dir;
+    public void standRight() {
+        lookRight();
+        
+        stand();
     }
     
-    public void onAnalog(String name, float value, float tpf) {
-        if (name.equals(AnalogControllerEnum.MOVE_LEFT.name())) {
-            runLeft();
-        } else if (name.equals(AnalogControllerEnum.MOVE_RIGHT.name())) {
-            runRight();
-        }
+    public void standLeft() {
+        lookLeft();
         
-        if (name.equals(AnalogControllerEnum.WEAPON.name())) {
-            currentWeapon.shoot();
-        }
-
+        stand();
     }
-
-    public void onAction(String name, boolean isPressed, float tpf) {
-        if (name.equals(ActionControllerEnum.JETPACK.name())) {
-            if (isPressed) {
-                jetpackFx.setEnabled(true);
-            } else {
-                jetpackFx.setEnabled(false);
-            }
-        }
+    
+    public void viewDir(int dir) {
+        lookDir = dir;
     }
 }
