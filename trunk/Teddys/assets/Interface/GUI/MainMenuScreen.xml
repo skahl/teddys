@@ -5,7 +5,7 @@
   <useControls filename="nifty-default-controls.xml"/>
   <useStyles filename="nifty-default-styles.xml"/>
   
-  <screen id="MAIN_MENU" controller="edu.teddys.menu.MainScreenController">
+  <screen id="MAIN_MENU" controller="edu.teddys.states.MainMenu">
       
     <layer id="background" backgroundColor="#000f">
        
@@ -34,16 +34,29 @@
         <panel id="entries_mid_panel" height="60%" width="75%" align="center" childLayout="vertical" backgroundColor="#0f08"> 
         
             <control name="button" label="Join Game" id="join_button" align="center" valign="top" visibleToMouse="true">
-                <interact onClick="create()"/>
+                <interact onClick="showJoinScreen()"/>
             </control>
-            <control name="button" label="Create Game" id="create_button" align="center" valign="center"/>
-            <control name="button" label="Options" id="options_button" align="center" valign="center"/>
-            <control name="button" label="Credits" id="credits_button" align="center" valign="center"/>
-            <control name="button" label="Exit" id="exit_button" align="center" valign="center"/>
             
+            <control name="button" label="Create Game" id="create_button" align="center" valign="center">
+                <interact onClick="showCreateScreen()"/>
+            </control>
+            
+            <control name="button" label="Options" id="options_button" align="center" valign="center">
+                <interact onClick="showOptionsScreen()"/>
+            </control>
+            
+            <control name="button" label="Credits" id="credits_button" align="center" valign="center">
+                <interact onClick="showCreditsScreen()"/>
+            </control>
+            
+       
         </panel>
         
-        <panel id="entries_bottom_panel" height="10%" width="75%" align="center" childLayout="center" backgroundColor="#88f8"/>
+        <panel id="entries_bottom_panel" height="10%" width="75%" align="center" childLayout="center" backgroundColor="#88f8">
+            <control name="button" label="Exit" id="exit_button" align="center" valign="center">
+                <interact onClick="exit()"/>
+            </control>
+        </panel>
         
     </layer>
     

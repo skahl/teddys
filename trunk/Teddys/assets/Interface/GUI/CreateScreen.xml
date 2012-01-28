@@ -5,7 +5,7 @@
   <useControls filename="nifty-default-controls.xml"/>
   <useStyles filename="nifty-default-styles.xml"/>
   
-  <screen id="CREATE_GAME" controller="edu.teddys.menu.CreateScreenController">
+  <screen id="CREATE_GAME" controller="edu.teddys.states.MainMenu">
       
     <layer id="background" backgroundColor="#000f">
        

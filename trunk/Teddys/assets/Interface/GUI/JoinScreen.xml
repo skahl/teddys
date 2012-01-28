@@ -5,7 +5,7 @@
   <useControls filename="nifty-default-controls.xml"/>
   <useStyles filename="nifty-default-styles.xml"/>
   
-  <screen id="JOIN_GAME" controller="edu.teddys.menu.JoinScreenController">
+  <screen id="JOIN_GAME" controller="edu.teddys.states.MainMenu">
       
     <layer id="background" backgroundColor="#000f">
        
@@ -37,7 +37,11 @@
             
         </panel>
         
-        <panel id="entries_bottom_panel" height="10%" width="100%" align="center" childLayout="center" backgroundColor="#88f8"/>
+        <panel id="entries_bottom_panel" height="10%" width="100%" align="center" childLayout="center" backgroundColor="#88f8">
+            <control name="button" label="Back" id="back_button" align="center" valign="center">
+                <interact onClick="back()"/>
+            </control>
+        </panel>
         
     </layer>
     
