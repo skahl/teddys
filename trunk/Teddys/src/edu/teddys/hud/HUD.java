@@ -22,7 +22,7 @@ import java.util.Map;
  */
 public class HUD {
 
-  public Node hudNode;
+  public Node hudNode, parent;
     
   
   private final int numMessages = 5;
@@ -58,7 +58,8 @@ public class HUD {
 
       
     hudNode = new Node("hudNode");
-
+    this.parent = parent;
+    
     imageSize = (int) (height / 20);
     iconOffset = 3 * imageSize;
     hudHeight = height / 30;
@@ -239,6 +240,16 @@ public class HUD {
   
   private void initTeam() {
       
+  }
+  
+  public void show() { 
+      if (!parent.hasChild(hudNode))
+        parent.attachChild(hudNode);
+  }
+  
+  public void hide() {
+      if (parent.hasChild(hudNode))
+        parent.detachChild(hudNode);
   }
   
   public static HUD getInstance(Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
