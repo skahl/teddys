@@ -86,7 +86,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
       if(!jetpackActive && onGround()) {
         visual.runLeft();
       } else {
-        visual.standLeft();
+        visual.stand();
       }
       
     } else if (name.equals(AnalogControllerEnum.MOVE_RIGHT.name())) {
@@ -101,7 +101,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
       if(!jetpackActive && onGround()) {
         visual.runRight();
       } else {
-        visual.standRight();
+        visual.stand();
       }
       
     }
@@ -215,8 +215,10 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
         hudUpdateTimer = 0;
         
         // calculate the angle from the default up vector of the player, to the cursor's position:
-        angleToDefaultVector = defaultVectorPlayerToCursor.angleBetween(vectorPlayerToCursor);
+        //angleToDefaultVector = defaultVectorPlayerToCursor.angleBetween(vectorPlayerToCursor);
         //MegaLogger.getLogger().info(new Throwable(angleToDefaultVector.toString()));
+        // inform the visual representation of this player about the view angle
+        visual.setViewVector(vectorPlayerToCursor);
         
         // update HUD 
         HUDController.getInstance().setJetpackEnergy((int) currentEnergy);

@@ -3,6 +3,7 @@ package edu.teddys.objects.player;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
@@ -24,7 +25,6 @@ public class TeddyVisual {
     // control attributes
     boolean isRunning;
     boolean runLeft;
-    int lookDir;
     
     // visual attributes
     Quad quad;
@@ -41,7 +41,6 @@ public class TeddyVisual {
         // control init
         isRunning = false;
         runLeft = false;
-        lookDir = 3; // default: look streight ahead!
         
         // effect init
         jetpackFx = new JetpackEffect(node.getName(), assetManager);
@@ -64,7 +63,7 @@ public class TeddyVisual {
         standing = assetManager.loadMaterial("Materials/teddyStand/teddyStand.j3m");
         standing.getAdditionalRenderState().setAlphaTest(true);
         standing.setTexture("TexMap", blueStand);
-        standing.setInt("SelectedTile", lookDir);
+        standing.setInt("SelectedTile", 3);
         standing.setInt("MaxTiles", 7);
         standing.setBoolean("Mirrored", false);
         
@@ -74,7 +73,7 @@ public class TeddyVisual {
         running = assetManager.loadMaterial("Materials/teddyRun/teddyRun.j3m");
         running.getAdditionalRenderState().setAlphaTest(true);
         running.setTexture("TexMap", blueRun);
-        running.setInt("SelectedTile", lookDir);
+        running.setInt("SelectedTile", 3);
         running.setInt("MaxTilesX", 7);
         running.setInt("MaxTilesY", 4);
         running.setFloat("Speed", 8.0f);
@@ -119,46 +118,27 @@ public class TeddyVisual {
         return jetpackFx;
     }
     
-    public void runLeft() {
+    public void run() {
         if(!isRunning) {
             isRunning = true;
             geo.setMaterial(running);
         }
+    }
     
-        lookLeft();
+    public void runLeft() {
+        if(!runLeft) {
+            runLeft=true;
+        }
+        
+        run();
     }
     
     public void runRight() {
-        if(!isRunning) {
-            isRunning = true;
-            geo.setMaterial(running);
+        if(runLeft) {
+            runLeft=false;
         }
         
-        lookRight();
-    }
-    
-    public void lookLeft() {
-        if(!runLeft) {
-            runLeft = true;
-            running.setBoolean("Mirrored", runLeft);
-            standing.setBoolean("Mirrored", runLeft);
-            
-            // move jetpack
-            jetpackFx.getNode().setLocalTranslation(0.30f, -0.25f, 0.0f);
-            jetpackFx.switchVelocity();
-        }
-    }
-    
-    public void lookRight() {
-        if(runLeft) {
-            runLeft = false;
-            running.setBoolean("Mirrored", runLeft);
-            standing.setBoolean("Mirrored", runLeft);
-            
-            // move jetpack
-            jetpackFx.getNode().setLocalTranslation(-0.30f, -0.25f, 0.0f);
-            jetpackFx.switchVelocity();
-        }
+        run();
     }
     
     public void stand() {
@@ -166,24 +146,87 @@ public class TeddyVisual {
             isRunning = false;
             
             geo.setMaterial(standing);
-            standing.setInt("SelectedTile", lookDir);
-            standing.setBoolean("Mirrored", runLeft);
         }
     }
     
-    public void standRight() {
-        lookRight();
+    public void setViewVector(Vector2f vector) {
         
-        stand();
-    }
-    
-    public void standLeft() {
-        lookLeft();
+        boolean mirrored;
+        int selectedTile;
+
+        if(vector.x > 0f) {
+           mirrored = false;
+        } else {
+           mirrored = true;
+        }
+            
+            
+        if(vector.y > 0f) {
+
+           if(vector.y > 0.5f) {
+               // check 1st quadrant cases
+               if(vector.y > 0.825f) {
+                   selectedTile = 0;
+               } else {
+                   selectedTile = 1;
+               }
+           } else {
+               // check 2nd quadrant cases
+               if(vector.y > 0.165f) {
+                   selectedTile = 2;
+               } else {
+                   selectedTile = 3;
+               }
+           }
+
+        } else {
+
+           if(vector.y > -0.5f) {
+               // check 3rd quadrant cases
+               if(vector.y > -0.165f) {
+                   selectedTile = 3;
+               } else {
+                   selectedTile = 4;
+               }
+           } else {
+               // check 4th quadrant cases
+               if(vector.y > -0.825f) {
+                   selectedTile = 5;
+               } else {
+                   selectedTile = 6;
+               }
+           }
+
+        }
         
-        stand();
-    }
-    
-    public void viewDir(int dir) {
-        lookDir = dir;
+        //MegaLogger.getLogger().info(new Throwable("selectedTile: "+String.valueOf(selectedTile)+" Vector-Y: "+String.valueOf(vector.y)));
+        
+        // set shader control
+        standing.setInt("SelectedTile", selectedTile);
+        standing.setBoolean("Mirrored", mirrored);
+        running.setInt("SelectedTile", selectedTile);
+        running.setBoolean("Mirrored", mirrored);
+        
+        if(mirrored) {
+            if(runLeft) {
+                running.setBoolean("Reverse", false);
+            } else {
+                running.setBoolean("Reverse", true);
+            }
+            
+            // move jetpack
+            jetpackFx.getNode().setLocalTranslation(0.30f, -0.25f, 0.0f);
+            jetpackFx.switchVelocity();
+        } else {
+            if(runLeft) {
+                running.setBoolean("Reverse", true);
+            } else {
+                running.setBoolean("Reverse", false);
+            }
+            
+            // move jetpack
+            jetpackFx.getNode().setLocalTranslation(-0.30f, -0.25f, 0.0f);
+            jetpackFx.switchVelocity();
+        }
     }
 }
