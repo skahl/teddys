@@ -22,8 +22,7 @@ import java.util.Map;
  */
 public class HUD {
 
-  public Node hudNode, parent;
-    
+  private Node hudNode, parent;    
   
   private final int numMessages = 5;
   private List<BitmapText> messages;
@@ -219,7 +218,7 @@ public class HUD {
     weaponList.addItem("Test3", 2, "Interface/HUD/placeholder.png", ColorRGBA.Yellow);
     weaponList.addItem("Test4", 3, "Interface/HUD/placeholder.png", ColorRGBA.Orange);
     weaponList.addItem("Test5", 2, "Interface/HUD/placeholder.png", ColorRGBA.Green);
-    weaponList.show();
+    //weaponList.show();
     
     //parent.attachChild(hudNode);
 
@@ -320,4 +319,9 @@ public class HUD {
   public IconList getWeaponList() {
       return weaponList;
   }
+  
+  public Node getNode() {
+    return hudNode;
+  }
 }
+

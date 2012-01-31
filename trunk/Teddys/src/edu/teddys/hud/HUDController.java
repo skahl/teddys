@@ -31,7 +31,7 @@ public class HUDController extends UpdateControl implements ActionListener {
 
   private boolean weaponsShown;
   private float timeToShow = 5;
-  private float timeShown;
+  private float timeShown = 0;
   
   private InputManager input;
   
@@ -62,8 +62,12 @@ public class HUDController extends UpdateControl implements ActionListener {
   }
 
   public void setHUD(final HUD hud) {
-      this.hud = hud;
-      hudSet = true;
+      if (!hudSet) {
+        this.hud = hud;
+      
+        hud.getNode().addControl(this);
+        hudSet = true;
+      }
   }
   public static HUDController getInstance() {
     if (instance == null) {
@@ -142,8 +146,12 @@ public class HUDController extends UpdateControl implements ActionListener {
      input.addListener(this, new String[]{"nextWeapon", "previousWeapon"});
  }
  
-    @Override
+ @Override
  public void update(float tpf) {
-
+     if (weaponsShown) {
+        timeShown += tpf;
+        if (timeShown > timeToShow) 
+            hideWeapons();
+     }   
  }
 }
