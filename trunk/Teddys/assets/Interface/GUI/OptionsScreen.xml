@@ -5,7 +5,7 @@
   <useControls filename="nifty-default-controls.xml"/>
   <useStyles filename="nifty-default-styles.xml"/>
   
-  <screen id="OPTIONS_MENU" controller="edu.teddys.states.MainMenu">
+  <screen id="OPTIONS_MENU" controller="edu.teddys.menu.MainMenu">
       
     <layer id="background" backgroundColor="#000f">
        
