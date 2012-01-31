@@ -221,7 +221,7 @@ public class HUD {
     weaponList.addItem("Test5", 2, "Interface/HUD/placeholder.png", ColorRGBA.Green);
     weaponList.show();
     
-    parent.attachChild(hudNode);
+    //parent.attachChild(hudNode);
 
     
     

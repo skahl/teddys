@@ -81,7 +81,7 @@ public class Game extends AbstractAppState {
 
       // attach keys
       initKeys(true);
-
+      hud.show();
       this.enabled = true;
 
     } else if (!isActive && this.isEnabled()) {
@@ -94,7 +94,7 @@ public class Game extends AbstractAppState {
 
       // detach keys
       initKeys(false);
-
+      hud.hide();
       this.enabled = false;
     }
   }

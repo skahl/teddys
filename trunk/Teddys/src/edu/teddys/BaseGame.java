@@ -150,6 +150,11 @@ public class BaseGame extends SimpleApplication {
     inputManager.setCursorVisible(false);
     rootNode.setShadowMode(ShadowMode.Off);
     renderManager.setAlphaToCoverage(false);
+    
+    inputManager.addMapping(MappingEnum.MENU.name(), new KeyTrigger(keyInput.KEY_P));
+    inputManager.addListener(actionListener, new String[]{MappingEnum.MENU.name()});
+    initGUI();
+    
 
     stateManager.attach(new Menu());
     stateManager.attach(Game.getInstance());
@@ -173,6 +178,8 @@ public class BaseGame extends SimpleApplication {
     // init start state
     stateManager.getState(Game.class).initialize(stateManager, this);
     stateManager.getState(Game.class).setEnabled(true);
+    //stateManager.getState(Menu.class).initialize(stateManager, this);
+    //stateManager.getState(Menu.class).setEnabled(true);
 
 
     // # # # # # # # # # # # # # # NETWORK # # # # # # # # # # # # # # # #
@@ -202,9 +209,7 @@ public class BaseGame extends SimpleApplication {
 
     // # # # # # # # # # # # # # # GAME # # # # # # # # # # # # # # # #
 
-    inputManager.addMapping(MappingEnum.MENU.name(), new KeyTrigger(keyInput.KEY_P));
-    inputManager.addListener(actionListener, new String[]{MappingEnum.MENU.name()});
-    initGUI();
+    
 
   }
 
