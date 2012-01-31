@@ -5,12 +5,16 @@ import edu.teddys.states.Menu;
 import edu.teddys.states.Game;
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.network.serializing.Serializer;
+import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.system.AppSettings;
+import de.lessvoid.nifty.Nifty;
 import edu.teddys.controls.MappingEnum;
+import edu.teddys.hud.HUDController;
 import edu.teddys.input.ControllerEvents;
 import edu.teddys.network.ClientData;
 import edu.teddys.network.DeathTest;
@@ -35,6 +39,7 @@ import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.input.SimpleTriple;
+import edu.teddys.menu.MenuTypes;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.GSMessageEndGame;
 import edu.teddys.network.messages.server.ManMessageActivateItem;
@@ -47,6 +52,8 @@ import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
+import edu.teddys.states.MainMenu;
+import edu.teddys.states.PauseMenu;
 import java.io.IOException;
 import java.util.List; 
 import java.util.Map;
@@ -65,6 +72,9 @@ import org.apache.log4j.PatternLayout;
 public class BaseGame extends SimpleApplication {
   // init java logging
 
+  private NiftyJmeDisplay niftyDisplay;
+  private Nifty nifty;
+    
   public ScheduledThreadPoolExecutor threadPool; // Multithreading
   // ActionListener
   private ActionListener actionListener = new ActionListener() {
@@ -72,25 +82,25 @@ public class BaseGame extends SimpleApplication {
     public void onAction(String name, boolean keyPressed, float tpf) {
 
       if (name.equals(MappingEnum.MENU.name()) && !keyPressed) {
-        if (!stateManager.getState(Menu.class).isEnabled()) {
+        if (!stateManager.getState(Pause.class).isEnabled()) {
 
           // if a game is running while menu is activated
-          if (stateManager.getState(Game.class).isEnabled()) {
+          //if (stateManager.getState(Game.class).isEnabled()) {
             // pause the game
             stateManager.getState(Game.class).setPaused(true);
-          }
+          //}
 
-          stateManager.getState(Menu.class).setEnabled(true);
+          stateManager.getState(Pause.class).setEnabled(true);
 
         } else {
 
           // if a game is running while menu is deactivated
-          if (stateManager.getState(Game.class).isEnabled()) {
+          //if (stateManager.getState(Game.class).isEnabled()) {
             // unpause the game
             stateManager.getState(Game.class).setPaused(false);
-          }
+          //}
 
-          stateManager.getState(Menu.class).setEnabled(false);
+          stateManager.getState(Pause.class).setEnabled(false);
 
         }
       }
@@ -192,6 +202,9 @@ public class BaseGame extends SimpleApplication {
 
     // # # # # # # # # # # # # # # GAME # # # # # # # # # # # # # # # #
 
+    inputManager.addMapping(MappingEnum.MENU.name(), new KeyTrigger(keyInput.KEY_P));
+    inputManager.addListener(actionListener, new String[]{MappingEnum.MENU.name()});
+    initGUI();
 
   }
 
@@ -231,6 +244,28 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(ReqMessageRelocateServer.class);
     Serializer.registerClass(ReqMessageSendChecksum.class);
     Serializer.registerClass(ReqMessageSendClientData.class);
+  }
+  
+  private void initGUI() {
+    niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
+    nifty = niftyDisplay.getNifty();
+    guiViewPort.addProcessor(niftyDisplay);
+ 
+    nifty.addXml("Interface/GUI/MainMenuScreen.xml");
+    nifty.addXml("Interface/GUI/PauseScreen.xml");
+    nifty.addXml("Interface/GUI/BlankScreen.xml");
+    nifty.addXml("Interface/GUI/CreateScreen.xml");
+    nifty.addXml("Interface/GUI/CreditsScreen.xml");
+    nifty.addXml("Interface/GUI/JoinScreen.xml");
+    nifty.addXml("Interface/GUI/OptionsScreen.xml");
+    nifty.addXml("Interface/GUI/MessagePopup.xml");
+    
+    ((PauseMenu) nifty.getScreen(MenuTypes.PAUSE_MENU.name()).getScreenController()).setApplication(this);    
+    ((MainMenu) nifty.getScreen(MenuTypes.MAIN_MENU.name()).getScreenController()).setApplication(this);
+  }
+
+  public Nifty getNifty() {
+      return nifty;
   }
 
   @Override

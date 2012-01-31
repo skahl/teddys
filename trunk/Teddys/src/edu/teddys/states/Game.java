@@ -41,6 +41,7 @@ public class Game extends AbstractAppState {
   private BasicShadowRenderer shadowRenderer; // Shadow rendering
   private GameLoader gameLoader;
   public static HUD hud;
+  private Cursor cursor;
   private boolean paused;
   private boolean enabled;
 
@@ -67,7 +68,7 @@ public class Game extends AbstractAppState {
 
   @Override
   public boolean isEnabled() {
-    return enabled;
+    return this.enabled;
   }
 
   @Override
@@ -108,8 +109,8 @@ public class Game extends AbstractAppState {
     
     app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
 
-    paused = false;
-    enabled = false;
+    this.paused = false;
+    this.enabled = false;
 
 
     // init physics  renderstate
@@ -162,7 +163,7 @@ public class Game extends AbstractAppState {
     int crosshairSize = this.app.getSettings().getHeight() / 15;
     this.app.getAssetManager().loadTexture("Interface/HUD/crosshair.png");
 
-    Cursor cursor = new Cursor("Cursor");
+    cursor = new Cursor("Cursor");
     cursor.setImage(this.app.getAssetManager(), "Interface/HUD/crosshair.png", true);
     cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
     cursor.setHeight(crosshairSize);
@@ -240,10 +241,15 @@ public class Game extends AbstractAppState {
   public void setPaused(boolean paused) {
     if (paused && !this.paused) {
       this.paused = true;
+      
+      this.app.getGuiNode().detachChildNamed("Cursor");
+      hud.hide();
 
     } else if (!paused && this.paused) {
       this.paused = false;
 
+      hud.show();
+      this.app.getGuiNode().attachChild(cursor);
     }
   }
 

@@ -8,8 +8,10 @@ import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import de.lessvoid.nifty.Nifty;
 import edu.teddys.BaseGame;
 import edu.teddys.controls.MappingEnum;
+import edu.teddys.menu.MenuTypes;
 
 /**
  *
@@ -20,6 +22,8 @@ public class Menu extends AbstractAppState {
     private boolean enabled;
     private BaseGame app;
     private InputManager inputManager;
+    
+    private Nifty nifty;
     
     
     // ActionListener
@@ -47,12 +51,16 @@ public class Menu extends AbstractAppState {
             // activate
             this.initKeys(true);
             
+            nifty.gotoScreen(MenuTypes.MAIN_MENU.name());
+            inputManager.setCursorVisible(true);
             this.enabled = true;
             
         } else if(!isActive && this.isEnabled()) {
             // deactivate
             this.initKeys(false);
             
+            nifty.gotoScreen(MenuTypes.BLANK.name());
+            inputManager.setCursorVisible(false);
             this.enabled = false;
         }
     }
@@ -63,6 +71,8 @@ public class Menu extends AbstractAppState {
         this.app = (BaseGame)app;
         this.inputManager = this.app.getInputManager();
         enabled = false;
+        
+        nifty = ((BaseGame)app).getNifty();
         
         //initKeys(true);
         // TODO: init menu background and other menu objects

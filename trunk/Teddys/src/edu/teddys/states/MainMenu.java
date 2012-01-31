@@ -19,15 +19,18 @@ import edu.teddys.states.AppStateSwitcher;
  *
  * @author besient
  */
-public class MainMenu extends AbstractAppState implements ScreenController {
+public class MainMenu implements ScreenController {
 
     Nifty nifty;
     Screen screen;
+    
+    private Application app;
     
     BaseGame game;
     InputManager input;
     
     private boolean enabled;
+    
     
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
@@ -42,31 +45,8 @@ public class MainMenu extends AbstractAppState implements ScreenController {
         
     }
     
-    @Override
-    public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app);
-        game = (BaseGame) app;
-        input = game.getInputManager();
-        
-        enabled = false;
-    }
-    
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-    
-    @Override
-    public void setEnabled(boolean isActive) {
-        if (isActive && !this.isEnabled()) {
-            
-            input.setCursorVisible(true);
-            enabled = true;
-        } else if (!isActive && this.isEnabled()) {
-            
-            input.setCursorVisible(false);
-            enabled = false;
-        }
+    public void setApplication(Application app) {
+        this.app = app;
     }
     
     public void showJoinScreen() {

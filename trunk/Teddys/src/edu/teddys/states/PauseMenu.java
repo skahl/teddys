@@ -19,12 +19,13 @@ import edu.teddys.menu.MenuTypes;
  *
  * @author besient
  */
-public class PauseMenu extends AbstractAppState implements ScreenController {
+public class PauseMenu implements ScreenController {
 
     private Nifty nifty;
     private Screen screen;
     
-    private BaseGame game;
+    private Application app;
+    
     private InputManager input;
     
     private boolean enabled;
@@ -41,39 +42,9 @@ public class PauseMenu extends AbstractAppState implements ScreenController {
     public void onEndScreen() {
         
     }
-    
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-    
-    @Override
-    public void setEnabled(boolean isActive) {
-        
-        if(isActive && !this.isEnabled()) {
-            // activate
-            HUDController.getInstance().addMessage("Enabling Menu...");
-            input.setCursorVisible(true);
-            if (nifty != null)
-                nifty.gotoScreen(MenuTypes.PAUSE_MENU.name());
-            else 
-                HUDController.getInstance().addMessage("Error: Nifty is null!");
-            this.enabled = true;
-            
-        } else if(!isActive && this.isEnabled()) {
-            // deactivate
-            
-            input.setCursorVisible(false);
-            nifty.gotoScreen(MenuTypes.BLANK.name());
-            this.enabled = false;
-        }
-    }
-    
-    @Override
-    public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app);
-        game = (BaseGame) app;
-        input = app.getInputManager();
+
+    public void setApplication(Application app) {
+        this.app = app;
     }
     
     public void returnToGame() {
@@ -89,7 +60,7 @@ public class PauseMenu extends AbstractAppState implements ScreenController {
     }
     
     public void exit() {
-        game.stop();
+        app.stop();
     }
     
 }

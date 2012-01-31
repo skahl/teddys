@@ -8,7 +8,10 @@ import edu.teddys.controls.RotationControl;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.input.InputManager;
+import de.lessvoid.nifty.Nifty;
 import edu.teddys.BaseGame;
+import edu.teddys.menu.MenuTypes;
 
 /**
  *
@@ -18,6 +21,9 @@ public class Pause extends AbstractAppState {
     
     private boolean enabled;
     private BaseGame app;
+    private InputManager inputManager;
+    
+    private Nifty nifty;
     
     
     @Override
@@ -38,6 +44,8 @@ public class Pause extends AbstractAppState {
             
             // TODO: Pause app state enabled code
             
+            inputManager.setCursorVisible(true);
+            nifty.gotoScreen(MenuTypes.PAUSE_MENU.name());
             this.enabled = true;
             
         } else if(!isActive && this.isEnabled()) {
@@ -45,6 +53,8 @@ public class Pause extends AbstractAppState {
 
             // TODO: Pause app state disabled code
             
+            nifty.gotoScreen(MenuTypes.BLANK.name());
+            inputManager.setCursorVisible(false);
             this.enabled = false;
         }
     }
@@ -54,6 +64,8 @@ public class Pause extends AbstractAppState {
         super.initialize(stateManager, app);
         this.app = (BaseGame)app;
         enabled = false;
+        this.inputManager = this.app.getInputManager();
+        nifty = ((BaseGame)app).getNifty();
         
         // TODO: Pause app state init code
         
