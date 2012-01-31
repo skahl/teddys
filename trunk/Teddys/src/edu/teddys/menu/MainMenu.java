@@ -26,7 +26,6 @@ public class MainMenu implements ScreenController {
     
     private Application app;
     
-    BaseGame game;
     InputManager input;
     
     private boolean enabled;
@@ -70,7 +69,7 @@ public class MainMenu implements ScreenController {
     }
     
     public void exit() {
-        game.stop();
+        app.stop();
     }
 
     
