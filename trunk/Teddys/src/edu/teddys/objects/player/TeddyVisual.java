@@ -25,6 +25,7 @@ public class TeddyVisual {
     // control attributes
     boolean isRunning;
     boolean runLeft;
+    boolean mirrored;
     
     // visual attributes
     Quad quad;
@@ -41,6 +42,7 @@ public class TeddyVisual {
         // control init
         isRunning = false;
         runLeft = false;
+        mirrored = false;
         
         // effect init
         jetpackFx = new JetpackEffect(node.getName(), assetManager);
@@ -151,13 +153,22 @@ public class TeddyVisual {
     
     public void setViewVector(Vector2f vector) {
         
-        boolean mirrored;
         int selectedTile;
 
         if(vector.x > 0f) {
-           mirrored = false;
+            if(mirrored) {
+                mirrored = false;
+                // move jetpack
+                jetpackFx.getNode().setLocalTranslation(-0.30f, -0.25f, 0.0f);
+                jetpackFx.switchVelocity();
+            }
         } else {
-           mirrored = true;
+            if(!mirrored) {
+                mirrored = true;
+                // move jetpack
+                jetpackFx.getNode().setLocalTranslation(0.30f, -0.25f, 0.0f);
+                jetpackFx.switchVelocity();
+            }
         }
             
             
@@ -213,20 +224,12 @@ public class TeddyVisual {
             } else {
                 running.setBoolean("Reverse", true);
             }
-            
-            // move jetpack
-            jetpackFx.getNode().setLocalTranslation(0.30f, -0.25f, 0.0f);
-            jetpackFx.switchVelocity();
         } else {
             if(runLeft) {
                 running.setBoolean("Reverse", true);
             } else {
                 running.setBoolean("Reverse", false);
             }
-            
-            // move jetpack
-            jetpackFx.getNode().setLocalTranslation(-0.30f, -0.25f, 0.0f);
-            jetpackFx.switchVelocity();
         }
     }
 }
