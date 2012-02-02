@@ -18,26 +18,26 @@ public class ReqMessageSendChecksum extends NetworkMessageRequest {
 
   private String token = "";
   private List<String> files = new ArrayList<String>();
-  private Integer destination;
 
   public ReqMessageSendChecksum() {
     super();
   }
 
-  public ReqMessageSendChecksum(String token, List<String> files, Integer destination) {
-    this(token, files);
-    setDestination(destination);
+  public ReqMessageSendChecksum(String token, List<String> files) {
+    this(new Integer[]{}, token, files);
   }
-
-  private ReqMessageSendChecksum(String token, List<String> files) {
-    this();
+  
+  public ReqMessageSendChecksum(Integer clientID, String token, List<String> files) {
+    this(new Integer[]{clientID}, token, files);
+  }
+  
+  public ReqMessageSendChecksum(Integer[] clientIDs, String token, List<String> files) {
+    super(clientIDs);
     if (token == null || token.isEmpty() || files == null || files.isEmpty()) {
       throw new InstantiationError("Some files must be specified to send a request!");
     }
     setFiles(files);
     setToken(token);
-    //TODO change!!!
-    setDestination(0);
   }
 
   public List<String> getFiles() {
@@ -54,13 +54,5 @@ public class ReqMessageSendChecksum extends NetworkMessageRequest {
 
   private void setToken(String token) {
     this.token = token;
-  }
-
-  public Integer getDestination() {
-    return destination;
-  }
-
-  private void setDestination(Integer destination) {
-    this.destination = destination;
   }
 }

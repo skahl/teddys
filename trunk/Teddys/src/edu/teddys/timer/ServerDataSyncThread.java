@@ -25,7 +25,7 @@ public class ServerDataSyncThread extends Thread {
       TeddyClient.getInstance().send(msg);
       // ... and sleep an amount of time.
       try {
-        sleep(GameSettings.SERVER_SYNC_INTERVAL);
+        sleep(GameSettings.NETWORK_SERVER_SYNC_INTERVAL);
       } catch (InterruptedException ex) {
         MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }

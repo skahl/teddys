@@ -17,4 +17,8 @@ public class ReqMessageSendClientData extends NetworkMessageRequest {
   public ReqMessageSendClientData() {
     super();
   }
+  
+  public ReqMessageSendClientData(Integer clientID) {
+    super(new Integer[]{clientID});
+  }
 }

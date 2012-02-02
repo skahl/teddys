@@ -6,6 +6,7 @@ package edu.teddys.network;
 
 import com.jme3.network.ConnectionListener;
 import com.jme3.network.HostedConnection;
+import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
 import java.io.IOException;
@@ -96,7 +97,21 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
     if (networkServer == null || !networkServer.isRunning()) {
       return;
     }
-    networkServer.broadcast(message);
+    if(GameSettings.NETWORK_SERVER_LAG_DELAY != 0) {
+      try {
+        Thread.sleep(GameSettings.NETWORK_SERVER_LAG_DELAY);
+      } catch (InterruptedException ex) {
+        MegaLogger.getLogger().debug(new Throwable("Lag delay sleep has been interrupted!", ex));
+      }
+    }
+    if(message.getRecipients() == null || message.getRecipients().length < 1) {
+      // Don't filter, send a broadcast
+      networkServer.broadcast(message);
+    }
+    // Send a message to the appropriate clients
+    for(Integer clientID : message.getRecipients()) {
+      networkServer.getConnection(clientID).send(message);
+    }
   }
 
   /*

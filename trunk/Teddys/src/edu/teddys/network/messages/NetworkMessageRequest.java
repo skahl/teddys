@@ -16,4 +16,8 @@ public class NetworkMessageRequest extends NetworkMessage {
   public NetworkMessageRequest() {
     super();
   }
+  
+  public NetworkMessageRequest(Integer[] recipients) {
+    super(recipients);
+  }
 }

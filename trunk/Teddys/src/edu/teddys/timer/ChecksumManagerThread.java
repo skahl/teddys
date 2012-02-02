@@ -46,18 +46,16 @@ public class ChecksumManagerThread extends Thread {
       String result = ChecksumManager.calculateChecksum(files);
       // for every client, generate a token
       if (!TeddyServer.getInstance().getClientIDs().isEmpty()) {
-        for (Integer clientID : TeddyServer.getInstance().getClientIDs()) {
           String token = getNewToken();
           ChecksumManager.files.put(token, files);
           ChecksumManager.result.put(token, result);
           // Send a message to the clients
-          ReqMessageSendChecksum request = new ReqMessageSendChecksum(token, files, clientID);
+          ReqMessageSendChecksum request = new ReqMessageSendChecksum(token, files);
           TeddyServer.getInstance().send(request);
           MegaLogger.getLogger().debug(
                   String.format("New token (%s) generated and sent. Expected checksum: %s", 
                   token, result)
                   );
-        }
       }
       // ... and sleep an amount of time.
       try {

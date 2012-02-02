@@ -135,9 +135,9 @@ public class ServerListener implements MessageListener<HostedConnection> {
         ManMessageSendDamage dmg = new ManMessageSendDamage(clientID, (int) (Math.random() * 20f + 1));
         TeddyServer.getInstance().send(dmg);
 
-        NetworkMessageInfo dmgInfo = new NetworkMessageInfo("Come on, "
+        NetworkMessageInfo dmgInfo = new NetworkMessageInfo(clientID, "Come on, "
                 + data.getName() + ". Don't worry about the damage I gave to you! "
-                + "I like you, really! :P", clientID);
+                + "I like you, really! :P");
         TeddyServer.getInstance().send(dmgInfo);
       }
     } else if (message instanceof NetworkMessageManipulation) {

@@ -201,7 +201,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     
     // Send a status text
     String message = String.format(
-            "New connection (%s) arrived! Client ID is %s",
+            "New player (%s) joined this server! Client ID is %s",
             conn.getAddress(),
             conn.getId());
     
@@ -210,11 +210,11 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     MegaLogger.getLogger().info(message);
     
     String serverMsg = String.format("Welcome to %s!", getData().getName());
-    NetworkMessageInfo clientInfo = new NetworkMessageInfo(serverMsg);
+    NetworkMessageInfo clientInfo = new NetworkMessageInfo(conn.getId(), serverMsg);
     TeddyServer.getInstance().send(clientInfo);
     
     // Request the client data
-    ReqMessageSendClientData sendMsg = new ReqMessageSendClientData();
+    ReqMessageSendClientData sendMsg = new ReqMessageSendClientData(conn.getId());
     TeddyServer.getInstance().send(sendMsg);
   }
 
@@ -241,6 +241,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
 
     // check if the player exists in the current game
     Game.getInstance().removePlayerFromWorld(Player.getInstance(conn.getId()));
+    MegaLogger.getLogger().debug("Player removed from world.");
 
     // Now search the client data of the HostedConnection and remove it 
     // from list
@@ -270,8 +271,6 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     String message = String.format(
             "Client %s disconnected.",
             conn.getId());
-    //TODO necessary?
-//    getConnections().remove(conn);
     NetworkMessageInfo info = new NetworkMessageInfo(message);
     send(info);
     MegaLogger.getLogger().info(message);

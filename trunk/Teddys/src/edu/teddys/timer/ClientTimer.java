@@ -41,8 +41,8 @@ public class ClientTimer {
     thread.start();
     String tempMsg = String.format(
             "Client timer thread spawned (Rate: %d, Interval: %f ms)",
-            GameSettings.CLIENT_TIMER_RATE,
-            (Float) (1f / GameSettings.CLIENT_TIMER_RATE * 1000));
+            GameSettings.NETWORK_CLIENT_TIMER_RATE,
+            (Float) (1f / GameSettings.NETWORK_CLIENT_TIMER_RATE * 1000));
     MegaLogger.getLogger().debug(tempMsg);
   }
 

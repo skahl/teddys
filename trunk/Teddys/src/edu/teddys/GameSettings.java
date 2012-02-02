@@ -57,7 +57,7 @@ public class GameSettings {
    * Client update rate per second (Default: 40 -> interval ^= 25 ms)
    * @see ClientTimer
    */
-  public static final Integer CLIENT_TIMER_RATE = 40;
+  public static final Integer NETWORK_CLIENT_TIMER_RATE = 40;
   /**
    * The number of rates to shift the user back in time.
    * @see CLIENT_INTERPO_DELAY
@@ -73,7 +73,7 @@ public class GameSettings {
    * 
    * Default: 2*(1/CLIENT_TIMER_RATE) (-> 100ms)
    */
-  public static final Integer CLIENT_INTERPOL_DELAY = (int) (2 * (1f / CLIENT_TIMER_RATE));
+  public static final Integer CLIENT_INTERPOL_DELAY = (int) (2 * (1f / NETWORK_CLIENT_TIMER_RATE));
   /**
    * The maximum number of client positions for the interpolation of movements.
    * Default: 5 (that means there is a history of 5*(1/CLIENT_TIMER_RATE) ms)
@@ -89,7 +89,7 @@ public class GameSettings {
    * Server synchronization interval in milliseconds (Default: 2000 ms)
    * @see ServerDataSync
    */
-  public static final Integer SERVER_SYNC_INTERVAL = 2000;
+  public static final Integer NETWORK_SERVER_SYNC_INTERVAL = 2000;
   /**
    * The interval for event calculations in ms.
    * @see ServerTimer
@@ -100,4 +100,23 @@ public class GameSettings {
    * @see TeddyServerData
    */
   public static final Integer MAX_SERVER_POS_CAPACITY = 10;
+  /**
+   * Set a delay for testing purposes. This holds back a message for the
+   * specified time in ms on the server.
+   * @see NetworkCommunicatorSpidermonkeyServer
+   */
+  public static final Integer NETWORK_SERVER_LAG_DELAY = 0;
+  /**
+   * Set a delay for testing purposes. This holds back a message for the
+   * specified time in ms on the client.
+   * @see NetworkCommunicatorSpidermonkeyClient
+   */
+  public static final Integer NETWORK_CLIENT_LAG_DELAY = 0;
+  /**
+   * Specify how often isConnected() on a network client should be called.
+   * Default: 5, that means every fifth time isValidConnection() is called,
+   * isConnected() is called as well.
+   * @see NetworkCommunicatorSpidermonkeyClient
+   */
+  public static final Integer NETWORK_CLIENT_CON_CHECK = 5;
 }

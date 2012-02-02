@@ -8,13 +8,15 @@ import com.jme3.network.serializing.Serializable;
 import edu.teddys.network.messages.NetworkMessageRequest;
 
 /**
+ * 
+ * A message for the clients that a new map should be loaded.
  *
  * @author cm
  */
 @Serializable
 public class ReqMessageMapRequest extends NetworkMessageRequest {
 
-  private String map;
+  private String map = "";
   
   public ReqMessageMapRequest() {
     super();

@@ -14,28 +14,18 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 @Serializable
 public class ManMessageTriggerEffect extends NetworkMessageManipulation {
   
-  private Integer affectedClient;
   private String effectName;
   
   public ManMessageTriggerEffect() {
     super();
   }
   
-  public ManMessageTriggerEffect(Integer client, String effect) {
-    this();
-    if(client == null || client == 0 || effect == null) {
+  public ManMessageTriggerEffect(Integer clientID, String effect) {
+    super(new Integer[]{clientID});
+    if(clientID == null || clientID == 0 || effect == null) {
       throw new InstantiationError("Client or effect name must be specified!");
     }
-    setAffectedClient(client);
     setEffectName(effect);
-  }
-
-  public Integer getAffectedClient() {
-    return affectedClient;
-  }
-
-  private void setAffectedClient(Integer affectedClient) {
-    this.affectedClient = affectedClient;
   }
 
   public String getEffectName() {

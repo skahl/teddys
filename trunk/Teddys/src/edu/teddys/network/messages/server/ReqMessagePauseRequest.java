@@ -24,6 +24,11 @@ public class ReqMessagePauseRequest extends NetworkMessageRequest {
     this();
     setPaused(paused);
   }
+  
+  public ReqMessagePauseRequest(Integer[] clientIDs, boolean paused) {
+    super(clientIDs);
+    setPaused(paused);
+  }
 
   public boolean isPaused() {
     return paused;

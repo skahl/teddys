@@ -17,4 +17,8 @@ public class GSMessageEndGame extends NetworkMessageGameState {
   public GSMessageEndGame() {
     super();
   }
+  
+  public GSMessageEndGame(Integer clientID) {
+    super(new Integer[]{clientID});
+  }
 }

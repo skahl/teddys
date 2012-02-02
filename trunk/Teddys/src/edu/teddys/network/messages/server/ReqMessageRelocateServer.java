@@ -13,27 +13,16 @@ import edu.teddys.network.messages.NetworkMessageRequest;
  */
 @Serializable
 public class ReqMessageRelocateServer extends NetworkMessageRequest {
-
-  private Integer destination;
   
   public ReqMessageRelocateServer() {
     super();
   }
 
-  public ReqMessageRelocateServer(Integer destination) {
-    this();
-    if(destination == null) {
+  public ReqMessageRelocateServer(Integer clientID) {
+    super(new Integer[]{clientID});
+    if(clientID == null) {
       throw new InstantiationError("Destination for the server relocation "
               + "must be specified (Client ID is missing)!");
     }
-    setDestination(destination);
-  }
-
-  public Integer getDestination() {
-    return destination;
-  }
-
-  private void setDestination(Integer destination) {
-    this.destination = destination;
   }
 }

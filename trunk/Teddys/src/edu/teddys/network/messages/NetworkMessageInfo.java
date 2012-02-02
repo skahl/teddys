@@ -14,28 +14,26 @@ import com.jme3.network.serializing.Serializable;
 public class NetworkMessageInfo extends NetworkMessage {
   
   private String message = "";
-  private Integer[] recipients;
   
   public NetworkMessageInfo() {
     super();
 //    throw new InstantiationError("Source, message and optionally recipients are not defined!");
   }
   
-  public NetworkMessageInfo(String message, Integer[] recipients) {
-    super();
+  public NetworkMessageInfo(Integer[] recipients, String message) {
+    super(recipients);
     if(message == null || message.isEmpty()) {
       throw new InstantiationError("Message can't be null or empty!");
     }
     setMessage(message);
-    setRecipients(recipients);
   }
   
-  public NetworkMessageInfo(String message, Integer recipient) {
-    this(message, new Integer[]{recipient});
+  public NetworkMessageInfo(Integer recipient, String message) {
+    this(new Integer[]{recipient}, message);
   }
   
   public NetworkMessageInfo(String message) {
-    this(message, new Integer[]{});
+    this(new Integer[]{}, message);
   }
 
   public String getMessage() {
@@ -45,14 +43,4 @@ public class NetworkMessageInfo extends NetworkMessage {
   final protected void setMessage(String message) {
     this.message = message;
   }
-
-  public Integer[] getRecipients() {
-    return recipients;
-  }
-
-  final protected void setRecipients(Integer[] recipients) {
-    this.recipients = recipients;
-  }
-  
-  
 }

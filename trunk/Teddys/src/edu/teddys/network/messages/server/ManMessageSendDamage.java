@@ -14,28 +14,26 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 @Serializable
 public class ManMessageSendDamage extends NetworkMessageManipulation {
 
-  private Integer client;
   private Integer damage;
   
   public ManMessageSendDamage() {
     super();
   }
 
-  public ManMessageSendDamage(Integer client, Integer damage) {
-    this();
-    if (client == null || damage == null || damage <= 0) {
+  public ManMessageSendDamage(Integer clientID, Integer damage) {
+    super(new Integer[]{clientID});
+    if (clientID == null || damage == null || damage <= 0) {
       throw new InstantiationError("Client or positive damage value must be specified!");
     }
-    setClient(client);
     setDamage(damage);
   }
 
-  public Integer getClient() {
-    return client;
-  }
-
-  private void setClient(Integer client) {
-    this.client = client;
+  public ManMessageSendDamage(Integer[] clientIDs, Integer damage) {
+    super(clientIDs);
+    if (clientIDs == null || clientIDs.length < 1 || damage == null || damage <= 0) {
+      throw new InstantiationError("Client or positive damage value must be specified!");
+    }
+    setDamage(damage);
   }
 
   public Integer getDamage() {

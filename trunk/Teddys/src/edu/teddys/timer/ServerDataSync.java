@@ -29,8 +29,8 @@ public class ServerDataSync {
     thread.start();
     String tempMsg = String.format(
             "Checksum timer thread spawned (Rate: %f, Interval: %d ms)",
-            (Float) (1f / GameSettings.SERVER_SYNC_INTERVAL * 1000),
-            GameSettings.SERVER_SYNC_INTERVAL);
+            (Float) (1f / GameSettings.NETWORK_SERVER_SYNC_INTERVAL * 1000),
+            GameSettings.NETWORK_SERVER_SYNC_INTERVAL);
     MegaLogger.getLogger().debug(tempMsg);
   }
 

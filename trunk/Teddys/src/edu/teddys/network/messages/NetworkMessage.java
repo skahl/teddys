@@ -7,6 +7,7 @@ package edu.teddys.network.messages;
 import com.jme3.network.AbstractMessage;
 import com.jme3.network.serializing.Serializable;
 import edu.teddys.timer.ServerTimer;
+import java.util.Arrays;
 
 /**
  * 
@@ -28,6 +29,10 @@ public class NetworkMessage extends AbstractMessage {
    * This is a so-called "tick" which describes a world state.
    */
   private Long serverTimestamp = 0L;
+  /**
+   * The clients that should get this message.
+   */
+  private Integer[] recipients = new Integer[0];
 
   public Long getLocalTimestamp() {
     return localTimestamp;
@@ -50,10 +55,31 @@ public class NetworkMessage extends AbstractMessage {
     this.serverTimestamp = serverTimestamp;
   }
 
+  public Integer[] getRecipients() {
+    return recipients;
+  }
+
+  public void setRecipients(Integer[] recipients) {
+    this.recipients = recipients;
+  }
+
   public NetworkMessage() {
     // initialize the timestamp value
     if (ServerTimer.isActive()) {
       localTimestamp = ServerTimer.getServerTimestamp();
     }
+  }
+
+  public NetworkMessage(Integer[] recipients) {
+    this();
+    this.recipients = recipients;
+  }
+  
+  @Override
+  public String toString() {
+    return getClass().getName()+String.format("[LocalTS=%d,ServerTS=%d,Recipients=%s]",
+            getLocalTimestamp(),
+            getServerTimestamp(),
+            Arrays.asList(getRecipients()));
   }
 }

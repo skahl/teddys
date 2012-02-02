@@ -16,4 +16,8 @@ public class NetworkMessageGameState extends NetworkMessage {
   public NetworkMessageGameState() {
     super();
   }
+  
+  public NetworkMessageGameState(Integer[] recipients) {
+    super(recipients);
+  }
 }

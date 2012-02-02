@@ -16,4 +16,8 @@ public class NetworkMessageManipulation extends NetworkMessage {
   public NetworkMessageManipulation() {
     super();
   }
+  
+  public NetworkMessageManipulation(Integer[] recipients) {
+    super(recipients);
+  }
 }

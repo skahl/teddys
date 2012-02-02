@@ -35,9 +35,9 @@ import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  *
@@ -49,13 +49,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
 
   public void messageReceived(com.jme3.network.Client source, Message message) {
     String inputMessage = String.format(
-            "Client received a NetworkMessage: %s",
-            message.getClass().getName());
-    if (message instanceof NetworkMessage) {
-      inputMessage += String.format("\nTimestamps: Local: %d, Server: %d",
-              ((NetworkMessage) message).getLocalTimestamp(),
-              ((NetworkMessage) message).getServerTimestamp());
-    }
+            "Client received a message (%s): %s",
+            message.getClass().getName(), message);
     MegaLogger.getLogger().debug(inputMessage);
 
     if (message instanceof DisconnectMessage) {
@@ -68,10 +63,20 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       MegaLogger.getLogger().info(new Throwable(logMsg));
       //TODO change game state
     } else if (message instanceof NetworkMessage) {
+
+      // CHECK CLIENT ID
+      Integer[] rec = ((NetworkMessage)message).getRecipients();
+      if (rec.length != 0 && !(Arrays.asList(rec)).contains(
+              TeddyClient.getInstance().getData().getId())) {
+        MegaLogger.getLogger().debug("Not a message for me ...");
+        return;
+      }
+
       // get the server timestamp
       //TODO check if it is a message from the server!!
       NetworkMessage tempMsg = (NetworkMessage) message;
       if (tempMsg.getServerTimestamp() != null) {
+        // set the new timestamp
         ClientTimer.lastServerTimestamp = tempMsg.getServerTimestamp();
       }
       if (message instanceof NetworkMessageInfo) {
@@ -115,11 +120,13 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
 
 //          ServerTimer.setServerTimestamp(msg.getServerTimestamp());
 //          ServerTimer.startTimer();
+          
+          // Send the local action events to the server and set the
+          // ControllerInputListener as key listener
           Map<String, List<Trigger>> map = ControllerEvents.getAllEvents();
           Game.getInstance().getInputManager().addListener(
                   ControllerInputListener.getInstance(),
-                  map.keySet().toArray(new String[map.keySet().size()])
-                  );
+                  map.keySet().toArray(new String[map.keySet().size()]));
           ClientTimer.startTimer();
         } else if (message instanceof GSMessageEndGame) {
           //
@@ -127,6 +134,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           //TODO Set game state to "EndGame"
 //          ServerTimer.stopTimer();
+          
+          // Stop sending the actions to the server
           ClientTimer.stopTimer();
           Game.getInstance().getInputManager().removeListener(ControllerInputListener.getInstance());
         } else if (message instanceof GSMessagePlayerReady) {
@@ -144,18 +153,16 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           ManMessageActivateItem msg = (ManMessageActivateItem) message;
 //        TeddyClient.getInstance().setCurrentItem(msg.getItemName());
+          //TODO client has to load and activate the item
         } else if (message instanceof ManMessageSendDamage) {
           //
           // A DAMAGE REQUEST TO BE APPLIED
           //
           ManMessageSendDamage msg = (ManMessageSendDamage) message;
-          // If this is the destination Teddy ...
-          if (msg.getClient().equals(TeddyClient.getInstance().getData().getId())) {
-            // Add a painful scar
-            TeddyClient.getInstance().addDamage(msg.getDamage());
-          }
+          // Add a painful scar
+          TeddyClient.getInstance().addDamage(msg.getDamage());
           try {
-            String goodTeddy = TeddyServer.getInstance().getClientData(msg.getClient()).getName();
+            String goodTeddy = TeddyClient.getInstance().getData().getName();
             String badTeddy = TeddyServer.getInstance().getClientData(source.getId()).getName();
             String infoString = String.format("Mad Teddy %s attacked 'Good Old %s'! %s: %s",
                     badTeddy, goodTeddy, getDamageMessage(msg.getDamage()), msg.getDamage());
@@ -193,13 +200,10 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // THE ACTIVE NETWORK SERVER SHOULD BE CHANGED
           //
           ReqMessageRelocateServer msg = (ReqMessageRelocateServer) message;
-          if (msg.getDestination().equals(TeddyClient.getInstance().getData().getId())) {
-            TeddyServer.getInstance().startServer();
-            //TODO Force the clients to join the new server ^^
-            MegaLogger.getLogger().debug("Relocated server.");
-          } else {
-            //TODO prepare to (seamlessly?) join the new server.
-          }
+          // At first, start the local server
+          TeddyServer.getInstance().startServer();
+          //TODO Force the clients to join the new server ^^
+          MegaLogger.getLogger().debug("Relocated server.");
         } else if (message instanceof ReqMessageSendChecksum) {
           //
           // PROTECTION: CHECKSUM REQUEST RECEIVED
@@ -253,7 +257,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       strings = new String[]{"Honorable", "Playful", "Strange", "Soulless", "Enchanting", "Magical", "Delightful", "Ravishing"};
       out = strings[getRandomInt(strings.length)];
     } else if (value < 80) {
-      strings = new String[]{"Absurd", "Hysterical", "Bizarre", "Freaky", "Crazy", "Glamorous", "Gorgeous", "Scattering"};
+      strings = new String[]{"Absurd", "Hysterical", "Bizarre", "Perfect", "Freaky", "Crazy", "Glamorous", "Gorgeous", "Scattering"};
       out = strings[getRandomInt(strings.length)];
     }
     out += " ";

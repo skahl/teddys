@@ -31,7 +31,7 @@ public class ClientTimerThread extends Thread {
       }
 
       try {
-        sleep((int) (1f / GameSettings.CLIENT_TIMER_RATE * 1000));
+        sleep((int) (1f / GameSettings.NETWORK_CLIENT_TIMER_RATE * 1000));
       } catch (InterruptedException ex) {
         MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
