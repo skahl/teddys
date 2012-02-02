@@ -20,9 +20,9 @@ public class ShotBaerenpistole extends GunShot {
             
         setColor(new ColorRGBA(1f, 1f, 1f, 1f));
         setSize(0.1f);
-        setLifeTime(1f);
+        setLifeTime(0.3f);
         setNumParticles(1);
-        setVelocity(10f);
+        setVelocity(20f);//10f);
     }
     
     

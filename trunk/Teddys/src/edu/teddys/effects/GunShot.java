@@ -8,6 +8,8 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import edu.teddys.MegaLogger;
@@ -30,6 +32,7 @@ public class GunShot {
     protected void init(String name, AssetManager assetManager, String texture) {
         
         this.assetManager = assetManager;
+        vector = new Vector3f();
         
         numParticles = 1;
         shooting = false;
@@ -49,10 +52,12 @@ public class GunShot {
         pe.setStartSize(0.25f);
         pe.setEndSize(0.25f);
         pe.setGravity(0,0,0);
-        pe.setLowLife(0.9f);
-        pe.setHighLife(1f);
+        pe.setLowLife(0.5f);
+        pe.setHighLife(0.5f);
         pe.getParticleInfluencer().setVelocityVariation(0f);  
         pe.setParticlesPerSec(0);
+        pe.setInWorldSpace(true);
+        pe.setFacingVelocity(true);
         
         mother.attachChild(pe);
     }
@@ -69,7 +74,12 @@ public class GunShot {
     public void setVector(Vector3f initialVector) {
         
         vector = initialVector;
+        
+        //mother.rotateUpTo(initialVector.cross(Vector3f.UNIT_Z).normalize());
+        
+        
         pe.getParticleInfluencer().setInitialVelocity(vector.mult(velocity));
+        
     }
     
     public void setNumParticles(int numParticles) {
