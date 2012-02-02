@@ -74,7 +74,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //
         ResMessageSendChecksum msg = (ResMessageSendChecksum) message;
         // Check the transmitted checksum for some files ...
-        System.out.println("User submitted " + msg.getChecksum() + " for token " + msg.getToken());
+        MegaLogger.getLogger().debug("User submitted " + msg.getChecksum() + " for token " + msg.getToken());
         try {
           ChecksumManager.checkChecksum(msg.getToken(), msg.getChecksum());
         } catch (VerifyError error) {
