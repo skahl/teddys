@@ -36,6 +36,7 @@ import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
+import edu.teddys.timer.ServerTimer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -115,19 +116,12 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           //TODO Set game state to "Game"
           GSMessageBeginGame msg = (GSMessageBeginGame) message;
+          // start the server timer to get the tick
+          if(source.getId() != Player.LOCAL_PLAYER) {
+            ServerTimer.setServerTimestamp(msg.getServerTimestamp());
+            ServerTimer.startTimer();
+          }
           // start sending input data
-          ClientTimer.startTimer();
-          //TODO compensate the difference in transmission?
-
-//          ServerTimer.setServerTimestamp(msg.getServerTimestamp());
-//          ServerTimer.startTimer();
-          
-          // Send the local action events to the server and set the
-          // ControllerInputListener as key listener
-          Map<String, List<Trigger>> map = ControllerEvents.getAllEvents();
-          Game.getInstance().getInputManager().addListener(
-                  ControllerInputListener.getInstance(),
-                  map.keySet().toArray(new String[map.keySet().size()]));
           ClientTimer.startTimer();
         } else if (message instanceof GSMessageEndGame) {
           //

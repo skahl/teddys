@@ -5,6 +5,8 @@ import com.jme3.scene.Node;
 import edu.teddys.controls.PlayerControl;
 import edu.teddys.network.ClientData;
 import edu.teddys.states.Game;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *  Singleton Player
@@ -13,7 +15,7 @@ import edu.teddys.states.Game;
 public class Player {
 
   public static final Integer LOCAL_PLAYER = 0;
-  private static Player instance = null;
+  private static Map<Integer,Player> instance = new TreeMap<Integer,Player>();
   Node node;
   TeddyVisual visual;
   PlayerControl control;
@@ -58,6 +60,7 @@ public class Player {
 
     // Create the client data object
     data = new ClientData();
+    data.setId(id);
   }
 
   public PlayerControl getPlayerControl() {
@@ -69,10 +72,10 @@ public class Player {
   }
 
   public static Player getInstance(Integer id) {
-    if (instance == null) {
-      instance = new Player(id);
+    if (instance.isEmpty() || instance.get(id) == null) {
+      instance.put(id, new Player(id));
     }
-    return instance;
+    return instance.get(id);
   }
 
 }

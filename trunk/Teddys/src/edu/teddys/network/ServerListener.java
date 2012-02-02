@@ -25,6 +25,7 @@ import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
+import edu.teddys.timer.ServerTimer;
 import java.awt.Color;
 
 /**
@@ -95,6 +96,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
         Game.getInstance().addPlayerToWorld(newPlayer);
         //TODO Check how many clients are ready yet to start the game occassionally.
         // (use TeddyServerData)
+        ServerTimer.startTimer();
+        //TODO check when the game has ended! the timer must be stopped!
         // Now start a game
         GSMessageBeginGame beginGame = new GSMessageBeginGame();
         TeddyServer.getInstance().send(beginGame);

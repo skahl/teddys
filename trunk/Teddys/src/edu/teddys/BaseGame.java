@@ -15,6 +15,7 @@ import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
 import edu.teddys.controls.MappingEnum;
 import edu.teddys.input.ControllerEvents;
+import edu.teddys.input.ControllerInputListener;
 import edu.teddys.network.ClientData;
 import edu.teddys.objects.player.DeathTest;
 import edu.teddys.objects.player.HealthListener;
@@ -144,6 +145,7 @@ public class BaseGame extends SimpleApplication {
   @Override
   public void simpleInitApp() {
 
+    // Change the level of some jME log messages to WARNING
     Logger.getLogger("").setLevel(java.util.logging.Level.WARNING);
     
     flyCam.setEnabled(false);
@@ -170,7 +172,6 @@ public class BaseGame extends SimpleApplication {
 
     Map<String, List<Trigger>> map = ControllerEvents.getAllEvents();
     // add the mapping
-    MegaLogger.getLogger().debug(map);
     for (Entry<String, List<Trigger>> entry : map.entrySet()) {
       for (Trigger trigger : entry.getValue()) {
         getInputManager().addMapping(entry.getKey(), trigger);
@@ -182,6 +183,12 @@ public class BaseGame extends SimpleApplication {
     stateManager.getState(Game.class).setEnabled(true);
     //stateManager.getState(Menu.class).initialize(stateManager, this);
     //stateManager.getState(Menu.class).setEnabled(true);
+    
+    //TODO check if this is correct
+    // set the ControllerInputListener as input listener
+    Game.getInstance().getInputManager().addListener(
+            ControllerInputListener.getInstance(),
+            map.keySet().toArray(new String[map.keySet().size()]));
 
 
     // # # # # # # # # # # # # # # NETWORK # # # # # # # # # # # # # # # #

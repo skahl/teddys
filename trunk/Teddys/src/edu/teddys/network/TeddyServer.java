@@ -17,7 +17,6 @@ import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ServerTimer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -55,7 +54,6 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     }
     getData().setCreated(new Date());
     getData().setDiscoverable(true);
-    ServerTimer.startTimer();
 
     // Start the protection mechanisms
     if(GameSettings.ENABLE_CHECKSUM_CHECK) {
@@ -108,7 +106,6 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     if (!getData().isDiscoverable()) {
       MegaLogger.getLogger().warn("TeddyServer not discoverable! Message not sent.");
     }
-    //TODO check if a recipient field is available?
     if(ServerTimer.isActive()) {
       message.setServerTimestamp(ServerTimer.getServerTimestamp());
     }
