@@ -4,12 +4,10 @@
  */
 package edu.teddys.network;
 
-import com.jme3.input.controls.Trigger;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.message.DisconnectMessage;
 import edu.teddys.MegaLogger;
-import edu.teddys.input.ControllerEvents;
 import edu.teddys.input.ControllerInputListener;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageGameState;
@@ -38,8 +36,6 @@ import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
 import edu.teddys.timer.ServerTimer;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -52,7 +48,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
   public void messageReceived(com.jme3.network.Client source, Message message) {
     String inputMessage = String.format(
             "Client received a message (%s): %s",
-            message.getClass().getName(), message);
+            message.getClass().getSimpleName(), message);
     MegaLogger.getLogger().debug(inputMessage);
 
     if (message instanceof DisconnectMessage) {

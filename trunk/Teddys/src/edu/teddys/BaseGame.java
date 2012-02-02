@@ -61,6 +61,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Logger;
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.DailyRollingFileAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
@@ -111,6 +112,8 @@ public class BaseGame extends SimpleApplication {
   public static void main(String[] args) {
 
     BasicConfigurator.configure();
+    // get a clean logger
+    MegaLogger.getLogger().removeAllAppenders();
     // Set the log level to ALL in order to be informed of all loggable events
     MegaLogger.getLogger().setLevel(Level.ALL);
     PatternLayout basicLayout = new PatternLayout("%d{ISO8601} %-5p (%F:%L): %m%n");
@@ -123,6 +126,8 @@ public class BaseGame extends SimpleApplication {
     } catch (IOException ex) {
       MegaLogger.getLogger().error(new Throwable("Creation of the log file appender aborted!", ex));
     }
+    // add the console logger with the specified layout
+    MegaLogger.getLogger().addAppender(new ConsoleAppender(basicLayout));
     // add the custom appender to react to some infos
     MegaLogger.getLogger().addAppender(new MegaLoggerListener(guiLayout));
 
