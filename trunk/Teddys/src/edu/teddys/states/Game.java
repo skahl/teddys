@@ -163,7 +163,7 @@ public class Game extends AbstractAppState {
     int crosshairSize = this.app.getSettings().getHeight() / 15;
     this.app.getAssetManager().loadTexture("Interface/HUD/crosshair.png");
 
-    cursor = new Cursor("Cursor");
+    cursor = Cursor.getInstance("Cursor");
     cursor.setImage(this.app.getAssetManager(), "Interface/HUD/crosshair.png", true);
     cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
     cursor.setHeight(crosshairSize);
