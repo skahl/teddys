@@ -85,20 +85,20 @@ public class BaseGame extends SimpleApplication {
         if (!stateManager.getState(Pause.class).isEnabled()) {
 
           // if a game is running while menu is activated
-          if (stateManager.getState(Game.class).isEnabled()) {
+          //if (stateManager.getState(Game.class).isEnabled()) {
             // pause the game
             stateManager.getState(Game.class).setPaused(true);
-          }
+          //}
 
           stateManager.getState(Pause.class).setEnabled(true);
 
         } else {
 
           // if a game is running while menu is deactivated
-          if (stateManager.getState(Game.class).isEnabled()) {
+          //if (stateManager.getState(Game.class).isEnabled()) {
             // unpause the game
             stateManager.getState(Game.class).setPaused(false);
-          }
+          //}
 
           stateManager.getState(Pause.class).setEnabled(false);
 

@@ -63,7 +63,7 @@ public class Pause extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (BaseGame)app;
-        //enabled = false;
+        super.setEnabled(false);
         this.inputManager = this.app.getInputManager();
         nifty = ((BaseGame)app).getNifty();
         

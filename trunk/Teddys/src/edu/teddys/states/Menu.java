@@ -70,7 +70,7 @@ public class Menu extends AbstractAppState {
         super.initialize(stateManager, app);
         this.app = (BaseGame)app;
         this.inputManager = this.app.getInputManager();
-        //enabled = false;
+        super.setEnabled(false);
         
         nifty = ((BaseGame)app).getNifty();
         
