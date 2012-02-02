@@ -23,11 +23,13 @@ public class ClientTimerThread extends Thread {
   @Override
   public void run() {
 
-    for (;;) {
+    while(!stop) {
 
       List<SimpleTriple> inputList = ClientTimer.getInput();
       if (!inputList.isEmpty()) {
         ManControllerInput input = new ManControllerInput(new LinkedList<SimpleTriple>(inputList));
+        // The timestamp has been already set in the empty constructor of
+        // NetworkMessage
         TeddyClient.getInstance().send(input);
         ClientTimer.input.clear();
       }

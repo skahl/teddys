@@ -117,6 +117,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //TODO Set game state to "Game"
           GSMessageBeginGame msg = (GSMessageBeginGame) message;
           // start the server timer to get the tick
+          // if the server is local, don't change the value.
           if(source.getId() != Player.LOCAL_PLAYER) {
             ServerTimer.setServerTimestamp(msg.getServerTimestamp());
             ServerTimer.startTimer();
