@@ -19,7 +19,7 @@ import edu.teddys.menu.MenuTypes;
  */
 public class Pause extends AbstractAppState {
     
-    private boolean enabled;
+//    private boolean enabled;
     private BaseGame app;
     private InputManager inputManager;
     
@@ -32,10 +32,10 @@ public class Pause extends AbstractAppState {
         // TODO: Pause app state update code
     }
     
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
+//    @Override
+//    public boolean isEnabled() {
+//        return enabled;
+//    }
     
     @Override
     public void setEnabled(boolean isActive) {
@@ -46,7 +46,7 @@ public class Pause extends AbstractAppState {
             
             inputManager.setCursorVisible(true);
             nifty.gotoScreen(MenuTypes.PAUSE_MENU.name());
-            this.enabled = true;
+            super.setEnabled(true);
             
         } else if(!isActive && this.isEnabled()) {
             // deactivate
@@ -55,7 +55,7 @@ public class Pause extends AbstractAppState {
             
             nifty.gotoScreen(MenuTypes.BLANK.name());
             inputManager.setCursorVisible(false);
-            this.enabled = false;
+            super.setEnabled(false);
         }
     }
     
@@ -63,7 +63,7 @@ public class Pause extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (BaseGame)app;
-        enabled = false;
+        //enabled = false;
         this.inputManager = this.app.getInputManager();
         nifty = ((BaseGame)app).getNifty();
         
