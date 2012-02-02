@@ -186,7 +186,7 @@ public class BaseGame extends SimpleApplication {
     
     //TODO check if this is correct
     // set the ControllerInputListener as input listener
-    Game.getInstance().getInputManager().addListener(
+    getInputManager().addListener(
             ControllerInputListener.getInstance(),
             map.keySet().toArray(new String[map.keySet().size()]));
 
