@@ -17,6 +17,7 @@ import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ServerTimer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -132,11 +133,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     if (!isRunning()) {
       return;
     }
-    //TODO iterate over the connections
-//    HostedConnection conn = getConnections().;
-//    if (conn == null) {
-//      return;
-//    }
+    //TODO close the connestion
 //    conn.close(reason);
     MegaLogger.getLogger().debug(String.format("The specified client (%d) has been disconnected yet.", client));
   }

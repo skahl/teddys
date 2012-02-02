@@ -32,124 +32,124 @@ import java.util.Random;
  */
 public class Game extends AbstractAppState {
 
-    private static Game instance;
-    private BaseGame app;
-    private AppStateManager stateManager;
-    private InputManager inputManager;
-    private BulletAppState bulletAppState;
-    private Node rootNode;
-    private BasicShadowRenderer shadowRenderer; // Shadow rendering
-    private GameLoader gameLoader;
-    public static HUD hud;
-    private Cursor cursor;
-    private boolean paused;
-    //private boolean enabled;
+  private static Game instance;
+  private BaseGame app;
+  private AppStateManager stateManager;
+  private InputManager inputManager;
+  private BulletAppState bulletAppState;
+  private Node rootNode;
+  private BasicShadowRenderer shadowRenderer; // Shadow rendering
+  private GameLoader gameLoader;
+  public static HUD hud;
+  private Cursor cursor;
+  private boolean paused;
+  //private boolean enabled;
 
-    protected Game() {
-        super();
+  protected Game() {
+    super();
+  }
+
+  public static Game getInstance() {
+    if (instance == null) {
+      instance = new Game();
     }
+    return instance;
+  }
+  // ActionListener
+  private ActionListener actionListener = new ActionListener() {
 
-    public static Game getInstance() {
-        if (instance == null) {
-            instance = new Game();
-        }
-        return instance;
+    public void onAction(String name, boolean keyPressed, float tpf) {
     }
-    // ActionListener
-    private ActionListener actionListener = new ActionListener() {
+  };
 
-        public void onAction(String name, boolean keyPressed, float tpf) {
-        }
-    };
-
-    @Override
-    public void update(float tpf) {
-    }
+  @Override
+  public void update(float tpf) {
+  }
 
 //  @Override
 //  public boolean isEnabled() {
 //    return enabled;
 //  }
-    @Override
-    public void setEnabled(boolean isActive) {
-        if (isActive && !this.isEnabled()) {
-            // activate
+  @Override
+  public void setEnabled(boolean isActive) {
+    if (isActive && !this.isEnabled()) {
+      // activate
 
-            // here one could attach and detach the whole scene graph
-            //this.app.getRootNode().attachChild(rotationNode);
+      // here one could attach and detach the whole scene graph
+      //this.app.getRootNode().attachChild(rotationNode);
 
-            // attach keys
-            initKeys(true);
-            hud.show();
-            super.setEnabled(true);
+      // attach keys
+      initKeys(true);
+      hud.show();
+      super.setEnabled(true);
 
-        } else if (!isActive && this.isEnabled()) {
-            // deactivate
-            //this.app.getRootNode().detachChild(rotationNode);
+    } else if (!isActive && this.isEnabled()) {
+      // deactivate
+      //this.app.getRootNode().detachChild(rotationNode);
 
-            // TODO: Why nullpointer exception on exit?
-            stateManager.cleanup();
-            rootNode.detachAllChildren();
+      // TODO: Why nullpointer exception on exit?
+      stateManager.cleanup();
+      rootNode.detachAllChildren();
 
-            // detach keys
-            initKeys(false);
-            hud.hide();
-            super.setEnabled(false);
-        }
+      // detach keys
+      initKeys(false);
+      hud.hide();
+      super.setEnabled(false);
     }
+  }
 
-    @Override
-    public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app);
-        this.app = (BaseGame) app;
-        this.stateManager = stateManager;
-        this.inputManager = this.app.getInputManager();
-        this.rootNode = this.app.getRootNode();
+  @Override
+  public void initialize(AppStateManager stateManager, Application app) {
+    super.initialize(stateManager, app);
+    this.app = (BaseGame) app;
+    this.stateManager = stateManager;
+    this.inputManager = this.app.getInputManager();
+    this.rootNode = this.app.getRootNode();
 
-        app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
+    app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
 
-        this.paused = false;
-        super.setEnabled(false);
-
-
-        // init physics  renderstate
-        bulletAppState = new BulletAppState();
-        stateManager.attach(bulletAppState);
-
-        // load game
-        gameLoader = new GameLoader("firstlevel", "maps/firstlevel.zip", this);
+    this.paused = false;
+    super.setEnabled(false);
 
 
-        // shed some light
-        Vector3f sunDirection = new Vector3f(-1f, -1f, -1.2f);
-        sunDirection.normalizeLocal();
+    // init physics  renderstate
+    bulletAppState = new BulletAppState();
+    stateManager.attach(bulletAppState);
 
-        DirectionalLight sunL = new DirectionalLight();
-        sunL.setColor(ColorRGBA.White.mult(0.5f));
-        sunL.setDirection(sunDirection);
-        rootNode.addLight(sunL);
-
-        AmbientLight sunA = new AmbientLight();
-        sunA.setColor(ColorRGBA.White.mult(0.3f));
-        rootNode.addLight(sunA);
-
-        // init shadow renderstate
-        shadowRenderer = new BasicShadowRenderer(this.app.getAssetManager(), 256);
-        shadowRenderer.setDirection(sunDirection);
-        this.app.getViewPort().addProcessor(shadowRenderer);
+    // load game
+    gameLoader = new GameLoader("firstlevel", "maps/firstlevel.zip", this);
 
 
-        //HUD
-        hud = HUD.getInstance(this.app.getGuiNode(),
-                this.app.getAssetManager(),
-                this.app.getSettings().getWidth(),
-                this.app.getSettings().getHeight(), GameModeEnum.CAPTURE_THE_HONEY);
+    // shed some light
+    Vector3f sunDirection = new Vector3f(-1f, -1f, -1.2f);
+    sunDirection.normalizeLocal();
 
-        HUDController hudController = HUDController.getInstance();
-        hudController.setHUD(hud);
-        hudController.registerWithInput(inputManager);
+    DirectionalLight sunL = new DirectionalLight();
+    sunL.setColor(ColorRGBA.White.mult(0.5f));
+    sunL.setDirection(sunDirection);
+    rootNode.addLight(sunL);
 
-        // init player
+    AmbientLight sunA = new AmbientLight();
+    sunA.setColor(ColorRGBA.White.mult(0.3f));
+    rootNode.addLight(sunA);
+
+    // init shadow renderstate
+    shadowRenderer = new BasicShadowRenderer(this.app.getAssetManager(), 256);
+    shadowRenderer.setDirection(sunDirection);
+    this.app.getViewPort().addProcessor(shadowRenderer);
+
+
+    //HUD
+    hud = HUD.getInstance(this.app.getGuiNode(),
+            this.app.getAssetManager(),
+            this.app.getSettings().getWidth(),
+            this.app.getSettings().getHeight(), GameModeEnum.CAPTURE_THE_HONEY);
+
+    HUDController hudController = HUDController.getInstance();
+    hudController.setHUD(hud);
+    hudController.registerWithInput(inputManager);
+
+    // init player
 //    player.getPlayerControl().setPhysicsLocation(new Vector3f(1f, 0f, -1.2f));
 //    
 //    Player player2 = Player.getInstance(1);
@@ -158,118 +158,127 @@ public class Game extends AbstractAppState {
 //    rootNode.attachChild(player.getNode());
 //    rootNode.attachChild(player2.getNode());
 
-        // Crosshair
-        int crosshairSize = this.app.getSettings().getHeight() / 15;
-        this.app.getAssetManager().loadTexture("Interface/HUD/crosshair.png");
+    // Crosshair
+    int crosshairSize = this.app.getSettings().getHeight() / 15;
+    this.app.getAssetManager().loadTexture("Interface/HUD/crosshair.png");
 
-        cursor = Cursor.getInstance("Cursor");
-        cursor.setImage(this.app.getAssetManager(), "Interface/HUD/crosshair.png", true);
-        cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
-        cursor.setHeight(crosshairSize);
-        cursor.setWidth(crosshairSize);
-        this.app.getGuiNode().attachChild(cursor);
+    cursor = Cursor.getInstance("Cursor");
+    cursor.setImage(this.app.getAssetManager(), "Interface/HUD/crosshair.png", true);
+    cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
+    cursor.setHeight(crosshairSize);
+    cursor.setWidth(crosshairSize);
+    this.app.getGuiNode().attachChild(cursor);
 
-        // Camera
-        CameraNode camNode = new CameraNode("Camera", this.app.getCamera());
-        camNode.setControlDir(ControlDirection.SpatialToCamera);
+    // Camera
+    CameraNode camNode = new CameraNode("Camera", this.app.getCamera());
+    camNode.setControlDir(ControlDirection.SpatialToCamera);
 
-        Player player = Player.getInstance(Player.LOCAL_PLAYER);
-        player.getNode().attachChild(camNode);
+    Player player = Player.getInstance(Player.LOCAL_PLAYER);
+    player.getNode().attachChild(camNode);
 
-        // initial distance between camera and player
-        camNode.move(0, 1, 8);
+    // initial distance between camera and player
+    camNode.move(0, 1, 8);
 
-        Vector3f dir = player.getNode().getWorldTranslation().add(0, 0.75f, 0);
-        camNode.lookAt(dir, new Vector3f(0, 1, 0));
+    Vector3f dir = player.getNode().getWorldTranslation().add(0, 0.75f, 0);
+    camNode.lookAt(dir, new Vector3f(0, 1, 0));
 
-        // Input
-        CrosshairControl cameraControl = new CrosshairControl(camNode, player, cursor,
-                this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
-        cameraControl.registerWithInput(inputManager);
+    // Input
+    CrosshairControl cameraControl = new CrosshairControl(camNode, player, cursor,
+            this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
+    cameraControl.registerWithInput(inputManager);
 
 
-        // physics debug (shows collission meshes):
+    // physics debug (shows collission meshes):
 
-        //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
+    //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
 
-        addPlayerToWorld(Player.getInstance(1));
+    addPlayerToWorld(Player.getInstance(1));
+  }
 
+  /**
+   * 
+   * Add a player to the root node of the game world. If it already exists,
+   * just return.
+   * 
+   * @param player  The Player to be added to the world.
+   */
+  public void addPlayerToWorld(Player player) {
+    if (getRootNode().hasChild(player.getNode())) {
+      return;
+    }
+    getRootNode().attachChild(player.getNode());
+    MegaLogger.getLogger().debug("Added player to the world.");
+    Random rnd = new Random();
+    //TODO set to the maximum dimension of the world
+    Vector3f pos = new Vector3f(rnd.nextFloat() * 6, rnd.nextFloat() * 2, -1.2f);
+    player.getPlayerControl().setPhysicsLocation(pos);
+    MegaLogger.getLogger().debug("Position of the player has been set: " + pos);
+  }
+
+  public void removePlayerFromWorld(Player player) {
+    if (getRootNode().hasChild(player.getNode())) {
+      getRootNode().detachChild(player.getNode());
+      MegaLogger.getLogger().debug("Player removed from the world.");
+    }
+  }
+
+  @Override
+  public void cleanup() {
+    super.setEnabled(false);
+    super.cleanup();
+
+
+  }
+
+  public void initKeys(boolean attach) {
+
+    if (attach) {
+      // add key mappings
+      //inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_P));
+      //inputManager.addMapping(MappingEnum.PARTICLE_TRIGGER.name(), new KeyTrigger(KeyInput.KEY_SPACE));
+      // add the action listener
+      //inputManager.addListener(actionListener, new String[]{MappingEnum.PARTICLE_TRIGGER.name()});
+      // add the analog listener
+      //inputManager.addListener(analogListener, new String[]{"ParticleTrigger"});
+    } else {
+      //inputManager.deleteMapping("Pause");
+      //inputManager.deleteMapping(MappingEnum.PARTICLE_TRIGGER.name());
     }
 
-    public void addPlayerToWorld(Player player) {
-        getRootNode().attachChild(player.getNode());
-        MegaLogger.getLogger().debug("Added player to the world.");
-        Random rnd = new Random();
-        //TODO set to the maximum dimension of the world
-        Vector3f pos = new Vector3f(rnd.nextFloat() * 6, rnd.nextFloat() * 2, -1.2f);
-        player.getPlayerControl().setPhysicsLocation(pos);
-        MegaLogger.getLogger().debug("Position of the player has been set: " + pos);
+  }
+
+  public void setPaused(boolean paused) {
+    if (paused && !this.paused) {
+      this.paused = true;
+
+      this.app.getGuiNode().detachChildNamed("Cursor");
+      hud.hide();
+
+    } else if (!paused && this.paused) {
+      this.paused = false;
+
+      hud.show();
+      this.app.getGuiNode().attachChild(cursor);
     }
+  }
 
-    public void removePlayerFromWorld(Player player) {
-        if (getRootNode().hasChild(player.getNode())) {
-            getRootNode().detachChild(player.getNode());
-            MegaLogger.getLogger().debug("Player removed from the world.");
-        }
-    }
+  public BaseGame getApp() {
+    return app;
+  }
 
-    @Override
-    public void cleanup() {
-        super.setEnabled(false);
-        super.cleanup();
+  public Node getRootNode() {
+    return rootNode;
+  }
 
+  public BulletAppState getBulletAppState() {
+    return bulletAppState;
+  }
 
-    }
+  public AssetManager getAssetManager() {
+    return app.getAssetManager();
+  }
 
-    public void initKeys(boolean attach) {
-
-        if (attach) {
-            // add key mappings
-            //inputManager.addMapping("Pause", new KeyTrigger(KeyInput.KEY_P));
-            //inputManager.addMapping(MappingEnum.PARTICLE_TRIGGER.name(), new KeyTrigger(KeyInput.KEY_SPACE));
-            // add the action listener
-            //inputManager.addListener(actionListener, new String[]{MappingEnum.PARTICLE_TRIGGER.name()});
-            // add the analog listener
-            //inputManager.addListener(analogListener, new String[]{"ParticleTrigger"});
-        } else {
-            //inputManager.deleteMapping("Pause");
-            //inputManager.deleteMapping(MappingEnum.PARTICLE_TRIGGER.name());
-        }
-
-    }
-
-    public void setPaused(boolean paused) {
-        if (paused && !this.paused) {
-            this.paused = true;
-
-            this.app.getGuiNode().detachChildNamed("Cursor");
-            hud.hide();
-
-        } else if (!paused && this.paused) {
-            this.paused = false;
-
-            hud.show();
-            this.app.getGuiNode().attachChild(cursor);
-        }
-    }
-
-    public BaseGame getApp() {
-        return app;
-    }
-
-    public Node getRootNode() {
-        return rootNode;
-    }
-
-    public BulletAppState getBulletAppState() {
-        return bulletAppState;
-    }
-
-    public AssetManager getAssetManager() {
-        return app.getAssetManager();
-    }
-
-    public InputManager getInputManager() {
-        return inputManager;
-    }
+  public InputManager getInputManager() {
+    return inputManager;
+  }
 }

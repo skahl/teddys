@@ -22,7 +22,6 @@ import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
-import edu.teddys.network.messages.server.ManMessageTransferServerData;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
@@ -88,14 +87,14 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //TODO Distribute to the other clients?
         ResMessageMapLoaded msg = (ResMessageMapLoaded) message;
         TeddyServer.getInstance().send(msg);
-        //TODO Check how many clients are ready yet to start the game occassionally.
-        // (use TeddyServerData)
         Player newPlayer = Player.getInstance(source.getId());
         // set the client data for local access on demand
         //TODO always sync the data! use a thread for that
         newPlayer.setData(TeddyServer.getInstance().getClientData(source.getId()));
-        //TODO add the player to the game if not already joined
+        // add the player to the game world if not already joined
         Game.getInstance().addPlayerToWorld(newPlayer);
+        //TODO Check how many clients are ready yet to start the game occassionally.
+        // (use TeddyServerData)
         // Now start a game
         GSMessageBeginGame beginGame = new GSMessageBeginGame();
         TeddyServer.getInstance().send(beginGame);
@@ -137,15 +136,17 @@ public class ServerListener implements MessageListener<HostedConnection> {
       if (message instanceof ManControllerInput) {
         ManControllerInput input = (ManControllerInput) message;
         
+        //TODO local player ...
 //        if(source.getId() == Player.LOCAL_PLAYER) {
 //          // ignore it, it is handled by the input manager attached to the local
 //          // player
-//          //TODO sync with the input data if the server has been created locally
+//          // sync with the input data if the server has been created locally
 //          // (local join)
 //          return;
 //        }
         // refresh the player
         Player.getInstance(source.getId()).getPlayerControl().newInput(input.getInput());
+        //TODO what about the player's local world?
       } else if (message instanceof ManMessageSendPosition) {
         //
         // USER POSITION RECEIVED

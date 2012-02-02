@@ -14,7 +14,6 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
 import edu.teddys.controls.MappingEnum;
-import edu.teddys.hud.HUDController;
 import edu.teddys.input.ControllerEvents;
 import edu.teddys.network.ClientData;
 import edu.teddys.network.DeathTest;
@@ -59,6 +58,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.logging.Logger;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.DailyRollingFileAppender;
 import org.apache.log4j.Level;
@@ -144,6 +144,8 @@ public class BaseGame extends SimpleApplication {
   @Override
   public void simpleInitApp() {
 
+    Logger.getLogger("").setLevel(java.util.logging.Level.WARNING);
+    
     flyCam.setEnabled(false);
     setDisplayFps(true);
     setDisplayStatView(false);

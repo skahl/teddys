@@ -33,7 +33,7 @@ public class Player {
     Game game = Game.getInstance();
 
     // Use the toString() method to generate a quite uniquely identified Node
-    node = new Node("player" + id);
+    node = new Node("player" + id.toString());
     visual = new TeddyVisual(node, game.getAssetManager());
 
     // physics

@@ -34,7 +34,6 @@ public class ServerTimerThread extends Thread {
   }
 
   protected Long getTick() {
-    //TODO check if synchronized is necessary
     return tick;
   }
 
