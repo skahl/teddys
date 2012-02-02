@@ -51,7 +51,7 @@ public class TeddyVisual {
         
         // gun init
         currentWeapon = new ShotBaerenpistole(node.getName(), assetManager);
-        currentWeapon.getNode().setLocalTranslation(0.2f, 0.1f, 0f);
+        //currentWeapon.getParticleEmitter().setLocalTranslation(0.2f, 0.1f, 0f);
         node.attachChild(currentWeapon.getNode());
         
         // quad and materials init
