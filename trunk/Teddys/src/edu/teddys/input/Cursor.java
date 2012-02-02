@@ -21,6 +21,8 @@ import java.util.Map;
  */
 public class Cursor extends Picture {
     
+    private static Cursor instance = null;
+    
     private float x, y, width, height;
     //private Map<String, Texture> textureMap;
     //private AssetManager assetManager;
@@ -28,7 +30,7 @@ public class Cursor extends Picture {
 
 
     
-    public Cursor(String name) {
+    private Cursor(String name) {
         super(name);
         //this.assetManager = assetManager;
         //textureMap = new HashMap<String, Texture>();
@@ -40,6 +42,13 @@ public class Cursor extends Picture {
         setHeight(64);
         setWidth(64);
         */
+    }
+    
+    public static Cursor getInstance(String name) {
+        if (instance == null) {
+            instance = new Cursor(name);
+        }
+        return instance;
     }
     
     public void setHotspot(float x, float y) {
