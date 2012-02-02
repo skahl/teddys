@@ -7,13 +7,8 @@
  
 package edu.teddys.input;
 
-import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector2f;
-import com.jme3.texture.Texture;
-import com.jme3.texture.Texture2D;
 import com.jme3.ui.Picture;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
@@ -28,10 +23,9 @@ public class Cursor extends Picture {
     //private AssetManager assetManager;
     private Vector2f hotspot;
 
-
-    
-    private Cursor(String name) {
-        super(name);
+    private Cursor() {
+      // Changed to a manually specified name!
+        super("Cursor");
         //this.assetManager = assetManager;
         //textureMap = new HashMap<String, Texture>();
         hotspot = new Vector2f();
@@ -44,9 +38,9 @@ public class Cursor extends Picture {
         */
     }
     
-    public static Cursor getInstance(String name) {
+    public static Cursor getInstance() {
         if (instance == null) {
-            instance = new Cursor(name);
+            instance = new Cursor();
         }
         return instance;
     }
@@ -103,7 +97,5 @@ public class Cursor extends Picture {
         this.y += y;
         super.setPosition(this.x, this.y);        
     }
-    
-
 
 }

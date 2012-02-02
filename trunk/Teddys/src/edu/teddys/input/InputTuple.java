@@ -11,17 +11,19 @@ import com.jme3.network.serializing.Serializable;
  * @author cm
  */
 @Serializable
-public class SimpleTriple {
+public class InputTuple {
 
   private String type = "";
   private String key = "";
   private Object value = "";
   private float tpf = 0f;
+  private float x = 0;
+  private float y = 0;
 
-  public SimpleTriple() {
+  public InputTuple() {
   }
 
-  public SimpleTriple(InputType type, String key, Object value, float tpf) {
+  public InputTuple(InputType type, String key, Object value, float tpf, float x, float y) {
     this.type = type.name();
     if (key != null) {
       this.key = key;
@@ -30,6 +32,8 @@ public class SimpleTriple {
       this.value = value;
     }
     this.tpf = tpf;
+    this.x = x;
+    this.y = y;
   }
 
   public InputType getType() {
@@ -62,6 +66,14 @@ public class SimpleTriple {
 
   public void setValue(Object value) {
     this.value = value;
+  }
+
+  public float getX() {
+    return x;
+  }
+
+  public float getY() {
+    return y;
   }
 
   @Override

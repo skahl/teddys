@@ -147,6 +147,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
 //          // (local join)
 //          return;
 //        }
+        
         // refresh the player
         Player.getInstance(source.getId()).getPlayerControl().newInput(input.getInput());
         //TODO what about the player's local world?
@@ -167,15 +168,15 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // USER WANTS TO GET NASTY (-> WEAPONS)
         //
 
+        MegaLogger.getLogger().debug(message);
+        
         //TODO read the target list
 
         //TODO calculate the damage and send them to the appropriate clients
 
         //TEST
-        Integer[] affected = (Integer[]) TeddyServer.getInstance().getClientIDs().toArray();
-        Integer[] damage = new Integer[]{40};
-        for (int i = 0; i < affected.length; i++) {
-          ManMessageSendDamage damMsg = new ManMessageSendDamage(affected[i], damage[i]);
+        for (Integer clientID : TeddyServer.getInstance().getClientIDs()) {
+          ManMessageSendDamage damMsg = new ManMessageSendDamage(clientID, 50);
           TeddyServer.getInstance().send(damMsg);
         }
       }

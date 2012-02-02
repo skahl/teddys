@@ -38,7 +38,7 @@ import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
-import edu.teddys.input.SimpleTriple;
+import edu.teddys.input.InputTuple;
 import edu.teddys.menu.MenuTypes;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.GSMessageEndGame;
@@ -240,7 +240,7 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(ClientData.class);
     Serializer.registerClass(Team.class);
     Serializer.registerClass(TeddyServerData.class);
-    Serializer.registerClass(SimpleTriple.class);
+    Serializer.registerClass(InputTuple.class);
     // Client
     Serializer.registerClass(GSMessageGamePaused.class);
     Serializer.registerClass(GSMessagePlayerReady.class);
