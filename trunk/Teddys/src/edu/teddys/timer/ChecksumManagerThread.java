@@ -17,6 +17,8 @@ import java.util.Random;
  * @author cm
  */
 public class ChecksumManagerThread extends Thread {
+  
+  private boolean stop = false;
 
   /**
    * 
@@ -36,7 +38,7 @@ public class ChecksumManagerThread extends Thread {
   @Override
   public void run() {
     //TODO dismiss old values
-    for (;;) {
+    while (!stop) {
       // TODO choose files randomly
       List<String> files = new ArrayList<String>();
       // Get the current working directory
@@ -64,5 +66,14 @@ public class ChecksumManagerThread extends Thread {
         MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
     }
+  }
+  
+  /**
+   * 
+   * Set the flag to stop the current thread.
+   * 
+   */
+  void stopThread() {
+    stop = true;
   }
 }

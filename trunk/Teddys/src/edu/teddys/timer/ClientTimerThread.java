@@ -17,6 +17,8 @@ import java.util.List;
  * @author cm
  */
 public class ClientTimerThread extends Thread {
+  
+  private boolean stop = false;
 
   @Override
   public void run() {
@@ -36,5 +38,14 @@ public class ClientTimerThread extends Thread {
         MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
     }
+  }
+  
+  /**
+   * 
+   * Set the flag to stop the current thread.
+   * 
+   */
+  void stopThread() {
+    stop = true;
   }
 }

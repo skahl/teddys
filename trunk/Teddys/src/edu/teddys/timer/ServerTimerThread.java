@@ -13,12 +13,14 @@ import edu.teddys.MegaLogger;
  */
 public class ServerTimerThread extends Thread {
 
+  
+  private boolean stop = false;
   private Long tick = new Long(0);
 
   @Override
   public void run() {
     
-    for(;;) {
+    while (!stop) {
       //TODO parse game events
 
       // increment the tick by one
@@ -38,5 +40,14 @@ public class ServerTimerThread extends Thread {
 
   protected synchronized void setTick(Long ts) {
     tick = ts;
+  }
+  
+  /**
+   * 
+   * Set the flag to stop the current thread.
+   * 
+   */
+  void stopThread() {
+    stop = true;
   }
 }

@@ -32,6 +32,7 @@ import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
+import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
@@ -138,6 +139,9 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // Stop sending the actions to the server
           ClientTimer.stopTimer();
           Game.getInstance().getInputManager().removeListener(ControllerInputListener.getInstance());
+          // Set the local player to be 'not ready'
+          TeddyServer.getInstance().getClientData(Player.LOCAL_PLAYER).setReady(false);
+          //TODO what about the other players?
         } else if (message instanceof GSMessagePlayerReady) {
           //
           // A PLAYER IS READY TO START THE GAME
@@ -145,6 +149,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           String teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
           String infoString = String.format("Player %s is ready yet!", teddyName);
           MegaLogger.getLogger().info(infoString);
+          // Refresh the server data
+          TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
         }
       } else if (message instanceof NetworkMessageManipulation) {
         if (message instanceof ManMessageActivateItem) {

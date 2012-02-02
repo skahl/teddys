@@ -50,7 +50,7 @@ public class ClientTimer {
     if (thread == null || !thread.isAlive()) {
       return;
     }
-    thread.interrupt();
+    thread.stopThread();
     thread = null;
     input.clear();
     MegaLogger.getLogger().debug("Client timer thread joined.");

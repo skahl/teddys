@@ -5,9 +5,7 @@
 package edu.teddys.input;
 
 import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
 
 /**

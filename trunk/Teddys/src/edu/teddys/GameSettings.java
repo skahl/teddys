@@ -114,9 +114,9 @@ public class GameSettings {
   public static final Integer NETWORK_CLIENT_LAG_DELAY = 0;
   /**
    * Specify how often isConnected() on a network client should be called.
-   * Default: 5, that means every fifth time isValidConnection() is called,
+   * Default: 1000, that means every fifth time isValidConnection() is called,
    * isConnected() is called as well.
    * @see NetworkCommunicatorSpidermonkeyClient
    */
-  public static final Integer NETWORK_CLIENT_CON_CHECK = 5;
+  public static final Integer NETWORK_CLIENT_CON_CHECK = 1000;
 }

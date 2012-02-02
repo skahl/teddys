@@ -43,7 +43,7 @@ public class ServerTimer {
     if (thread == null || !thread.isAlive()) {
       return;
     }
-    thread.interrupt();
+    thread.stopThread();
     thread = null;
     MegaLogger.getLogger().debug("Server timer stopped.");
   }

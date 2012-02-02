@@ -16,10 +16,12 @@ import edu.teddys.network.messages.server.ManMessageTransferServerData;
  */
 public class ServerDataSyncThread extends Thread {
 
+  private boolean stop = false;
+
   @Override
   public void run() {
     //TODO dismiss old values
-    for (;;) {
+    while (!stop) {
       //TODO(nice to have) delta compression?
       ManMessageTransferServerData msg = new ManMessageTransferServerData(TeddyServer.getInstance().getData());
       TeddyClient.getInstance().send(msg);
@@ -30,5 +32,14 @@ public class ServerDataSyncThread extends Thread {
         MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
     }
+  }
+
+  /**
+   * 
+   * Set the flag to stop the current thread.
+   * 
+   */
+  void stopThread() {
+    stop = true;
   }
 }

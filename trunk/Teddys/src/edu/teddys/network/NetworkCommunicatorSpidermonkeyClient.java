@@ -40,7 +40,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
   /**
    * 
    * Checks if networkClient is not null. If so, check every n-th time (see
-   * GameSettings.NETWORK_CLIENT_CON_CHECK) whether the connection is really
+   * GameSettings.NETWORK_CLIENT_CON_CHECK) whether the connection is fully
    * established.
    * 
    * @return True if a connection to a server is established, else false.

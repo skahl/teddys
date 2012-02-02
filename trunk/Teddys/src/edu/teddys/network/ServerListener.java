@@ -22,6 +22,7 @@ import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
+import edu.teddys.network.messages.server.ManMessageTransferServerData;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
@@ -37,10 +38,6 @@ import java.awt.Color;
 public class ServerListener implements MessageListener<HostedConnection> {
 
   public void messageReceived(HostedConnection source, Message message) {
-//    if (message instanceof NetworkMessage) {
-//      NetworkMessage msg = (NetworkMessage) message;
-//      if (msg instanceof NetworkMessageInfo) {
-    //TODO get the name of the client
     if (message instanceof NetworkMessageInfo) {
       //
       // RECEIVED A SIMPLE MESSAGE
@@ -61,7 +58,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // USER ACCEPTED THE GAME START REQUEST
         //
         //TODO link to the map load status?
-        // Distribute info to the other clients
+        // Re-distribute info to the other clients
         GSMessagePlayerReady msg = (GSMessagePlayerReady) message;
         TeddyServer.getInstance().send(msg);
         // Refresh client info in TeddyServerData
@@ -70,10 +67,6 @@ public class ServerListener implements MessageListener<HostedConnection> {
           return;
         }
         TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
-        // Refresh server data of the clients
-        //TODO
-//        ManMessageTransferServerData sync = new ManMessageTransferServerData(TeddyServer.getInstance().getData());
-//        TeddyServer.getInstance().send(sync);
       }
     } else if (message instanceof NetworkMessageResponse) {
       if (message instanceof ResMessageSendChecksum) {

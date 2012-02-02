@@ -66,7 +66,6 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
       return;
     }
     networkServer.close();
-    //TODO check if all connections must be closed
     MegaLogger.getLogger().debug("Spidermonkey server closed.");
   }
 
@@ -114,9 +113,6 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
     }
   }
 
-  /*
-   * TODO use the client state listener for this purpose?
-   */
   public boolean join() {
     throw new UnsupportedOperationException("Not necessary.");
   }

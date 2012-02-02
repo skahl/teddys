@@ -47,7 +47,7 @@ public class ChecksumManager {
     if (thread == null || !thread.isAlive()) {
       return;
     }
-    thread.interrupt();
+    thread.stopThread();
     thread = null;
     MegaLogger.getLogger().debug("The checksum timer has been stopped.");
   }

@@ -38,7 +38,7 @@ public class ServerDataSync {
     if (!thread.isAlive()) {
       return;
     }
-    thread.interrupt();
+    thread.stopThread();
     thread = null;
     MegaLogger.getLogger().debug("ServerDataSync timer thread joined.");
   }
