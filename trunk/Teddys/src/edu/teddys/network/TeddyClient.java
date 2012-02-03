@@ -143,6 +143,7 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
       setHealth(newHealth);
       return;
     }
+    setHealth(0);
     // You're dead, fag!
     for (AttributeListener listener : listeners.get(ListenerFields.isDead)) {
       listener.attributeChanged(true);

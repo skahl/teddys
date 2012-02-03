@@ -1,6 +1,7 @@
 package edu.teddys.map;
 
 import com.jme3.asset.AssetLoadException;
+import edu.teddys.MegaLogger;
 import edu.teddys.states.Game;
 
 /**
@@ -24,7 +25,7 @@ public class GameLoader {
       gameMapCfg = new GameMapConfig(name + ".cfg");
 
     } catch (AssetLoadException e) {
-      e.printStackTrace();
+      MegaLogger.getLogger().fatal(new Throwable("Map could not be loaded!", e));
     }
   }
 

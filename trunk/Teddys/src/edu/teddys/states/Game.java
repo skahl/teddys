@@ -281,4 +281,8 @@ public class Game extends AbstractAppState {
   public InputManager getInputManager() {
     return inputManager;
   }
+
+  public void setGameLoader(GameLoader gameLoader) {
+    this.gameLoader = gameLoader;
+  }
 }

@@ -44,7 +44,8 @@ public class ClientData {
   /**
    * Indicates whether the player is ready to play the game.
    */
-  private Boolean ready = false;
+  private boolean ready = false;
+  private boolean mapLoaded = false;
   
   public ClientData() {
     super();
@@ -106,12 +107,20 @@ public class ClientData {
     this.team = team;
   }
 
-  public Boolean getReady() {
+  public boolean isReady() {
     return ready;
   }
 
-  public void setReady(Boolean ready) {
+  public void setReady(boolean ready) {
     this.ready = ready;
+  }
+
+  public boolean isMapLoaded() {
+    return mapLoaded;
+  }
+
+  public void setMapLoaded(boolean mapLoaded) {
+    this.mapLoaded = mapLoaded;
   }
   
 }

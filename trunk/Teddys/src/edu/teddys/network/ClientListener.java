@@ -9,6 +9,7 @@ import com.jme3.network.MessageListener;
 import com.jme3.network.message.DisconnectMessage;
 import edu.teddys.MegaLogger;
 import edu.teddys.input.ControllerInputListener;
+import edu.teddys.map.GameLoader;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
@@ -127,6 +128,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //TODO Set game state to "EndGame"
 //          ServerTimer.stopTimer();
           
+          Player.getInstance(Player.LOCAL_PLAYER).getData().setReady(false);
+          Player.getInstance(Player.LOCAL_PLAYER).getData().setMapLoaded(false);
           // Stop sending the actions to the server
           ClientTimer.stopTimer();
           Game.getInstance().getInputManager().removeListener(ControllerInputListener.getInstance());
@@ -185,8 +188,13 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // LOAD THE SPECIFIED MAP
           //
           ReqMessageMapRequest msg = (ReqMessageMapRequest) message;
-          //TODO call the map loader
-//        GameLoader mapLoader = new GameLoader(null, null, null);
+          // Load the game map
+          Game.getInstance().setGameLoader(
+                  new GameLoader("firstlevel", "maps/firstlevel.zip", Game.getInstance())
+                  );
+          // Now that the map is loaded, send the confirmation
+          ResMessageMapLoaded mapLoaded = new ResMessageMapLoaded();
+          TeddyClient.getInstance().send(mapLoaded);
         } else if (message instanceof ReqMessagePauseRequest) {
           //
           //TODO check if GSMessageGamePaused is better ...
@@ -222,9 +230,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //TODO adapt to the game flow
           GSMessagePlayerReady playerReady = new GSMessagePlayerReady();
           TeddyClient.getInstance().send(playerReady);
-
-          ResMessageMapLoaded mapLoaded = new ResMessageMapLoaded();
-          TeddyClient.getInstance().send(mapLoaded);
         }
       }
     }
