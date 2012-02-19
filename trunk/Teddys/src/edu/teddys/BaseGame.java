@@ -57,11 +57,9 @@ import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.menu.MainMenu;
 import edu.teddys.menu.PauseMenu;
 import java.io.IOException;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.List; 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Logger;
 import org.apache.log4j.BasicConfigurator;
@@ -80,9 +78,7 @@ public class BaseGame extends SimpleApplication {
 
   private NiftyJmeDisplay niftyDisplay;
   private Nifty nifty;
-  private ConcurrentLinkedQueue<Entry<Node,Spatial>> nodesToAdd = new ConcurrentLinkedQueue<Entry<Node,Spatial>>();
-  private ConcurrentLinkedQueue<Entry<Node,Spatial>> nodesToRemove = new ConcurrentLinkedQueue<Entry<Node,Spatial>>();
-    
+  
   public ScheduledThreadPoolExecutor threadPool; // Multithreading
   // ActionListener
   private ActionListener actionListener = new ActionListener() {
@@ -299,33 +295,14 @@ public class BaseGame extends SimpleApplication {
   @Override
   public void update() {
     super.update();
-    for(Entry<Node,Spatial> nodeEntry : nodesToAdd) {
-      nodeEntry.getKey().attachChild(nodeEntry.getValue());
-      MegaLogger.getLogger().debug(String.format(
-              "Node %s added to %s.",
-              nodeEntry.getValue(),
-              nodeEntry.getKey()));
-    }
-    nodesToAdd.clear();
-    for(Entry<Node,Spatial> nodeEntry : nodesToRemove) {
-      nodeEntry.getKey().detachChild(nodeEntry.getValue());
-      MegaLogger.getLogger().debug(String.format(
-              "Node %s removed from %s.",
-              nodeEntry.getValue(),
-              nodeEntry.getKey()));
-    }
-    nodesToRemove.clear();
-//    getRootNode().updateGeometricState();
-//    getRootNode().updateLogicalState(tpf);
-//    getRootNode().updateModelBound();
   }
   
   public void addSpatial(Node parent, Spatial child) {
-    nodesToAdd.add(new SimpleEntry<Node, Spatial>(parent, child));
+    enqueue(new AttachToNodeCallable(parent, child));
   }
   
   public void removeSpatial(Node parent, Spatial child) {
-    nodesToRemove.add(new SimpleEntry<Node, Spatial>(parent, child));
+    enqueue(new DetachFromNodeCallable(parent, child));
   }
 
   @Override

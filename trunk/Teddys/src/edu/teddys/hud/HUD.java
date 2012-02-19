@@ -113,7 +113,7 @@ public class HUD {
 
 
     //health
-    healthIndicator = new BarIndicator(this.app, barWidth, barHeight,
+    healthIndicator = new BarIndicator(barWidth, barHeight,
             healthXLocation + imageSize,
             hudHeight + barYOffset,
             assetManager,
@@ -143,7 +143,7 @@ public class HUD {
 
 
     //jeatpack energy
-    jetpackIndicator = new BarIndicator(this.app, barWidth, barHeight,
+    jetpackIndicator = new BarIndicator(barWidth, barHeight,
             jetpackXLocation + imageSize,
             hudHeight + barYOffset,
             assetManager,
@@ -173,7 +173,7 @@ public class HUD {
 
 
     //ammo
-    weaponIndicator = new BarIndicator(this.app, barWidth, barHeight,
+    weaponIndicator = new BarIndicator(barWidth, barHeight,
             weaponXLocation + imageSize,
             hudHeight + barYOffset,
             assetManager,
@@ -202,7 +202,7 @@ public class HUD {
     hudNode.attachChild(weaponTail);
 
 
-    weaponList = new HorizontalIconList(this.app, imageSize, iconOffset, 2 * imageSize, assetManager, hudNode);
+    weaponList = new HorizontalIconList(imageSize, iconOffset, 2 * imageSize, assetManager, hudNode);
 
     //test weapon list
     weaponList.addItem("Test1", 0, "Interface/HUD/placeholder.png", ColorRGBA.Blue);

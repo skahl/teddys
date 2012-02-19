@@ -46,8 +46,6 @@ public class Game extends AbstractAppState {
   public static HUD hud;
   private Cursor cursor;
   private boolean paused;
-  private List<Node> nodesToAdd = Collections.synchronizedList(new LinkedList<Node>());
-  private List<Node> nodesToRemove = Collections.synchronizedList(new LinkedList<Node>());
   private List<Node> nodesToAddToPhysicsSpace = Collections.synchronizedList(new LinkedList<Node>());
   private List<Node> nodesToRemoveFromPhysicsSpace = Collections.synchronizedList(new LinkedList<Node>());
   
@@ -72,23 +70,6 @@ public class Game extends AbstractAppState {
 
   @Override
   public void update(float tpf) {
-    if(nodesToRemove.isEmpty() && nodesToAdd.isEmpty()) {
-      return;
-    }
-    if(!nodesToAdd.isEmpty()) {
-      for(Node node : nodesToAdd) {
-        getRootNode().attachChild(node);
-        MegaLogger.getLogger().debug("Added node to the world.");
-      }
-      nodesToAdd.clear();
-    }
-    if(!nodesToRemove.isEmpty()) {
-      for(Node node : nodesToRemove) {
-        getRootNode().detachChild(node);
-        MegaLogger.getLogger().debug("Node removed from the world.");
-      }
-      nodesToRemove.clear();
-    }
     if(!nodesToAddToPhysicsSpace.isEmpty()) {
       for(Node node : nodesToAddToPhysicsSpace) {
         getBulletAppState().getPhysicsSpace().add(node);
@@ -249,23 +230,25 @@ public class Game extends AbstractAppState {
     if (getRootNode().hasChild(player.getNode())) {
       return;
     }
-    nodesToAdd.add(player.getNode());
     Random rnd = new Random();
     //TODO set to the maximum dimension of the world
     Vector3f pos = new Vector3f(rnd.nextFloat() * 6, rnd.nextFloat() * 2, -1.2f);
+    //TODO should be done in a OpenGL update thread
     player.getPlayerControl().setPhysicsLocation(pos);
     MegaLogger.getLogger().debug("Position of the player has been set: " + pos);
+    // add to the worldww
+    app.addSpatial(getRootNode(), player.getNode());
   }
 
   public void removePlayerFromWorld(Player player) {
-    //TOOD use the update routine for thi spurpose.
+    //TOOD use the update routine for this purpose.
     if (getRootNode().hasChild(player.getNode())) {
-      nodesToRemove.add(player.getNode());
+      app.removeSpatial(getRootNode(), player.getNode());
     }
   }
   
   public void addMapModel(Node mapModel) {
-    nodesToAdd.add(mapModel);
+    app.addSpatial(getRootNode(), mapModel);
     nodesToAddToPhysicsSpace.add(mapModel);
   }
 
