@@ -82,6 +82,7 @@ public class Cursor extends Picture {
         this.width = width;
     }
     
+  @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
         this.x = x;

@@ -9,6 +9,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.ui.Picture;
+import edu.teddys.BaseGame;
 
 /**
  *
@@ -16,10 +17,12 @@ import com.jme3.ui.Picture;
  */
 public class HorizontalIconList extends IconList {
     
+  private BaseGame app;
     
     
-    public HorizontalIconList(float entrySize, float x, float y, AssetManager assetManager, Node parent) {
+    public HorizontalIconList(BaseGame app, float entrySize, float x, float y, AssetManager assetManager, Node parent) {
         super(entrySize, x, y, assetManager, parent);
+        this.app = app;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class HorizontalIconList extends IconList {
         
         
         
-        BarIndicator bar = new BarIndicator(pictureSize, 
+        BarIndicator bar = new BarIndicator(app, pictureSize, 
                 pictureSize/5, 
                 x + position*(2.5f*pictureSize) + 1.25f*pictureSize, 
                 y + 0.4f*pictureSize, 

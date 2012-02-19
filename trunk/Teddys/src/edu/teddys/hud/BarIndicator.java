@@ -11,6 +11,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
+import edu.teddys.BaseGame;
 
 /**
  *
@@ -20,18 +21,22 @@ import com.jme3.scene.shape.Quad;
  */
 public class BarIndicator {
     
+  private BaseGame app;
     private Geometry geom;
     private float width, height, geomWidth, geomHeight;
     private int percentage;
     
-    public BarIndicator(float width, float height, float x, float y, AssetManager assetManager, ColorRGBA color, Node parent) {
-        Quad bar = new Quad(width, height);
+    public BarIndicator(BaseGame app, float width, float height, float x, float y, AssetManager assetManager, ColorRGBA color, Node parent) {
+      this.app = app;  
+      Quad bar = new Quad(width, height);
         geom = new Geometry("BarGeom", bar);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", color);
         geom.setMaterial(mat);
         geom.move(x, y, 0);
-        parent.attachChild(geom);
+        //TODO should be done in a opengl update thread?
+        app.addSpatial(parent, geom);
+//        parent.attachChild(geom);
         this.width = width;
         this.height = height;
         geomWidth = geom.getLocalScale().x;
