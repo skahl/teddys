@@ -17,6 +17,8 @@ public class HealthListener implements AttributeListener<Integer> {
 
   public void attributeChanged(Integer value) {
     MegaLogger.getLogger().info("Listener: Health changed to " + value + "!");
-    HUDController.getInstance().setHealth(TeddyClient.getInstance().getData().getHealth());
+    
+    // TODO: TRIGGERS HUD TO UPDATE OUTSIDE UPDATE CYCLE!!!
+    //HUDController.getInstance().setHealth(TeddyClient.getInstance().getData().getHealth());
   }
 }

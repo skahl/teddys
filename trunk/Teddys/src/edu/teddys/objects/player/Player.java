@@ -1,5 +1,6 @@
 package edu.teddys.objects.player;
 
+import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.scene.Node;
 import edu.teddys.controls.PlayerControl;
@@ -21,6 +22,7 @@ public class Player {
   TeddyVisual visual;
   PlayerControl control;
   CapsuleCollisionShape collisionShape;
+  BoundingBox boundingBox;
   ClientData data;
 
   public ClientData getData() {
@@ -39,6 +41,11 @@ public class Player {
     node = new Node("player" + id.toString());
     visual = new TeddyVisual(node, game.getAssetManager());
 
+    // model bounds (make it shootable)
+    boundingBox = new BoundingBox(visual.getGeo().getLocalTranslation(), visual.getWidth(), visual.getHeight(), 1.0f);
+    visual.getBox().setBound(boundingBox);
+    visual.getBox().updateBound();
+    
     // physics
     collisionShape = new CapsuleCollisionShape(visual.getWidth() * 0.3f, visual.getHeight() * 0.35f, 1);
 

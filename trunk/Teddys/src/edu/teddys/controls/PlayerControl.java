@@ -19,6 +19,7 @@ import edu.teddys.input.AnalogControllerEnum;
 import edu.teddys.input.ControllerEvents;
 import edu.teddys.input.InputType;
 import edu.teddys.input.InputTuple;
+import edu.teddys.objects.player.Player;
 import edu.teddys.objects.player.TeddyVisual;
 import edu.teddys.states.Game;
 import java.util.LinkedList;
@@ -108,6 +109,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     }
     
     if (name.equals(AnalogControllerEnum.WEAPON.name())) {
+        
       // reset weapon timer
       weaponTimer = 0;
       
@@ -115,25 +117,21 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
       visual.getWeapon().shoot();
       
       // shoot
-      Node playerInstances = Game.getInstance().getRootNode();
+      //Node playerInstances = Game.getInstance().getRootNode();
+      Node playerInstances = Player.getPlayerTree();
       
       CollisionResults hits = new CollisionResults();
       
       Ray ray = new Ray(getPhysicsLocation(), 
               new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
       
-      playerInstances.collideWith(ray, hits);
-      if(hits.size()>0) {
-          MegaLogger.getLogger().info(new Throwable("We hit something!"));
-      } else {
-          MegaLogger.getLogger().info(new Throwable("Nothing was hit! :("));
-      }
+      int numHits = playerInstances.collideWith(ray, hits);
       
-      for(int i=0; i<hits.size(); i++) {
+      
+      for(int i=0; i<numHits; i++) {
           String hitmsg = hits.getCollision(i).getGeometry().getName()+" was hit!";
           MegaLogger.getLogger().info(new Throwable(hitmsg));
       }
-      
     }
     
     if (name.contains(AnalogControllerEnum.JETPACK.name())) {
@@ -238,6 +236,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
         // calculate the angle from the default up vector of the player, to the cursor's position:
         //angleToDefaultVector = defaultVectorPlayerToCursor.angleBetween(vectorPlayerToCursor);
         //MegaLogger.getLogger().info(new Throwable(angleToDefaultVector.toString()));
+        
         // inform the visual representation of this player about the view angle
         visual.setViewVector(vectorPlayerToCursor);
         
