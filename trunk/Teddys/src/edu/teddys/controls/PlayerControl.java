@@ -2,12 +2,15 @@ package edu.teddys.controls;
 
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.Trigger;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUDController;
@@ -16,7 +19,9 @@ import edu.teddys.input.AnalogControllerEnum;
 import edu.teddys.input.ControllerEvents;
 import edu.teddys.input.InputType;
 import edu.teddys.input.SimpleTriple;
+import edu.teddys.objects.player.Player;
 import edu.teddys.objects.player.TeddyVisual;
+import edu.teddys.states.Game;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +36,6 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   
   // screen positions of cursor and player
   private Vector2f vectorPlayerToCursor = new Vector2f(1f, 0f);
-  private Vector2f defaultVectorPlayerToCursor = new Vector2f(1f, 0f);
-  // angle between player and cursor on screen
-  private Float angleToDefaultVector = 0f;
   
   private float moveSpeed = 2f;
   private boolean jetpackActive;
@@ -112,6 +114,26 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
       
       // visual
       visual.getWeapon().shoot();
+      
+      // shoot
+      Node playerInstances = Game.getInstance().getRootNode();
+      
+      CollisionResults hits = new CollisionResults();
+      
+      Ray ray = new Ray(getPhysicsLocation(), 
+              new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
+      
+      playerInstances.collideWith(ray, hits);
+      if(hits.size()>0) {
+          MegaLogger.getLogger().info(new Throwable("We hit something!"));
+      } else {
+          MegaLogger.getLogger().info(new Throwable("Nothing was hit! :("));
+      }
+      
+      for(int i=0; i<hits.size(); i++) {
+          String hitmsg = hits.getCollision(i).getGeometry().getName()+" was hit!";
+          MegaLogger.getLogger().info(new Throwable(hitmsg));
+      }
       
     }
     

@@ -5,6 +5,7 @@ import com.jme3.scene.Node;
 import edu.teddys.controls.PlayerControl;
 import edu.teddys.network.ClientData;
 import edu.teddys.states.Game;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -77,5 +78,20 @@ public class Player {
     }
     return instance.get(id);
   }
+  
+  public static ArrayList<Player> getInstanceList() {
+      return new ArrayList<Player>(instance.values());
+  }
 
+  public static Node getPlayerTree() {
+      
+      ArrayList<Player> pl = getInstanceList();
+      Node node = new Node("playerTree");
+      
+      for(Player p : pl) {
+          node.attachChild(p.getNode().clone());
+      }
+      
+      return node;
+  }
 }
