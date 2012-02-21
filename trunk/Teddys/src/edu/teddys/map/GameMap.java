@@ -44,19 +44,6 @@ public class GameMap {
         mapModel.getLocalRotation().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);
         
         
-        // enable alpha blending
-        // not necessary due to MultiSampling and renderManager.setAlphaToCoverage
-        /**
-        for(Spatial geom : mapModel.getChildren()) {
-            if(geom instanceof Geometry) {
-                Material mat = ((Geometry)geom).getMaterial();
-                
-                //mat.getAdditionalRenderState().setAlphaTest(true);
-                //mat.getAdditionalRenderState().setDepthTest(true);
-                //mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-                //geom.setQueueBucket(Bucket.Transparent);
-            }
-        }**/
         
         
         sceneShape = CollisionShapeFactory.createMeshShape(mapModel);
@@ -64,10 +51,6 @@ public class GameMap {
         mapModel.addControl(mapPhysics);
         
         game.addMapModel(mapModel);
-        game.getBulletAppState().getPhysicsSpace().add(mapModel);
-        
-        //app.getRootNode().getLocalRotation().fromAngleAxis(-FastMath.HALF_PI, new Vector3f(0,1,0));
-        
         
         
         } catch (Exception e) {
