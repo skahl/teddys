@@ -18,8 +18,7 @@ import edu.teddys.input.ActionControllerEnum;
 import edu.teddys.input.AnalogControllerEnum;
 import edu.teddys.input.ControllerEvents;
 import edu.teddys.input.InputType;
-import edu.teddys.input.SimpleTriple;
-import edu.teddys.objects.player.Player;
+import edu.teddys.input.InputTuple;
 import edu.teddys.objects.player.TeddyVisual;
 import edu.teddys.states.Game;
 import java.util.LinkedList;
@@ -48,7 +47,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   private Vector3f left, right;
   
   // player control input from server
-  private LinkedList<SimpleTriple> serverControlInput;
+  private LinkedList<InputTuple> serverControlInput;
   private short controlTimer = 0;
   private short jetpackTimer = 0;
   private short weaponTimer = 0;
@@ -60,7 +59,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     player.addControl(this);
     
     visual = vis;
-    serverControlInput = new LinkedList<SimpleTriple>();
+    serverControlInput = new LinkedList<InputTuple>();
 
     left = new Vector3f(-1, 0, 0);
     right = new Vector3f(1, 0, 0);
@@ -246,7 +245,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
         HUDController.getInstance().setJetpackEnergy((int) currentEnergy);
     }
     
-    SimpleTriple entry = null;
+    InputTuple entry = null;
     while (serverControlInput.size() > 0) {
         
       entry = serverControlInput.pop();
@@ -273,7 +272,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
    * 
    * @param input A queue of actions gathered in the last time frame.
    */
-  public void newInput(LinkedList<SimpleTriple> input) {
+  public void newInput(LinkedList<InputTuple> input) {
       this.serverControlInput = input;
     
   }

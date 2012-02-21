@@ -15,38 +15,18 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 @Serializable
 public class ManMessageTriggerWeapon extends NetworkMessageManipulation {
 
-  private String weaponName = "";
   private Vector2f crosshair = new Vector2f();
-  private Integer[] targets;
   
   public ManMessageTriggerWeapon() {
     super();
   }
 
-  public ManMessageTriggerWeapon(String weapon, Vector2f crosshair, Integer[] targets) {
+  public ManMessageTriggerWeapon(Vector2f crosshair) {
     this();
-    if (weapon == null) {
-      throw new InstantiationError("Weapon not specified!");
+    if (crosshair == null) {
+      throw new InstantiationError("Mouse position not specified!");
     }
-    setWeaponName(weapon);
     setCrosshair(crosshair);
-    setTargets(targets);
-  }
-
-  public Integer[] getTargets() {
-    return targets;
-  }
-
-  private void setTargets(Integer[] clientIDs) {
-    this.targets = clientIDs;
-  }
-
-  public String getWeaponName() {
-    return weaponName;
-  }
-
-  private void setWeaponName(String weaponName) {
-    this.weaponName = weaponName;
   }
 
   public Vector2f getCrosshair() {

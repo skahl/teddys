@@ -17,7 +17,6 @@ import com.jme3.ui.Picture;
 public class HorizontalIconList extends IconList {
     
     
-    
     public HorizontalIconList(float entrySize, float x, float y, AssetManager assetManager, Node parent) {
         super(entrySize, x, y, assetManager, parent);
     }

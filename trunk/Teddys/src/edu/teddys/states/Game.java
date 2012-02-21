@@ -24,6 +24,9 @@ import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.map.GameLoader;
 import edu.teddys.objects.player.Player;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -43,6 +46,9 @@ public class Game extends AbstractAppState {
   public static HUD hud;
   private Cursor cursor;
   private boolean paused;
+  private List<Node> nodesToAddToPhysicsSpace = Collections.synchronizedList(new LinkedList<Node>());
+  private List<Node> nodesToRemoveFromPhysicsSpace = Collections.synchronizedList(new LinkedList<Node>());
+  
   //private boolean enabled;
 
   protected Game() {
@@ -64,6 +70,20 @@ public class Game extends AbstractAppState {
 
   @Override
   public void update(float tpf) {
+    if(!nodesToAddToPhysicsSpace.isEmpty()) {
+      for(Node node : nodesToAddToPhysicsSpace) {
+        getBulletAppState().getPhysicsSpace().add(node);
+        MegaLogger.getLogger().debug("Added node to physics space.");
+      }
+      nodesToAddToPhysicsSpace.clear();
+    }
+    if(!nodesToRemoveFromPhysicsSpace.isEmpty()) {
+      for(Node node : nodesToRemoveFromPhysicsSpace) {
+        getBulletAppState().getPhysicsSpace().remove(node);
+        MegaLogger.getLogger().debug("Removed node from physics space.");
+      }
+      nodesToRemoveFromPhysicsSpace.clear();
+    }
   }
 
 //  @Override
@@ -89,7 +109,7 @@ public class Game extends AbstractAppState {
 
       // TODO: Why nullpointer exception on exit?
       stateManager.cleanup();
-      rootNode.detachAllChildren();
+//      rootNode.detachAllChildren();
 
       // detach keys
       initKeys(false);
@@ -140,7 +160,7 @@ public class Game extends AbstractAppState {
 
 
     //HUD
-    hud = HUD.getInstance(this.app.getGuiNode(),
+    hud = HUD.getInstance(this.app, this.app.getGuiNode(),
             this.app.getAssetManager(),
             this.app.getSettings().getWidth(),
             this.app.getSettings().getHeight(), GameModeEnum.CAPTURE_THE_HONEY);
@@ -162,12 +182,14 @@ public class Game extends AbstractAppState {
     int crosshairSize = this.app.getSettings().getHeight() / 15;
     this.app.getAssetManager().loadTexture("Interface/HUD/crosshair.png");
 
-    cursor = Cursor.getInstance("Cursor");
+    cursor = Cursor.getInstance();
     cursor.setImage(this.app.getAssetManager(), "Interface/HUD/crosshair.png", true);
     cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
     cursor.setHeight(crosshairSize);
     cursor.setWidth(crosshairSize);
-    this.app.getGuiNode().attachChild(cursor);
+    //TODO gui node
+    this.app.addSpatial(this.app.getGuiNode(), cursor);
+//    this.app.getGuiNode().attachChild(cursor);
 
     // Camera
     CameraNode camNode = new CameraNode("Camera", this.app.getCamera());
@@ -203,23 +225,31 @@ public class Game extends AbstractAppState {
    * @param player  The Player to be added to the world.
    */
   public void addPlayerToWorld(Player player) {
+    //TODO use the update routine for this purpose. Just write a list 
+    // to be processed at this moment.
     if (getRootNode().hasChild(player.getNode())) {
       return;
     }
-    getRootNode().attachChild(player.getNode());
-    MegaLogger.getLogger().debug("Added player to the world.");
     Random rnd = new Random();
     //TODO set to the maximum dimension of the world
     Vector3f pos = new Vector3f(rnd.nextFloat() * 6, rnd.nextFloat() * 2, -1.2f);
+    //TODO should be done in a OpenGL update thread
     player.getPlayerControl().setPhysicsLocation(pos);
     MegaLogger.getLogger().debug("Position of the player has been set: " + pos);
+    // add to the worldww
+    app.addSpatial(getRootNode(), player.getNode());
   }
 
   public void removePlayerFromWorld(Player player) {
+    //TOOD use the update routine for this purpose.
     if (getRootNode().hasChild(player.getNode())) {
-      getRootNode().detachChild(player.getNode());
-      MegaLogger.getLogger().debug("Player removed from the world.");
+      app.removeSpatial(getRootNode(), player.getNode());
     }
+  }
+  
+  public void addMapModel(Node mapModel) {
+    app.addSpatial(getRootNode(), mapModel);
+    nodesToAddToPhysicsSpace.add(mapModel);
   }
 
   @Override
@@ -251,14 +281,18 @@ public class Game extends AbstractAppState {
     if (paused && !this.paused) {
       this.paused = true;
 
-      this.app.getGuiNode().detachChildNamed("Cursor");
+      //TODO gui node
+      this.app.removeSpatial(this.app.getGuiNode(), cursor);
+//      this.app.getGuiNode().detachChildNamed("Cursor");
       hud.hide();
 
     } else if (!paused && this.paused) {
       this.paused = false;
 
       hud.show();
-      this.app.getGuiNode().attachChild(cursor);
+      //TODO gui node
+      this.app.addSpatial(this.app.getGuiNode(), cursor);
+//      this.app.getGuiNode().attachChild(cursor);
     }
   }
 
@@ -280,5 +314,9 @@ public class Game extends AbstractAppState {
 
   public InputManager getInputManager() {
     return inputManager;
+  }
+
+  public void setGameLoader(GameLoader gameLoader) {
+    this.gameLoader = gameLoader;
   }
 }

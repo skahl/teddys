@@ -4,7 +4,7 @@
  */
 package edu.teddys.network.messages.client;
 
-import edu.teddys.input.SimpleTriple;
+import edu.teddys.input.InputTuple;
 import com.jme3.network.serializing.Serializable;
 import edu.teddys.network.messages.NetworkMessageManipulation;
 import java.util.LinkedList;
@@ -16,13 +16,13 @@ import java.util.LinkedList;
 @Serializable
 public class ManControllerInput extends NetworkMessageManipulation {
 
-  private LinkedList<SimpleTriple> input = new LinkedList<SimpleTriple>();
+  private LinkedList<InputTuple> input = new LinkedList<InputTuple>();
   
   public ManControllerInput() {
     super();
   }
   
-  public ManControllerInput(LinkedList<SimpleTriple> list) {
+  public ManControllerInput(LinkedList<InputTuple> list) {
     this();
     if(list == null) {
       // Always return a list
@@ -31,7 +31,7 @@ public class ManControllerInput extends NetworkMessageManipulation {
     input = list;
   }
 
-  public LinkedList<SimpleTriple> getInput() {
+  public LinkedList<InputTuple> getInput() {
     return input;
   }
 }

@@ -11,6 +11,8 @@ import com.jme3.network.serializing.Serializer;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
 import edu.teddys.controls.MappingEnum;
@@ -38,7 +40,7 @@ import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
-import edu.teddys.input.SimpleTriple;
+import edu.teddys.input.InputTuple;
 import edu.teddys.menu.MenuTypes;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.GSMessageEndGame;
@@ -61,6 +63,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Logger;
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.DailyRollingFileAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
@@ -75,7 +78,7 @@ public class BaseGame extends SimpleApplication {
 
   private NiftyJmeDisplay niftyDisplay;
   private Nifty nifty;
-    
+  
   public ScheduledThreadPoolExecutor threadPool; // Multithreading
   // ActionListener
   private ActionListener actionListener = new ActionListener() {
@@ -111,6 +114,8 @@ public class BaseGame extends SimpleApplication {
   public static void main(String[] args) {
 
     BasicConfigurator.configure();
+    // get a clean logger
+    MegaLogger.getLogger().removeAllAppenders();
     // Set the log level to ALL in order to be informed of all loggable events
     MegaLogger.getLogger().setLevel(Level.ALL);
     PatternLayout basicLayout = new PatternLayout("%d{ISO8601} %-5p (%F:%L): %m%n");
@@ -123,6 +128,8 @@ public class BaseGame extends SimpleApplication {
     } catch (IOException ex) {
       MegaLogger.getLogger().error(new Throwable("Creation of the log file appender aborted!", ex));
     }
+    // add the console logger with the specified layout
+    MegaLogger.getLogger().addAppender(new ConsoleAppender(basicLayout));
     // add the custom appender to react to some infos
     MegaLogger.getLogger().addAppender(new MegaLoggerListener(guiLayout));
 
@@ -219,7 +226,6 @@ public class BaseGame extends SimpleApplication {
     // # # # # # # # # # # # # # # GAME # # # # # # # # # # # # # # # #
 
     
-
   }
 
   private void initSerializer() {
@@ -235,7 +241,7 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(ClientData.class);
     Serializer.registerClass(Team.class);
     Serializer.registerClass(TeddyServerData.class);
-    Serializer.registerClass(SimpleTriple.class);
+    Serializer.registerClass(InputTuple.class);
     // Client
     Serializer.registerClass(GSMessageGamePaused.class);
     Serializer.registerClass(GSMessagePlayerReady.class);
@@ -284,6 +290,19 @@ public class BaseGame extends SimpleApplication {
 
   @Override
   public void simpleUpdate(float tpf) {
+  }
+  
+  @Override
+  public void update() {
+    super.update();
+  }
+  
+  public void addSpatial(Node parent, Spatial child) {
+    enqueue(new AttachToNodeCallable(parent, child));
+  }
+  
+  public void removeSpatial(Node parent, Spatial child) {
+    enqueue(new DetachFromNodeCallable(parent, child));
   }
 
   @Override

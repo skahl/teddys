@@ -63,8 +63,7 @@ public class GameMap {
         mapPhysics = new RigidBodyControl(sceneShape, 0);
         mapModel.addControl(mapPhysics);
         
-        game.getRootNode().attachChild(mapModel);
-        game.getBulletAppState().getPhysicsSpace().add(mapModel);
+        game.addMapModel(mapModel);
         
         //app.getRootNode().getLocalRotation().fromAngleAxis(-FastMath.HALF_PI, new Vector3f(0,1,0));
         

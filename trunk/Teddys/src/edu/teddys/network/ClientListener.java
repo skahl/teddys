@@ -4,13 +4,12 @@
  */
 package edu.teddys.network;
 
-import com.jme3.input.controls.Trigger;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.message.DisconnectMessage;
 import edu.teddys.MegaLogger;
-import edu.teddys.input.ControllerEvents;
 import edu.teddys.input.ControllerInputListener;
+import edu.teddys.map.GameLoader;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
@@ -38,8 +37,6 @@ import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
 import edu.teddys.timer.ServerTimer;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -52,7 +49,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
   public void messageReceived(com.jme3.network.Client source, Message message) {
     String inputMessage = String.format(
             "Client received a message (%s): %s",
-            message.getClass().getName(), message);
+            message.getClass().getSimpleName(), message);
     MegaLogger.getLogger().debug(inputMessage);
 
     if (message instanceof DisconnectMessage) {
@@ -117,6 +114,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //TODO Set game state to "Game"
           GSMessageBeginGame msg = (GSMessageBeginGame) message;
           // start the server timer to get the tick
+          // if the server is local, don't change the value.
           if(source.getId() != Player.LOCAL_PLAYER) {
             ServerTimer.setServerTimestamp(msg.getServerTimestamp());
             ServerTimer.startTimer();
@@ -130,6 +128,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //TODO Set game state to "EndGame"
 //          ServerTimer.stopTimer();
           
+          Player.getInstance(Player.LOCAL_PLAYER).getData().setReady(false);
+          Player.getInstance(Player.LOCAL_PLAYER).getData().setMapLoaded(false);
           // Stop sending the actions to the server
           ClientTimer.stopTimer();
           Game.getInstance().getInputManager().removeListener(ControllerInputListener.getInstance());
@@ -188,8 +188,13 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // LOAD THE SPECIFIED MAP
           //
           ReqMessageMapRequest msg = (ReqMessageMapRequest) message;
-          //TODO call the map loader
-//        GameLoader mapLoader = new GameLoader(null, null, null);
+          // Load the game map
+          Game.getInstance().setGameLoader(
+                  new GameLoader("firstlevel", "maps/firstlevel.zip", Game.getInstance())
+                  );
+          // Now that the map is loaded, send the confirmation
+          ResMessageMapLoaded mapLoaded = new ResMessageMapLoaded();
+          TeddyClient.getInstance().send(mapLoaded);
         } else if (message instanceof ReqMessagePauseRequest) {
           //
           //TODO check if GSMessageGamePaused is better ...
@@ -225,9 +230,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //TODO adapt to the game flow
           GSMessagePlayerReady playerReady = new GSMessagePlayerReady();
           TeddyClient.getInstance().send(playerReady);
-
-          ResMessageMapLoaded mapLoaded = new ResMessageMapLoaded();
-          TeddyClient.getInstance().send(mapLoaded);
         }
       }
     }

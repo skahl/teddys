@@ -8,7 +8,7 @@ import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.messages.client.ManControllerInput;
-import edu.teddys.input.SimpleTriple;
+import edu.teddys.input.InputTuple;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,11 +23,13 @@ public class ClientTimerThread extends Thread {
   @Override
   public void run() {
 
-    for (;;) {
+    while(!stop) {
 
-      List<SimpleTriple> inputList = ClientTimer.getInput();
+      List<InputTuple> inputList = ClientTimer.getInput();
       if (!inputList.isEmpty()) {
-        ManControllerInput input = new ManControllerInput(new LinkedList<SimpleTriple>(inputList));
+        ManControllerInput input = new ManControllerInput(new LinkedList<InputTuple>(inputList));
+        // The timestamp has been already set in the empty constructor of
+        // NetworkMessage
         TeddyClient.getInstance().send(input);
         ClientTimer.input.clear();
       }
