@@ -24,9 +24,6 @@ import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.map.GameLoader;
 import edu.teddys.objects.player.Player;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -46,8 +43,6 @@ public class Game extends AbstractAppState {
   public static HUD hud;
   private Cursor cursor;
   private boolean paused;
-  private List<Node> nodesToAddToPhysicsSpace = Collections.synchronizedList(new LinkedList<Node>());
-  private List<Node> nodesToRemoveFromPhysicsSpace = Collections.synchronizedList(new LinkedList<Node>());
   
   //private boolean enabled;
 
@@ -67,24 +62,6 @@ public class Game extends AbstractAppState {
     public void onAction(String name, boolean keyPressed, float tpf) {
     }
   };
-
-  @Override
-  public void update(float tpf) {
-    if(!nodesToAddToPhysicsSpace.isEmpty()) {
-      for(Node node : nodesToAddToPhysicsSpace) {
-        getBulletAppState().getPhysicsSpace().add(node);
-        MegaLogger.getLogger().debug("Added node to physics space.");
-      }
-      nodesToAddToPhysicsSpace.clear();
-    }
-    if(!nodesToRemoveFromPhysicsSpace.isEmpty()) {
-      for(Node node : nodesToRemoveFromPhysicsSpace) {
-        getBulletAppState().getPhysicsSpace().remove(node);
-        MegaLogger.getLogger().debug("Removed node from physics space.");
-      }
-      nodesToRemoveFromPhysicsSpace.clear();
-    }
-  }
 
 //  @Override
 //  public boolean isEnabled() {
@@ -249,7 +226,8 @@ public class Game extends AbstractAppState {
   
   public void addMapModel(Node mapModel) {
     app.addSpatial(getRootNode(), mapModel);
-    nodesToAddToPhysicsSpace.add(mapModel);
+    //TODO use the update routine for this purpose
+    getBulletAppState().getPhysicsSpace().add(mapModel);
   }
 
   @Override
