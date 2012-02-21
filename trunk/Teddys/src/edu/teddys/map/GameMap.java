@@ -64,6 +64,7 @@ public class GameMap {
         mapModel.addControl(mapPhysics);
         
         game.addMapModel(mapModel);
+        game.getBulletAppState().getPhysicsSpace().add(mapModel);
         
         //app.getRootNode().getLocalRotation().fromAngleAxis(-FastMath.HALF_PI, new Vector3f(0,1,0));
         
