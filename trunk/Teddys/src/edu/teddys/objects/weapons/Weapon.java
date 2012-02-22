@@ -5,15 +5,16 @@
 package edu.teddys.objects.weapons;
 
 /**
+ * 
+ * Describes a weapon. All values range from 0 to 1.
  *
  * @author cm
  */
-abstract public class Weapon {
-  private String name;
-  private Integer damage;
-  private Integer spread;
-  private Integer range;
-  private Integer accuracy;
-  private Integer fireRate;
-  private Integer spawningRate;
+public interface Weapon {
+  public String getName();
+  public float getBaseDamage();
+  public float getRange();
+  public float getAccuracy();
+  public float getFireRate();
+  public float getSpawningRate();
 }

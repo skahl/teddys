@@ -3,6 +3,7 @@ package edu.teddys.objects.player;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import edu.teddys.controls.PlayerControl;
 import edu.teddys.network.ClientData;
 import edu.teddys.states.Game;
@@ -17,7 +18,7 @@ import java.util.TreeMap;
 public class Player {
 
   public static final Integer LOCAL_PLAYER = 0;
-  private static Map<Integer,Player> instance = new TreeMap<Integer,Player>();
+  private static Map<Integer, Player> instance = new TreeMap<Integer, Player>();
   Node node;
   TeddyVisual visual;
   PlayerControl control;
@@ -45,7 +46,7 @@ public class Player {
     boundingBox = new BoundingBox(visual.getGeo().getLocalTranslation(), visual.getWidth(), visual.getHeight(), 1.0f);
     visual.getBox().setBound(boundingBox);
     visual.getBox().updateBound();
-    
+
     // physics
     collisionShape = new CapsuleCollisionShape(visual.getWidth() * 0.3f, visual.getHeight() * 0.35f, 1);
 
@@ -85,20 +86,50 @@ public class Player {
     }
     return instance.get(id);
   }
-  
+
   public static ArrayList<Player> getInstanceList() {
-      return new ArrayList<Player>(instance.values());
+    return new ArrayList<Player>(instance.values());
   }
 
   public static Node getPlayerTree() {
-      
-      ArrayList<Player> pl = getInstanceList();
-      Node node = new Node("playerTree");
-      
-      for(Player p : pl) {
-          node.attachChild(p.getNode().clone());
+    ArrayList<Player> pl = getInstanceList();
+    Node node = new Node("playerTree");
+    for (Player p : pl) {
+      Spatial tmp = p.getNode().clone();
+      tmp.getWorldTranslation().setZ(0f);
+      node.attachChild(tmp);
+    }
+    return node;
+  }
+
+  /**
+   * 
+   * Filters a node containing the specified playerNode name.
+   * 
+   */
+  public static Node getPlayerTree(String playerNodeName) {
+    ArrayList<Player> pl = getInstanceList();
+    Node node = new Node("playerTree");
+    for (Player p : pl) {
+      if (p.getNode().getName().equals(playerNodeName)) {
+        continue;
       }
-      
-      return node;
+      Spatial tmp = p.getNode().clone();
+//      tmp.getWorldTranslation().setZ(0f);
+      node.attachChild(tmp);
+    }
+    return node;
+  }
+
+  public static Player getPlayerByNode(String name) {
+    System.out.println("ARG:" + name);
+    System.out.println(getInstanceList().toString());
+    for (Player p : getInstanceList()) {
+      System.out.println("p:" + p.getNode().getName());
+      if (p.getNode().getName().equals(name)) {
+        return p;
+      }
+    }
+    return null;
   }
 }

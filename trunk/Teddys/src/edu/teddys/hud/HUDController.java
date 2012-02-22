@@ -35,7 +35,6 @@ public class HUDController extends UpdateControl implements ActionListener {
   private float timeToShow = 5;
   private float timeShown = 0;
   private InputManager input;
-  private Integer updatedHealth;
 
   private HUDController() {
     messages = new ArrayList<String>();
