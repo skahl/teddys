@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.teddys;
+package edu.teddys.callables;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
