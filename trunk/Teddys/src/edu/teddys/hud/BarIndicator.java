@@ -11,6 +11,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Quad;
+import edu.teddys.states.Game;
 
 /**
  *
@@ -33,7 +34,7 @@ public class BarIndicator {
     geom.move(x, y, 0);
 
     //TODO add node
-    parent.attachChild(geom);
+    Game.getInstance().addSpatial(parent, geom);
     this.width = width;
     this.height = height;
     geomWidth = geom.getLocalScale().x;

@@ -13,9 +13,12 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.shadow.BasicShadowRenderer;
+import edu.teddys.AttachToNodeCallable;
 import edu.teddys.BaseGame;
+import edu.teddys.DetachFromNodeCallable;
 import edu.teddys.GameModeEnum;
 import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUD;
@@ -137,7 +140,7 @@ public class Game extends AbstractAppState {
 
 
     //HUD
-    hud = HUD.getInstance(this.app, this.app.getGuiNode(),
+    hud = HUD.getInstance(this.app.getGuiNode(),
             this.app.getAssetManager(),
             this.app.getSettings().getWidth(),
             this.app.getSettings().getHeight(), GameModeEnum.CAPTURE_THE_HONEY);
@@ -165,7 +168,7 @@ public class Game extends AbstractAppState {
     cursor.setHeight(crosshairSize);
     cursor.setWidth(crosshairSize);
     //TODO gui node
-    this.app.addSpatial(this.app.getGuiNode(), cursor);
+    addSpatial(this.app.getGuiNode(), cursor);
 //    this.app.getGuiNode().attachChild(cursor);
 
     // Camera
@@ -193,6 +196,14 @@ public class Game extends AbstractAppState {
 
     addPlayerToWorld(Player.getInstance(1));
   }
+  
+  public void addSpatial(Node parent, Spatial child) {
+    getApp().enqueue(new AttachToNodeCallable(parent, child));
+  }
+  
+  public void removeSpatial(Node parent, Spatial child) {
+    getApp().enqueue(new DetachFromNodeCallable(parent, child));
+  }
 
   /**
    * 
@@ -213,19 +224,19 @@ public class Game extends AbstractAppState {
     //TODO should be done in a OpenGL update thread
     player.getPlayerControl().setPhysicsLocation(pos);
     MegaLogger.getLogger().debug("Position of the player has been set: " + pos);
-    // add to the worldww
-    app.addSpatial(getRootNode(), player.getNode());
+    // add to the world
+    addSpatial(getRootNode(), player.getNode());
   }
 
   public void removePlayerFromWorld(Player player) {
     //TOOD use the update routine for this purpose.
     if (getRootNode().hasChild(player.getNode())) {
-      app.removeSpatial(getRootNode(), player.getNode());
+      removeSpatial(getRootNode(), player.getNode());
     }
   }
   
   public void addMapModel(Node mapModel) {
-    app.addSpatial(getRootNode(), mapModel);
+    addSpatial(getRootNode(), mapModel);
     //TODO use the update routine for this purpose
     getBulletAppState().getPhysicsSpace().add(mapModel);
   }
@@ -260,7 +271,7 @@ public class Game extends AbstractAppState {
       this.paused = true;
 
       //TODO gui node
-      this.app.removeSpatial(this.app.getGuiNode(), cursor);
+      removeSpatial(this.app.getGuiNode(), cursor);
 //      this.app.getGuiNode().detachChildNamed("Cursor");
       hud.hide();
 
@@ -269,7 +280,7 @@ public class Game extends AbstractAppState {
 
       hud.show();
       //TODO gui node
-      this.app.addSpatial(this.app.getGuiNode(), cursor);
+      addSpatial(this.app.getGuiNode(), cursor);
 //      this.app.getGuiNode().attachChild(cursor);
     }
   }

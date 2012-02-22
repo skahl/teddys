@@ -296,14 +296,6 @@ public class BaseGame extends SimpleApplication {
   public void update() {
     super.update();
   }
-  
-  public void addSpatial(Node parent, Spatial child) {
-    enqueue(new AttachToNodeCallable(parent, child));
-  }
-  
-  public void removeSpatial(Node parent, Spatial child) {
-    enqueue(new DetachFromNodeCallable(parent, child));
-  }
 
   @Override
   public void simpleRender(RenderManager rm) {
