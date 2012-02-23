@@ -125,6 +125,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
           TeddyServer.getInstance().getData().getTeams().add(newTeam);
         }
         Integer teamId = 0;
+        // Add the player to the team
         TeddyServer.getInstance().getData().getTeams().get(teamId).addPlayer(clientID);
         data.setTeam(teamId);
         NetworkMessageInfo teamInfoMsg = new NetworkMessageInfo(
@@ -179,11 +180,11 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //TODO read the target list, calculate the damage 
         // and send them to the appropriate clients
 
-        //TEST
-        for (Integer clientID : TeddyServer.getInstance().getClientIDs()) {
-          ManMessageSendDamage damMsg = new ManMessageSendDamage(clientID, 25);
-          TeddyServer.getInstance().send(damMsg);
-        }
+        //TODO This is a TEST
+//        for (Integer clientID : TeddyServer.getInstance().getClientIDs()) {
+//          ManMessageSendDamage damMsg = new ManMessageSendDamage(clientID, 25);
+//          TeddyServer.getInstance().send(damMsg);
+//        }
       }
       //TODO check if trigger effect is also possible for clients
     }

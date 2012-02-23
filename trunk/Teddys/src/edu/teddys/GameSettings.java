@@ -4,6 +4,7 @@
  */
 package edu.teddys;
 
+import edu.teddys.controls.PlayerControl;
 import edu.teddys.network.TeddyServerData;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
@@ -49,6 +50,14 @@ public class GameSettings {
    * Default game mode.
    */
   public static final Class<? extends GameMode> DEFAULT_GAME_MODE = Deathmatch.class;
+  /**
+   * Shows the meshed of the bounding boxes and increases the verbosity of logs.
+   */
+  public static final boolean DEBUG = true;
+  /**
+   * Defined the value regarding the z axis in the 3D world.
+   */
+  public static final float WORLD_Z_INDEX = -1.2f;
   /**
    * Enable checks of randomly chosen game files.
    */
@@ -119,4 +128,15 @@ public class GameSettings {
    * @see NetworkCommunicatorSpidermonkeyClient
    */
   public static final Integer NETWORK_CLIENT_CON_CHECK = 1000;
+  /**
+   * The maximum damage which is taken as the base value for the calculation of
+   * the damage. Default: 80f
+   * @see PlayerControl
+   */
+  public static final Float DAMAGE_MAX = 50f;
+  /**
+   * Defined the sigma value for the damage calculation.
+   * @see PlayerControl
+   */
+  public static final Double DAMAGE_SIGMA = 0.05;
 }

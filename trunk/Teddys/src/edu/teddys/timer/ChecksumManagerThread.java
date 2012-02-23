@@ -11,6 +11,7 @@ import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.apache.commons.math.random.RandomDataImpl;
 
 /**
  *
@@ -46,9 +47,11 @@ public class ChecksumManagerThread extends Thread {
 //      files.add("/edu/teddys/BaseGame.class");
 //      files.add("BaseGame.java");
       String result = ChecksumManager.calculateChecksum(files);
+      RandomDataImpl rnd = new RandomDataImpl();
       // for every client, generate a token
       if (!TeddyServer.getInstance().getClientIDs().isEmpty()) {
-          String token = getNewToken();
+//          String token = getNewToken();
+          String token = rnd.nextHexString(13);
           ChecksumManager.files.put(token, files);
           ChecksumManager.result.put(token, result);
           // Send a message to the clients

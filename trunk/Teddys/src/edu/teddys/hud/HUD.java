@@ -12,6 +12,7 @@ import com.jme3.scene.Node;
 import com.jme3.ui.Picture;
 import edu.teddys.BaseGame;
 import edu.teddys.GameModeEnum;
+import edu.teddys.states.Game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,6 @@ import java.util.Map;
  */
 public class HUD {
 
-  private BaseGame app;
   private Node hudNode, parent;
   private final int numMessages = 5;
   private List<BitmapText> messages;
@@ -44,9 +44,7 @@ public class HUD {
   private final String bar_icon_weapon = "Interface/HUD/bar_icon_weapon_white.png";
   private static HUD instance = null;
 
-  private HUD(BaseGame app, Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
-
-    this.app = app;
+  private HUD(Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
 
     hudNode = new Node("hudNode");
     this.parent = parent;
@@ -234,7 +232,7 @@ public class HUD {
   public void show() {
     if (!parent.hasChild(hudNode)) {
       //TODO add node
-      app.addSpatial(parent, hudNode);
+      Game.getInstance().addSpatial(parent, hudNode);
 //        parent.attachChild(hudNode);
     }
   }
@@ -242,14 +240,14 @@ public class HUD {
   public void hide() {
     if (parent.hasChild(hudNode)) {
       //TODO add node
-      app.removeSpatial(parent, hudNode);
+      Game.getInstance().removeSpatial(parent, hudNode);
 //        parent.detachChild(hudNode);
     }
   }
 
-  public static HUD getInstance(BaseGame app, Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
+  public static HUD getInstance(Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
     if (instance == null) {
-      instance = new HUD(app, parent, assetManager, width, height, mode);
+      instance = new HUD(parent, assetManager, width, height, mode);
     }
     return instance;
   }
@@ -296,11 +294,11 @@ public class HUD {
   public void setItem(String item) {
     if (hudNode.getChild("item") != null) {
       //TODO remove node
-      app.removeSpatial(hudNode, hudNode.getChild("item"));
+      Game.getInstance().removeSpatial(hudNode, hudNode.getChild("item"));
 //      hudNode.detachChildNamed("item");
     }
     if (items.containsKey(item)) {
-      app.addSpatial(hudNode, items.get(item));
+      Game.getInstance().addSpatial(hudNode, items.get(item));
       //TODO add node
 //      hudNode.attachChild(items.get(item));
     }
@@ -308,7 +306,7 @@ public class HUD {
 
   public void removeItem(String item) {
     if (hudNode.getChild("item") != null) {
-      app.removeSpatial(hudNode, items.get(item));
+      Game.getInstance().removeSpatial(hudNode, items.get(item));
       //TODO remove node
 //      hudNode.detachChild(items.get(item));
     }

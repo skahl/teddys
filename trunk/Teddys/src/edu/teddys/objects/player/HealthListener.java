@@ -7,7 +7,6 @@ package edu.teddys.objects.player;
 import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUDController;
 import edu.teddys.network.AttributeListener;
-import edu.teddys.network.TeddyClient;
 
 /**
  *
@@ -19,6 +18,6 @@ public class HealthListener implements AttributeListener<Integer> {
     MegaLogger.getLogger().info("Listener: Health changed to " + value + "!");
     
     // TODO: TRIGGERS HUD TO UPDATE OUTSIDE UPDATE CYCLE!!!
-    //HUDController.getInstance().setHealth(TeddyClient.getInstance().getData().getHealth());
+//    HUDController.getInstance().setHealth(value);
   }
 }
