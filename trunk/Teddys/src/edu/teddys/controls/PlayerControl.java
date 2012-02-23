@@ -7,11 +7,15 @@ import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.Trigger;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Line;
 import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUDController;
 import edu.teddys.input.ActionControllerEnum;
@@ -121,6 +125,15 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
       Node playerInstances = Player.getPlayerTree();
       
       CollisionResults hits = new CollisionResults();
+      
+      ////////////////////
+      Line shot = new Line(getPhysicsLocation(), new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
+      Geometry gs = new Geometry("shot", shot);
+      Material red = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+      red.setColor("Color", ColorRGBA.Red);
+      gs.setMaterial(red);
+      Game.getInstance().getRootNode().attachChild(gs);
+      ////////////////////
       
       Ray ray = new Ray(getPhysicsLocation(), 
               new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
@@ -237,7 +250,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
         //angleToDefaultVector = defaultVectorPlayerToCursor.angleBetween(vectorPlayerToCursor);
         //MegaLogger.getLogger().info(new Throwable(angleToDefaultVector.toString()));
         
-        // inform the visual representation of this player about the view angle
+        // inform the visual representation of this player about the view vector
         visual.setViewVector(vectorPlayerToCursor);
         
         // update HUD 
