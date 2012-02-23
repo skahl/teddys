@@ -15,7 +15,7 @@ import com.jme3.scene.Node;
  *
  * @author skahl
  */
-public class JetpackEffect {
+public class JetpackEffect implements Effect {
     Node mother;
     ParticleEmitter pe;
     Material mat;
@@ -65,11 +65,27 @@ public class JetpackEffect {
         mother.attachChild(pe);
     }
     
-    public boolean isEnabled() {
+    public boolean isTriggerable() {
         return enabled;
     }
     
-    public void setEnabled(boolean enable) {
+    public void trigger() {
+      setEnabled(true);
+    }
+    
+    public void reset() {
+      setEnabled(false);
+    }
+    
+    public Vector3f getVector() {
+      return velocity;
+    }
+    
+    public void setVector(Vector3f vector) {
+      velocity = vector;
+    }
+    
+    private void setEnabled(boolean enable) {
         if(!enable) {
             pe.setParticlesPerSec(0);
             enabled = false;

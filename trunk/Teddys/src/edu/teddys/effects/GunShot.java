@@ -16,7 +16,7 @@ import com.jme3.scene.Node;
  *
  * @author skahl
  */
-public class GunShot {
+public class GunShot implements Effect {
     Node mother;
     ParticleEmitter pe;
     Material mat;
@@ -26,15 +26,12 @@ public class GunShot {
     float velocity;
     Vector3f vector;
     
-    float frequency; // How often PER SECOND should a gun be able to shoot?
-    
     
     protected void init(String name, AssetManager assetManager, String texture) {
         
         this.assetManager = assetManager;
         vector = new Vector3f();
         
-        frequency = 0.5f;
         numParticles = 1;
         canShoot = true;
         
@@ -85,18 +82,6 @@ public class GunShot {
       return vector;
     }
     
-    public float getFrequency() {
-      return frequency;
-    }
-    
-    public void setFrequency(float freq) {
-      if(freq > 0f) {
-        frequency = freq;
-      } else {
-        throw new IllegalArgumentException("Frequncy has to be positive and bigger than zero!");
-      }
-    }
-    
     public void setNumParticles(int numParticles) {
         pe.setNumParticles(numParticles);
     }
@@ -123,7 +108,7 @@ public class GunShot {
         return pe;
     }
     
-    public void shoot() {
+    public void trigger() {
         if(canShoot) {
             canShoot = false;
             pe.emitAllParticles(); // for immediate shot
@@ -131,7 +116,7 @@ public class GunShot {
         }
     }
     
-    public boolean canShoot() {
+    public boolean isTriggerable() {
       return canShoot;
     }
     

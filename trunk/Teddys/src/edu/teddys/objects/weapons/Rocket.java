@@ -4,11 +4,13 @@
  */
 package edu.teddys.objects.weapons;
 
+import edu.teddys.effects.Effect;
+
 /**
  *
  * @author besient
  */
-public class Rocket extends Projectile implements Weapon {
+public class Rocket implements Weapon {
 
   public String getName() {
     return "Teddy Rocket";
@@ -32,6 +34,10 @@ public class Rocket extends Projectile implements Weapon {
 
   public float getSpawningRate() {
     return .2f;
+  }
+
+  public Effect getEffect() {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
     
 }

@@ -4,11 +4,20 @@
  */
 package edu.teddys.objects.weapons;
 
+import edu.teddys.effects.Effect;
+import edu.teddys.effects.StenGunShot;
+
 /**
  *
  * @author cm
  */
 public class StenGun implements Weapon {
+  
+  StenGunShot shot;
+  
+  public StenGun() {
+    shot = new StenGunShot();
+  }
   
   public String getName() {
     return "Sten Gun";
@@ -32,5 +41,9 @@ public class StenGun implements Weapon {
 
   public float getSpawningRate() {
     return .05f;
+  }
+
+  public Effect getEffect() {
+    return shot;
   }
 }

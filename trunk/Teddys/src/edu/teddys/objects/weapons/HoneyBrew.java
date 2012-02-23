@@ -4,6 +4,8 @@
  */
 package edu.teddys.objects.weapons;
 
+import edu.teddys.effects.Effect;
+
 /**
  *
  * @author cm
@@ -32,5 +34,9 @@ public class HoneyBrew implements Weapon {
 
   public float getSpawningRate() {
     return .4f;
+  }
+
+  public Effect getEffect() {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 }

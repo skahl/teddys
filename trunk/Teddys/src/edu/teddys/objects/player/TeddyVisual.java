@@ -15,7 +15,7 @@ import com.jme3.texture.Texture;
 import edu.teddys.MegaLogger;
 import edu.teddys.effects.GunShot;
 import edu.teddys.effects.JetpackEffect;
-import edu.teddys.effects.ShotBaerenpistole;
+import edu.teddys.effects.StenGunShot;
 import edu.teddys.effects.TeddyDeath;
 
 /**
@@ -39,7 +39,6 @@ public class TeddyVisual {
     
     // effect attributes
     JetpackEffect jetpackFx;
-    GunShot currentWeapon;
     TeddyDeath deathFx;
     
     /**
@@ -60,11 +59,6 @@ public class TeddyVisual {
         jetpackFx = new JetpackEffect(node.getName(), assetManager);
         jetpackFx.getNode().setLocalTranslation(-0.3f, -0.25f, 0.0f);
         node.attachChild(jetpackFx.getNode());
-        
-        // gun init
-        currentWeapon = new ShotBaerenpistole(node.getName(), assetManager);
-        //currentWeapon.getParticleEmitter().setLocalTranslation(0.2f, 0.1f, 0f);
-        node.attachChild(currentWeapon.getNode());
         
         // death effect init
         deathFx = new TeddyDeath(assetManager);
@@ -110,6 +104,15 @@ public class TeddyVisual {
     }
     
     /**
+     * Node getter.
+     * 
+     * @return 
+     */
+    public Node getNode() {
+      return node;
+    }
+    
+    /**
      * Geometry getter.
      * 
      * @return 
@@ -152,15 +155,6 @@ public class TeddyVisual {
      */
     public Quad getQuad() {
         return quad;
-    }
-    
-    /**
-     * Return the currently selected weapon.
-     * 
-     * @return 
-     */
-    public GunShot getWeapon() {
-        return currentWeapon;
     }
     
     /**

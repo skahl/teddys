@@ -26,6 +26,7 @@ import edu.teddys.objects.player.TeddyVisual;
 import edu.teddys.objects.weapons.DeafNut;
 import edu.teddys.objects.weapons.HolyWater;
 import edu.teddys.objects.weapons.Rocket;
+import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
 import java.util.LinkedList;
@@ -49,7 +50,6 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   private float totalJetpackEnergy = 100f;
   private float currentEnergy = totalJetpackEnergy;
   private float oldGravity = 4f;
-  private InputManager input;
   private Vector3f left, right;
   // player control input from server
   private LinkedList<InputTuple> serverControlInput;
@@ -57,6 +57,9 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   private short jetpackTimer = 0;
   private float weaponTimer = 0.0f;
   private short hudUpdateTimer = 0;
+  
+  // Weapon
+  Weapon currentWeapon;
   
   
   /**
@@ -78,19 +81,10 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     left = new Vector3f(-1, 0, 0);
     right = new Vector3f(1, 0, 0);
 
-  }
-
-  /** 
-   * Register KeySet Listeners
-   * 
-   * @param input InputManager
-   */
-  public void registerWithInput(InputManager input) {
-    this.input = input;
-
-    Map<String, List<Trigger>> map = ControllerEvents.getAllEvents();
-
-    input.addListener(this, map.keySet().toArray(new String[map.keySet().size()]));
+    
+    // Initialize the currentWeapon with a Sten Gun
+    currentWeapon = new StenGun();
+    Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
   }
 
   /** 
@@ -136,12 +130,12 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     if (name.equals(AnalogControllerEnum.WEAPON.name())) {
 
       // check if weapon can fire again
-      if (visual.getWeapon().canShoot()) {
+      if (currentWeapon.getEffect().isTriggerable()) {
 
         // visual
-        visual.getWeapon().shoot();
+        currentWeapon.getEffect().trigger();
 
-        Ray ray = new Ray(getPhysicsLocation(), visual.getWeapon().getVector());
+        Ray ray = new Ray(getPhysicsLocation(), currentWeapon.getEffect().getVector());
         // I could do that!
         //ray.setLimit(); ??? 
         CollisionResults hits = new CollisionResults();     
@@ -230,7 +224,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
       jetpackActive = true;
 
       visual.stand();
-      visual.getJetpack().setEnabled(true);
+      visual.getJetpack().trigger();
     } else {
       stopJetpack();
     }
@@ -244,7 +238,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     setGravity(oldGravity);
     jetpackActive = false;
 
-    visual.getJetpack().setEnabled(false);
+    visual.getJetpack().reset();
   }
 
   /** 
@@ -267,7 +261,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
    */
   public void setScreenPositions(Vector2f playerPos, Vector2f cursorPos) {
     vectorPlayerToCursor = (cursorPos.subtract(playerPos)).normalizeLocal();
-    visual.getWeapon().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
+    currentWeapon.getEffect().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
   }
 
   /**
@@ -313,8 +307,8 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
     // increase weapon timer
     weaponTimer += tpf;
-    if (weaponTimer > visual.getWeapon().getFrequency()) {
-      visual.getWeapon().reset();
+    if (weaponTimer > currentWeapon.getFireRate()) {
+      currentWeapon.getEffect().reset();
       weaponTimer = 0.0f;
     }
 
