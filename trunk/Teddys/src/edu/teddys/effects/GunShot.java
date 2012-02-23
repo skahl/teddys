@@ -72,14 +72,18 @@ public class GunShot {
     } 
     
     public void setVector(Vector3f initialVector) {
-        
+        Vector3f tmp = initialVector;
         vector = initialVector;
         
         //mother.rotateUpTo(initialVector.cross(Vector3f.UNIT_Z).normalize());
         
+        tmp.z = 0f;
+        pe.getParticleInfluencer().setInitialVelocity(tmp.mult(velocity));
         
-        pe.getParticleInfluencer().setInitialVelocity(vector.mult(velocity));
-        
+    }
+    
+    public Vector3f getVector() {
+      return vector;
     }
     
     public void setNumParticles(int numParticles) {

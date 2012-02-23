@@ -136,11 +136,12 @@ public class BaseGame extends SimpleApplication {
     AppSettings settings = new AppSettings(true);
 
     BaseGame app = new BaseGame();
-    app.setSettings(settings);
     settings.setTitle(GameSettings.TITLE);
     settings.setVSync(GameSettings.VSYNC);
     settings.setSamples(GameSettings.MSAA);
     settings.setResolution(GameSettings.WIDTH, GameSettings.HEIGHT);
+    
+    app.setSettings(settings);
 
     app.start();
   }

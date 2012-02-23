@@ -43,7 +43,7 @@ public class Player {
     visual = new TeddyVisual(node, game.getAssetManager());
 
     // model bounds (make it shootable)
-    boundingBox = new BoundingBox(visual.getGeo().getLocalTranslation(), visual.getWidth(), visual.getHeight(), 1.0f);
+    boundingBox = new BoundingBox(visual.getGeo().getLocalTranslation(), 1f, 1.5f, 2.0f);
     visual.getBox().setBound(boundingBox);
     visual.getBox().updateBound();
 
@@ -103,8 +103,7 @@ public class Player {
   }
 
   /**
-   * 
-   * Filters a node containing the specified playerNode name.
+   * Returns a Node tree of all player nodes, except the given player node.
    * 
    */
   public static Node getPlayerTree(String playerNodeName) {

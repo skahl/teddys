@@ -15,6 +15,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Line;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUDController;
@@ -30,6 +31,7 @@ import edu.teddys.objects.weapons.DeafNut;
 import edu.teddys.objects.weapons.HolyWater;
 import edu.teddys.objects.weapons.Rocket;
 import edu.teddys.objects.weapons.Weapon;
+import edu.teddys.states.Game;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -105,6 +107,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
       // better for physics than warp(getPhysicsLocation().add(vel));
       setWalkDirection(right.mult(moveSpeed * tpf));
+      visual.getBox().updateBound();
 
       // visual
       if (!jetpackActive && onGround()) {
@@ -135,10 +138,18 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
       CollisionResults hits = new CollisionResults();
 
-//      Ray ray = new Ray(getPhysicsLocation(),
-//              new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
-      Ray ray = new Ray(getPhysicsLocation(),
-              new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, getPhysicsLocation().getZ()));
+      ////////////////////
+//      Line shot = new Line(getPhysicsLocation(), getPhysicsLocation().add(visual.getWeapon().getVector()));
+//      Geometry gs = new Geometry("shot", shot);
+//      Material red = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+//      red.setColor("Color", ColorRGBA.Red);
+//      gs.setMaterial(red);
+//      Game.getInstance().getRootNode().attachChild(gs);
+      ////////////////////
+      
+      
+      // Kopf->Tisch ;)
+      Ray ray = new Ray(getPhysicsLocation(), getPhysicsLocation().add(visual.getWeapon().getVector()));
 
       int numHits = playerInstances.collideWith(ray, hits);
 
@@ -216,9 +227,8 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   }
 
   public void setScreenPositions(Vector2f playerPos, Vector2f cursorPos) {
-
     vectorPlayerToCursor = (cursorPos.subtract(playerPos)).normalizeLocal();
-    visual.getWeapon().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
+    visual.getWeapon().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, getPhysicsLocation().getZ()));
   }
 
   @Override
