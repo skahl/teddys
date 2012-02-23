@@ -43,7 +43,7 @@ public class JetpackEffect {
     
     private void init() {
         
-        mat.setTexture("Texture", assetManager.loadTexture("Textures/Effects/Smoke/Smoke.png"));
+        mat.setTexture("Texture", assetManager.loadTexture("Textures/Effects/smoke/smoke.png"));
         mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
         mat.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
         mat.getAdditionalRenderState().setAlphaTest(true);

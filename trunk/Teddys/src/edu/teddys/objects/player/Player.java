@@ -100,12 +100,20 @@ public class Player {
   }
 
   /**
-   * playerControl setter.
+   * playerControl getter.
    * 
    * @return 
    */
   public PlayerControl getPlayerControl() {
     return control;
+  }
+  
+  /**
+   * playerVisual getter.
+   * @return 
+   */
+  public TeddyVisual getPlayerVisual() {
+    return visual;
   }
 
   /**
@@ -145,11 +153,9 @@ public class Player {
    * @return 
    */
   public static Node getPlayerTree() {
-    ArrayList<Player> pl = getInstanceList();
     Node node = new Node("playerTree");
-    for (Player p : pl) {
+    for (Player p : getInstanceList()) {
       Spatial tmp = p.getNode().clone();
-      tmp.getWorldTranslation().setZ(0f);
       node.attachChild(tmp);
     }
     return node;
@@ -161,14 +167,12 @@ public class Player {
    * @return
    */
   public static Node getPlayerTree(String playerNodeName) {
-    ArrayList<Player> pl = getInstanceList();
     Node node = new Node("playerTree");
-    for (Player p : pl) {
+    for (Player p : getInstanceList()) {
       if (p.getNode().getName().equals(playerNodeName)) {
         continue;
       }
       Spatial tmp = p.getNode().clone();
-//      tmp.getWorldTranslation().setZ(0f);
       node.attachChild(tmp);
     }
     return node;
@@ -181,10 +185,7 @@ public class Player {
    * @return 
    */
   public static Player getPlayerByNode(String name) {
-    System.out.println("ARG:" + name);
-    System.out.println(getInstanceList().toString());
     for (Player p : getInstanceList()) {
-      System.out.println("p:" + p.getNode().getName());
       if (p.getNode().getName().equals(name)) {
         return p;
       }

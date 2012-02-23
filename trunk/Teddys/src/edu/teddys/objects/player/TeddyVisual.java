@@ -9,12 +9,14 @@ import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 import edu.teddys.MegaLogger;
 import edu.teddys.effects.GunShot;
 import edu.teddys.effects.JetpackEffect;
 import edu.teddys.effects.ShotBaerenpistole;
+import edu.teddys.effects.TeddyDeath;
 
 /**
  * TeddyVisual contains everything visual specific about a character.
@@ -29,6 +31,7 @@ public class TeddyVisual {
     boolean mirrored;
     
     // visual attributes
+    Node node;
     Quad quad;
     Geometry geo;
     Material standing;
@@ -37,6 +40,7 @@ public class TeddyVisual {
     // effect attributes
     JetpackEffect jetpackFx;
     GunShot currentWeapon;
+    TeddyDeath deathFx;
     
     /**
      * TeddyVisual constructor.
@@ -45,12 +49,14 @@ public class TeddyVisual {
      * @param assetManager 
      */
     public TeddyVisual(Node node, AssetManager assetManager) {
+        this.node = node;
+      
         // control init
         isRunning = false;
         runLeft = false;
         mirrored = false;
         
-        // effect init
+        // jetpack init
         jetpackFx = new JetpackEffect(node.getName(), assetManager);
         jetpackFx.getNode().setLocalTranslation(-0.3f, -0.25f, 0.0f);
         node.attachChild(jetpackFx.getNode());
@@ -59,6 +65,11 @@ public class TeddyVisual {
         currentWeapon = new ShotBaerenpistole(node.getName(), assetManager);
         //currentWeapon.getParticleEmitter().setLocalTranslation(0.2f, 0.1f, 0f);
         node.attachChild(currentWeapon.getNode());
+        
+        // death effect init
+        deathFx = new TeddyDeath(assetManager);
+        node.attachChild(deathFx.getNode());
+        
         
         // quad and materials init
         quad = new Quad(0.6f, 0.79f); //Box(0.3f, 0.3f, 0.01f);
@@ -202,6 +213,22 @@ public class TeddyVisual {
             
             geo.setMaterial(standing);
         }
+    }
+    
+    /**
+     * Let the Teddy die!
+     */
+    public void die() {
+      geo.setCullHint(CullHint.Always);
+      //deathFx.getNode().setCullHint(CullHint.Never);
+      deathFx.die();
+    }
+    
+    /**
+     * Revive the Teddy
+     */
+    public void live() {
+      geo.setCullHint(CullHint.Inherit);
     }
     
     /**

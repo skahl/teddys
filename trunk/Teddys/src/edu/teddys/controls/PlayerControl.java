@@ -156,6 +156,8 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
           // I found no other way than to compare a string... :(
           if(p.getParent().getName().contains("player")) {
 
+            Player plHit = Player.getPlayerByNode(nodeName);
+            plHit.getPlayerVisual().die(); // play the die effect :D
 
             //TODO Now calculate the specific damage dependend from the current weapon
             /*TODO If there is no other reason than for checking the weapon's range,

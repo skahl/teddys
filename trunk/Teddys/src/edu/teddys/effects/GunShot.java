@@ -8,13 +8,11 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Matrix3f;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import edu.teddys.MegaLogger;
 
 /**
+ * 
  *
  * @author skahl
  */
@@ -28,7 +26,7 @@ public class GunShot {
     float velocity;
     Vector3f vector;
     
-    float frequency;
+    float frequency; // How often PER SECOND should a gun be able to shoot?
     
     
     protected void init(String name, AssetManager assetManager, String texture) {
