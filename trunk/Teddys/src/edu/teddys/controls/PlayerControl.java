@@ -42,9 +42,9 @@ import java.util.Map;
 import org.apache.commons.math.random.RandomData;
 import org.apache.commons.math.random.RandomDataImpl;
 
-/**
+/** Control class responsible for character controls and visuals, based on input.
  *
- * @author besient
+ * @author besient,skahl,cm
  */
 public class PlayerControl extends CharacterControl implements AnalogListener, ActionListener {
 
@@ -66,7 +66,16 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   private short jetpackTimer = 0;
   private short weaponTimer = 0;
   private short hudUpdateTimer = 0;
-
+  
+  
+  /**
+   * PlayerControl constructor. Sets physics properties.
+   * 
+   * @param player
+   * @param collisionShape
+   * @param stepHeight
+   * @param vis 
+   */
   public PlayerControl(Spatial player, CollisionShape collisionShape, float stepHeight, TeddyVisual vis) {
     super(collisionShape, stepHeight);
     setPhysicsLocation(player.getWorldTranslation());
@@ -80,6 +89,11 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
   }
 
+  /** 
+   * Register KeySet Listeners
+   * 
+   * @param input InputManager
+   */
   public void registerWithInput(InputManager input) {
     this.input = input;
 
@@ -88,6 +102,13 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     input.addListener(this, map.keySet().toArray(new String[map.keySet().size()]));
   }
 
+  /** 
+   * Analog Control listeners. Walking, Jetpack and Shooting.
+   * 
+   * @param name
+   * @param value
+   * @param tpf 
+   */
   public void onAnalog(String name, float value, float tpf) {
     if (name.equals(AnalogControllerEnum.MOVE_LEFT.name())) {
 
@@ -187,6 +208,13 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
   }
 
+  /** 
+   * Action Control listener.
+   * 
+   * @param name
+   * @param isPressed
+   * @param tpf 
+   */
   public void onAction(String name, boolean isPressed, float tpf) {
 //    if (name.equals(ActionControllerEnum.JETPACK.name())) {
 //      if (!jetpackActive && isPressed) {
@@ -197,6 +225,10 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 //    }
   }
 
+  /** 
+   * Start Jetpack firing, with gravity controls and visuals.
+   * 
+   */
   private void startJetpack() {
     if (currentEnergy > 25f) {
       oldGravity = getGravity();
@@ -210,6 +242,10 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     }
   }
 
+  /** 
+   * Set everything back to normal after Jetpack use.
+   * 
+   */
   private void stopJetpack() {
     setGravity(oldGravity);
     jetpackActive = false;
@@ -217,16 +253,35 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     visual.getJetpack().setEnabled(false);
   }
 
+  /** 
+   * Gravity setter method, for player gravity.
+   * 
+   * @param value 
+   */
   @Override
   public void setGravity(float value) {
     super.setGravity(value);
   }
 
+  /** 
+   * Usually only used on Crosshair movement updates!
+   * 
+   * Feed udpated Player and Cursor positions to this control class.
+   * 
+   * @param playerPos
+   * @param cursorPos 
+   */
   public void setScreenPositions(Vector2f playerPos, Vector2f cursorPos) {
     vectorPlayerToCursor = (cursorPos.subtract(playerPos)).normalizeLocal();
     visual.getWeapon().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
   }
 
+  /**
+   * This control's update method. Is being called from JME, automatically.
+   * Basically forwards and processes the input queue.
+   * 
+   * @param tpf 
+   */
   @Override
   public void update(float tpf) {
     super.update(tpf);

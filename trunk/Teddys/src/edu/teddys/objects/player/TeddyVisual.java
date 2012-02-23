@@ -17,7 +17,8 @@ import edu.teddys.effects.JetpackEffect;
 import edu.teddys.effects.ShotBaerenpistole;
 
 /**
- *
+ * TeddyVisual contains everything visual specific about a character.
+ * 
  * @author skahl
  */
 public class TeddyVisual {
@@ -37,7 +38,12 @@ public class TeddyVisual {
     JetpackEffect jetpackFx;
     GunShot currentWeapon;
     
-    
+    /**
+     * TeddyVisual constructor.
+     * 
+     * @param node
+     * @param assetManager 
+     */
     public TeddyVisual(Node node, AssetManager assetManager) {
         // control init
         isRunning = false;
@@ -92,34 +98,72 @@ public class TeddyVisual {
         node.attachChild(geo);
     }
     
+    /**
+     * Geometry getter.
+     * 
+     * @return 
+     */
     public Geometry getGeo() {
         return geo;
     }
 
+    /**
+     * Material getter.
+     * 
+     * @return 
+     */
     public Material getMat() {
         return geo.getMaterial();
     }
     
+    /**
+     * Return the Teddy displaying Quad's width.
+     * 
+     * @return 
+     */
     public float getWidth() {
         return quad.getWidth();//.getXExtent();
     }
     
+    /**
+     * Return the Teddy displaying Quad's height.
+     * 
+     * @return 
+     */
     public float getHeight() {
         return quad.getHeight();//.getYExtent();
     }
 
-    public Quad getBox() {
+    /**
+     * Return the Teddy displaying Quad.
+     * 
+     * @return 
+     */
+    public Quad getQuad() {
         return quad;
     }
     
+    /**
+     * Return the currently selected weapon.
+     * 
+     * @return 
+     */
     public GunShot getWeapon() {
         return currentWeapon;
     }
     
+    /**
+     * Return the Jetpack
+     * 
+     * @return 
+     */
     public JetpackEffect getJetpack() {
         return jetpackFx;
     }
     
+    /**
+     * Signal the shader to play the "run" animation.
+     */
     public void run() {
         if(!isRunning) {
             isRunning = true;
@@ -127,6 +171,9 @@ public class TeddyVisual {
         }
     }
     
+    /**
+     * Signal the shader to play the "runLeft" animation.
+     */
     public void runLeft() {
         if(!runLeft) {
             runLeft=true;
@@ -135,6 +182,9 @@ public class TeddyVisual {
         run();
     }
     
+    /**
+     * Signal the shader to play the "runRight" animation.
+     */
     public void runRight() {
         if(runLeft) {
             runLeft=false;
@@ -143,6 +193,9 @@ public class TeddyVisual {
         run();
     }
     
+    /**
+     * Signal the shader to switch to the "stand" animation.
+     */
     public void stand() {
         if(isRunning) {
             isRunning = false;
@@ -151,6 +204,11 @@ public class TeddyVisual {
         }
     }
     
+    /**
+     * Set the vector, the Teddy is aiming on.
+     * 
+     * @param vector 
+     */
     public void setViewVector(Vector2f vector) {
         
         int selectedTile;

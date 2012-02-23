@@ -17,7 +17,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- *  Singleton Player
+ * Singleton Player. Contains PlayerControl object, the player visuals and
+ * is the place for the ClientData storage.
+ * 
  * @author skahl
  */
 public class Player {
@@ -31,14 +33,29 @@ public class Player {
   CapsuleCollisionShape collisionShape;
   ClientData data;
 
+  /**
+   * ClientData getter method.
+   * 
+   * @return The client data.
+   */
   public ClientData getData() {
     return data;
   }
 
+  /**
+   * ClientData setter method.
+   * 
+   * @param data 
+   */
   public void setData(ClientData data) {
     this.data = data;
   }
 
+  /**
+   * Player constructor. Initializes controls, visuals and physics of the player.
+   * 
+   * @param id Players are differentiated by this ID.
+   */
   private Player(Integer id) {
 
     Game game = Game.getInstance();
@@ -82,14 +99,30 @@ public class Player {
     data.setId(id);
   }
 
+  /**
+   * playerControl setter.
+   * 
+   * @return 
+   */
   public PlayerControl getPlayerControl() {
     return control;
   }
 
+  /**
+   * Since each player has a Node of its own. This is where you can get it.
+   * 
+   * @return 
+   */
   public Node getNode() {
     return node;
   }
 
+  /**
+   * Player is a singleton. Use this to obtain the object by player ID.
+   * 
+   * @param id
+   * @return 
+   */
   public static Player getInstance(Integer id) {
     if (instance.isEmpty() || instance.get(id) == null) {
       instance.put(id, new Player(id));
@@ -97,10 +130,20 @@ public class Player {
     return instance.get(id);
   }
 
+  /**
+   * Get a list of Player instances.
+   * 
+   * @return 
+   */
   public static ArrayList<Player> getInstanceList() {
     return new ArrayList<Player>(instance.values());
   }
 
+  /**
+   * This method creates a Node, to which clones of Player nodes are attached.
+   * 
+   * @return 
+   */
   public static Node getPlayerTree() {
     ArrayList<Player> pl = getInstanceList();
     Node node = new Node("playerTree");
@@ -115,6 +158,7 @@ public class Player {
   /**
    * Returns a Node tree of all player nodes, except the given player node.
    * 
+   * @return
    */
   public static Node getPlayerTree(String playerNodeName) {
     ArrayList<Player> pl = getInstanceList();
@@ -130,6 +174,12 @@ public class Player {
     return node;
   }
 
+  /**
+   * Return the Player instance given the wanted Player's name.
+   * 
+   * @param name
+   * @return 
+   */
   public static Player getPlayerByNode(String name) {
     System.out.println("ARG:" + name);
     System.out.println(getInstanceList().toString());
