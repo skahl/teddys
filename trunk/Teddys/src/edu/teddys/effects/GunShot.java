@@ -24,9 +24,11 @@ public class GunShot {
     Material mat;
     AssetManager assetManager;
     int numParticles;
-    boolean shooting;
+    boolean canShoot;
     float velocity;
     Vector3f vector;
+    
+    float frequency;
     
     
     protected void init(String name, AssetManager assetManager, String texture) {
@@ -34,8 +36,9 @@ public class GunShot {
         this.assetManager = assetManager;
         vector = new Vector3f();
         
+        frequency = 0.5f;
         numParticles = 1;
-        shooting = false;
+        canShoot = true;
         
         mother = new Node(name+"_gun");
         pe = new ParticleEmitter(name+"_gunshots", ParticleMesh.Type.Triangle, 1);
@@ -84,6 +87,18 @@ public class GunShot {
       return vector;
     }
     
+    public float getFrequency() {
+      return frequency;
+    }
+    
+    public void setFrequency(float freq) {
+      if(freq > 0f) {
+        frequency = freq;
+      } else {
+        throw new IllegalArgumentException("Frequncy has to be positive and bigger than zero!");
+      }
+    }
+    
     public void setNumParticles(int numParticles) {
         pe.setNumParticles(numParticles);
     }
@@ -111,16 +126,18 @@ public class GunShot {
     }
     
     public void shoot() {
-        if(!shooting) {
-            shooting = true;
+        if(canShoot) {
+            canShoot = false;
             pe.emitAllParticles(); // for immediate shot
             
-            pe.setParticlesPerSec(numParticles);
         }
     }
     
-    public void stop() {
-        shooting = false;
-        pe.setParticlesPerSec(0);
+    public boolean canShoot() {
+      return canShoot;
+    }
+    
+    public void reset() {
+        canShoot = true;
     }
 }

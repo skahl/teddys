@@ -175,7 +175,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // USER WANTS TO GET NASTY (-> WEAPONS)
         //
 
-        MegaLogger.getLogger().debug("A weapon was triggered! " + message);
+        //MegaLogger.getLogger().debug("A weapon was triggered! " + message);
         
         //TODO read the target list, calculate the damage 
         // and send them to the appropriate clients
