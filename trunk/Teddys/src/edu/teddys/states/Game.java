@@ -193,7 +193,8 @@ public class Game extends AbstractAppState {
     // physics debug (shows collission meshes):
 
     if(GameSettings.DEBUG) {
-      bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
+      // debug switch not working
+      //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
     }
     
     addPlayerToWorld(Player.getInstance(1));

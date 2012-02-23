@@ -2,8 +2,13 @@ package edu.teddys.objects.player;
 
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.debug.WireBox;
+import com.jme3.scene.shape.Box;
 import edu.teddys.controls.PlayerControl;
 import edu.teddys.network.ClientData;
 import edu.teddys.states.Game;
@@ -20,10 +25,10 @@ public class Player {
   public static final Integer LOCAL_PLAYER = 0;
   private static Map<Integer, Player> instance = new TreeMap<Integer, Player>();
   Node node;
+  Geometry invBoxGeo; // Geometry of the invisible box
   TeddyVisual visual;
   PlayerControl control;
   CapsuleCollisionShape collisionShape;
-  BoundingBox boundingBox;
   ClientData data;
 
   public ClientData getData() {
@@ -42,10 +47,15 @@ public class Player {
     node = new Node("player" + id.toString());
     visual = new TeddyVisual(node, game.getAssetManager());
 
-    // model bounds (make it shootable)
-    boundingBox = new BoundingBox(visual.getGeo().getLocalTranslation(), 1f, 1.5f, 2.0f);
-    visual.getBox().setBound(boundingBox);
-    visual.getBox().updateBound();
+    // attach a cube to the model, so it becomes shootable
+    Box invisibleBox = new Box(0.3f, 0.3f, 0.5f);
+    invBoxGeo = new Geometry("player" + id.toString(), invisibleBox);
+    Material red = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+    red.setColor("Color", ColorRGBA.Red);
+    invBoxGeo.setMaterial(red);
+    invBoxGeo.setCullHint(Spatial.CullHint.Always); //make invisible
+    node.attachChild(invBoxGeo);
+    
 
     // physics
     collisionShape = new CapsuleCollisionShape(visual.getWidth() * 0.3f, visual.getHeight() * 0.35f, 1);

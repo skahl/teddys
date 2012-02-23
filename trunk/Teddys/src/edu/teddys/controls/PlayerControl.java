@@ -1,7 +1,9 @@
 package edu.teddys.controls;
 
+import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
@@ -15,7 +17,9 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
+import com.jme3.scene.shape.Quad;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUDController;
@@ -107,7 +111,6 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
       // better for physics than warp(getPhysicsLocation().add(vel));
       setWalkDirection(right.mult(moveSpeed * tpf));
-      visual.getBox().updateBound();
 
       // visual
       if (!jetpackActive && onGround()) {
@@ -125,58 +128,51 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
       // visual
       visual.getWeapon().shoot();
-
-      // shoot
-      //Node playerInstances = Game.getInstance().getRootNode();
-
-      //TODO the damage should only be calculated if a particle has been emitted
-
-      // Get all players except for the current one on the server
-      Node playerInstances = Player.getPlayerTree(
-              Player.getInstance(Player.LOCAL_PLAYER).getNode().getName()
-              );
-
-      CollisionResults hits = new CollisionResults();
-
-      ////////////////////
-//      Line shot = new Line(getPhysicsLocation(), getPhysicsLocation().add(visual.getWeapon().getVector()));
-//      Geometry gs = new Geometry("shot", shot);
-//      Material red = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-//      red.setColor("Color", ColorRGBA.Red);
-//      gs.setMaterial(red);
-//      Game.getInstance().getRootNode().attachChild(gs);
-      ////////////////////
       
+      Ray ray = new Ray(getPhysicsLocation(), visual.getWeapon().getVector());
+      // I could do that!
+      //ray.setLimit(); ??? 
+      CollisionResults hits = new CollisionResults();     
       
-      // Kopf->Tisch ;)
-      Ray ray = new Ray(getPhysicsLocation(), getPhysicsLocation().add(visual.getWeapon().getVector()));
-
-      int numHits = playerInstances.collideWith(ray, hits);
-
-      for (int i = 0; i < numHits; i++) {
-        String nodeName = hits.getCollision(i).getGeometry().getName();
-        String hitmsg = nodeName + " was hit!";
-        //TODO Now calculate the specific damage dependend from the current weapon
-        float distance = hits.getCollision(i).getDistance();
-        MegaLogger.getLogger().debug("Distance: " + distance);
-        Vector3f iPoint = hits.getCollision(i).getContactPoint();
-        // Assume we have a honey brew yet
-        Weapon w = new DeafNut();
-        RandomDataImpl rnd = new RandomDataImpl();
-        Double weaponDamage = Math.abs(rnd.nextGaussian(w.getBaseDamage(), GameSettings.DAMAGE_SIGMA));
-        Double weaponAccuracy = Math.abs(rnd.nextGaussian(w.getAccuracy(), GameSettings.DAMAGE_SIGMA));
-        Double damage = GameSettings.DAMAGE_MAX * weaponDamage * weaponAccuracy;
-        MegaLogger.getLogger().info(String.format("m=%f,b=%f,a=%f",
-                GameSettings.DAMAGE_MAX,
-                weaponDamage,
-                weaponAccuracy));
-        int resDamage = (int) Math.ceil(damage);
-        hitmsg += " Damage: " + resDamage;
-        ManMessageSendDamage dmgMsg = new ManMessageSendDamage(
-                Player.getPlayerByNode(nodeName).getData().getId(), resDamage);
-        //TODO this should only be done by the server instance!
-        TeddyServer.getInstance().send(dmgMsg);
-        MegaLogger.getLogger().info(new Throwable(hitmsg));
+      Game.getInstance().getRootNode().collideWith(ray, hits);
+      
+      // Check if a Box was hit, since Box are only used by Players...
+      if(hits.size() > 1) {// && hits.getCollision(2).getGeometry().getClass().equals(Box.class)) {
+        Geometry p = hits.getCollision(1).getGeometry();
+        String nodeName = p.getParent().getName();
+        
+        // I found no other way than to compare a string... :(
+        if(p.getParent().getName().contains("player")) {
+        
+          
+          //TODO Now calculate the specific damage dependend from the current weapon
+          /*TODO If there is no other reason than for checking the weapon's range,
+           * one could use ray.setLimit() to limit the intersection check distance
+           * 
+           */
+          float distance = hits.getCollision(1).getDistance();
+          MegaLogger.getLogger().debug("Distance: " + distance);
+          //Vector3f iPoint = hits.getCollision(1).getContactPoint();
+          
+          // Assume we have a honey brew yet
+          Weapon w = new DeafNut();
+          RandomDataImpl rnd = new RandomDataImpl();
+          Double weaponDamage = Math.abs(rnd.nextGaussian(w.getBaseDamage(), GameSettings.DAMAGE_SIGMA));
+          Double weaponAccuracy = Math.abs(rnd.nextGaussian(w.getAccuracy(), GameSettings.DAMAGE_SIGMA));
+          Double damage = GameSettings.DAMAGE_MAX * weaponDamage * weaponAccuracy;
+          MegaLogger.getLogger().info(String.format("m=%f,b=%f,a=%f",
+                  GameSettings.DAMAGE_MAX,
+                  weaponDamage,
+                  weaponAccuracy));
+          int resDamage = (int) Math.ceil(damage);
+          String hitmsg = " Damage: " + resDamage;
+          ManMessageSendDamage dmgMsg = new ManMessageSendDamage(
+                  Player.getPlayerByNode(nodeName).getData().getId(), resDamage);
+          //TODO this should only be done by the server instance!
+          
+          MegaLogger.getLogger().info("Hit: "+nodeName+hitmsg);
+          TeddyServer.getInstance().send(dmgMsg);
+        }
       }
     }
 
@@ -228,7 +224,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
 
   public void setScreenPositions(Vector2f playerPos, Vector2f cursorPos) {
     vectorPlayerToCursor = (cursorPos.subtract(playerPos)).normalizeLocal();
-    visual.getWeapon().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, getPhysicsLocation().getZ()));
+    visual.getWeapon().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
   }
 
   @Override
