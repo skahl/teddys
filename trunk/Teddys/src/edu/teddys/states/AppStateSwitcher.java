@@ -46,6 +46,11 @@ public class AppStateSwitcher {
         }
     }
     
+    public void unpause() {
+        manager.getState(Pause.class).setEnabled(false);
+        manager.getState(Game.class).setPaused(false);
+    }
+    
         
     public static AppStateSwitcher getInstance(AppStateManager manager) {
         if (instance == null) 

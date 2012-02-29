@@ -111,7 +111,7 @@ public class Game extends AbstractAppState {
     app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
 
     this.paused = false;
-    super.setEnabled(false);
+    //super.setEnabled(false);
 
 
     // init physics  renderstate
@@ -147,6 +147,7 @@ public class Game extends AbstractAppState {
             this.app.getSettings().getWidth(),
             this.app.getSettings().getHeight(), GameModeEnum.CAPTURE_THE_HONEY);
 
+    hud.show();
     HUDController hudController = HUDController.getInstance();
     hudController.setHUD(hud);
     hudController.registerWithInput(inputManager);

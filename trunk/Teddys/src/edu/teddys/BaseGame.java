@@ -53,6 +53,7 @@ import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.menu.MainMenu;
+import edu.teddys.menu.OptionsMenu;
 import edu.teddys.menu.PauseMenu;
 import java.io.IOException;
 import java.util.List; 
@@ -87,20 +88,20 @@ public class BaseGame extends SimpleApplication {
         if (!stateManager.getState(Pause.class).isEnabled()) {
 
           // if a game is running while menu is activated
-          //if (stateManager.getState(Game.class).isEnabled()) {
+          if (stateManager.getState(Game.class).isEnabled()) {
             // pause the game
             stateManager.getState(Game.class).setPaused(true);
-          //}
+          }
 
           stateManager.getState(Pause.class).setEnabled(true);
 
         } else {
 
           // if a game is running while menu is deactivated
-          //if (stateManager.getState(Game.class).isEnabled()) {
+          if (stateManager.getState(Game.class).isEnabled()) {
             // unpause the game
             stateManager.getState(Game.class).setPaused(false);
-          //}
+          }
 
           stateManager.getState(Pause.class).setEnabled(false);
 
@@ -277,10 +278,11 @@ public class BaseGame extends SimpleApplication {
     nifty.addXml("Interface/GUI/CreditsScreen.xml");
     nifty.addXml("Interface/GUI/JoinScreen.xml");
     nifty.addXml("Interface/GUI/OptionsScreen.xml");
-    nifty.addXml("Interface/GUI/MessagePopup.xml");
+    nifty.addXml("Interface/GUI/Popups.xml");
     
     ((PauseMenu) nifty.getScreen(MenuTypes.PAUSE_MENU.name()).getScreenController()).setApplication(this);    
     ((MainMenu) nifty.getScreen(MenuTypes.MAIN_MENU.name()).getScreenController()).setApplication(this);
+    ((OptionsMenu) nifty.getScreen(MenuTypes.OPTIONS_MENU.name()).getScreenController()).setApplication(this);
   }
 
   public Nifty getNifty() {
