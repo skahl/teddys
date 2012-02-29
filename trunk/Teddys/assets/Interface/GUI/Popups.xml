@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
+
+    <useControls filename="nifty-default-controls.xml"/>
+    <useStyles filename="nifty-default-styles.xml"/>
+  
+    <popup id="EXIT_POPUP" childLayout="center" controller="edu.teddys.menu.MainMenu">
+        <panel id="popup_panel" style="nifty-panel-red" height="30%" width="50%" align="center" childLayout="vertical" visibleToMouse="true"> 
+            
+            <text text="Really want to quit?" align="center" font="Interface/Fonts/Default.fnt"/>
+            
+            <panel id="spacer" height="70%" width="100%"/>
+            
+            <panel id="button_panel" height="80%" width="100%" align="center" childLayout="horizontal" visibleToMouse="true">
+                
+                <panel id="spacer" height="100%" width="20%"/>
+                
+                <control name="button" label="Yes" id="yes_button" align="center" visibleToMouse="true">
+                    <interact onClick="exit()"/>                
+                </control>           
+                <panel id="spacer" height="100%" width="5%"/>
+                <control name="button" label="No" id="no_button" align="center" visibleToMouse="true">
+                    <interact onClick="closePopup()"/>
+                </control>
+                
+                
+            </panel>  
+            
+                       
+        </panel>
+    </popup>
+    
+    <popup id="INPUT_POPUP" childLayout="center" controller="edu.teddys.menu.MainMenu">
+        <panel id="popup_panel" style="nifty-panel-red" height="30%" width="50%" align="center" childLayout="vertical" visibleToMouse="true"> 
+            
+            <text text="Press any key" align="center" font="Interface/Fonts/Default.fnt"/>
+                      
+        </panel>
+    </popup>
+  
+</nifty>

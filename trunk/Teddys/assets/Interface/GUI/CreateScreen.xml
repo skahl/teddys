@@ -10,34 +10,31 @@
     <layer id="background" backgroundColor="#000f">
        
     </layer>
+
     
-    <layer id="foreground" backgroundColor="#0000" childLayout="vertical">
-        
-        <panel id="top_panel" height="30%" width="100%" align="center" childLayout="center" backgroundColor="#f008">  
-            <text text="Create Game" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
-        </panel>
-        
-        <panel id="mid_panel" height="60%" width="100%" align="center" childLayout="center" backgroundColor="#0f08">  
-        
-        </panel>
-        
-        <panel id="bottom_panel" height="10%" width="100%" align="center" childLayout="center" backgroundColor="#88f8"> 
-        
-        </panel>
-        
-    </layer>
+    <layer id="entries" backgroundColor="#0000" childLayout="horizontal">
     
-    <layer id="entries" backgroundColor="#0000" childLayout="vertical">
-    
-        <panel id="entries_top_panel" height="30%" width="100%" align="center" childLayout="center" backgroundColor="#f008"/>
+        <panel id="left_panel" style="nifty-panel-simple" height="100%" width="30%" align="center" childLayout="vertical">  
         
-        <panel id="entries_mid_panel" height="60%" width="100%" align="center" childLayout="vertical" backgroundColor="#0f08"> 
-        
+            <text text="Create Game" font="Interface/Fonts/Default.fnt" align="center"/>
             
+            <panel id="spacer" height="90%" width="100%"/>
+            
+                                    
+            <control name="button" label="Back" id="back_button" align="center" valign="center">
+                <interact onClick="back()"/>
+            </control>
             
         </panel>
         
-        <panel id="entries_bottom_panel" height="10%" width="100%" align="center" childLayout="center" backgroundColor="#88f8"/>
+        <panel id="entries_mid_panel" style="nifty-panel-no-shadow" height="100%" width="70%" align="center" childLayout="vertical">
+            
+      
+        </panel>
+        
+        <panel id="entries_bottom_panel" style="nifty-panel-bright" height="10%" width="100%" align="center" childLayout="center">
+            
+        </panel>    
         
     </layer>
     

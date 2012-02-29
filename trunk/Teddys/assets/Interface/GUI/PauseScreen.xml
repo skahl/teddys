@@ -31,19 +31,19 @@
         
         <panel id="entries_mid_panel" height="80%" width="75%" align="center" childLayout="horizontal" backgroundColor="#0000"> 
             
-            <control name="button" label="Return" id="create_button" align="center" valign="top" visibleToMouse="true">
+            <control name="button" label="Return" id="create_button" width="25%" align="center" valign="top" visibleToMouse="true">
                 <interact onClick="returnToGame()"/>
             </control>
             
-            <control name="button" label="Options" id="options_button" align="center" valign="top" visibleToMouse="true">
+            <control name="button" label="Options" id="options_button" width="25%" align="center" valign="top" visibleToMouse="true">
                 <interact onClick="showOptionsScreen()"/>
             </control>
             
-            <control name="button" label="Disconnect" id="credits_button" align="center" valign="top" visibleToMouse="true">
+            <control name="button" label="Disconnect" id="credits_button" width="25%" align="center" valign="top" visibleToMouse="true">
                 <interact onClick="disconnect()"/>
             </control>
             
-            <control name="button" label="Exit" id="exit_button" align="center" valign="top" visibleToMouse="true">
+            <control name="button" label="Exit" id="exit_button" width="25%" align="center" valign="top" visibleToMouse="true">
                 <interact onClick="exit()"/>
             </control>
             

@@ -6,6 +6,36 @@
   <useStyles filename="nifty-default-styles.xml"/>
   
   <screen id="CREDITS" controller="edu.teddys.menu.MainMenu">
+      <layer id="background" backgroundColor="#000f">
+       
+    </layer>
+
+    
+    <layer id="entries" backgroundColor="#0000" childLayout="horizontal">
+    
+        <panel id="left_panel" style="nifty-panel-simple" height="100%" width="30%" align="center" childLayout="vertical">  
+        
+            <text text="Credits" font="Interface/Fonts/Default.fnt" align="center"/>
+            
+            <panel id="spacer" height="90%" width="100%"/>
+            
+                                    
+            <control name="button" label="Back" id="back_button" align="center" valign="center">
+                <interact onClick="back()"/>
+            </control>
+            
+        </panel>
+        
+        <panel id="entries_mid_panel" style="nifty-panel-no-shadow" height="100%" width="70%" align="center" childLayout="vertical">
+            
+      
+        </panel>
+        
+        <panel id="entries_bottom_panel" style="nifty-panel-bright" height="10%" width="100%" align="center" childLayout="center">
+            
+        </panel>    
+        
+    </layer>
   </screen>
 
 </nifty>
