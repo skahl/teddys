@@ -35,7 +35,10 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
     try {
       setUpServer();
     } catch (IOException ex) {
-      MegaLogger.getLogger().fatal(new Throwable("The server could not be started!", ex));
+      MegaLogger.getLogger().fatal(new Throwable(
+              "The server could not be started (is the port " 
+              + NetworkSettings.SERVER_PORT + " already used?)"
+              , ex));
     }
   }
 

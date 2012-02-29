@@ -55,6 +55,7 @@ import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.menu.MainMenu;
 import edu.teddys.menu.OptionsMenu;
 import edu.teddys.menu.PauseMenu;
+import java.io.File;
 import java.io.IOException;
 import java.util.List; 
 import java.util.Map;
@@ -77,6 +78,7 @@ public class BaseGame extends SimpleApplication {
 
   private NiftyJmeDisplay niftyDisplay;
   private Nifty nifty;
+  private boolean createdLockfile = false;
   
   public ScheduledThreadPoolExecutor threadPool; // Multithreading
   // ActionListener
@@ -205,7 +207,17 @@ public class BaseGame extends SimpleApplication {
 
     // Create the server
     TeddyServer server = TeddyServer.getInstance();
-    server.startServer();
+    File lockfile = new File(".serverlock");
+    if(!lockfile.exists()) {
+      server.startServer();
+      try {
+        lockfile.createNewFile();
+        createdLockfile = true;
+        MegaLogger.getLogger().debug("Created the lock file for the server instance.");
+      } catch (IOException ex) {
+        MegaLogger.getLogger().warn("Could not create the lock file for the server instance!");
+      }
+    }
 
     // Get the handle to the client and try to join the specified server
     TeddyClient client = TeddyClient.getInstance();
@@ -308,8 +320,12 @@ public class BaseGame extends SimpleApplication {
 
     TeddyClient.getInstance().disconnect();
 
-    TeddyServer.getInstance().stopServer();
-
+    if(createdLockfile) {
+      TeddyServer.getInstance().stopServer();
+      File lockfile = new File(".serverlock");
+      lockfile.delete();
+    }
+    
     threadPool.shutdown();
   }
 

@@ -45,7 +45,7 @@ public class TeddyDeath {
       matPlush.getAdditionalRenderState().setAlphaTest(true);
       
       matSmoke = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-      matSmoke.setTexture("Texture", assetManager.loadTexture("Textures/Effects/smoke/smoke.png"));
+      matSmoke.setTexture("Texture", assetManager.loadTexture("Textures/Effects/Smoke/Smoke.png"));
       
       matSmoke.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
       matSmoke.getAdditionalRenderState().setAlphaTest(true);
