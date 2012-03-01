@@ -113,6 +113,9 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           //TODO Set game state to "Game"
           GSMessageBeginGame msg = (GSMessageBeginGame) message;
+          // add the player to the local world
+          Player newPlayer = Player.getInstance(source.getId());
+          Game.getInstance().addPlayerToWorld(newPlayer);
           // start the server timer to get the tick
           // if the server is local, don't change the value.
           if(source.getId() != Player.LOCAL_PLAYER) {
@@ -121,6 +124,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           }
           // start sending input data
           ClientTimer.startTimer();
+          // activate the keyboard and mouse listeners
+          Game.getInstance().getInputManager().addListener(ControllerInputListener.getInstance());
         } else if (message instanceof GSMessageEndGame) {
           //
           // END OF THE GAME. DISPLAY STATISTICS ...
@@ -133,8 +138,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // Stop sending the actions to the server
           ClientTimer.stopTimer();
           Game.getInstance().getInputManager().removeListener(ControllerInputListener.getInstance());
-          // Set the local player to be 'not ready'
-          TeddyServer.getInstance().getClientData(Player.LOCAL_PLAYER).setReady(false);
           //TODO what about the other players?
         } else if (message instanceof GSMessagePlayerReady) {
           //
@@ -206,8 +209,10 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // THE ACTIVE NETWORK SERVER SHOULD BE CHANGED
           //
           ReqMessageRelocateServer msg = (ReqMessageRelocateServer) message;
-          // At first, start the local server
-          TeddyServer.getInstance().startServer();
+          //TODO Stop the local server
+          TeddyServer.getInstance().stopServer();
+          // Start the server on the default server port
+          TeddyServer.getInstance().startServer(NetworkSettings.SERVER_PORT);
           //TODO Force the clients to join the new server ^^
           MegaLogger.getLogger().debug("Relocated server.");
         } else if (message instanceof ReqMessageSendChecksum) {

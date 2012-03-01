@@ -22,22 +22,14 @@ import java.util.Collection;
 public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicatorAPI {
 
   private com.jme3.network.Server networkServer;
-  private static NetworkCommunicatorSpidermonkeyServer instance;
 
-  public static NetworkCommunicatorSpidermonkeyServer getInstance() {
-    if (instance == null) {
-      instance = new NetworkCommunicatorSpidermonkeyServer();
-    }
-    return instance;
-  }
-
-  private NetworkCommunicatorSpidermonkeyServer() {
+  public NetworkCommunicatorSpidermonkeyServer(Integer serverPort) {
     try {
-      setUpServer();
+      setUpServer(serverPort);
     } catch (IOException ex) {
       MegaLogger.getLogger().fatal(new Throwable(
               "The server could not be started (is the port "
-              + NetworkSettings.SERVER_PORT + " already used?)", ex));
+              + serverPort + " already used?)", ex));
     }
   }
 
@@ -49,7 +41,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
    *  that is informed of all connection-related stuff.
    * @see ConnectionListener
    */
-  public void startServer(TeddyServer server) {
+  public void startServer(TeddyServer server, Integer serverPort) {
     if (networkServer != null && networkServer.isRunning()) {
       return;
     }
@@ -81,9 +73,8 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
    * 
    * @throws IOException Exception which is thrown on network errors.
    */
-  private void setUpServer() throws IOException {
+  private void setUpServer(Integer serverPort) throws IOException {
     // Get the server settings
-    Integer serverPort = NetworkSettings.SERVER_PORT;
     networkServer = com.jme3.network.Network.createServer(serverPort);
     // Configure the server to receive messages
     networkServer.addMessageListener(new ServerListener());
@@ -120,7 +111,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
     }
   }
 
-  public boolean join() {
+  public boolean join(String serverIP, Integer serverPort) {
     throw new UnsupportedOperationException("Not necessary.");
   }
 

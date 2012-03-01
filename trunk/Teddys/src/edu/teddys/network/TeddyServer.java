@@ -32,7 +32,9 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
    */
   private TeddyServerData data;
   private static TeddyServer instance;
-
+  
+  private NetworkCommunicatorSpidermonkeyServer spidermonkeyServer = new NetworkCommunicatorSpidermonkeyServer(NetworkSettings.SERVER_PORT);
+  
   public static TeddyServer getInstance() {
     if (instance == null) {
       instance = new TeddyServer();
@@ -42,18 +44,15 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
 
   /**
    * 
-   * Start the server. Refresh the server data regarding creation timestamp
-   * and discoverability in every case, even when the server is already
-   * running.
+   * Start the server.
    * 
    */
-  public void startServer() {
+  public void startServer(Integer serverPort) {
     if (!isRunning()) {
       data = new TeddyServerData();
       getData().setCreated(new Date());
-      getData().setDiscoverable(true);
     }
-    NetworkCommunicatorSpidermonkeyServer.getInstance().startServer(this);
+    spidermonkeyServer.startServer(this, serverPort);
     
     // Start the protection mechanisms
     if(GameSettings.ENABLE_CHECKSUM_CHECK) {
@@ -88,7 +87,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
       ChecksumManager.stopTimer();
     }
     ServerTimer.stopTimer();
-    NetworkCommunicatorSpidermonkeyServer.getInstance().shutdownServer();
+    spidermonkeyServer.shutdownServer();
     // reset data
     data = null;
 
@@ -96,7 +95,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   }
 
   public String getPubKey(String pubKeyClient) {
-    return NetworkCommunicatorSpidermonkeyServer.getInstance().getPubKey(pubKeyClient);
+    return spidermonkeyServer.getPubKey(pubKeyClient);
   }
 
   public void send(NetworkMessage message) {
@@ -109,10 +108,10 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     if(ServerTimer.isActive()) {
       message.setServerTimestamp(ServerTimer.getServerTimestamp());
     }
-    NetworkCommunicatorSpidermonkeyServer.getInstance().send(message);
+    spidermonkeyServer.send(message);
   }
 
-  public boolean join() {
+  public boolean join(String serverIP, Integer serverPort) {
     // dummy value
     return false;
   }
@@ -265,6 +264,6 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   }
   
   protected Collection<HostedConnection> getConnections() {
-    return NetworkCommunicatorSpidermonkeyServer.getInstance().getConnections();
+    return spidermonkeyServer.getConnections();
   }
 }

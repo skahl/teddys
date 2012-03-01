@@ -21,20 +21,12 @@ import java.io.IOException;
 public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicatorAPI {
 
   private com.jme3.network.Client networkClient;
-  private static NetworkCommunicatorSpidermonkeyClient instance = null;
   /**
    * A counter variable for isValidConnection().
    */
   private int conCheck = 0;
 
-  public static NetworkCommunicatorSpidermonkeyClient getInstance() {
-    if (instance == null) {
-      instance = new NetworkCommunicatorSpidermonkeyClient();
-    }
-    return instance;
-  }
-
-  private NetworkCommunicatorSpidermonkeyClient() {
+  public NetworkCommunicatorSpidermonkeyClient() {
   }
 
   /**
@@ -103,7 +95,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
    * 
    * @return True if no error has occured, else false.
    */
-  public boolean join() {
+  public boolean join(String serverIP, Integer serverPort) {
     TeddyClient client = TeddyClient.getInstance();
     // Check for active connection
     if (isValidConnection()) {
@@ -111,8 +103,8 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
       disconnect(client.getData().getId());
     }
     // Get the server settings
-    String serverIP = client.getServerIP();
-    Integer serverPort = NetworkSettings.SERVER_PORT;
+//    String serverIP = client.getServerIP();
+//    Integer serverPort = NetworkSettings.SERVER_PORT;
     if (serverIP == null || serverPort == null) {
       String msg = "Invalid server configuration! serverIP or serverPort is null. "
               + "Please check your network settings!";

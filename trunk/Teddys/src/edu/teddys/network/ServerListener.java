@@ -140,6 +140,9 @@ public class ServerListener implements MessageListener<HostedConnection> {
                 "Teddy has sent his client data. " + data.getName()
                 + " belongs to the team " + newTeam.getName() + "!");
         TeddyServer.getInstance().send(teamInfoMsg);
+        
+        //TODO send to the other clients
+        //TeddyServer.getInstance().send(msg);
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManControllerInput) {

@@ -75,6 +75,8 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
    */
   private Map<ListenerFields, List<AttributeListener>> listeners = new EnumMap<ListenerFields, List<AttributeListener>>(ListenerFields.class);
   private static TeddyClient instance = null;
+  private NetworkCommunicatorSpidermonkeyClient spidermonkeyClient = new NetworkCommunicatorSpidermonkeyClient();
+  private NetworkCommunicatorSpidermonkeyClient spidermonkeyClientLocal = new NetworkCommunicatorSpidermonkeyClient();
 
   private TeddyClient() {
     super();
@@ -198,21 +200,23 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
   }
 
   public String getPubKey(String pubKeyClient) {
-    return NetworkCommunicatorSpidermonkeyClient.getInstance().getPubKey(pubKeyClient);
+    return spidermonkeyClient.getPubKey(pubKeyClient);
   }
 
   public void send(NetworkMessage message) {
-    NetworkCommunicatorSpidermonkeyClient.getInstance().send(message);
+    spidermonkeyClient.send(message);
   }
 
-  public boolean join() {
-    boolean status = NetworkCommunicatorSpidermonkeyClient.getInstance().join();
-//    NetworkCommunicatorSpidermonkeyClient.getInstance().addClientStateListener(this);
-    return status;
+  public boolean joinLocalServer() {
+    return spidermonkeyClientLocal.join(NetworkSettings.LOCAL_IP, NetworkSettings.LOCAL_SERVER_PORT);
+  }
+
+  public boolean join(String serverIP, Integer serverPort) {
+    return spidermonkeyClient.join(serverIP, serverPort);
   }
 
   public void disconnect(Integer clientID) {
-    NetworkCommunicatorSpidermonkeyClient.getInstance().disconnect(clientID);
+    spidermonkeyClient.disconnect(clientID);
   }
 
   public void disconnect() {

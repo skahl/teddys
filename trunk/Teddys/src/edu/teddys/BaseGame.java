@@ -56,6 +56,7 @@ import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.menu.MainMenu;
 import edu.teddys.menu.OptionsMenu;
 import edu.teddys.menu.PauseMenu;
+import edu.teddys.network.NetworkSettings;
 import edu.teddys.objects.player.Player;
 import java.io.File;
 import java.io.IOException;
@@ -212,11 +213,13 @@ public class BaseGame extends SimpleApplication {
     // Register the network messages at the Serializer
     initSerializer();
 
-    // Create the server
+    // Create the server "on demand"
     File lockfile = new File(".serverlock");
     if(!lockfile.exists()) {
       TeddyServer server = TeddyServer.getInstance();
-      server.startServer();
+      server.startServer(NetworkSettings.SERVER_PORT);
+      //TODO dirty (use port information)
+      server.getData().setDiscoverable(true);
       try {
         lockfile.createNewFile();
         createdLockfile = true;
@@ -224,19 +227,19 @@ public class BaseGame extends SimpleApplication {
       } catch (IOException ex) {
         MegaLogger.getLogger().warn("Could not create the lock file for the server instance!");
       }
+    } else {
+      // Try to connect to the server
+      if (TeddyClient.getInstance().join(TeddyClient.getInstance().getServerIP(), NetworkSettings.SERVER_PORT)) {
+        MegaLogger.getLogger().debug(String.format("Client started a join request to %s ", TeddyClient.getInstance().getServerIP()));
+      } else {
+        MegaLogger.getLogger().error("Error while connecting the server!");
+        return;
+      }
     }
 
     // Get the handle to the client and try to join the specified server
     TeddyClient client = TeddyClient.getInstance();
     MegaLogger.getLogger().info("Client has " + client.getData().getHealth() + " health points at the beginning.");
-
-    // Trying to connect to the server
-    if (client.join()) {
-      MegaLogger.getLogger().debug(String.format("Client started a join request to %s ", client.getServerIP()));
-    } else {
-      MegaLogger.getLogger().error("Error while connecting the server!");
-      return;
-    }
 
     // Create the listeners for the client
     client.registerListener(TeddyClient.ListenerFields.health, new HealthListener());

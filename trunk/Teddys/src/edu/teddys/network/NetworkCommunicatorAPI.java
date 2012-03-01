@@ -34,9 +34,12 @@ public interface NetworkCommunicatorAPI {
    * 
    * Join a new client to the list of users. 
    * 
+   * @param serverIP The server which should be joined.
+   * @param serverPort The server port on which the connection should be established.
+   * 
    * @return Response from the server if the session could be opened or not.
    */
-  public boolean join();
+  public boolean join(String serverIP, Integer serverPort);
   /**
    * 
    * Destroy the active session for the specified user.

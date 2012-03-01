@@ -189,15 +189,12 @@ public class Game extends AbstractAppState {
             this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
     cameraControl.registerWithInput(inputManager);
 
-
     // physics debug (shows collission meshes):
 
     if(GameSettings.DEBUG) {
       // debug switch not working
       //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
     }
-    
-//    addPlayerToWorld(Player.getInstance(1));
   }
   
   /**

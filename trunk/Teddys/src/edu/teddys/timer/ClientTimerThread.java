@@ -4,11 +4,13 @@
  */
 package edu.teddys.timer;
 
+import com.jme3.util.PlaceholderAssets;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.messages.client.ManControllerInput;
 import edu.teddys.input.InputTuple;
+import edu.teddys.objects.player.Player;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class ClientTimerThread extends Thread {
     while(!stop) {
 
       List<InputTuple> inputList = ClientTimer.getInput();
+      Player.getInstance(Player.LOCAL_PLAYER).getPlayerControl().newInput(new LinkedList<InputTuple>(inputList));
       if (!inputList.isEmpty()) {
         ManControllerInput input = new ManControllerInput(new LinkedList<InputTuple>(inputList));
         // The timestamp has been already set in the empty constructor of
