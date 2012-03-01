@@ -73,6 +73,7 @@ public class Player {
     instances.remove(LOCAL_PLAYER);
     // Refresh the ID
     LOCAL_PLAYER = id;
+    instances.put(id, player);
   }
   
   /**

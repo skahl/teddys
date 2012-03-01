@@ -214,7 +214,8 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   public void connectionRemoved(Server server, HostedConnection conn) {
 
     if (!isRunning()) {
-      MegaLogger.getLogger().error(new Throwable("connectionRemoved() called, but the server is not running (or not discoverable)!"));
+      MegaLogger.getLogger().error(new Throwable("connectionRemoved() called, "
+              + "but the server is not running (or not discoverable)!"));
       return;
     }
 
@@ -223,7 +224,8 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
       return;
     }
 
-    MegaLogger.getLogger().debug("Connection with ID " + conn.getId() + " removed!");
+    MegaLogger.getLogger().debug("Connection with ID " + conn.getId() 
+            + " removed! Active players: "+server.getConnections().size());
 
     // check if the player exists in the current game
     Game.getInstance().removePlayerFromWorld(Player.getInstance(conn.getId()));
