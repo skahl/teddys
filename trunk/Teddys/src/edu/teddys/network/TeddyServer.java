@@ -48,13 +48,13 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
    * 
    */
   public void startServer() {
-    NetworkCommunicatorSpidermonkeyServer.getInstance().startServer(this);
     if (!isRunning()) {
       data = new TeddyServerData();
+      getData().setCreated(new Date());
+      getData().setDiscoverable(true);
     }
-    getData().setCreated(new Date());
-    getData().setDiscoverable(true);
-
+    NetworkCommunicatorSpidermonkeyServer.getInstance().startServer(this);
+    
     // Start the protection mechanisms
     if(GameSettings.ENABLE_CHECKSUM_CHECK) {
       ChecksumManager.startTimer();
@@ -148,8 +148,8 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   }
 
   public List<Integer> getClientIDs() {
-    if (getData() != null && !getData().getClients().isEmpty()) {
-      return new ArrayList<Integer>(getData().getClients().keySet());
+    if (getData() != null && !Player.getInstances().isEmpty()) {
+      return new ArrayList<Integer>(Player.getInstances().keySet());
     }
     return new ArrayList<Integer>();
   }
@@ -163,18 +163,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
    * @return Client data, i. e. the name, health, ...
    */
   public ClientData getClientData(Integer id) {
-    return getData().getClients().get(id);
-  }
-
-  /**
-   * Adds client data to the current list. Existing data will be overwritten!
-   */
-  public void setClientData(Integer clientID, ClientData client) {
-    if (!isRunning()) {
-      MegaLogger.getLogger().error(new Throwable("TeddyServer is not running! Could not set client data!"));
-      return;
-    }
-    getData().getClients().put(clientID, client);
+    return Player.getInstance(id).getData();
   }
 
   /**
@@ -195,14 +184,17 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     
     // Send a status text
     String message = String.format(
-            "New player (%s) joined this server! Client ID is %s",
+            "New player (%s) joined this server! Client ID is %s. Active players: %d",
             conn.getAddress(),
-            conn.getId());
-    
-    NetworkMessageInfo info = new NetworkMessageInfo(message);
-    TeddyServer.getInstance().send(info);
+            conn.getId(),
+            server.getConnections().size());
     MegaLogger.getLogger().info(message);
     
+    // Send a message to all clients
+    NetworkMessageInfo info = new NetworkMessageInfo(message);
+    TeddyServer.getInstance().send(info);
+    
+    // Send a message to the new client
     String serverMsg = String.format("Welcome to %s!", getData().getName());
     NetworkMessageInfo clientInfo = new NetworkMessageInfo(conn.getId(), serverMsg);
     TeddyServer.getInstance().send(clientInfo);
@@ -241,24 +233,24 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     // from list
 
     // acquire client data because of the team allocation
-    if(getData() != null && !getData().getClients().isEmpty()) {
-      ClientData client = getData().getClients().get(conn.getId());
-      if (client != null) {
+    if(getData() != null && !Player.getInstances().isEmpty()) {
+      ClientData clientData = Player.getInstance(conn.getId()).getData();
+      if (clientData != null) {
         // remove the player from the team list
-        if (client.getTeamID() != null) {
+        if (clientData.getTeamID() != null) {
           try {
-            getData().getTeams().get(client.getTeamID()).removePlayer(client.getId());
+            getData().getTeams().get(clientData.getTeamID()).removePlayer(clientData.getId());
           } catch (ArrayIndexOutOfBoundsException ex) {
             //TODO ignore?
             MegaLogger.getLogger().warn(
                     new Throwable(
                     String.format("No team with ID %d could be found!",
-                    client.getTeamID()), ex));
+                    clientData.getTeamID()), ex));
           }
         }
 
         // remove the client data from server
-        getData().getClients().remove(client.getId());
+        Player.removePlayer(clientData.getId());
       }
     }
 

@@ -1,18 +1,18 @@
 package edu.teddys.objects.player;
 
-import com.jme3.bounding.BoundingBox;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.network.serializing.Serializable;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.shape.Box;
 import edu.teddys.controls.PlayerControl;
 import edu.teddys.network.ClientData;
 import edu.teddys.states.Game;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -22,16 +22,24 @@ import java.util.TreeMap;
  * 
  * @author skahl
  */
+@Serializable
 public class Player {
 
-  public static final Integer LOCAL_PLAYER = 0;
-  private static Map<Integer, Player> instance = new TreeMap<Integer, Player>();
-  Node node;
-  Geometry invBoxGeo; // Geometry of the invisible box
-  TeddyVisual visual;
-  PlayerControl control;
-  CapsuleCollisionShape collisionShape;
-  ClientData data;
+  /**
+   * The local player ID will be set to the network ID
+   * if the connection to a game server has been established.
+   */
+  public static transient Integer LOCAL_PLAYER = 0;
+  /**
+   * The map of instances. It holds all players' data.
+   */
+  private static Map<Integer, Player> instances = new TreeMap<Integer, Player>();
+  transient Node node;
+  transient Geometry invBoxGeo; // Geometry of the invisible box
+  transient TeddyVisual visual;
+  transient PlayerControl control;
+  transient CapsuleCollisionShape collisionShape;
+  ClientData data = new ClientData();
 
   /**
    * ClientData getter method.
@@ -49,6 +57,43 @@ public class Player {
    */
   public void setData(ClientData data) {
     this.data = data;
+  }
+  
+  /**
+   * 
+   * Note: If a player with the specified ID already exists, it will be removed!
+   * Also, the old instance of the local player will be removed!
+   * 
+   * @param id The new player ID
+   */
+  public static void setLocalPlayerId(Integer id) {
+    instances.remove(id);
+    // Initialize the new player object
+    Player player = new Player(id);
+    instances.remove(LOCAL_PLAYER);
+    // Refresh the ID
+    LOCAL_PLAYER = id;
+  }
+  
+  /**
+   * 
+   * Remove the player specified by the ID. Note that the node will be removed from the
+   * Game world as well.
+   * 
+   * @param id The player ID
+   */
+  public static void removePlayer(Integer id) {
+    Player oldPlayer = Player.getInstance(id);
+    Game.getInstance().removeSpatial(Game.getInstance().getRootNode(), oldPlayer.getNode());
+    Game.getInstance().getBulletAppState().getPhysicsSpace().remove(oldPlayer.getPlayerControl());
+    instances.remove(id);
+  }
+  
+  /**
+   * DON'T CALL THIS!!! THIS IS FOR SERIALIZING PURPOSES!
+   */
+  public Player() {
+    
   }
 
   /**
@@ -81,11 +126,6 @@ public class Player {
     if (id == LOCAL_PLAYER) {
       //TODO check
 //      control.registerWithInput(game.getInputManager());
-    } else {
-      /*
-       * TODO A network listener should get the appropriate actions from 
-       * the client messages and call onAction() and onAnalog().
-       */
     }
 
     game.getBulletAppState().getPhysicsSpace().add(control);
@@ -94,8 +134,7 @@ public class Player {
     control.setGravity(5);
     control.setFallSpeed(5);
 
-    // Create the client data object
-    data = new ClientData();
+    // Set the (network) client ID
     data.setId(id);
   }
 
@@ -132,10 +171,10 @@ public class Player {
    * @return 
    */
   public static Player getInstance(Integer id) {
-    if (instance.isEmpty() || instance.get(id) == null) {
-      instance.put(id, new Player(id));
+    if (instances.isEmpty() || instances.get(id) == null) {
+      instances.put(id, new Player(id));
     }
-    return instance.get(id);
+    return instances.get(id);
   }
 
   /**
@@ -143,8 +182,12 @@ public class Player {
    * 
    * @return 
    */
-  public static ArrayList<Player> getInstanceList() {
-    return new ArrayList<Player>(instance.values());
+  public static List<Player> getInstanceList() {
+    return new ArrayList<Player>(instances.values());
+  }
+  
+  public static Map<Integer, Player> getInstances() {
+    return instances;
   }
 
   /**

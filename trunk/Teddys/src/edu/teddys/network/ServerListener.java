@@ -39,6 +39,10 @@ import java.awt.Color;
 public class ServerListener implements MessageListener<HostedConnection> {
 
   public void messageReceived(HostedConnection source, Message message) {
+    String inputMessage = String.format(
+            "Server received a message (%s): %s",
+            message.getClass().getSimpleName(), message);
+    MegaLogger.getLogger().debug(inputMessage);
     if (message instanceof NetworkMessageInfo) {
       //
       // RECEIVED A SIMPLE MESSAGE
@@ -61,7 +65,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // Re-distribute info to the other clients
         GSMessagePlayerReady msg = (GSMessagePlayerReady) message;
         TeddyServer.getInstance().send(msg);
-        TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
+//        TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
+        Player.getInstance(source.getId()).getData().setReady(true);
         //TODO change to the chosen map name
         ReqMessageMapRequest mapRequest = new ReqMessageMapRequest("firstlevel");
         TeddyServer.getInstance().send(mapRequest);
@@ -86,17 +91,17 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //TODO Distribute to the other clients?
         ResMessageMapLoaded msg = (ResMessageMapLoaded) message;
         TeddyServer.getInstance().send(msg);
-        TeddyServer.getInstance().getClientData(source.getId()).setMapLoaded(true);
         Player newPlayer = Player.getInstance(source.getId());
+        newPlayer.getData().setMapLoaded(true);
         // set the client data for local access on demand
         //TODO always sync the data! use a thread for that
-        newPlayer.setData(TeddyServer.getInstance().getClientData(source.getId()));
+//        newPlayer.setData(TeddyServer.getInstance().getClientData(source.getId()));
         // add the player to the game world if not already joined
         Game.getInstance().addPlayerToWorld(newPlayer);
-        // If all players have loaded the map, I wanna play a game with you.
+        // If all players have loaded the map, "I wanna play a game with you".
         int numPlayers = 0;
-        for(ClientData playerData : TeddyServer.getInstance().getData().getClients().values()) {
-          if(playerData.isReady() && playerData.isMapLoaded()) {
+        for(Player player : Player.getInstanceList()) {
+          if(player.getData().isReady() && player.getData().isMapLoaded()) {
             numPlayers++;
           }
         }
@@ -114,8 +119,11 @@ public class ServerListener implements MessageListener<HostedConnection> {
         ResMessageSendClientData msg = (ResMessageSendClientData) message;
         // Tell the server to update the data
         ClientData data = msg.getClientData();
-        Integer clientID = data.getId();
-        TeddyServer.getInstance().setClientData(clientID, data);
+        Integer clientID = source.getId();
+        // Get the player object
+        Player player = Player.getInstance(clientID);
+        // Update the data
+        player.setData(data);
         //TODO Add member to a team
 
         //TEST
@@ -127,37 +135,27 @@ public class ServerListener implements MessageListener<HostedConnection> {
         Integer teamId = 0;
         // Add the player to the team
         TeddyServer.getInstance().getData().getTeams().get(teamId).addPlayer(clientID);
-        data.setTeam(teamId);
+        player.getData().setTeam(teamId);
         NetworkMessageInfo teamInfoMsg = new NetworkMessageInfo(
                 "Teddy has sent his client data. " + data.getName()
                 + " belongs to the team " + newTeam.getName() + "!");
         TeddyServer.getInstance().send(teamInfoMsg);
-
-        // send a neat "gift" to the new client
-        ManMessageSendDamage dmg = new ManMessageSendDamage(clientID, (int) (Math.random() * 20f + 1));
-        TeddyServer.getInstance().send(dmg);
-
-        NetworkMessageInfo dmgInfo = new NetworkMessageInfo(clientID, "Come on, "
-                + data.getName() + ". Don't worry about the damage I gave to you! "
-                + "I like you, really! :P");
-        TeddyServer.getInstance().send(dmgInfo);
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManControllerInput) {
         ManControllerInput input = (ManControllerInput) message;
         
         //TODO local player ...
-//        if(source.getId() == Player.LOCAL_PLAYER) {
-//          // ignore it, it is handled by the input manager attached to the local
-//          // player
-//          // sync with the input data if the server has been created locally
-//          // (local join)
-//          return;
-//        }
+        if(source.getId() == Player.getInstance(Player.LOCAL_PLAYER).getData().getId()) {
+          // ignore it, it is handled by the input manager attached to the local
+          // player
+          // sync with the input data if the server has been created locally
+          // (local join)
+          return;
+        }
         
-        // refresh the player
+        // refresh the player's action
         Player.getInstance(source.getId()).getPlayerControl().newInput(input.getInput());
-        //TODO what about the player's local world?
       } else if (message instanceof ManMessageSendPosition) {
         //
         // USER POSITION RECEIVED

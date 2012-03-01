@@ -140,11 +140,12 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           // A PLAYER IS READY TO START THE GAME
           //
-          String teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
-          String infoString = String.format("Player %s is ready yet!", teddyName);
-          MegaLogger.getLogger().info(infoString);
-          // Refresh the server data
-          TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
+          //TODO the status could be updated, but is synced as well. So this can be deleted
+//          String teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
+//          String infoString = String.format("Player %s is ready yet!", teddyName);
+//          MegaLogger.getLogger().info(infoString);
+//          // Refresh the server data
+//          TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
         }
       } else if (message instanceof NetworkMessageManipulation) {
         if (message instanceof ManMessageActivateItem) {

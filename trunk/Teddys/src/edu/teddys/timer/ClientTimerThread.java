@@ -13,6 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * 
+ * This thread reads the input List from the main class and sends the control
+ * inputs to the server.
  *
  * @author cm
  */

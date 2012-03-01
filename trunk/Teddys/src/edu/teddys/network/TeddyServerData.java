@@ -5,10 +5,9 @@
 package edu.teddys.network;
 
 import com.jme3.math.Vector3f;
-import com.jme3.network.HostedConnection;
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.GameMode;
 import edu.teddys.GameSettings;
+import edu.teddys.objects.player.Player;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,10 +36,6 @@ public class TeddyServerData {
    * The list of teams registered on the server.
    */
   private List<Team> teams = new ArrayList<Team>();
-  /**
-   * Save the client data here ...
-   */
-  private Map<Integer,ClientData> clients = new HashMap<Integer,ClientData>();
   /*
    * //TODO integrate a singleton gameMode
    */
@@ -80,14 +75,6 @@ public class TeddyServerData {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public Map<Integer, ClientData> getClients() {
-    return clients;
-  }
-
-  public void setClients(Map<Integer, ClientData> clients) {
-    this.clients = clients;
   }
 
   public List<Team> getTeams() {

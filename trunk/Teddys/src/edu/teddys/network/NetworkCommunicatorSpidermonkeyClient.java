@@ -61,7 +61,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
    * 
    * @param listener  The client listener.
    */
-  public void addClientStateListener(ClientStateListener listener) {
+  private void addClientStateListener(ClientStateListener listener) {
     if (networkClient == null) {
       MegaLogger.getLogger().error(new Throwable("Could not add ClientStateListener because networkClient is null!"));
       return;
@@ -95,6 +95,14 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     }
   }
 
+  /**
+   * 
+   * Note: This function resets implicitely (because of the allocation of a
+   * new networkClient instance) the list of ClientState listeners and
+   * adds the TeddyClient to the list of ClientState listeners afterwards.
+   * 
+   * @return True if no error has occured, else false.
+   */
   public boolean join() {
     TeddyClient client = TeddyClient.getInstance();
     // Check for active connection
@@ -114,6 +122,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     // Try to connect to the server
     try {
       networkClient = com.jme3.network.Network.connectToServer(serverIP, serverPort);
+      addClientStateListener(client);
       networkClient.start();
       // Configure the client to receive messages
       networkClient.addMessageListener(new ClientListener());

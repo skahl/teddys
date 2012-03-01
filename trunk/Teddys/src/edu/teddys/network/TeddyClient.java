@@ -207,7 +207,7 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
 
   public boolean join() {
     boolean status = NetworkCommunicatorSpidermonkeyClient.getInstance().join();
-    NetworkCommunicatorSpidermonkeyClient.getInstance().addClientStateListener(this);
+//    NetworkCommunicatorSpidermonkeyClient.getInstance().addClientStateListener(this);
     return status;
   }
 
@@ -231,16 +231,18 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
   }
 
   public void clientConnected(Client c) {
-    getData().setId(c.getId());
+    Player.setLocalPlayerId(c.getId());
     TeddyClient.getInstance().setJoinedServer(new Date());
     MegaLogger.getLogger().debug("Client joined the server at "
             + TeddyClient.getInstance().getJoinedServer().toLocaleString());
   }
 
   public void clientDisconnected(Client c, DisconnectInfo info) {
+    // Note: The client ID for the local player is kept until a new connection
+    // has been established.
     ClientTimer.stopTimer();
-    MegaLogger.getLogger().debug("Client has been disconnected from the server.");
-    //TODO react to this event
+    MegaLogger.getLogger().warn("Client has been disconnected from the server");
+    //TODO react to this event, such as settings the appropriate GameState
   }
 
   public ClientData getData() {

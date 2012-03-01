@@ -22,6 +22,8 @@ import edu.teddys.MegaLogger;
 public class ServerTimer {
   
   private static ServerTimerThread thread;
+  private static Long tickBuffer = null;
+  
   /**
    * Start the server timer.
    */
@@ -30,6 +32,10 @@ public class ServerTimer {
       return;
     }
     thread = new ServerTimerThread();
+    if(tickBuffer != null) {
+      thread.setTick(tickBuffer);
+      tickBuffer = null;
+    }
     thread.start();
     String tempMsg = String.format(
             "Server timer thread spawned (Rate: %f, Interval: %d ms)",
@@ -60,6 +66,10 @@ public class ServerTimer {
   }
   
   public synchronized static void setServerTimestamp(Long ts) {
+    if(thread == null) {
+      tickBuffer = ts;
+      return;
+    }
     thread.setTick(ts);
   }
 }

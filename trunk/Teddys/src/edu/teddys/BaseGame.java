@@ -12,6 +12,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.system.AppSettings;
+import com.jme3.system.JmeContext;
 import de.lessvoid.nifty.Nifty;
 import edu.teddys.controls.MappingEnum;
 import edu.teddys.input.ControllerEvents;
@@ -55,6 +56,7 @@ import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.menu.MainMenu;
 import edu.teddys.menu.OptionsMenu;
 import edu.teddys.menu.PauseMenu;
+import edu.teddys.objects.player.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.List; 
@@ -144,7 +146,12 @@ public class BaseGame extends SimpleApplication {
     
     app.setSettings(settings);
 
-    app.start();
+    File lockfile = new File(".serverlock");
+    if(lockfile.exists()) {
+      app.start();
+    } else {
+      app.start(JmeContext.Type.Headless);
+    }
   }
 
   public AppSettings getSettings() {
@@ -206,9 +213,9 @@ public class BaseGame extends SimpleApplication {
     initSerializer();
 
     // Create the server
-    TeddyServer server = TeddyServer.getInstance();
     File lockfile = new File(".serverlock");
     if(!lockfile.exists()) {
+      TeddyServer server = TeddyServer.getInstance();
       server.startServer();
       try {
         lockfile.createNewFile();
@@ -252,6 +259,7 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(SessionClientData.class);
     Serializer.registerClass(ClientData.class);
     Serializer.registerClass(Team.class);
+    Serializer.registerClass(Player.class);
     Serializer.registerClass(TeddyServerData.class);
     Serializer.registerClass(InputTuple.class);
     // Client

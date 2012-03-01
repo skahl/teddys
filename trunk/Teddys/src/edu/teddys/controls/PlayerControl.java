@@ -3,10 +3,8 @@ package edu.teddys.controls;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.collision.CollisionResults;
-import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
-import com.jme3.input.controls.Trigger;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -16,7 +14,6 @@ import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUDController;
 import edu.teddys.input.AnalogControllerEnum;
-import edu.teddys.input.ControllerEvents;
 import edu.teddys.input.InputType;
 import edu.teddys.input.InputTuple;
 import edu.teddys.network.TeddyServer;
@@ -24,14 +21,11 @@ import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.player.TeddyVisual;
 import edu.teddys.objects.weapons.DeafNut;
-import edu.teddys.objects.weapons.HolyWater;
-import edu.teddys.objects.weapons.Rocket;
 import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.locks.Lock;
 import org.apache.commons.math.random.RandomDataImpl;
 
 /** Control class responsible for character controls and visuals, based on input.
@@ -52,7 +46,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   private float oldGravity = 4f;
   private Vector3f left, right;
   // player control input from server
-  private LinkedList<InputTuple> serverControlInput;
+  private LinkedList<InputTuple> serverControlInput = new LinkedList<InputTuple>();
   private short controlTimer = 0;
   private short jetpackTimer = 0;
   private float weaponTimer = 0.0f;
@@ -329,17 +323,21 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     }
 
     InputTuple entry = null;
-    while (serverControlInput.size() > 0) {
+    
+    synchronized(serverControlInput) {
+      
+      while (serverControlInput.size() > 0) {
 
-      entry = serverControlInput.pop();
-//    MegaLogger.getLogger().debug("input: " + entry);
-      if (entry.getType() == InputType.Analog) {
-        onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
-      } else if (entry.getType() == InputType.Action) {
-        if (entry.getValue() instanceof Boolean) {
-          onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
-        } else {
-          MegaLogger.getLogger().error(new Throwable("Action event invalid! Value is not a Boolean!"));
+        entry = serverControlInput.pop();
+  //    MegaLogger.getLogger().debug("input: " + entry);
+        if (entry.getType() == InputType.Analog) {
+          onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
+        } else if (entry.getType() == InputType.Action) {
+          if (entry.getValue() instanceof Boolean) {
+            onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
+          } else {
+            MegaLogger.getLogger().error(new Throwable("Action event invalid! Value is not a Boolean!"));
+          }
         }
       }
     }
@@ -354,8 +352,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
    * 
    * @param input A queue of actions gathered in the last time frame.
    */
-  public void newInput(LinkedList<InputTuple> input) {
-    this.serverControlInput = input;
-
+  public synchronized void newInput(LinkedList<InputTuple> input) {
+    serverControlInput.addAll(input);
   }
 }

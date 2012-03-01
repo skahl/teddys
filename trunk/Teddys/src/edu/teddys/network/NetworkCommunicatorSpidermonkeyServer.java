@@ -36,9 +36,8 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
       setUpServer();
     } catch (IOException ex) {
       MegaLogger.getLogger().fatal(new Throwable(
-              "The server could not be started (is the port " 
-              + NetworkSettings.SERVER_PORT + " already used?)"
-              , ex));
+              "The server could not be started (is the port "
+              + NetworkSettings.SERVER_PORT + " already used?)", ex));
     }
   }
 
@@ -115,7 +114,8 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
       try {
         networkServer.getConnection(clientID).send(message);
       } catch (NullPointerException ex) {
-        MegaLogger.getLogger().warn("Specified client ID does not exist: " + clientID);
+        MegaLogger.getLogger().warn("Specified client ID does not exist: " 
+                + clientID + ". Message: " + message);
       }
     }
   }

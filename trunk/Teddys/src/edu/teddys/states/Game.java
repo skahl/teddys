@@ -28,7 +28,6 @@ import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.map.GameLoader;
 import edu.teddys.objects.player.Player;
-import java.util.Random;
 import org.apache.commons.math.random.RandomDataImpl;
 
 /**
@@ -37,7 +36,7 @@ import org.apache.commons.math.random.RandomDataImpl;
  */
 public class Game extends AbstractAppState {
 
-  private static Game instance;
+  private static Game instance = null;
   private BaseGame app;
   private AppStateManager stateManager;
   private InputManager inputManager;
@@ -198,7 +197,7 @@ public class Game extends AbstractAppState {
       //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
     }
     
-    addPlayerToWorld(Player.getInstance(1));
+//    addPlayerToWorld(Player.getInstance(1));
   }
   
   /**
