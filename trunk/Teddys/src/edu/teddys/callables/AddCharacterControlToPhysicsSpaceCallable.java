@@ -1,0 +1,30 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package edu.teddys.callables;
+
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.control.CharacterControl;
+import java.util.concurrent.Callable;
+
+/**
+ *
+ * @author cm
+ */
+public class AddCharacterControlToPhysicsSpaceCallable implements Callable {
+
+  private PhysicsSpace space;
+  private CharacterControl control;
+  
+  public AddCharacterControlToPhysicsSpaceCallable(PhysicsSpace space, CharacterControl control) {
+    this.space = space;
+    this.control = control;
+  }
+  
+  public Object call() throws Exception {
+    space.add(control);
+    return null;
+  }
+  
+}

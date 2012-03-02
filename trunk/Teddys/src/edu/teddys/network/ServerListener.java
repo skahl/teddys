@@ -21,6 +21,7 @@ import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
+import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;
 import edu.teddys.network.messages.server.ReqMessageMapRequest;
 import edu.teddys.objects.player.Player;
@@ -68,7 +69,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         TeddyServer.getInstance().send(msg);
 //        TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
         Player.getInstance(source.getId()).getData().setReady(true);
-        
+
         //TODO change to the chosen map name
         ReqMessageMapRequest mapRequest = new ReqMessageMapRequest("firstlevel");
         TeddyServer.getInstance().send(mapRequest);
@@ -98,25 +99,30 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // set the client data for local access on demand
         //TODO always sync the data! use a thread for that
 //        newPlayer.setData(TeddyServer.getInstance().getClientData(source.getId()));
-        // add the player to the game world if not already joined
+        Game.getInstance().setRandomPlayerPosition(newPlayer);
+        // refresh the clients' positions
+        ManMessageTransferPlayerData playerData = new ManMessageTransferPlayerData(Player.getInstances());
+        TeddyServer.getInstance().send(playerData);
+        // add the player to the game world (if not already joined?)
         Game.getInstance().addPlayerToWorld(newPlayer);
+        MegaLogger.getLogger().debug("Client has ben added to the world.");
         // If all players have loaded the map, "I wanna play a game with you".
         int numPlayers = 0;
-        for(Player player : Player.getInstanceList()) {
-          if(player.getData().isReady() && player.getData().isMapLoaded()) {
+        for (Player player : Player.getInstanceList()) {
+          if (player.getData().isReady() && player.getData().isMapLoaded()) {
             numPlayers++;
           }
         }
-        
+
         //TODO now that the player has been added to the world, send him a message
         // that the game has begun yet
-        
+
 //        if(numPlayers == TeddyServer.getInstance().getConnections().size()) {
 //          ServerTimer.startTimer();
 //          //TODO check when the game has ended! the timer must be stopped!
 //          // Now start a game
-          GSMessageBeginGame beginGame = new GSMessageBeginGame(source.getId());
-          TeddyServer.getInstance().send(beginGame);
+        GSMessageBeginGame beginGame = new GSMessageBeginGame(source.getId());
+        TeddyServer.getInstance().send(beginGame);
 //        }
       } else if (message instanceof ResMessageSendClientData) {
         //
@@ -138,7 +144,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
           // Create a new team
           TeddyServer.getInstance().getData().getTeams().add(newTeam);
         }
-        
+
         Integer teamId = 0;
         // Add the player to the team
         TeddyServer.getInstance().getData().getTeams().get(teamId).addPlayer(clientID);
@@ -149,7 +155,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
                 "Teddy has sent his client data. " + data.getName()
                 + " belongs to the team " + newTeam.getName() + "!");
         TeddyServer.getInstance().send(teamInfoMsg);
-        
+
         // Get the other clients
         List<Integer> rec = new ArrayList<Integer>(Player.getInstances().keySet());
         System.out.println(rec);
@@ -160,10 +166,10 @@ public class ServerListener implements MessageListener<HostedConnection> {
         msg.setRecipients(rec.toArray(new Integer[rec.size()]));
         // And send the data to the clients
         TeddyServer.getInstance().send(msg);
-        
+
         // Send the data of the "old" clients to the new member
         for (Player playerInstance : Player.getInstanceList()) {
-          if(playerInstance.getData().getId() == clientID) {
+          if (playerInstance.getData().getId() == clientID) {
             continue;
           }
           ResMessageSendClientData tmp = new ResMessageSendClientData(clientID, playerInstance.getData());
@@ -172,7 +178,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
           ResMessageMapLoaded tmpMapLoaded = new ResMessageMapLoaded(new Integer[]{clientID}, playerInstance.getData().getId());
           TeddyServer.getInstance().send(tmpMapLoaded);
         }
-        
+
         // Now update the player data on the clients
 //        ManMessageTransferPlayerData playerDataMsg = new ManMessageTransferPlayerData(Player.getInstances());
 //        TeddyServer.getInstance().send(playerDataMsg);
@@ -182,16 +188,16 @@ public class ServerListener implements MessageListener<HostedConnection> {
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManControllerInput) {
         ManControllerInput input = (ManControllerInput) message;
-        
+
         //TODO local player ...
-        if(source.getId() == Player.getInstance(Player.LOCAL_PLAYER).getData().getId()) {
+        if (source.getId() == Player.getInstance(Player.LOCAL_PLAYER).getData().getId()) {
           // ignore it, it is handled by the input manager attached to the local
           // player
           // sync with the input data if the server has been created locally
           // (local join)
           return;
         }
-        
+
         // refresh the player's action
         Player.getInstance(source.getId()).getPlayerControl().newInput(input.getInput());
       } else if (message instanceof ManMessageSendPosition) {
@@ -210,12 +216,9 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //
         // USER WANTS TO GET NASTY (-> WEAPONS)
         //
-
         //MegaLogger.getLogger().debug("A weapon was triggered! " + message);
-        
         //TODO read the target list, calculate the damage 
         // and send them to the appropriate clients
-
         //TODO This is a TEST
 //        for (Integer clientID : TeddyServer.getInstance().getClientIDs()) {
 //          ManMessageSendDamage damMsg = new ManMessageSendDamage(clientID, 25);

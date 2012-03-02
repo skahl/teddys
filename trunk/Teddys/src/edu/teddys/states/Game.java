@@ -5,6 +5,8 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.light.AmbientLight;
@@ -22,12 +24,15 @@ import edu.teddys.callables.DetachFromNodeCallable;
 import edu.teddys.GameModeEnum;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
+import edu.teddys.callables.AddCharacterControlToPhysicsSpaceCallable;
+import edu.teddys.callables.SetPositionOfTeddyCallable;
 import edu.teddys.hud.HUD;
 import edu.teddys.hud.HUDController;
 import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.map.GameLoader;
 import edu.teddys.objects.player.Player;
+import java.util.Arrays;
 import org.apache.commons.math.random.RandomDataImpl;
 
 /**
@@ -47,9 +52,8 @@ public class Game extends AbstractAppState {
   public static HUD hud;
   private Cursor cursor;
   private boolean paused;
-  
-  //private boolean enabled;
 
+  //private boolean enabled;
   protected Game() {
     super();
   }
@@ -191,12 +195,12 @@ public class Game extends AbstractAppState {
 
     // physics debug (shows collission meshes):
 
-    if(GameSettings.DEBUG) {
+    if (GameSettings.DEBUG) {
       // debug switch not working
       //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
     }
   }
-  
+
   /**
    * 
    * Add a spatial (such as Node) to the current world.
@@ -207,7 +211,7 @@ public class Game extends AbstractAppState {
   public void addSpatial(Node parent, Spatial child) {
     getApp().enqueue(new AttachToNodeCallable(parent, child));
   }
-  
+
   /**
    * 
    * Remove a spatial from the parent.
@@ -217,6 +221,21 @@ public class Game extends AbstractAppState {
    */
   public void removeSpatial(Node parent, Spatial child) {
     getApp().enqueue(new DetachFromNodeCallable(parent, child));
+  }
+  
+  public void addCharacterControlToPhysicsSpace(PhysicsSpace space, CharacterControl control) {
+    getApp().enqueue(new AddCharacterControlToPhysicsSpaceCallable(space, control));
+  }
+
+  public void setRandomPlayerPosition(Player player) {
+    RandomDataImpl rnd = new RandomDataImpl();
+    //TODO use some spawn points
+    Vector3f pos = new Vector3f(rnd.nextLong(0, 6), rnd.nextLong(1, 2), GameSettings.WORLD_Z_INDEX);
+    // this is the first position of the Teddy, so initialize a new List
+    SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(player, Arrays.asList(pos));
+    getApp().enqueue(setPos);
+    MegaLogger.getLogger().debug("Position of the player has been set to "
+            + pos + " (ID: " + player.getData().getId() + ")");
   }
 
   /**
@@ -230,14 +249,9 @@ public class Game extends AbstractAppState {
     if (getRootNode().hasChild(player.getNode())) {
       return;
     }
-    RandomDataImpl rnd = new RandomDataImpl();
-    //TODO use some spawn points
-    Vector3f pos = new Vector3f(rnd.nextLong(0, 6), rnd.nextLong(1, 2), GameSettings.WORLD_Z_INDEX);
-    //TODO should be done in a OpenGL update thread?
-    player.getPlayerControl().setPhysicsLocation(pos);
-    MegaLogger.getLogger().debug("Position of the player has been set: " + pos);
     // add to the world
     addSpatial(getRootNode(), player.getNode());
+    addCharacterControlToPhysicsSpace(getBulletAppState().getPhysicsSpace(), player.getPlayerControl());
   }
 
   public void removePlayerFromWorld(Player player) {
@@ -245,7 +259,7 @@ public class Game extends AbstractAppState {
       removeSpatial(getRootNode(), player.getNode());
     }
   }
-  
+
   public void addMapModel(Node mapModel) {
     addSpatial(getRootNode(), mapModel);
     //TODO use the update routine for this purpose?

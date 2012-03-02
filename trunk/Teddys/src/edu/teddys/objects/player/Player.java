@@ -66,7 +66,7 @@ public class Player {
    * 
    * @param id The new player ID
    */
-  public static void setLocalPlayerId(Integer id) {
+  public synchronized static void setLocalPlayerId(Integer id) {
     instances.remove(id);
     instances.remove(LOCAL_PLAYER);
     // Initialize the new player object
@@ -83,15 +83,18 @@ public class Player {
    * 
    * @param id The player ID
    */
-  public static void removePlayer(Integer id) {
+  public synchronized static void removePlayer(Integer id) {
     Player oldPlayer = Player.getInstance(id);
     Game.getInstance().removeSpatial(Game.getInstance().getRootNode(), oldPlayer.getNode());
     Game.getInstance().getBulletAppState().getPhysicsSpace().remove(oldPlayer.getPlayerControl());
     instances.remove(id);
   }
   
-  public static void setInstanceList(Map<Integer,Player> playerMap) {
-    //TODO !
+  public synchronized static void setInstanceList(Map<Integer,Player> playerMap) {
+    //TODO Problems: The Nodes are not transmitted
+    //TODO What about lag compensation? use smoothed movements etc ...
+//    instances = playerMap;
+    //TODO refresh the positions in the local world if a game is active
   }
   
   /**

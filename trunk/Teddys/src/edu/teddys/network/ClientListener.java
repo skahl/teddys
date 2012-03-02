@@ -4,10 +4,12 @@
  */
 package edu.teddys.network;
 
+import com.jme3.math.Vector3f;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
 import com.jme3.network.message.DisconnectMessage;
 import edu.teddys.MegaLogger;
+import edu.teddys.callables.SetPositionOfTeddyCallable;
 import edu.teddys.input.ControllerInputListener;
 import edu.teddys.map.GameLoader;
 import edu.teddys.network.messages.NetworkMessage;
@@ -39,6 +41,8 @@ import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
 import edu.teddys.timer.ServerTimer;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map.Entry;
 
 /**
  *
@@ -115,6 +119,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //TODO this should have been done already when the player data was received
           newPlayer.getData().setMapLoaded(true);
           MegaLogger.getLogger().debug("Client " + msg.getAffected() + " has loaded the map.");
+          // The position has been set by the server already
           Game.getInstance().addPlayerToWorld(newPlayer);
           MegaLogger.getLogger().debug("Client " + msg.getAffected() + " has been added to the world.");
         }
@@ -211,9 +216,15 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           ManMessageTransferServerData msg = (ManMessageTransferServerData) message;
           //overwrite the current server data
           TeddyServer.getInstance().setData(msg.getData());
-          //TODO integrate new team members on demand
-          // Look for new team members
-          for (Team team : msg.getData().getTeams()) {
+          // update the positions of the clients
+          for(Entry<Integer,List<Vector3f>> posPerTeddy : msg.getData().getClientPositions().entrySet()) {
+            if(posPerTeddy.getValue().isEmpty()) {
+              continue;
+            }
+            Player curPlayer = Player.getInstance(posPerTeddy.getKey());
+            // ... and set the position of the player
+            SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(curPlayer, posPerTeddy.getValue());
+            Game.getInstance().getApp().enqueue(setPos);
           }
         } else if (message instanceof ManMessageTriggerEffect) {
           //

@@ -25,7 +25,6 @@ import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
 import java.util.LinkedList;
-import java.util.concurrent.locks.Lock;
 import org.apache.commons.math.random.RandomDataImpl;
 
 /** Control class responsible for character controls and visuals, based on input.

@@ -95,10 +95,10 @@ public class GameSettings {
    */
   public static final Integer CHECKSUM_INTERVAL = 3000;
   /**
-   * Server synchronization interval in milliseconds (Default: 2000 ms)
+   * Server synchronization interval in milliseconds (Default: 1000 ms)
    * @see ServerDataSync
    */
-  public static final Integer NETWORK_SERVER_SYNC_INTERVAL = 2000;
+  public static final Integer NETWORK_SERVER_SYNC_INTERVAL = 1000;
   /**
    * The interval for event calculations in ms.
    * @see ServerTimer

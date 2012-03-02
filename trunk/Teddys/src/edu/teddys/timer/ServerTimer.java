@@ -4,8 +4,11 @@
  */
 package edu.teddys.timer;
 
+import com.jme3.math.Vector3f;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
+import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  *
@@ -71,5 +74,9 @@ public class ServerTimer {
       return;
     }
     thread.setTick(ts);
+  }
+  
+  public static Map<Integer,LinkedBlockingQueue<Vector3f>> getClientPositions() {
+    return thread.getClientPositions();
   }
 }

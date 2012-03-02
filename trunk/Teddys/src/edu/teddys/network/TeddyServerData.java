@@ -6,13 +6,11 @@ package edu.teddys.network;
 
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.GameSettings;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.TreeMap;
 
 /**
  *
@@ -30,7 +28,7 @@ public class TeddyServerData {
   /**
    * The server name which is displayed on occasion.
    */
-  private String name = "Big Fat Server";
+  private String name = "Honey Pot World";
   /**
    * The list of teams registered on the server.
    */
@@ -42,11 +40,8 @@ public class TeddyServerData {
    * True if the server should be visible to other clients.
    */
   private boolean discoverable = false;
-  /**
-   * History of the clients' positions for the lag compensation.
-   */
-  private Map<Integer,LinkedBlockingQueue<Vector3f>> clientPositions = new HashMap<Integer,LinkedBlockingQueue<Vector3f>>();
-
+  private Map<Integer,List<Vector3f>> clientPositions = new TreeMap<Integer,List<Vector3f>>();
+  
   public TeddyServerData() {
     super();
     //TODO Create a GameMode object which is not persisted
@@ -84,18 +79,11 @@ public class TeddyServerData {
     this.teams = teams;
   }
 
-  public Map<Integer, LinkedBlockingQueue<Vector3f>> getClientPositions() {
+  public Map<Integer, List<Vector3f>> getClientPositions() {
     return clientPositions;
   }
 
-  public void setClientPositions(Map<Integer, LinkedBlockingQueue<Vector3f>> clientPositions) {
+  public void setClientPositions(Map<Integer, List<Vector3f>> clientPositions) {
     this.clientPositions = clientPositions;
-  }
-  
-  public void addClientPosition(Integer clientId, Vector3f pos) {
-    if(!getClientPositions().containsKey(clientId)) {
-      getClientPositions().put(clientId, new LinkedBlockingQueue<Vector3f>(GameSettings.MAX_SERVER_POS_CAPACITY));
-    }
-    getClientPositions().get(clientId).offer(pos);
   }
 }

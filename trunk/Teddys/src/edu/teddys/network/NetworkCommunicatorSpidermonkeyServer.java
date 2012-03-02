@@ -42,12 +42,22 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
    * @see ConnectionListener
    */
   public void startServer(TeddyServer server, Integer serverPort) {
-    if (networkServer != null && networkServer.isRunning()) {
+    if (isRunning()) {
       return;
     }
     networkServer.start();
     networkServer.addConnectionListener(server);
     MegaLogger.getLogger().debug("The Spidermonkey server has started successfully.");
+  }
+  
+  /**
+   * 
+   * Check if the server is running.
+   * 
+   * @return True if networkServer is not null and it is running, else false.
+   */
+  boolean isRunning() {
+    return (networkServer != null && networkServer.isRunning());
   }
 
   /**
@@ -86,7 +96,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   }
 
   public void send(NetworkMessage message) {
-    if (networkServer == null || !networkServer.isRunning()) {
+    if (!isRunning()) {
       return;
     }
     if (GameSettings.NETWORK_SERVER_LAG_DELAY != 0) {
@@ -120,7 +130,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   }
 
   public Collection<HostedConnection> getConnections() {
-    if (networkServer == null) {
+    if (!isRunning()) {
       MegaLogger.getLogger().debug("networkServer has not yet started, can't get the connections.");
       return null;
     }
