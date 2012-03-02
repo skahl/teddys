@@ -155,15 +155,6 @@ public class Game extends AbstractAppState {
     hudController.setHUD(hud);
     hudController.registerWithInput(inputManager);
 
-    // init player
-//    player.getPlayerControl().setPhysicsLocation(new Vector3f(1f, 0f, -1.2f));
-//    
-//    Player player2 = Player.getInstance(1);
-//    player2.getPlayerControl().setPhysicsLocation(new Vector3f(0f, 0f, -1.2f));
-
-//    rootNode.attachChild(player.getNode());
-//    rootNode.attachChild(player2.getNode());
-
     // Crosshair
     int crosshairSize = this.app.getSettings().getHeight() / 15;
     this.app.getAssetManager().loadTexture("Interface/HUD/crosshair.png");
@@ -197,7 +188,7 @@ public class Game extends AbstractAppState {
 
     if (GameSettings.DEBUG) {
       // debug switch not working
-      //bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
+//      bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
     }
   }
 

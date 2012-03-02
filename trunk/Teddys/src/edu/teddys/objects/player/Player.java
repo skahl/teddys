@@ -136,7 +136,8 @@ public class Player {
 //      control.registerWithInput(game.getInputManager());
     }
 
-    game.getBulletAppState().getPhysicsSpace().add(control);
+    //TODO shouldn't this be done in an update()-loop?
+//    game.getBulletAppState().getPhysicsSpace().add(control);
 
     control.setJumpSpeed(5);
     control.setGravity(5);
