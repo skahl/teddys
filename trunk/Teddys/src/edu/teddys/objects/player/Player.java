@@ -68,9 +68,9 @@ public class Player {
    */
   public static void setLocalPlayerId(Integer id) {
     instances.remove(id);
+    instances.remove(LOCAL_PLAYER);
     // Initialize the new player object
     Player player = new Player(id);
-    instances.remove(LOCAL_PLAYER);
     // Refresh the ID
     LOCAL_PLAYER = id;
     instances.put(id, player);
@@ -88,6 +88,10 @@ public class Player {
     Game.getInstance().removeSpatial(Game.getInstance().getRootNode(), oldPlayer.getNode());
     Game.getInstance().getBulletAppState().getPhysicsSpace().remove(oldPlayer.getPlayerControl());
     instances.remove(id);
+  }
+  
+  public static void setInstanceList(Map<Integer,Player> playerMap) {
+    //TODO !
   }
   
   /**

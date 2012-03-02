@@ -29,6 +29,15 @@ public class ResMessageSendClientData extends NetworkMessageResponse {
     setClientData(data);
   }
 
+  public ResMessageSendClientData(Integer recipient, ClientData data) {
+    this();
+    if(data == null) {
+      throw new InstantiationError("ClientData can't be null!");
+    }
+    setClientData(data);
+    setRecipients(new Integer[]{recipient});
+  }
+
   public ClientData getClientData() {
     return data;
   }

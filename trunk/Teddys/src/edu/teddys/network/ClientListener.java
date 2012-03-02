@@ -15,6 +15,7 @@ import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
 import edu.teddys.network.messages.NetworkMessageManipulation;
 import edu.teddys.network.messages.NetworkMessageRequest;
+import edu.teddys.network.messages.NetworkMessageResponse;
 import edu.teddys.network.messages.client.GSMessageGamePaused;
 import edu.teddys.network.messages.client.GSMessagePlayerReady;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
@@ -24,6 +25,7 @@ import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.GSMessageEndGame;
 import edu.teddys.network.messages.server.ManMessageActivateItem;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
+import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;
 import edu.teddys.network.messages.server.ManMessageTriggerEffect;
 import edu.teddys.network.messages.server.ReqMessageMapRequest;
@@ -64,7 +66,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
     } else if (message instanceof NetworkMessage) {
 
       // CHECK CLIENT ID
-      Integer[] rec = ((NetworkMessage)message).getRecipients();
+      Integer[] rec = ((NetworkMessage) message).getRecipients();
       if (rec.length != 0 && !(Arrays.asList(rec)).contains(
               TeddyClient.getInstance().getData().getId())) {
         MegaLogger.getLogger().debug("Not a message for me ...");
@@ -96,6 +98,26 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
                 teddyName,
                 info.getMessage());
         MegaLogger.getLogger().info(infoString);
+      } else if (message instanceof NetworkMessageResponse) {
+        if (message instanceof ResMessageSendClientData) {
+          //
+          // A NEW TEAM MEMBER JOINED THE SERVER
+          //
+          ResMessageSendClientData msg = (ResMessageSendClientData) message;
+
+        } else if (message instanceof ResMessageMapLoaded) {
+          //
+          // A USER HAS LOADED THE MAP.
+          // ADD THE CLIENT TO THE LOCAL WORLD
+          //
+          ResMessageMapLoaded msg = (ResMessageMapLoaded)message;
+          Player newPlayer = Player.getInstance(msg.getAffected());
+          //TODO this should have been done already when the player data was received
+          newPlayer.getData().setMapLoaded(true);
+          MegaLogger.getLogger().debug("Client " + msg.getAffected() + " has loaded the map.");
+          Game.getInstance().addPlayerToWorld(newPlayer);
+          MegaLogger.getLogger().debug("Client " + msg.getAffected() + " has been added to the world.");
+        }
       } else if (message instanceof NetworkMessageGameState) {
         if (message instanceof GSMessageGamePaused) {
           //
@@ -113,12 +135,12 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           //TODO Set game state to "Game"
           GSMessageBeginGame msg = (GSMessageBeginGame) message;
-          // add the player to the local world
-          Player newPlayer = Player.getInstance(source.getId());
-          Game.getInstance().addPlayerToWorld(newPlayer);
+          //TODO check!! add the player to the local world
+//          Player newPlayer = Player.getInstance(source.getId());
+//          Game.getInstance().addPlayerToWorld(newPlayer);
           // start the server timer to get the tick
           // if the server is local, don't change the value.
-          if(source.getId() != Player.LOCAL_PLAYER) {
+          if (source.getId() != Player.LOCAL_PLAYER) {
             ServerTimer.setServerTimestamp(msg.getServerTimestamp());
             ServerTimer.startTimer();
           }
@@ -132,7 +154,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           //TODO Set game state to "EndGame"
 //          ServerTimer.stopTimer();
-          
+
           Player.getInstance(Player.LOCAL_PLAYER).getData().setReady(false);
           Player.getInstance(Player.LOCAL_PLAYER).getData().setMapLoaded(false);
           // Stop sending the actions to the server
@@ -173,6 +195,15 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
             MegaLogger.getLogger().info(infoString);
           } catch (Exception ex) {
           }
+        } else if (message instanceof ManMessageTransferPlayerData) {
+          //
+          // NEW PLAYER DATA AVAILABLE. SYNC
+          //
+          // (NOTE: CURRENTLY NOT USED)
+          //
+          ManMessageTransferPlayerData msg = (ManMessageTransferPlayerData) message;
+          //overwrite the current player data
+          Player.setInstanceList(msg.getData());
         } else if (message instanceof ManMessageTransferServerData) {
           //
           // NEW SERVER DATA AVAILABLE. SYNC
@@ -180,6 +211,10 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           ManMessageTransferServerData msg = (ManMessageTransferServerData) message;
           //overwrite the current server data
           TeddyServer.getInstance().setData(msg.getData());
+          //TODO integrate new team members on demand
+          // Look for new team members
+          for (Team team : msg.getData().getTeams()) {
+          }
         } else if (message instanceof ManMessageTriggerEffect) {
           //
           // CALL THE GIVEN EFFECT
@@ -194,10 +229,9 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           ReqMessageMapRequest msg = (ReqMessageMapRequest) message;
           // Load the game map
           Game.getInstance().setGameLoader(
-                  new GameLoader("firstlevel", "maps/firstlevel.zip", Game.getInstance())
-                  );
+                  new GameLoader("firstlevel", "maps/firstlevel.zip", Game.getInstance()));
           // Now that the map is loaded, send the confirmation
-          ResMessageMapLoaded mapLoaded = new ResMessageMapLoaded();
+          ResMessageMapLoaded mapLoaded = new ResMessageMapLoaded(TeddyClient.getInstance().getData().getId());
           TeddyClient.getInstance().send(mapLoaded);
         } else if (message instanceof ReqMessagePauseRequest) {
           //
@@ -228,7 +262,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           // CLIENT SYNCHRONISATION REQUEST
           //
-          ResMessageSendClientData response = new ResMessageSendClientData(TeddyClient.getInstance().getData());
+          ResMessageSendClientData response = new ResMessageSendClientData(
+                  Player.getInstance(Player.LOCAL_PLAYER).getData());
           TeddyClient.getInstance().send(response);
 
           //TEMPORARY

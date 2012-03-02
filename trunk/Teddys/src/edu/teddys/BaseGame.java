@@ -57,6 +57,7 @@ import edu.teddys.menu.MainMenu;
 import edu.teddys.menu.OptionsMenu;
 import edu.teddys.menu.PauseMenu;
 import edu.teddys.network.NetworkSettings;
+import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
 import edu.teddys.objects.player.Player;
 import java.io.File;
 import java.io.IOException;
@@ -280,6 +281,7 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(ManMessageActivateItem.class);
     Serializer.registerClass(ManMessageSendDamage.class);
     Serializer.registerClass(ManMessageSetPosition.class);
+    Serializer.registerClass(ManMessageTransferPlayerData.class);
     Serializer.registerClass(ManMessageTransferServerData.class);
     Serializer.registerClass(ManMessageTriggerEffect.class);
     Serializer.registerClass(ReqMessageMapRequest.class);

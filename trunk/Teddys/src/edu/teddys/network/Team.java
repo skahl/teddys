@@ -16,11 +16,11 @@ import java.util.List;
 @Serializable
 public class Team {
 
-  private String name = "";
+  private String name = "Grampen";
   /**
    * Default value is a dummy.
    */
-  private Color color = Color.BLACK;
+  private String color = Color.BLACK.toString();
   private List<Integer> players = new ArrayList<Integer>();
 
   public Team() {
@@ -33,14 +33,14 @@ public class Team {
   
   public Team(Color color, String teamName) {
     this(teamName);
-    setColor(color);
+    setColor(color.toString());
   }
 
-  public Color getColor() {
+  public String getColor() {
     return color;
   }
 
-  public final void setColor(Color color) {
+  public final void setColor(String color) {
     this.color = color;
   }
 
