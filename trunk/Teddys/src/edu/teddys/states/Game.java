@@ -261,15 +261,15 @@ public class Game extends AbstractAppState {
     }
     MegaLogger.getLogger().debug("New player should be added to the world. Creating the requests.");
     // add to the world
-    addCharacterControlToPhysicsSpace(player.getPlayerControl());
     addSpatial(getRootNode(), player.getNode());
+    addCharacterControlToPhysicsSpace(player.getPlayerControl());
   }
 
   public void removePlayerFromWorld(Player player) {
     if (getRootNode().hasChild(player.getNode())) {
       MegaLogger.getLogger().debug("Player " + player + " should be removed from the world.");
-      removeSpatial(getRootNode(), player.getNode());
       removeCharacterControlFromPhysicsSpace(player.getPlayerControl());
+      removeSpatial(getRootNode(), player.getNode());
     }
   }
 

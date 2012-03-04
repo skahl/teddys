@@ -72,28 +72,33 @@ public class Player {
    * @param id The new player ID
    */
   public synchronized static void setLocalPlayerId(Integer id) {
-    CameraNode camNode = Game.getInstance().getCamNode();
-    // At first, remove the camera from the old Player
-    Player oldLocalPlayer = Player.getInstance(LOCAL_PLAYER);
-    if(oldLocalPlayer.getNode().hasChild(camNode)) {
-      Game.getInstance().removeSpatial(oldLocalPlayer.getNode(), camNode);
+    if(id == LOCAL_PLAYER) {
+      // no change
+      return;
     }
-    // Then remove the player from the world
-    Game.getInstance().removePlayerFromWorld(Player.getInstance(id));
-    Game.getInstance().removePlayerFromWorld(oldLocalPlayer);
-    // Refresh the list
-    instances.remove(id);
+    //TODO check if removing all players is better ...
+    if(instances.containsKey(id)) {
+      // Remove the old player
+      Game.getInstance().removePlayerFromWorld(Player.getInstance(id));
+      instances.remove(id);
+    }
+    // Get the current instance
+    Player localPlayer = Player.getInstance(LOCAL_PLAYER);
+    // Instead of copying all data, rename the node 
+    // and change the position in the instances List
+    localPlayer.getNode().setName("player" + id.toString());
+    localPlayer.getData().setId(id);
+    CameraNode camNode = Game.getInstance().getCamNode();
+    if(!localPlayer.getNode().hasChild(camNode)) {
+      Vector3f dir = localPlayer.getNode().getWorldTranslation().add(0, 0.75f, 0);
+      camNode.lookAt(dir, new Vector3f(0, 1, 0));
+      Game.getInstance().addSpatial(localPlayer.getNode(), camNode);
+    }
+    instances.put(id, localPlayer);
+    // Refresh the list since the ID has changed
     instances.remove(LOCAL_PLAYER);
-    // Initialize the new player object
-    Player player = new Player(id);
-    // Update the camNode
-    Vector3f dir = player.getNode().getWorldTranslation().add(0, 0.75f, 0);
-    camNode.lookAt(dir, new Vector3f(0, 1, 0));
-    // Attach the cam to the Player
-    Game.getInstance().addSpatial(player.getNode(), camNode);
-    // Refresh the ID
+    // Update the LOCAL_PLAYER ID
     LOCAL_PLAYER = id;
-    instances.put(id, player);
   }
 
   /**
@@ -117,7 +122,7 @@ public class Player {
   }
 
   /**
-   * DON'T CALL THIS!!! THIS IS FOR SERIALIZING PURPOSES!
+   * DON'T CALL THIS!!! THIS IS FOR SERIALIZING PURPOSES ONLY!
    */
   public Player() {
   }
@@ -153,7 +158,7 @@ public class Player {
       //TODO check
 //      control.registerWithInput(game.getInputManager());
     }
-    
+
     control.setJumpSpeed(5);
     control.setGravity(5);
     control.setFallSpeed(5);
