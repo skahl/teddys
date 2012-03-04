@@ -5,7 +5,6 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
@@ -49,6 +48,7 @@ public class Game extends AbstractAppState {
   private AppStateManager stateManager;
   private InputManager inputManager;
   private BulletAppState bulletAppState;
+  private CameraNode camNode;
   private Node rootNode;
   private BasicShadowRenderer shadowRenderer; // Shadow rendering
   private GameLoader gameLoader;
@@ -166,15 +166,15 @@ public class Game extends AbstractAppState {
     addSpatial(this.app.getGuiNode(), cursor);
 
     // Camera
-    CameraNode camNode = new CameraNode("Camera", this.app.getCamera());
+    camNode = new CameraNode("Camera", this.app.getCamera());
     camNode.setControlDir(ControlDirection.SpatialToCamera);
-
-    Player player = Player.getInstance(Player.LOCAL_PLAYER);
-    player.getNode().attachChild(camNode);
 
     // initial distance between camera and player
     camNode.move(0, 1, 8);
 
+    Player player = Player.getInstance(Player.LOCAL_PLAYER);
+    // Update the camNode. Note that the camNode has been already attached to the player
+    // when the LOCAL_PLAYER id was set.
     Vector3f dir = player.getNode().getWorldTranslation().add(0, 0.75f, 0);
     camNode.lookAt(dir, new Vector3f(0, 1, 0));
 
@@ -261,8 +261,8 @@ public class Game extends AbstractAppState {
     }
     MegaLogger.getLogger().debug("New player should be added to the world. Creating the requests.");
     // add to the world
-    addSpatial(getRootNode(), player.getNode());
     addCharacterControlToPhysicsSpace(player.getPlayerControl());
+    addSpatial(getRootNode(), player.getNode());
   }
 
   public void removePlayerFromWorld(Player player) {
@@ -339,6 +339,10 @@ public class Game extends AbstractAppState {
 
   public InputManager getInputManager() {
     return inputManager;
+  }
+  
+  public CameraNode getCamNode() {
+    return camNode;
   }
   
   public void loadGameMap(String levelName, String mapPath) {

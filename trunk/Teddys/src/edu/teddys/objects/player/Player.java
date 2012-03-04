@@ -3,7 +3,9 @@ package edu.teddys.objects.player;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
+import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -65,13 +67,30 @@ public class Player {
    * Note: If a player with the specified ID already exists, it will be removed!
    * Also, the old instance of the local player will be removed!
    * 
+   * This method is only called (until now ...) by clientConnected() in TeddyClient!
+   * 
    * @param id The new player ID
    */
   public synchronized static void setLocalPlayerId(Integer id) {
+    CameraNode camNode = Game.getInstance().getCamNode();
+    // At first, remove the camera from the old Player
+    Player oldLocalPlayer = Player.getInstance(LOCAL_PLAYER);
+    if(oldLocalPlayer.getNode().hasChild(camNode)) {
+      Game.getInstance().removeSpatial(oldLocalPlayer.getNode(), camNode);
+    }
+    // Then remove the player from the world
+    Game.getInstance().removePlayerFromWorld(Player.getInstance(id));
+    Game.getInstance().removePlayerFromWorld(oldLocalPlayer);
+    // Refresh the list
     instances.remove(id);
     instances.remove(LOCAL_PLAYER);
     // Initialize the new player object
     Player player = new Player(id);
+    // Update the camNode
+    Vector3f dir = player.getNode().getWorldTranslation().add(0, 0.75f, 0);
+    camNode.lookAt(dir, new Vector3f(0, 1, 0));
+    // Attach the cam to the Player
+    Game.getInstance().addSpatial(player.getNode(), camNode);
     // Refresh the ID
     LOCAL_PLAYER = id;
     instances.put(id, player);
@@ -134,9 +153,6 @@ public class Player {
       //TODO check
 //      control.registerWithInput(game.getInputManager());
     }
-
-    //TODO shouldn't this be done in an update()-loop?
-//    game.getBulletAppState().getPhysicsSpace().add(control);
     
     control.setJumpSpeed(5);
     control.setGravity(5);
