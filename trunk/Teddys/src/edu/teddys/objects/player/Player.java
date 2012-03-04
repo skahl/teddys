@@ -129,7 +129,7 @@ public class Player {
     // physics
     collisionShape = new CapsuleCollisionShape(visual.getWidth() * 0.3f, visual.getHeight() * 0.35f, 1);
 
-    control = new PlayerControl(node, collisionShape, 0.02f, visual);
+    control = new PlayerControl(collisionShape, 0.02f, visual);
     if (id == LOCAL_PLAYER) {
       //TODO check
 //      control.registerWithInput(game.getInputManager());
@@ -137,10 +137,14 @@ public class Player {
 
     //TODO shouldn't this be done in an update()-loop?
 //    game.getBulletAppState().getPhysicsSpace().add(control);
-
+    
     control.setJumpSpeed(5);
     control.setGravity(5);
     control.setFallSpeed(5);
+    // The location of the CharacterControl Spatial should be the same as from the Player's node
+    control.setPhysicsLocation(node.getWorldTranslation());
+    // Set a binding
+    node.addControl(control);
 
     // Set the (network) client ID
     data.setId(id);

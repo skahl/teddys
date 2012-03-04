@@ -5,8 +5,10 @@
 package edu.teddys.callables;
 
 import com.jme3.math.Vector3f;
+import edu.teddys.MegaLogger;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.objects.player.Player;
+import edu.teddys.timer.ServerTimerThread;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -15,7 +17,7 @@ import java.util.concurrent.Callable;
  * @author cm
  */
 public class SetPositionOfTeddyCallable implements Callable {
-  
+
   private Player player;
   List<Vector3f> positions = null;
 
@@ -23,14 +25,13 @@ public class SetPositionOfTeddyCallable implements Callable {
     this.player = playerInstance;
     this.positions = positions;
   }
-  
+
   public Object call() throws Exception {
     //TODO if the array contains more than entry, use smoothed movements.
-    Vector3f lastPosition = positions.get(positions.size()-1);
+    Vector3f lastPosition = positions.get(positions.size() - 1);
     player.getPlayerControl().setPhysicsLocation(lastPosition);
-    //TODO check!
-    TeddyServer.getInstance().getData().getClientPositions().put(player.getData().getId(), positions);
+    MegaLogger.getLogger().debug(String.format("Position of player %d set to %s",
+            player.getData().getId(), lastPosition));
     return null;
   }
-  
 }

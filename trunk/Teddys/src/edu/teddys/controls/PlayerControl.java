@@ -63,17 +63,14 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
    * @param stepHeight
    * @param vis 
    */
-  public PlayerControl(Spatial player, CollisionShape collisionShape, float stepHeight, TeddyVisual vis) {
+  public PlayerControl(CollisionShape collisionShape, float stepHeight, TeddyVisual vis) {
     super(collisionShape, stepHeight);
-    setPhysicsLocation(player.getWorldTranslation());
-    player.addControl(this);
-
+    
     visual = vis;
     serverControlInput = new LinkedList<InputTuple>();
 
     left = new Vector3f(-1, 0, 0);
     right = new Vector3f(1, 0, 0);
-
     
     // Initialize the currentWeapon with a Sten Gun
     currentWeapon = new StenGun();

@@ -187,7 +187,7 @@ public class Game extends AbstractAppState {
 
     if (GameSettings.DEBUG) {
       // debug switch not working
-//      bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
+      bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
     }
 
     MegaLogger.getLogger().debug("New game instance created.");

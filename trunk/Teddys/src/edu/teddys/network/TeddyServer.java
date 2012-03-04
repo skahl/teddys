@@ -224,7 +224,6 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
 
     // check if the player exists in the current game
     Game.getInstance().removePlayerFromWorld(Player.getInstance(conn.getId()));
-    MegaLogger.getLogger().debug("Player removed from world.");
 
     // Now search the client data of the HostedConnection and remove it 
     // from list

@@ -96,9 +96,6 @@ public class ServerListener implements MessageListener<HostedConnection> {
         TeddyServer.getInstance().send(msg);
         Player newPlayer = Player.getInstance(source.getId());
         newPlayer.getData().setMapLoaded(true);
-        // set the client data for local access on demand
-        //TODO always sync the data! use a thread for that
-//        newPlayer.setData(TeddyServer.getInstance().getClientData(source.getId()));
         Game.getInstance().setRandomPlayerPosition(newPlayer);
         // refresh the clients' positions
         ManMessageTransferPlayerData playerData = new ManMessageTransferPlayerData(Player.getInstances());
