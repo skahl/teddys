@@ -121,7 +121,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           MegaLogger.getLogger().debug("Client " + msg.getAffected() + " has loaded the map.");
           // The position has been set by the server already
           Game.getInstance().addPlayerToWorld(newPlayer);
-          MegaLogger.getLogger().debug("Client " + msg.getAffected() + " has been added to the world.");
         }
       } else if (message instanceof NetworkMessageGameState) {
         if (message instanceof GSMessageGamePaused) {
@@ -239,8 +238,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           ReqMessageMapRequest msg = (ReqMessageMapRequest) message;
           // Load the game map
-          Game.getInstance().setGameLoader(
-                  new GameLoader("firstlevel", "maps/firstlevel.zip", Game.getInstance()));
+          Game.getInstance().loadGameMap(msg.getLevelName(), msg.getLevelPath());
           // Now that the map is loaded, send the confirmation
           ResMessageMapLoaded mapLoaded = new ResMessageMapLoaded(TeddyClient.getInstance().getData().getId());
           TeddyClient.getInstance().send(mapLoaded);

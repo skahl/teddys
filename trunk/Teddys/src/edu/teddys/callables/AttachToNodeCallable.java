@@ -6,6 +6,7 @@ package edu.teddys.callables;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import edu.teddys.MegaLogger;
 import java.util.concurrent.Callable;
 
 /**
@@ -24,6 +25,7 @@ public class AttachToNodeCallable implements Callable {
 
   public Object call() {
     parent.attachChild(child);
+    MegaLogger.getLogger().debug(String.format("Node %s attached to %s.", child, parent));
     return null;
   }
 }

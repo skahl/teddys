@@ -71,7 +71,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         Player.getInstance(source.getId()).getData().setReady(true);
 
         //TODO change to the chosen map name
-        ReqMessageMapRequest mapRequest = new ReqMessageMapRequest("firstlevel");
+        ReqMessageMapRequest mapRequest = new ReqMessageMapRequest("firstlevel", "maps/firstlevel.zip");
         TeddyServer.getInstance().send(mapRequest);
       }
     } else if (message instanceof NetworkMessageResponse) {
@@ -158,10 +158,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
 
         // Get the other clients
         List<Integer> rec = new ArrayList<Integer>(Player.getInstances().keySet());
-        System.out.println(rec);
         // Remove the current clientID
         rec.remove(clientID);
-        System.out.println(rec);
         // Refresh the recipient list
         msg.setRecipients(rec.toArray(new Integer[rec.size()]));
         // And send the data to the clients

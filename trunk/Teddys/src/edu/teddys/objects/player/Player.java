@@ -8,6 +8,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import edu.teddys.MegaLogger;
 import edu.teddys.controls.PlayerControl;
 import edu.teddys.network.ClientData;
 import edu.teddys.states.Game;
@@ -58,7 +59,7 @@ public class Player {
   public void setData(ClientData data) {
     this.data = data;
   }
-  
+
   /**
    * 
    * Note: If a player with the specified ID already exists, it will be removed!
@@ -75,7 +76,7 @@ public class Player {
     LOCAL_PLAYER = id;
     instances.put(id, player);
   }
-  
+
   /**
    * 
    * Remove the player specified by the ID. Note that the node will be removed from the
@@ -85,23 +86,21 @@ public class Player {
    */
   public synchronized static void removePlayer(Integer id) {
     Player oldPlayer = Player.getInstance(id);
-    Game.getInstance().removeSpatial(Game.getInstance().getRootNode(), oldPlayer.getNode());
-    Game.getInstance().getBulletAppState().getPhysicsSpace().remove(oldPlayer.getPlayerControl());
+    Game.getInstance().removePlayerFromWorld(oldPlayer);
     instances.remove(id);
   }
-  
-  public synchronized static void setInstanceList(Map<Integer,Player> playerMap) {
+
+  public synchronized static void setInstanceList(Map<Integer, Player> playerMap) {
     //TODO Problems: The Nodes are not transmitted
     //TODO What about lag compensation? use smoothed movements etc ...
 //    instances = playerMap;
     //TODO refresh the positions in the local world if a game is active
   }
-  
+
   /**
    * DON'T CALL THIS!!! THIS IS FOR SERIALIZING PURPOSES!
    */
   public Player() {
-    
   }
 
   /**
@@ -125,7 +124,7 @@ public class Player {
     invBoxGeo.setMaterial(red);
     invBoxGeo.setCullHint(Spatial.CullHint.Always); //make invisible
     node.attachChild(invBoxGeo);
-    
+
 
     // physics
     collisionShape = new CapsuleCollisionShape(visual.getWidth() * 0.3f, visual.getHeight() * 0.35f, 1);
@@ -145,6 +144,8 @@ public class Player {
 
     // Set the (network) client ID
     data.setId(id);
+
+    MegaLogger.getLogger().debug("New player created (id=" + id + ")");
   }
 
   /**
@@ -155,7 +156,7 @@ public class Player {
   public PlayerControl getPlayerControl() {
     return control;
   }
-  
+
   /**
    * playerVisual getter.
    * @return 
@@ -194,7 +195,7 @@ public class Player {
   public static List<Player> getInstanceList() {
     return new ArrayList<Player>(instances.values());
   }
-  
+
   public static Map<Integer, Player> getInstances() {
     return instances;
   }

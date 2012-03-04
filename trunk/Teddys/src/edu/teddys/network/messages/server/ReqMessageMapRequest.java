@@ -16,22 +16,32 @@ import edu.teddys.network.messages.NetworkMessageRequest;
 @Serializable
 public class ReqMessageMapRequest extends NetworkMessageRequest {
 
-  private String map = "";
+  private String levelName = "";
+  private String levelPath = "";
   
   public ReqMessageMapRequest() {
     super();
   }
 
-  public ReqMessageMapRequest(String map) {
+  public ReqMessageMapRequest(String levelName, String levelPath) {
     this();
-    setMap(map);
+    this.levelName = levelName;
+    this.levelPath = levelPath;
   }
 
-  public String getMap() {
-    return map;
+  public String getLevelName() {
+    return levelName;
   }
 
-  private  void setMap(String map) {
-    this.map = map;
+  public void setLevelName(String levelName) {
+    this.levelName = levelName;
+  }
+
+  public String getLevelPath() {
+    return levelPath;
+  }
+
+  public void setLevelPath(String levelPath) {
+    this.levelPath = levelPath;
   }
 }

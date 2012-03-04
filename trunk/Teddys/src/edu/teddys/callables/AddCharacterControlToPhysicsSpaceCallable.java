@@ -6,6 +6,7 @@ package edu.teddys.callables;
 
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.CharacterControl;
+import edu.teddys.MegaLogger;
 import java.util.concurrent.Callable;
 
 /**
@@ -24,6 +25,7 @@ public class AddCharacterControlToPhysicsSpaceCallable implements Callable {
   
   public Object call() throws Exception {
     space.add(control);
+    MegaLogger.getLogger().debug(String.format("CharacterControl %s attached to PhysicsSpace %s", control, space));
     return null;
   }
   

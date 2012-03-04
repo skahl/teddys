@@ -25,6 +25,9 @@ import edu.teddys.GameModeEnum;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.callables.AddCharacterControlToPhysicsSpaceCallable;
+import edu.teddys.callables.AddNodeToPhysicsSpaceCallable;
+import edu.teddys.callables.RemoveCharacterControlFromPhysicsSpace;
+import edu.teddys.callables.RemoveNodeFromPhysicsSpace;
 import edu.teddys.callables.SetPositionOfTeddyCallable;
 import edu.teddys.hud.HUD;
 import edu.teddys.hud.HUDController;
@@ -121,10 +124,6 @@ public class Game extends AbstractAppState {
     bulletAppState = new BulletAppState();
     stateManager.attach(bulletAppState);
 
-    // load game
-    gameLoader = new GameLoader("firstlevel", "maps/firstlevel.zip", this);
-
-
     // shed some light
     Vector3f sunDirection = new Vector3f(-1f, -1f, -1.2f);
     sunDirection.normalizeLocal();
@@ -190,6 +189,8 @@ public class Game extends AbstractAppState {
       // debug switch not working
 //      bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
     }
+
+    MegaLogger.getLogger().debug("New game instance created.");
   }
 
   /**
@@ -213,11 +214,29 @@ public class Game extends AbstractAppState {
   public void removeSpatial(Node parent, Spatial child) {
     getApp().enqueue(new DetachFromNodeCallable(parent, child));
   }
+
+  void addCharacterControlToPhysicsSpace(CharacterControl control) {
+    getApp().enqueue(new AddCharacterControlToPhysicsSpaceCallable(getBulletAppState().getPhysicsSpace(), control));
+  }
   
-  public void addCharacterControlToPhysicsSpace(PhysicsSpace space, CharacterControl control) {
-    getApp().enqueue(new AddCharacterControlToPhysicsSpaceCallable(space, control));
+  void removeCharacterControlFromPhysicsSpace(CharacterControl control) {
+    getApp().enqueue((new RemoveCharacterControlFromPhysicsSpace(getBulletAppState().getPhysicsSpace(), control)));
+  }
+  
+  public void addNodeToPhysicsSpace(Node node) {
+    getApp().enqueue(new AddNodeToPhysicsSpaceCallable(getBulletAppState().getPhysicsSpace(), node));
+  }
+  
+  public void removeNodeFromPhysicsSpace(Node node) {
+    getApp().enqueue((new RemoveNodeFromPhysicsSpace(getBulletAppState().getPhysicsSpace(), node)));
   }
 
+  /**
+   * 
+   * Create a random position and enqueue the change of the position of the specified Player.
+   * 
+   * @param player The player whose position is set.
+   */
   public void setRandomPlayerPosition(Player player) {
     RandomDataImpl rnd = new RandomDataImpl();
     //TODO use some spawn points
@@ -225,7 +244,7 @@ public class Game extends AbstractAppState {
     // this is the first position of the Teddy, so initialize a new List
     SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(player, Arrays.asList(pos));
     getApp().enqueue(setPos);
-    MegaLogger.getLogger().debug("Position of the player has been set to "
+    MegaLogger.getLogger().debug("Position of the player has been randomly set to "
             + pos + " (ID: " + player.getData().getId() + ")");
   }
 
@@ -240,29 +259,30 @@ public class Game extends AbstractAppState {
     if (getRootNode().hasChild(player.getNode())) {
       return;
     }
+    MegaLogger.getLogger().debug("New player should be added to the world. Creating the requests.");
     // add to the world
     addSpatial(getRootNode(), player.getNode());
-    addCharacterControlToPhysicsSpace(getBulletAppState().getPhysicsSpace(), player.getPlayerControl());
+    addCharacterControlToPhysicsSpace(player.getPlayerControl());
   }
 
   public void removePlayerFromWorld(Player player) {
     if (getRootNode().hasChild(player.getNode())) {
+      MegaLogger.getLogger().debug("Player " + player + " should be removed from the world.");
       removeSpatial(getRootNode(), player.getNode());
+      removeCharacterControlFromPhysicsSpace(player.getPlayerControl());
     }
   }
 
   public void addMapModel(Node mapModel) {
+    MegaLogger.getLogger().debug("Map model " + mapModel + " should be added to the Root Node and to the PhysicsSpace.");
     addSpatial(getRootNode(), mapModel);
-    //TODO use the update routine for this purpose?
-    getBulletAppState().getPhysicsSpace().add(mapModel);
+    addNodeToPhysicsSpace(mapModel);
   }
 
   @Override
   public void cleanup() {
     super.setEnabled(false);
     super.cleanup();
-
-
   }
 
   public void initKeys(boolean attach) {
@@ -320,8 +340,9 @@ public class Game extends AbstractAppState {
   public InputManager getInputManager() {
     return inputManager;
   }
-
-  public void setGameLoader(GameLoader gameLoader) {
-    this.gameLoader = gameLoader;
+  
+  public void loadGameMap(String levelName, String mapPath) {
+    gameLoader = new GameLoader("firstlevel", "maps/firstlevel.zip", this);
+    addMapModel(gameLoader.getGameMap().getMapModel());
   }
 }
