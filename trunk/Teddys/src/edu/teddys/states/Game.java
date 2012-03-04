@@ -165,23 +165,26 @@ public class Game extends AbstractAppState {
     cursor.setWidth(crosshairSize);
     addSpatial(this.app.getGuiNode(), cursor);
 
-    // Camera
-    camNode = new CameraNode("Camera", this.app.getCamera());
-    camNode.setControlDir(ControlDirection.SpatialToCamera);
-
-    // initial distance between camera and player
-    camNode.move(0, 1, 8);
-
-    Player player = Player.getInstance(Player.LOCAL_PLAYER);
-    // Update the camNode. Note that the camNode has been already attached to the player
-    // when the LOCAL_PLAYER id was set.
-    Vector3f dir = player.getNode().getWorldTranslation().add(0, 0.75f, 0);
-    camNode.lookAt(dir, new Vector3f(0, 1, 0));
-
-    // Input
-    CrosshairControl cameraControl = new CrosshairControl(camNode, player, cursor,
-            this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
-    cameraControl.registerWithInput(inputManager);
+    initCamNode();
+    
+//    // Camera
+//    camNode = new CameraNode("Camera", this.app.getCamera());
+//    camNode.setControlDir(ControlDirection.SpatialToCamera);
+//
+//    // initial distance between camera and player
+//    camNode.move(0, 1, 8);
+//
+//    Player player = Player.getInstance(Player.LOCAL_PLAYER);
+//    // Update the camNode. Note that the camNode has been already attached to the player
+//    // when the LOCAL_PLAYER id was set.
+//    Vector3f dir = player.getNode().getWorldTranslation().add(0, 0.75f, 0);
+//    camNode.lookAt(dir, new Vector3f(0, 1, 0));
+////    player.getNode().attachChild(camNode);
+//
+//    // Input
+//    CrosshairControl cameraControl = new CrosshairControl(camNode, player, cursor,
+//            this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
+//    cameraControl.registerWithInput(inputManager);
 
     // physics debug (shows collission meshes):
 
@@ -191,6 +194,22 @@ public class Game extends AbstractAppState {
     }
 
     MegaLogger.getLogger().debug("New game instance created.");
+  }
+  
+  public void initCamNode() {
+    if(camNode != null) {
+      return;
+    }
+    // Camera
+    camNode = new CameraNode("Camera", this.app.getCamera());
+    camNode.setControlDir(ControlDirection.SpatialToCamera);
+    // initial distance between camera and player
+    camNode.move(0, 1, 8);
+    
+    Player player = Player.getInstance(Player.LOCAL_PLAYER);
+    CrosshairControl cameraControl = new CrosshairControl(camNode, player, cursor,
+            this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
+    cameraControl.registerWithInput(inputManager);
   }
 
   /**

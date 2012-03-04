@@ -9,6 +9,7 @@ import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import edu.teddys.MegaLogger;
 import edu.teddys.controls.PlayerControl;
@@ -88,8 +89,17 @@ public class Player {
     // and change the position in the instances List
     localPlayer.getNode().setName("player" + id.toString());
     localPlayer.getData().setId(id);
+    // Check if the camera is null. If so, create a new one ...
     CameraNode camNode = Game.getInstance().getCamNode();
+    if(camNode == null) {
+      Game.getInstance().initCamNode();
+      MegaLogger.getLogger().debug("CameraNode created");
+      // reload
+      camNode = Game.getInstance().getCamNode();
+    }
+    // ... and attach it to the user's Teddy
     if(!localPlayer.getNode().hasChild(camNode)) {
+      MegaLogger.getLogger().debug("CameraNode has not been attached yet.");
       Vector3f dir = localPlayer.getNode().getWorldTranslation().add(0, 0.75f, 0);
       camNode.lookAt(dir, new Vector3f(0, 1, 0));
       Game.getInstance().addSpatial(localPlayer.getNode(), camNode);
