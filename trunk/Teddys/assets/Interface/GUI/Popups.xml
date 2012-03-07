@@ -32,7 +32,7 @@
     </popup>
     
     <popup id="INPUT_POPUP" childLayout="center" controller="edu.teddys.menu.MainMenu">
-        <panel id="popup_panel" style="nifty-panel-red" height="30%" width="50%" align="center" childLayout="vertical" visibleToMouse="true"> 
+        <panel id="popup_panel" style="nifty-panel-red" height="30%" width="50%" align="center" childLayout="vertical"> 
             
             <text text="Press any key" align="center" font="Interface/Fonts/Default.fnt"/>
                       

@@ -28,39 +28,44 @@ import edu.teddys.input.AnalogControllerEnum;
 public class OptionsMenu implements ScreenController, RawInputListener {
 
     private Nifty nifty;
+    private Screen screen;
     private Application app;
     
-    private Element inputPopup;
+    private Element inputPopup, systemLayer, controlsLayer;
     
     
     private ActionControllerEnum selectAction = null;
     private AnalogControllerEnum selectAnalog = null;
     
+    private final String labelSuffix = "_LABEL";
+    
     public void bind(Nifty nifty, Screen screen) {
-        this.nifty = nifty;        
+        this.nifty = nifty;
+        this.screen = screen;
         inputPopup = nifty.createPopup("INPUT_POPUP");
+        systemLayer = nifty.getScreen("OPTIONS_MENU").findElementByName("system_layer");
+        controlsLayer = nifty.getScreen("OPTIONS_MENU").findElementByName("controls_layer");
     }
     
     public void setApplication(Application app) {
         this.app = app;
     }
     
-    private void loadKeys(Application app) {
+    private void loadKeys() {
         InputSettings settings = InputSettings.getInstance();
-        settings.loadSettings(((BaseGame)app).getSettings());
         
         nifty.getScreen("OPTIONS_MENU").findElementByName("JETPACK_LABEL")
-                .getRenderer(TextRenderer.class).setText(settings.getKey(AnalogControllerEnum.JETPACK)[0].getName());
+                .getRenderer(TextRenderer.class).setText(settings.getName(AnalogControllerEnum.JETPACK));
         nifty.getScreen("OPTIONS_MENU").findElementByName("MOVE_LEFT_LABEL")
-                .getRenderer(TextRenderer.class).setText(settings.getKey(AnalogControllerEnum.MOVE_LEFT)[0].getName());
+                .getRenderer(TextRenderer.class).setText(settings.getName(AnalogControllerEnum.MOVE_LEFT));
         nifty.getScreen("OPTIONS_MENU").findElementByName("MOVE_RIGHT_LABEL")
-                .getRenderer(TextRenderer.class).setText(settings.getKey(AnalogControllerEnum.MOVE_RIGHT)[0].getName());
+                .getRenderer(TextRenderer.class).setText(settings.getName(AnalogControllerEnum.MOVE_RIGHT));
         nifty.getScreen("OPTIONS_MENU").findElementByName("WEAPON_LABEL")
-                .getRenderer(TextRenderer.class).setText(settings.getKey(AnalogControllerEnum.WEAPON)[0].getName());
+                .getRenderer(TextRenderer.class).setText(settings.getName(AnalogControllerEnum.WEAPON));
         }
 
     public void onStartScreen() {
-        loadKeys(app);
+        loadKeys();
     }    
         
     public void onEndScreen() {
@@ -71,19 +76,24 @@ public class OptionsMenu implements ScreenController, RawInputListener {
         nifty.gotoScreen(MenuTypes.MAIN_MENU.name());
     }
     
-    public void save() {
-        InputSettings.getInstance().saveSettings(((BaseGame)app).getSettings());
+    public void showSystem() {
+        screen.removeLayerElement(controlsLayer);
+        screen.addLayerElement(systemLayer);
+    }
+    
+    public void showControls() {
+      screen.removeLayerElement(systemLayer);
+      screen.addLayerElement(controlsLayer); 
     }
 
-    
     public void activateInputSelection(String key) {
         try {
-            selectAction = ActionControllerEnum.valueOf(key);
-            selectAnalog = null;
+            selectAnalog = AnalogControllerEnum.valueOf(key);
+            selectAction = null; 
         } catch (IllegalArgumentException e1) {
             try {
-                selectAnalog = AnalogControllerEnum.valueOf(key);
-                selectAction = null;
+                selectAction = ActionControllerEnum.valueOf(key);
+                selectAnalog = null; 
             } catch(IllegalArgumentException e2) {
                 
             }
@@ -93,40 +103,43 @@ public class OptionsMenu implements ScreenController, RawInputListener {
         nifty.showPopup(nifty.getCurrentScreen(), inputPopup.getId(), null);
     }
     
+    public void save() {
+        InputSettings.getInstance().saveSettings();
+    }
+    
     public void onKeyEvent(KeyInputEvent evt) {
-        if (selectAction != null) {
-            InputSettings.getInstance().setKey(selectAction, evt.getKeyCode());
-            Element niftyElement = nifty.getCurrentScreen().findElementByName(selectAction.name().concat("_LABEL"));
-            niftyElement.getRenderer(TextRenderer.class).setText(String.valueOf(evt.getKeyChar()));
-        } else if (selectAnalog != null) {
-            InputSettings.getInstance().setKey(selectAnalog, evt.getKeyCode());
-            Element niftyElement = nifty.getCurrentScreen().findElementByName(selectAnalog.name().concat("_LABEL"));
-            niftyElement.getRenderer(TextRenderer.class).setText(String.valueOf(evt.getKeyChar()));
+        String keyChar;
+        if (evt.getKeyChar() == ' ') {
+            keyChar = String.valueOf(evt.getKeyCode());
+        } else {
+            keyChar = String.valueOf(evt.getKeyChar());
+        }
+        if (selectAnalog != null) {
+            InputSettings.getInstance().setKey(selectAnalog, evt.getKeyCode(), keyChar);
+        } else if (selectAction != null) {
+            InputSettings.getInstance().setKey(selectAction, evt.getKeyCode(), keyChar);
         } else {
             
         }       
         evt.setConsumed();
         app.getInputManager().removeRawInputListener(this);
         nifty.closePopup(inputPopup.getId());
-            
+        loadKeys();    
     }
     
     public void onMouseButtonEvent(MouseButtonEvent evt) {
         if (evt.isPressed()) {
             if (selectAction != null) {
                 InputSettings.getInstance().setMouseButton(selectAction, evt.getButtonIndex());
-                Element niftyElement = nifty.getCurrentScreen().findElementByName(selectAction.name().concat("_LABEL"));
-                niftyElement.getRenderer(TextRenderer.class).setText("MOUSE_"+evt.getButtonIndex());
             } else if (selectAnalog != null) {
                 InputSettings.getInstance().setMouseButton(selectAnalog, evt.getButtonIndex());
-                Element niftyElement = nifty.getCurrentScreen().findElementByName(selectAnalog.name().concat("_LABEL"));
-                niftyElement.getRenderer(TextRenderer.class).setText("MOUSE_"+evt.getButtonIndex());
             } else {
             
             }
             evt.setConsumed();
             app.getInputManager().removeRawInputListener(this);
             nifty.closePopup(inputPopup.getId());
+            loadKeys();
         }
     }
 
