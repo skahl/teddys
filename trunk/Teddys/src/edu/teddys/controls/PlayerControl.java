@@ -9,7 +9,6 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUDController;
@@ -33,6 +32,7 @@ import org.apache.commons.math.random.RandomDataImpl;
  */
 public class PlayerControl extends CharacterControl implements AnalogListener, ActionListener {
 
+  private Player player;
   private TeddyVisual visual;
   // screen positions of cursor and player
   private Vector2f vectorPlayerToCursor = new Vector2f(1f, 0f);
@@ -63,8 +63,10 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
    * @param stepHeight
    * @param vis 
    */
-  public PlayerControl(CollisionShape collisionShape, float stepHeight, TeddyVisual vis) {
+  public PlayerControl(Player player, CollisionShape collisionShape, float stepHeight, TeddyVisual vis) {
     super(collisionShape, stepHeight);
+    
+    this.player = player;
     
     visual = vis;
     serverControlInput = new LinkedList<InputTuple>();
@@ -165,7 +167,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
             int resDamage = (int) Math.ceil(damage);
             String hitmsg = " Damage: " + resDamage;
             ManMessageSendDamage dmgMsg = new ManMessageSendDamage(
-                    Player.getPlayerByNode(nodeName).getData().getId(), resDamage);
+                    plHit.getData().getId(), resDamage);
             //TODO this should only be done by the server instance!
 
             MegaLogger.getLogger().info("Hit: "+nodeName+hitmsg);

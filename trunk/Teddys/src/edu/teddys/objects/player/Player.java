@@ -163,7 +163,7 @@ public class Player {
     // physics
     collisionShape = new CapsuleCollisionShape(visual.getWidth() * 0.3f, visual.getHeight() * 0.35f, 1);
 
-    control = new PlayerControl(collisionShape, 0.02f, visual);
+    control = new PlayerControl(this, collisionShape, 0.02f, visual);
     if (id == LOCAL_PLAYER) {
       //TODO check
 //      control.registerWithInput(game.getInputManager());
