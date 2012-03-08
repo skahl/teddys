@@ -49,6 +49,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
    */
   public void startServer(Integer serverPort) {
     if (!isRunning()) {
+      // Get a fresh data object
       data = new TeddyServerData();
       getData().setCreated(new Date());
     }
@@ -84,8 +85,6 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     }
     ServerTimer.stopTimer();
     spidermonkeyServer.shutdownServer();
-    // reset data
-    data = null;
 
     MegaLogger.getLogger().debug("Server stopped.");
   }

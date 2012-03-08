@@ -167,7 +167,9 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
             int resDamage = (int) Math.ceil(damage);
             String hitmsg = " Damage: " + resDamage;
             ManMessageSendDamage dmgMsg = new ManMessageSendDamage(
-                    plHit.getData().getId(), resDamage);
+                    player.getData().getId(),
+                    plHit.getData().getId(),
+                    resDamage);
             //TODO this should only be done by the server instance!
 
             MegaLogger.getLogger().info("Hit: "+nodeName+hitmsg);

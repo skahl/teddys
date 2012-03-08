@@ -11,7 +11,6 @@ import com.jme3.network.message.DisconnectMessage;
 import edu.teddys.MegaLogger;
 import edu.teddys.callables.SetPositionOfTeddyCallable;
 import edu.teddys.input.ControllerInputListener;
-import edu.teddys.map.GameLoader;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
@@ -192,12 +191,13 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // Add a painful scar
           TeddyClient.getInstance().addDamage(msg.getDamage());
           try {
-            String goodTeddy = TeddyClient.getInstance().getData().getName();
-            String badTeddy = TeddyServer.getInstance().getClientData(source.getId()).getName();
-            String infoString = String.format("Mad Teddy %s attacked 'Good Old %s'! %s: %s",
+            String goodTeddy = Player.getInstance(Player.LOCAL_PLAYER).getData().getName();
+            String badTeddy = Player.getInstance(msg.getSource()).getData().getName();
+            String infoString = String.format("Mad Teddy %s attacked 'Good Old %s'! %s: %d",
                     badTeddy, goodTeddy, getDamageMessage(msg.getDamage()), msg.getDamage());
             MegaLogger.getLogger().info(infoString);
           } catch (Exception ex) {
+            MegaLogger.getLogger().warn(ex);
           }
         } else if (message instanceof ManMessageTransferPlayerData) {
           //
