@@ -28,8 +28,15 @@
         </panel>
         
         <panel id="entries_mid_panel" style="nifty-panel-no-shadow" height="100%" width="70%" align="center" childLayout="vertical">
-            
-      
+            <text text="choose server" font="Interface/Fonts/Default.fnt" align="left"/>
+            <control id="server_list_box" name="listBox" vertical="optional" horizontal="optional" displayItems="10" />
+            <panel id="ip_field_panel" childLayout="horizontal">
+                <text text="or specify IP " font="Interface/Fonts/Default.fnt" align="left"/>
+                <control name="textfield" id="ip_text_field" maxLength="20"/>
+                <control name="button" label="Connect" align="right" id="connect_button">
+                    <interact onClick="connect()"/>
+                </control>
+            </panel>
         </panel>
         
         <panel id="entries_bottom_panel" style="nifty-panel-bright" height="10%" width="100%" align="center" childLayout="center">
