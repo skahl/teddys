@@ -24,7 +24,7 @@ public class ClientData {
   /**
    * Displayed name.
    */
-  private String name = "Anton";
+  private String name = "Ted";
   /**
    * Position in the current map. 
    */
@@ -65,6 +65,8 @@ public class ClientData {
 
   public void setId(Integer id) {
     this.id = id;
+    //TODO remove in later versions
+    this.name = "Ted " + id;
   }
 
   public String getName() {

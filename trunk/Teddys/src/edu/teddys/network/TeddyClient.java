@@ -220,7 +220,7 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
   }
 
   public void disconnect() {
-    disconnect(Player.getInstance(Player.LOCAL_PLAYER).getData().getId());
+    disconnect(Player.LOCAL_PLAYER);
   }
 
   /**

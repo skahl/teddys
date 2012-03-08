@@ -12,7 +12,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import edu.teddys.MegaLogger;
 import edu.teddys.controls.PlayerControl;
-import edu.teddys.input.CrosshairControl;
 import edu.teddys.network.ClientData;
 import edu.teddys.states.Game;
 import java.util.ArrayList;

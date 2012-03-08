@@ -185,16 +185,16 @@ public class ServerListener implements MessageListener<HostedConnection> {
         ManControllerInput input = (ManControllerInput) message;
 
         //TODO local player ...
-        if (source.getId() == Player.getInstance(Player.LOCAL_PLAYER).getData().getId()) {
+        if (input.getSource() == Player.LOCAL_PLAYER) {
           // ignore it, it is handled by the input manager attached to the local
           // player
           // sync with the input data if the server has been created locally
           // (local join)
-          return;
+//          return;
         }
 
         // refresh the player's action
-        Player.getInstance(source.getId()).getPlayerControl().newInput(input.getInput());
+        Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
       } else if (message instanceof ManMessageSendPosition) {
         //
         // USER POSITION RECEIVED
