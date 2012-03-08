@@ -172,10 +172,14 @@ public class Player {
     control.setJumpSpeed(5);
     control.setGravity(5);
     control.setFallSpeed(5);
-    // The location of the CharacterControl Spatial should be the same as from the Player's node
-    control.setPhysicsLocation(node.getWorldTranslation());
+    
     // Set a binding
     node.addControl(control);
+    
+    
+    // The location of the CharacterControl Spatial should be the same as from the Player's node
+    control.setPhysicsLocation(node.getWorldTranslation().add(new Vector3f(0f,0f,-1.2f)));
+    
 
     // Set the (network) client ID
     data.setId(id);
