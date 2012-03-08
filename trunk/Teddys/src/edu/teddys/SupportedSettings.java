@@ -15,7 +15,7 @@ import java.util.prefs.BackingStoreException;
 
 /**
  *
- * 
+ * taken from com.jme3.app.SettingsDialog.java
  */
 public class SupportedSettings {
 
