@@ -9,10 +9,10 @@ import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import edu.teddys.MegaLogger;
 import edu.teddys.controls.PlayerControl;
+import edu.teddys.input.CrosshairControl;
 import edu.teddys.network.ClientData;
 import edu.teddys.states.Game;
 import java.util.ArrayList;
@@ -73,12 +73,12 @@ public class Player {
    * @param id The new player ID
    */
   public synchronized static void setLocalPlayerId(Integer id) {
-    if(id == LOCAL_PLAYER) {
+    if (id == LOCAL_PLAYER) {
       // no change
       return;
     }
     //TODO check if removing all players is better ...
-    if(instances.containsKey(id)) {
+    if (instances.containsKey(id)) {
       // Remove the old player
       Game.getInstance().removePlayerFromWorld(Player.getInstance(id));
       instances.remove(id);
@@ -91,14 +91,14 @@ public class Player {
     localPlayer.getData().setId(id);
     // Check if the camera is null. If so, create a new one ...
     CameraNode camNode = Game.getInstance().getCamNode();
-    if(camNode == null) {
-      Game.getInstance().initCamNode();
-      MegaLogger.getLogger().debug("CameraNode created");
+    if (camNode == null) {
+      Game.getInstance().initCamNode(localPlayer);
+      MegaLogger.getLogger().debug("CameraNode created/updated");
       // reload
       camNode = Game.getInstance().getCamNode();
     }
     // ... and attach it to the user's Teddy
-    if(!localPlayer.getNode().hasChild(camNode)) {
+    if (!localPlayer.getNode().hasChild(camNode)) {
       MegaLogger.getLogger().debug("CameraNode has not been attached yet.");
       Vector3f dir = localPlayer.getNode().getWorldTranslation().add(0, 0.75f, 0);
       camNode.lookAt(dir, new Vector3f(0, 1, 0));
@@ -172,14 +172,14 @@ public class Player {
     control.setJumpSpeed(5);
     control.setGravity(5);
     control.setFallSpeed(5);
-    
+
     // Set a binding
     node.addControl(control);
-    
-    
+
+
     // The location of the CharacterControl Spatial should be the same as from the Player's node
-    control.setPhysicsLocation(node.getWorldTranslation().add(new Vector3f(0f,0f,-1.2f)));
-    
+    control.setPhysicsLocation(node.getWorldTranslation().add(new Vector3f(0f, 0f, -1.2f)));
+
 
     // Set the (network) client ID
     data.setId(id);

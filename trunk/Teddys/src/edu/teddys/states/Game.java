@@ -49,6 +49,7 @@ public class Game extends AbstractAppState {
   private InputManager inputManager;
   private BulletAppState bulletAppState;
   private CameraNode camNode;
+  private CrosshairControl cameraControl;
   private Node rootNode;
   private BasicShadowRenderer shadowRenderer; // Shadow rendering
   private GameLoader gameLoader;
@@ -165,7 +166,8 @@ public class Game extends AbstractAppState {
     cursor.setWidth(crosshairSize);
     addSpatial(this.app.getGuiNode(), cursor);
 
-    initCamNode();
+    Player player = Player.getInstance(Player.LOCAL_PLAYER);
+    initCamNode(player);
     
 //    // Camera
 //    camNode = new CameraNode("Camera", this.app.getCamera());
@@ -196,8 +198,24 @@ public class Game extends AbstractAppState {
     MegaLogger.getLogger().debug("New game instance created.");
   }
   
-  public void initCamNode() {
+  /**
+   * 
+   * Initialize or update the CameraNode and CrosshairControl.
+   * 
+   * If the player in the CrosshairControl is different from the previous one,
+   * update the reference.
+   * 
+   * @see CameraNode
+   * @see CrosshairControl
+   * 
+   * @param player The player instance to which the camera should be attached.
+   */
+  public void initCamNode(Player player) {
     if(camNode != null) {
+      // refresh the player used by the CrosshairControl
+      if(!cameraControl.getPlayer().equals(player)) {
+        cameraControl.setPlayer(player);
+      }
       return;
     }
     // Camera
@@ -206,8 +224,7 @@ public class Game extends AbstractAppState {
     // initial distance between camera and player
     camNode.move(0, 1, 8);
     
-    Player player = Player.getInstance(Player.LOCAL_PLAYER);
-    CrosshairControl cameraControl = new CrosshairControl(camNode, player, cursor,
+    cameraControl = new CrosshairControl(camNode, player, cursor,
             this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
     cameraControl.registerWithInput(inputManager);
   }

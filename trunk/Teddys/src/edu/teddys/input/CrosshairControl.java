@@ -51,6 +51,14 @@ public class CrosshairControl implements AnalogListener {
 
     crosshair.setPosition(width / 2 - crosshair.getWidth() / 2, height / 2 - crosshair.getHeight() / 2);
   }
+  
+  public Player getPlayer() {
+    return player;
+  }
+  
+  public void setPlayer(Player player) {
+    this.player = player;
+  }
 
   public void registerWithInput(InputManager input) {
     this.input = input;
