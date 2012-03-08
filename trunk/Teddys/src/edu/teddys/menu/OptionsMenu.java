@@ -13,14 +13,18 @@ import com.jme3.input.event.MouseButtonEvent;
 import com.jme3.input.event.MouseMotionEvent;
 import com.jme3.input.event.TouchEvent;
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.CheckBox;
+import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import edu.teddys.BaseGame;
+import edu.teddys.SupportedSettings;
 import edu.teddys.input.InputSettings;
 import edu.teddys.input.ActionControllerEnum;
 import edu.teddys.input.AnalogControllerEnum;
+import java.util.Arrays;
 /**
  *
  * @author besient
@@ -33,23 +37,46 @@ public class OptionsMenu implements ScreenController, RawInputListener {
     
     private Element inputPopup, systemLayer, controlsLayer;
     
+    private DropDown<String> resolution_dd, bpp_dd, aa_dd;
+    private CheckBox fullscreen_cb, vsync_cb;
+    
     
     private ActionControllerEnum selectAction = null;
     private AnalogControllerEnum selectAnalog = null;
     
     private final String labelSuffix = "_LABEL";
     
+    private enum SettingLayers {
+        CONTROLS,
+        SYSTEM
+    };
+    
+    private SettingLayers activeLayer = SettingLayers.SYSTEM;
+     
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
         this.screen = screen;
         inputPopup = nifty.createPopup("INPUT_POPUP");
         systemLayer = nifty.getScreen("OPTIONS_MENU").findElementByName("system_layer");
-        controlsLayer = nifty.getScreen("OPTIONS_MENU").findElementByName("controls_layer");
+        controlsLayer = nifty.getScreen("OPTIONS_MENU").findElementByName("controls_layer");        
+        
+        resolution_dd = screen.findNiftyControl("RESOLUTION_DROPDOWN", DropDown.class);
+        bpp_dd = screen.findNiftyControl("BPP_DROPDOWN", DropDown.class);
+        aa_dd = screen.findNiftyControl("AA_DROPDOWN", DropDown.class);
+        
+        resolution_dd.addAllItems(Arrays.asList(SupportedSettings.getResolutions()));
+        bpp_dd.addItem("16 bpp");
+        bpp_dd.addItem("24 bpp");
+        aa_dd.addAllItems(Arrays.asList(SupportedSettings.getAAs()));
+        
+        fullscreen_cb = screen.findNiftyControl("FULLSCREEN_CHECKBOX", CheckBox.class);
+        vsync_cb = screen.findNiftyControl("VSYNC_CHECKBOX", CheckBox.class);
     }
     
     public void setApplication(Application app) {
         this.app = app;
     }
+
     
     private void loadKeys() {
         InputSettings settings = InputSettings.getInstance();
@@ -79,11 +106,13 @@ public class OptionsMenu implements ScreenController, RawInputListener {
     public void showSystem() {
         screen.removeLayerElement(controlsLayer);
         screen.addLayerElement(systemLayer);
+        activeLayer = SettingLayers.SYSTEM;
     }
     
     public void showControls() {
       screen.removeLayerElement(systemLayer);
-      screen.addLayerElement(controlsLayer); 
+      screen.addLayerElement(controlsLayer);
+      activeLayer = SettingLayers.CONTROLS;
     }
 
     public void activateInputSelection(String key) {
@@ -104,7 +133,17 @@ public class OptionsMenu implements ScreenController, RawInputListener {
     }
     
     public void save() {
-        InputSettings.getInstance().saveSettings();
+        switch (activeLayer) {
+            case CONTROLS:
+                InputSettings.getInstance().saveSettings();
+                break;
+            case SYSTEM:
+                SupportedSettings.verifyAndSaveCurrentSelection(((BaseGame)app).getSettings(),
+                        resolution_dd.getSelection(), 
+                        bpp_dd.getSelection(), aa_dd.getSelection(), 
+                        SupportedSettings.getFrequencies(resolution_dd.getSelection())[0], 
+                        fullscreen_cb.isChecked(), vsync_cb.isChecked()); 
+       }
     }
     
     public void onKeyEvent(KeyInputEvent evt) {
