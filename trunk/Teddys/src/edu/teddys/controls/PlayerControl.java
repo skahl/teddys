@@ -20,6 +20,7 @@ import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.player.TeddyVisual;
 import edu.teddys.objects.weapons.DeafNut;
+import edu.teddys.objects.weapons.HolyWater;
 import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
@@ -75,7 +76,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     right = new Vector3f(1, 0, 0);
     
     // Initialize the currentWeapon with a Sten Gun
-    currentWeapon = new StenGun();
+    currentWeapon = new StenGun();//new HolyWater();
     Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
   }
 
@@ -310,10 +311,6 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     hudUpdateTimer++;
     if(hudUpdateTimer > 4) {
         hudUpdateTimer = 0;
-        
-        // calculate the angle from the default up vector of the player, to the cursor's position:
-        //angleToDefaultVector = defaultVectorPlayerToCursor.angleBetween(vectorPlayerToCursor);
-        //MegaLogger.getLogger().info(new Throwable(angleToDefaultVector.toString()));
         
         // inform the visual representation of this player about the view vector
         visual.setViewVector(vectorPlayerToCursor);

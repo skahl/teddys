@@ -5,12 +5,15 @@
 package edu.teddys.objects.weapons;
 
 import edu.teddys.effects.Effect;
+import edu.teddys.effects.HolyWaterShot;
 
 /**
  *
  * @author cm
  */
 public class HolyWater implements Weapon {
+  
+  HolyWaterShot holyWater = new HolyWaterShot();
   
   public String getName() {
     return "Holy Water";
@@ -37,6 +40,6 @@ public class HolyWater implements Weapon {
   }
 
   public Effect getEffect() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return holyWater;
   }
 }

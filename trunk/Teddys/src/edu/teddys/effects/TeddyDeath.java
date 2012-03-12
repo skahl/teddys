@@ -66,7 +66,7 @@ public class TeddyDeath {
       plush.setParticlesPerSec(0);
       plush.getParticleInfluencer().setVelocityVariation(0.6f);
       
-      smoke.setImagesX(15); plush.setImagesY(1);
+      smoke.setImagesX(15); smoke.setImagesY(1);
       smoke.setStartColor(new ColorRGBA(0.9f, 0.9f, 0.9f, 0.7f));
       smoke.setEndColor(new ColorRGBA(0.8f, 0.8f, 0.8f, 0.0f));
       smoke.getParticleInfluencer().setInitialVelocity(new Vector3f(0f, 2f, 0f));
