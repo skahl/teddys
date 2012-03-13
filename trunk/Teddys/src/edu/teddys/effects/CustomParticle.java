@@ -1,7 +1,6 @@
 
 package edu.teddys.effects;
 
-import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Quad;
@@ -11,26 +10,22 @@ import com.jme3.scene.shape.Quad;
  * 
  * @author skahl
  */
-public abstract class CustomParticle extends Geometry {
+public class CustomParticle extends Geometry {
+  
   // physics
   protected float rotateSpeed = 0f;
   protected boolean isFloating = false;
-  protected float floatingSinusAmplitude = 1.0f;
+  protected float floatingSinusAmplitude = 0.0f;
   protected Vector3f initialVector = new Vector3f(1f, 0f, 0f);
   protected float timeToHalt = 0f;
   protected Vector3f gravityVector = new Vector3f(0f, -1f, 0f);
-  
-  /**
-   * CustomParticle constructor. Texture size needs to be a power of two.
-   * @param mat 
-   */
-  public CustomParticle(Material mat) {
     
-    mesh = new Quad(0.1f, 0.1f);
-    this.material = mat;
+  /**
+   * Needs to specify the Geometry and Material, that will be displayed as a particle.
+   */
+  public CustomParticle(String name) {
+    setName(name);
   }
-  
-  abstract void init();
   
   public void setInitialVector(Vector3f init) {
     initialVector = init;
@@ -58,5 +53,13 @@ public abstract class CustomParticle extends Geometry {
   
   public Vector3f getGravityVector() {
     return gravityVector;
+  }
+  
+  public float getQuadWidth() {
+    return ((Quad)mesh).getWidth();
+  }
+  
+  public float getQuadHeight() {
+    return ((Quad)mesh).getHeight();
   }
 }

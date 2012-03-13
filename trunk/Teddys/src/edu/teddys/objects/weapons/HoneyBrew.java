@@ -5,12 +5,15 @@
 package edu.teddys.objects.weapons;
 
 import edu.teddys.effects.Effect;
+import edu.teddys.effects.HoneyBrewShot;
 
 /**
  *
  * @author cm
  */
 public class HoneyBrew implements Weapon {
+  
+  HoneyBrewShot honeyBrew = new HoneyBrewShot();
   
   public String getName() {
     return "Honey Brew";
@@ -37,6 +40,6 @@ public class HoneyBrew implements Weapon {
   }
 
   public Effect getEffect() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return honeyBrew;
   }
 }

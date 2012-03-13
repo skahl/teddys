@@ -17,14 +17,14 @@ import com.jme3.scene.Node;
  * @author skahl
  */
 public class GunShot implements Effect {
-    Node mother;
-    ParticleEmitter pe;
-    Material mat;
-    AssetManager assetManager;
-    int numParticles;
-    boolean canShoot;
-    float velocity;
-    Vector3f vector;
+    protected Node mother;
+    protected ParticleEmitter pe;
+    protected Material mat;
+    protected AssetManager assetManager;
+    protected int numParticles;
+    protected boolean canShoot;
+    protected float velocity;
+    protected Vector3f vector;
     
     
     protected void init(String name, AssetManager assetManager, String texture) {
@@ -35,7 +35,7 @@ public class GunShot implements Effect {
         numParticles = 1;
         canShoot = true;
         
-        mother = new Node(name+"_gun");
+        mother = new Node(name);
         pe = new ParticleEmitter(name+"_gunshots", ParticleMesh.Type.Triangle, 1);
         mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         mat.setTexture("Texture", assetManager.loadTexture(texture));
@@ -121,6 +121,7 @@ public class GunShot implements Effect {
     }
     
     public void reset() {
+      if(!canShoot)
         canShoot = true;
     }
 }

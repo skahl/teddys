@@ -2,30 +2,24 @@ package edu.teddys.controls;
 
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
-import com.jme3.collision.CollisionResults;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
+import edu.teddys.effects.HoneyBrewShot;
 import edu.teddys.hud.HUDController;
 import edu.teddys.input.AnalogControllerEnum;
 import edu.teddys.input.InputType;
 import edu.teddys.input.InputTuple;
-import edu.teddys.network.TeddyServer;
-import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.player.TeddyVisual;
-import edu.teddys.objects.weapons.DeafNut;
 import edu.teddys.objects.weapons.HolyWater;
+import edu.teddys.objects.weapons.HoneyBrew;
 import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
 import java.util.LinkedList;
-import org.apache.commons.math.random.RandomDataImpl;
 
 /** Control class responsible for character controls and visuals, based on input.
  *
@@ -76,7 +70,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     right = new Vector3f(1, 0, 0);
     
     // Initialize the currentWeapon with a Sten Gun
-    currentWeapon = new StenGun();//new HolyWater();
+    currentWeapon = new HoneyBrew();//new StenGun();//new HolyWater();
     Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
   }
 
@@ -128,55 +122,55 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
         // visual
         currentWeapon.getEffect().trigger();
 
-        Ray ray = new Ray(getPhysicsLocation(), currentWeapon.getEffect().getVector());
-        // I could do that!
-        //ray.setLimit(); ??? 
-        CollisionResults hits = new CollisionResults();     
-
-        Game.getInstance().getRootNode().collideWith(ray, hits);
-
-        // Check if a Box was hit, since Box are only used by Players...
-        if(hits.size() > 1) {// && hits.getCollision(2).getGeometry().getClass().equals(Box.class)) {
-          Geometry p = hits.getCollision(1).getGeometry();
-          String nodeName = p.getParent().getName();
-
-          // I found no other way than to compare a string... :(
-          if(p.getParent().getName().contains("player")) {
-
-            Player plHit = Player.getPlayerByNode(nodeName);
-            plHit.getPlayerVisual().die(); // play the die effect :D
-
-            //TODO Now calculate the specific damage dependend from the current weapon
-            /*TODO If there is no other reason than for checking the weapon's range,
-             * one could use ray.setLimit() to limit the intersection check distance
-             * 
-             */
-            float distance = hits.getCollision(1).getDistance();
-            MegaLogger.getLogger().debug("Distance: " + distance);
-            //Vector3f iPoint = hits.getCollision(1).getContactPoint();
-
-            // Assume we have a honey brew yet
-            Weapon w = new DeafNut();
-            RandomDataImpl rnd = new RandomDataImpl();
-            Double weaponDamage = Math.abs(rnd.nextGaussian(w.getBaseDamage(), GameSettings.DAMAGE_SIGMA));
-            Double weaponAccuracy = Math.abs(rnd.nextGaussian(w.getAccuracy(), GameSettings.DAMAGE_SIGMA));
-            Double damage = GameSettings.DAMAGE_MAX * weaponDamage * weaponAccuracy;
-            MegaLogger.getLogger().info(String.format("m=%f,b=%f,a=%f",
-                    GameSettings.DAMAGE_MAX,
-                    weaponDamage,
-                    weaponAccuracy));
-            int resDamage = (int) Math.ceil(damage);
-            String hitmsg = " Damage: " + resDamage;
-            ManMessageSendDamage dmgMsg = new ManMessageSendDamage(
-                    player.getData().getId(),
-                    plHit.getData().getId(),
-                    resDamage);
-            //TODO this should only be done by the server instance!
-
-            MegaLogger.getLogger().info("Hit: "+nodeName+hitmsg);
-            TeddyServer.getInstance().send(dmgMsg);
-          }
-        }
+//        Ray ray = new Ray(getPhysicsLocation(), currentWeapon.getEffect().getVector());
+//        // I could do that!
+//        //ray.setLimit(); ??? 
+//        CollisionResults hits = new CollisionResults();     
+//
+//        Game.getInstance().getRootNode().collideWith(ray, hits);
+//
+//        // Check if a Box was hit, since Box are only used by Players...
+//        if(hits.size() > 1) {// && hits.getCollision(2).getGeometry().getClass().equals(Box.class)) {
+//          Geometry p = hits.getCollision(1).getGeometry();
+//          String nodeName = p.getParent().getName();
+//
+//          // I found no other way than to compare a string... :(
+//          if(p.getParent().getName().contains("player")) {
+//
+//            Player plHit = Player.getPlayerByNode(nodeName);
+//            plHit.getPlayerVisual().die(); // play the die effect :D
+//
+//            //TODO Now calculate the specific damage dependend from the current weapon
+//            /*TODO If there is no other reason than for checking the weapon's range,
+//             * one could use ray.setLimit() to limit the intersection check distance
+//             * 
+//             */
+//            float distance = hits.getCollision(1).getDistance();
+//            MegaLogger.getLogger().debug("Distance: " + distance);
+//            //Vector3f iPoint = hits.getCollision(1).getContactPoint();
+//
+//            // Assume we have a honey brew yet
+//            Weapon w = new DeafNut();
+//            RandomDataImpl rnd = new RandomDataImpl();
+//            Double weaponDamage = Math.abs(rnd.nextGaussian(w.getBaseDamage(), GameSettings.DAMAGE_SIGMA));
+//            Double weaponAccuracy = Math.abs(rnd.nextGaussian(w.getAccuracy(), GameSettings.DAMAGE_SIGMA));
+//            Double damage = GameSettings.DAMAGE_MAX * weaponDamage * weaponAccuracy;
+//            MegaLogger.getLogger().info(String.format("m=%f,b=%f,a=%f",
+//                    GameSettings.DAMAGE_MAX,
+//                    weaponDamage,
+//                    weaponAccuracy));
+//            int resDamage = (int) Math.ceil(damage);
+//            String hitmsg = " Damage: " + resDamage;
+//            ManMessageSendDamage dmgMsg = new ManMessageSendDamage(
+//                    player.getData().getId(),
+//                    plHit.getData().getId(),
+//                    resDamage);
+//            //TODO this should only be done by the server instance!
+//
+//            MegaLogger.getLogger().info("Hit: "+nodeName+hitmsg);
+//            TeddyServer.getInstance().send(dmgMsg);
+//          }
+//        }
       }
     }
 
