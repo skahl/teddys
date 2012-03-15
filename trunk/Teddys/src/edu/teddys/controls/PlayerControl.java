@@ -16,6 +16,7 @@ import edu.teddys.objects.player.Player;
 import edu.teddys.objects.player.TeddyVisual;
 import edu.teddys.objects.weapons.HolyWater;
 import edu.teddys.objects.weapons.HoneyBrew;
+import edu.teddys.objects.weapons.Rocket;
 import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
@@ -70,7 +71,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     right = new Vector3f(1, 0, 0);
     
     // Initialize the currentWeapon with a Sten Gun
-    currentWeapon = new HoneyBrew();//new StenGun();//new HolyWater();
+    currentWeapon = new Rocket();//new HoneyBrew();//new HolyWater();//new StenGun();
     Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
   }
 

@@ -10,18 +10,18 @@ import edu.teddys.states.Game;
  *
  * @author skahl
  */
-public class HoneyBrewParticle extends CustomParticle {
+public class HolyWaterParticle extends CustomParticle {
   Material mat;
   
-  public HoneyBrewParticle(String name) {
+  public HolyWaterParticle(String name) {
     super(name);
     
-    this.setMesh(new Quad(1f, 0.2f));
+    this.setMesh(new Quad(0.6f, 0.6f));
     
     mat = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
     mat.setColor("Color", ColorRGBA.Red);
     this.setMaterial(mat);
     
+    
   }
-  
 }

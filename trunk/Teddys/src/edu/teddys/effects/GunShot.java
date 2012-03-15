@@ -30,7 +30,8 @@ public class GunShot implements Effect {
     protected void init(String name, AssetManager assetManager, String texture) {
         
         this.assetManager = assetManager;
-        vector = new Vector3f();
+        vector = Vector3f.ZERO;
+        velocity = 0f;
         
         numParticles = 1;
         canShoot = true;
@@ -68,6 +69,10 @@ public class GunShot implements Effect {
     public void setVelocity(float velocity) {
         this.velocity = velocity;
     } 
+    
+    public float getVelocity() {
+      return this.velocity;
+    }
     
     public void setVector(Vector3f initialVector) {
         vector = initialVector;

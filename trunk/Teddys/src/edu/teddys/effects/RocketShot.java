@@ -1,8 +1,7 @@
 
 package edu.teddys.effects;
 
-import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.math.Quaternion;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import edu.teddys.callables.AttachToNodeCallable;
@@ -10,59 +9,81 @@ import edu.teddys.callables.DetachFromNodeCallable;
 import edu.teddys.states.Game;
 
 /**
- * Implements the HoneyBrewShot Effect. Triggering a splash of deadly honey. 
- * Will create a pond of honey, deadly aswell.
+ * Implements the RocketShot Effect. Triggering an unstoppable rocket. Smoke appears. 
  * 
  * @author skahl
  */
-public class HoneyBrewShot extends RigidBodyControl implements Effect {
+public class RocketShot extends GhostControl implements Effect {
   
   // control variables
   boolean canShoot;
   
   // Effect attributes
   Node mother;
-  HoneyBrewParticle particle;
+  RocketParticle particle;
+  Vector3f triggerVector;
 //  ParticleEmmitter
   ParticleCollisionBox partColBox;
   
   
-  public HoneyBrewShot() {
+  
+  public RocketShot() {
     // init control variables
     canShoot = true;
     
     // init effect attributes
-    mother = new Node("Honey Brew");
-    particle = new HoneyBrewParticle(mother.getName());
+    mother = new Node("Teddy Rocket");
+    particle = new RocketParticle(mother.getName());
     partColBox = new ParticleCollisionBox(mother.getName(), particle);
     
     this.setCollisionShape(partColBox.getCollisionShape());
     
     partColBox.getNode().addControl(this);
-    
-    setMass(1f);
-    this.setDamping(0.9f, 0.9f);
   }
   
   @Override
-  public void trigger() {
+  public void update(float tpf) {
+    super.update(tpf);
+    
+    if(partColBox.collided()) {
+      if(partColBox.collidedPlayer()) {
         
+      }
+      
+      reset();
+    } else {
+      
+      // linear force to apply
+      Vector3f force = triggerVector;
+      // apply velocity
+      force = force.mult(particle.getVelocity());
+      
+      force = force.mult(tpf);
+      
+      partColBox.getNode().move(force);
+    }
+  }
+
+  
+  @Override
+  public void trigger() {
+    
     if(canShoot) {
       canShoot = false;
+      
       
       // attach the collision cube to the root node, not the player node!
       Game.getInstance().getApp().enqueue(new AttachToNodeCallable(
               Game.getInstance().getRootNode(), partColBox.getNode()));
       
+      
       Vector3f loc = mother.getWorldTranslation();
-      Quaternion rot = mother.getLocalRotation();
-      if(particle.getVector().x > 0f) {
-        loc.addLocal(1.1f, 0.3f, 0f);
-      } else {
-        loc.addLocal(-1.1f, 0.3f, 0f);
-      }
-      setPhysicsLocation(loc);
-      setPhysicsRotation(rot);
+      loc.addLocal(particle.getVector());
+      
+      partColBox.getNode().setLocalTranslation(loc);
+      
+      // store the vector at trigger time, so that the rocket can fly uncontrolled
+      triggerVector = new Vector3f(particle.getVector());
       
       setEnabled(true);
     }
@@ -72,17 +93,13 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
   public void reset() {
     if(!canShoot) {
       
-      if(partColBox.collidedPlayer()) {
-        canShoot = true;
-        setEnabled(false);
+      canShoot = true;
+      setEnabled(false);
 
-        // remove the cube from the field
-        Game.getInstance().getApp().enqueue(new DetachFromNodeCallable(
-                Game.getInstance().getRootNode(), partColBox.getNode()));
-        
-        // reset rigidBody physics
-        
-      }
+      // remove the cube from the field
+      Game.getInstance().getApp().enqueue(new DetachFromNodeCallable(
+              Game.getInstance().getRootNode(), partColBox.getNode()));
+      
     }
   }
   
@@ -98,6 +115,7 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
   public boolean isEnabled() {
     return super.isEnabled();
   }
+
 
   public Node getNode() {
     return mother;

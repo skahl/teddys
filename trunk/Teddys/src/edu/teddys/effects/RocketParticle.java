@@ -10,18 +10,19 @@ import edu.teddys.states.Game;
  *
  * @author skahl
  */
-public class HoneyBrewParticle extends CustomParticle {
+public class RocketParticle extends CustomParticle {
   Material mat;
   
-  public HoneyBrewParticle(String name) {
+  public RocketParticle(String name) {
     super(name);
     
-    this.setMesh(new Quad(1f, 0.2f));
+    velocity = 10f;
+    
+    this.setMesh(new Quad(0.2f, 0.15f));
     
     mat = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
     mat.setColor("Color", ColorRGBA.Red);
     this.setMaterial(mat);
-    
   }
   
 }

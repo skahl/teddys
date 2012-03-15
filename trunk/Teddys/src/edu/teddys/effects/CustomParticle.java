@@ -11,14 +11,9 @@ import com.jme3.scene.shape.Quad;
  * @author skahl
  */
 public class CustomParticle extends Geometry {
-  
-  // physics
-  protected float rotateSpeed = 0f;
-  protected boolean isFloating = false;
-  protected float floatingSinusAmplitude = 0.0f;
-  protected Vector3f initialVector = new Vector3f(1f, 0f, 0f);
-  protected float timeToHalt = 0f;
-  protected Vector3f gravityVector = new Vector3f(0f, -1f, 0f);
+  protected Vector3f gravity = Vector3f.ZERO;
+  protected Vector3f initialVector = Vector3f.ZERO;
+  protected float velocity = 0f;
     
   /**
    * Needs to specify the Geometry and Material, that will be displayed as a particle.
@@ -27,32 +22,24 @@ public class CustomParticle extends Geometry {
     setName(name);
   }
   
-  public void setInitialVector(Vector3f init) {
-    initialVector = init;
+  public Vector3f getGravity() {
+    return gravity;
   }
-   
-  public float getRotateSpeed() {
-    return rotateSpeed;
-  }
-  
-  public boolean isFloating() {
-    return isFloating;
-  }
-  
-  public float getFloatingSinusAmplitude() {
-    return floatingSinusAmplitude;
-  }
-  
-  public Vector3f getInitialVector() {
+
+  public Vector3f getVector() {
     return initialVector;
   }
   
-  public float getTimeToHalt() {
-    return timeToHalt;
+  public void setVector(Vector3f vec) {
+    initialVector = vec;
   }
   
-  public Vector3f getGravityVector() {
-    return gravityVector;
+  public void setVelocity(float vel) {
+    velocity = vel;
+  }
+  
+  public float getVelocity() {
+    return velocity;
   }
   
   public float getQuadWidth() {

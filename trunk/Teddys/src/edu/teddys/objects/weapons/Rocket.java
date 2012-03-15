@@ -5,12 +5,15 @@
 package edu.teddys.objects.weapons;
 
 import edu.teddys.effects.Effect;
+import edu.teddys.effects.RocketShot;
 
 /**
  *
  * @author besient
  */
 public class Rocket implements Weapon {
+  
+  RocketShot rocketShot = new RocketShot();
 
   public String getName() {
     return "Teddy Rocket";
@@ -29,7 +32,7 @@ public class Rocket implements Weapon {
   }
 
   public float getFireRate() {
-    return .4f;
+    return 1f;
   }
 
   public float getSpawningRate() {
@@ -37,7 +40,7 @@ public class Rocket implements Weapon {
   }
 
   public Effect getEffect() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return rocketShot;
   }
     
 }
