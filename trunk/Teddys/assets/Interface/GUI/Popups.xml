@@ -6,24 +6,56 @@
     <useStyles filename="nifty-default-styles.xml"/>
   
     <popup id="EXIT_POPUP" childLayout="center" controller="edu.teddys.menu.MainMenu">
-        <panel id="popup_panel" style="nifty-panel-red" height="30%" width="50%" align="center" childLayout="vertical" visibleToMouse="true"> 
+        <panel id="popup_panel" style="nifty-panel-red" height="25%" width="35%" align="center" childLayout="vertical" visibleToMouse="true"> 
             
             <text text="Really want to quit?" align="center" font="Interface/Fonts/Default.fnt"/>
             
-            <panel id="spacer" height="70%" width="100%"/>
+            <!--panel id="spacer" height="70%" width="100%"/-->
             
             <panel id="button_panel" height="80%" width="100%" align="center" childLayout="horizontal" visibleToMouse="true">
                 
-                <panel id="spacer" height="100%" width="20%"/>
+                <panel id="leftButton" height="50%" width="50%" valign="bottom" childLayout="center" visibleToMouse="true">
                 
-                <control name="button" label="Yes" id="yes_button" align="center" visibleToMouse="true">
-                    <interact onClick="exit()"/>                
-                </control>           
-                <panel id="spacer" height="100%" width="5%"/>
-                <control name="button" label="No" id="no_button" align="center" visibleToMouse="true">
-                    <interact onClick="closePopup()"/>
-                </control>
+                    <control name="button" label="Yes" id="yes_button" visibleToMouse="true">
+                        <interact onRelease="exit()"/>                
+                    </control>   
                 
+                </panel>
+                
+                <panel id="rightButton" height="50%" width="50%" valign="bottom" childLayout="center" visibleToMouse="true">
+                    <control name="button" label="No" id="no_button"  visibleToMouse="true">
+                        <interact onRelease="closePopup()"/>
+                    </control>
+                </panel>
+                
+            </panel>  
+            
+                       
+        </panel>
+    </popup>
+    
+    <popup id="DISCONNECT_POPUP" childLayout="center" controller="edu.teddys.menu.MainMenu">
+        <panel id="popup_panel" style="nifty-panel-red" height="25%" width="35%" align="center" childLayout="vertical" visibleToMouse="true"> 
+            
+            <text text="Really want to disconnect?" align="center" font="Interface/Fonts/Default.fnt"/>
+            
+            <!--panel id="spacer" height="70%" width="100%"/-->
+            
+            <panel id="button_panel" height="80%" width="100%" align="center" childLayout="horizontal" visibleToMouse="true">
+                
+                <panel id="leftButton" height="50%" width="50%" valign="bottom" childLayout="center" visibleToMouse="true">
+                
+                    <control name="button" label="Yes" id="yes_button" visibleToMouse="true">
+                        <interact onRelease="disconnect()"/>                
+                    </control>   
+                
+                </panel>
+                
+                <panel id="rightButton" height="50%" width="50%" valign="bottom" childLayout="center" visibleToMouse="true">
+                    <control name="button" label="No" id="no_button"  visibleToMouse="true">
+                        <interact onRelease="closePopup()"/>
+                    </control>
+                </panel>
                 
             </panel>  
             
@@ -32,9 +64,21 @@
     </popup>
     
     <popup id="INPUT_POPUP" childLayout="center" controller="edu.teddys.menu.MainMenu">
-        <panel id="popup_panel" style="nifty-panel-red" height="30%" width="50%" align="center" childLayout="vertical"> 
+        <panel id="popup_panel" style="nifty-panel-red" height="25%" width="35%" align="center" childLayout="vertical"> 
             
             <text text="Press any key" align="center" font="Interface/Fonts/Default.fnt"/>
+                      
+        </panel>
+    </popup>
+    
+    <popup id="UNSUPPORTED_POPUP" childLayout="center" controller="edu.teddys.menu.MainMenu">
+        <panel id="popup_panel" style="nifty-panel-red" height="25%" width="35%" align="center" childLayout="vertical"> 
+            
+            <text text="Press any key" align="center" font="Interface/Fonts/Default.fnt"/>
+            
+            <control name="button" label="Ok" id="ok_button"  visibleToMouse="true">
+                <interact onRelease="closePopup()"/>
+            </control>
                       
         </panel>
     </popup>

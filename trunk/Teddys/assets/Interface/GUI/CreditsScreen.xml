@@ -2,40 +2,48 @@
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
        xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
 
-  <useControls filename="nifty-default-controls.xml"/>
-  <useStyles filename="nifty-default-styles.xml"/>
+    <useControls filename="nifty-default-controls.xml"/>
+    <useStyles filename="nifty-default-styles.xml"/>
   
-  <screen id="CREDITS" controller="edu.teddys.menu.MainMenu">
-      <layer id="background" backgroundColor="#000f">
-       
-    </layer>
+    <screen id="CREDITS" controller="edu.teddys.menu.MainMenu">
+        <layer id="background" childLayout="center" backgroundColor="#000f">
+            <panel id="bgpanel" childLayout="center" height="100%" width="100%">
+                <!--image id="bg" filename="Interface/GUI/bg.jpg" height="100%" width="100%"/--> 
+            </panel>
+        </layer>
 
     
-    <layer id="entries" backgroundColor="#0000" childLayout="horizontal">
+        <layer id="entries" childLayout="horizontal">
     
-        <panel id="left_panel" style="nifty-panel-simple" height="100%" width="30%" align="center" childLayout="vertical">  
+            <panel id="left_panel" backgroundColor="#888f"  height="100%" width="35%" align="center" childLayout="vertical">  
         
-            <text text="Credits" font="Interface/Fonts/Default.fnt" align="center"/>
+                <panel id="spacer" height="5%" width="100%"/>
+                <text text="Credits" font="Interface/Fonts/Default.fnt" align="right"/>
             
-            <panel id="spacer" height="90%" width="100%"/>
+                <panel id="spacer" height="85%" width="100%"/>
             
                                     
-            <control name="button" label="Back" id="back_button" align="center" valign="center">
-                <interact onClick="back()"/>
-            </control>
+                <text text="Back" align="right" font="Interface/Fonts/Default.fnt">
+                    <effect>
+                                <!--onClick name="changeFont" font="Interface/Fonts/Waree.fnt" /-->
+                        <onHover name="textColor" color="#000f"/>
+                    </effect>
+                            
+                    <interact onRelease="back()"/>
+                </text>
             
-        </panel>
-        
-        <panel id="entries_mid_panel" style="nifty-panel-no-shadow" height="100%" width="70%" align="center" childLayout="vertical">
+            </panel>
+            <panel id="mid_panel" backgroundColor="#888f"  height="100%" width="5%" align="center" childLayout="vertical"/>
+            <panel id="entries_mid_panel" backgroundColor="#333f"  height="100%" width="60%" align="center" childLayout="vertical">
             
       
-        </panel>
+            </panel>
         
-        <panel id="entries_bottom_panel" style="nifty-panel-bright" height="10%" width="100%" align="center" childLayout="center">
+            <panel id="entries_bottom_panel" height="10%" width="100%" align="center" childLayout="center">
             
-        </panel>    
+            </panel>    
         
-    </layer>
-  </screen>
+        </layer>
+    </screen>
 
 </nifty>

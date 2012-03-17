@@ -7,39 +7,46 @@
   
   <screen id="JOIN_GAME" controller="edu.teddys.menu.MainMenu">
       
-    <layer id="background" backgroundColor="#000f">
-       
-    </layer>
+    <layer id="background" childLayout="center" backgroundColor="#000f">
+            <panel id="bgpanel" childLayout="center" height="100%" width="100%">
+                <!--image id="bg" filename="Interface/GUI/bg.jpg" height="100%" width="100%"/--> 
+            </panel>
+        </layer>
 
     
     <layer id="entries" backgroundColor="#0000" childLayout="horizontal">
     
-        <panel id="left_panel" style="nifty-panel-simple" height="100%" width="30%" align="center" childLayout="vertical">  
+        <panel id="left_panel" backgroundColor="#888f" height="100%" width="35%" align="center" childLayout="vertical">  
         
-            <text text="Join Game" font="Interface/Fonts/Default.fnt" align="center"/>
+            <text text="Join Game" font="Interface/Fonts/Default.fnt" align="right"/>
             
             <panel id="spacer" height="90%" width="100%"/>
             
                                     
-            <control name="button" label="Back" id="back_button" align="center" valign="center">
-                <interact onClick="back()"/>
-            </control>
+            <text text="Back" align="right" font="Interface/Fonts/Default.fnt">
+                    <effect>
+                                <!--onClick name="changeFont" font="Interface/Fonts/Waree.fnt" /-->
+                        <onHover name="textColor" color="#000f"/>
+                    </effect>
+                            
+                    <interact onRelease="back()"/>
+                </text>
             
         </panel>
-        
-        <panel id="entries_mid_panel" style="nifty-panel-no-shadow" height="100%" width="70%" align="center" childLayout="vertical">
+        <panel id="mid_panel" backgroundColor="#888f"  height="100%" width="5%" align="center" childLayout="vertical"/>
+        <panel id="entries_mid_panel" backgroundColor="#0008" height="100%" width="60%" align="center" childLayout="vertical">
             <text text="choose server" font="Interface/Fonts/Default.fnt" align="left"/>
             <control id="server_list_box" name="listBox" vertical="optional" horizontal="optional" displayItems="10" />
             <panel id="ip_field_panel" childLayout="horizontal">
                 <text text="or specify IP " font="Interface/Fonts/Default.fnt" align="left"/>
                 <control name="textfield" id="ip_text_field" maxLength="20"/>
                 <control name="button" label="Connect" align="right" id="connect_button">
-                    <interact onClick="connect()"/>
+                    <interact onRelease="connect()"/>
                 </control>
             </panel>
         </panel>
         
-        <panel id="entries_bottom_panel" style="nifty-panel-bright" height="10%" width="100%" align="center" childLayout="center">
+        <panel id="entries_bottom_panel" backgroundColor="#333f" height="10%" width="100%" align="center" childLayout="center">
             
         </panel>    
         

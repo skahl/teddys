@@ -2,162 +2,191 @@
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
        xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
 
-  <useControls filename="nifty-default-controls.xml"/>
-  <useStyles filename="nifty-default-styles.xml"/>
+    <useControls filename="nifty-default-controls.xml"/>
+    <useStyles filename="nifty-default-styles.xml"/>
   
-  <screen id="OPTIONS_MENU" controller="edu.teddys.menu.OptionsMenu">
-      
-    <layer id="background_layer" childLayout="center" backgroundColor="#000f">
-       <panel id="left_panel" style="nifty-panel-simple" height="100%" width="30%" align="left" childLayout="vertical">  
+    <screen id="OPTIONS_MENU" controller="edu.teddys.menu.OptionsMenu">
+    
+        <layer id="background" childLayout="center" backgroundColor="#000f">
+            <panel id="bgpanel" childLayout="center" height="100%" width="100%">
+                <!--image id="bg" filename="Interface/GUI/bg.jpg" height="100%" width="100%"/--> 
+            </panel>
+        </layer>
+    
+        <layer id="shared_layer" childLayout="horizontal" >
+            <panel id="left_panel" backgroundColor="#888f" height="100%" width="35%" align="left" childLayout="vertical">  
         
-            <text text="Options" font="Interface/Fonts/Default.fnt" align="center"/>
+                <text text="Options" font="Interface/Fonts/Default.fnt" align="right"/>
             
-            <panel id="spacer" height="5%" width="100%"/>
+                <panel id="spacer" height="5%" width="100%"/>
             
-            <control name="button" label="Controls" id="show_controls_button" align="center" valign="center">
-                <interact onClick="showControls()"/>
-            </control>
+                <text text="Controls" align="right" font="Interface/Fonts/Default.fnt">
+                    <effect>
+                                <!--onClick name="changeFont" font="Interface/Fonts/Waree.fnt" /-->
+                        <onHover name="textColor" color="#000f"/>
+                    </effect>
+                            
+                    <interact onRelease="showControls()"/>
+                </text>
             
-            <panel id="spacer" height="5%" width="100%"/>
+                <panel id="spacer" height="5%" width="100%"/>
             
-            <control name="button" label="System" id="show_system_button" align="center" valign="center">
-                <interact onClick="showSystem()"/>
-            </control>
+                <text text="System" align="right" font="Interface/Fonts/Default.fnt">
+                    <effect>
+                                <!--onClick name="changeFont" font="Interface/Fonts/Waree.fnt" /-->
+                        <onHover name="textColor" color="#000f"/>
+                    </effect>
+                            
+                    <interact onRelease="showSystem()"/>
+                </text>
             
-            <panel id="spacer" height="60%" width="100%"/>
+                <panel id="spacer" height="65%" width="100%"/>
             
-            <control name="button" label="Save" id="save_button" align="center" valign="center">
-                <interact onClick="save()"/>
-            </control>
+                <text text="Save" align="right" font="Interface/Fonts/Default.fnt">
+                    <effect>
+                                <!--onClick name="changeFont" font="Interface/Fonts/Waree.fnt" /-->
+                        <onHover name="textColor" color="#000f"/>
+                    </effect>
+                            
+                    <interact onRelease="save()"/>
+                </text>
             
-            <panel id="spacer" height="5%" width="100%"/>
+                <panel id="spacer" height="5%" width="100%"/>
                         
-            <control name="button" label="Back" id="back_button" align="center" valign="center">
-                <interact onClick="back()"/>
-            </control>
+                <text text="Back" align="right" font="Interface/Fonts/Default.fnt">
+                    <effect>
+                                <!--onClick name="changeFont" font="Interface/Fonts/Waree.fnt" /-->
+                        <onHover name="textColor" color="#000f"/>
+                    </effect>
+                            
+                    <interact onRelease="back()"/>
+                </text>
             
-        </panel>
-    </layer>
+            </panel>
+            <panel id="mid_panel" backgroundColor="#888f"  height="100%" width="5%" childLayout="vertical"/>
+        </layer>
     
     
         
-    <layer id="controls_layer" backgroundColor="#fff0" childLayout="center">
+        <layer id="controls_layer" childLayout="center">
     
         
         
-        <panel id="entries_mid_panel" style="nifty-panel-no-shadow" height="100%" width="70%" align="right" childLayout="vertical">
+            <panel id="entries_mid_panel" backgroundColor="#333f" height="100%" width="60%" align="right" childLayout="vertical">
             
-            <text text="Controls" font="Interface/Fonts/Default.fnt"/>
+                <text text="Controls" font="Interface/Fonts/Default.fnt"/>
             
                        
-            <panel id="Left" height="10%" width="100%" align="center" childLayout="horizontal">
+                <panel id="Left" height="10%" width="100%" align="center" childLayout="horizontal">
         
-                <control name="button" label="Left" id="back_button" align="center" valign="center">
-                    <interact onClick="activateInputSelection(MOVE_LEFT)"/>
-                </control>   
+                    <control name="button" label="Left" id="back_button" align="center" valign="center">
+                        <interact onRelease="activateInputSelection(MOVE_LEFT)"/>
+                    </control>   
                            
-                <text id="MOVE_LEFT_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
+                    <text id="MOVE_LEFT_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
 
-            </panel>
+                </panel>
             
-            <panel id="Right" height="10%" width="100%" align="center" childLayout="horizontal">
+                <panel id="Right" height="10%" width="100%" align="center" childLayout="horizontal">
         
-                <control name="button" label="Right" id="back_button" align="center" valign="center">
-                    <interact onClick="activateInputSelection(MOVE_RIGHT)"/>
-                </control>   
+                    <control name="button" label="Right" id="back_button" align="center" valign="center">
+                        <interact onRelease="activateInputSelection(MOVE_RIGHT)"/>
+                    </control>   
                            
-                <text id="MOVE_RIGHT_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
+                    <text id="MOVE_RIGHT_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
 
-            </panel>
+                </panel>
             
-            <panel id="Jetpack" height="10%" width="100%" align="center" childLayout="horizontal">
+                <panel id="Jetpack" height="10%" width="100%" align="center" childLayout="horizontal">
         
-                <control name="button" label="Jetpack" id="back_button" align="center" valign="center">
-                    <interact onClick="activateInputSelection(JETPACK)"/>
-                </control>   
+                    <control name="button" label="Jetpack" id="back_button" align="center" valign="center">
+                        <interact onRelease="activateInputSelection(JETPACK)"/>
+                    </control>   
                            
-                <text id="JETPACK_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
+                    <text id="JETPACK_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
 
-            </panel>
+                </panel>
             
-            <panel id="Weapon" height="10%" width="100%" align="center" childLayout="horizontal">
+                <panel id="Weapon" height="10%" width="100%" align="center" childLayout="horizontal">
         
-                <control name="button" label="Weapon" id="back_button" align="center" valign="center">
-                    <interact onClick="activateInputSelection(WEAPON)"/>
-                </control>   
+                    <control name="button" label="Weapon" id="back_button" align="center" valign="center">
+                        <interact onRelease="activateInputSelection(WEAPON)"/>
+                    </control>   
                            
-                <text id="WEAPON_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
+                    <text id="WEAPON_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
 
-            </panel>
+                </panel>
             
-            <panel id="NextWeapon" height="10%" width="100%" align="center" childLayout="horizontal">
+                <panel id="NextWeapon" height="10%" width="100%" align="center" childLayout="horizontal">
         
-                <control name="button" label="Next Weapon" id="next_button" align="center" valign="center">
-                    <interact onClick="activateInputSelection(NEXT_WEAPON)"/>
-                </control>   
+                    <control name="button" label="Next Weapon" id="next_button" align="center" valign="center">
+                        <interact onRelease="activateInputSelection(NEXT_WEAPON)"/>
+                    </control>   
                            
-                <text id="NEXT_WEAPON_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
+                    <text id="NEXT_WEAPON_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
 
-            </panel>
+                </panel>
             
-            <panel id="PreviousWeapon" height="10%" width="100%" align="center" childLayout="horizontal">
+                <panel id="PreviousWeapon" height="10%" width="100%" align="center" childLayout="horizontal">
         
-                <control name="button" label="Previous Weapon" id="next_button" align="center" valign="center">
-                    <interact onClick="activateInputSelection(PREVIOUS_WEAPON)"/>
-                </control>   
+                    <control name="button" label="Previous Weapon" id="next_button" align="center" valign="center">
+                        <interact onRelease="activateInputSelection(PREVIOUS_WEAPON)"/>
+                    </control>   
                            
-                <text id="PREVIOUS_WEAPON_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
+                    <text id="PREVIOUS_WEAPON_LABEL" font="Interface/Fonts/Default.fnt" width="100%" height="100%"/>
 
-            </panel>
+                </panel>
        
-        </panel>
+            </panel>
         
            
         
-    </layer>
+        </layer>
     
-    <layer id="system_layer" backgroundColor="#fff0" childLayout="center">
+        <layer id="system_layer" childLayout="center">
         
-        <panel id="entries_mid_panel" style="nifty-panel-no-shadow" height="100%" width="70%" align="right" childLayout="vertical">
+            <panel id="entries_mid_panel" backgroundColor="#333f" height="100%" width="60%" align="right" childLayout="vertical">
             
-            <text text="System" font="Interface/Fonts/Default.fnt"/>
+                <text text="System" font="Interface/Fonts/Default.fnt"/>
             
-            <panel id="spacer" height="5%" width="100%"/>
+                <panel id="spacer" height="5%" width="100%"/>
             
-            <panel id="entries" childLayout="horizontal">                
-                <panel id="labels" height="100%" width="50%" align="left" childLayout="vertical">
+                <panel id="entries" childLayout="horizontal">                
+                    <panel id="labels" height="100%" width="50%" align="left" childLayout="vertical">
         
-                    <text text="Resolution" font="Interface/Fonts/Default.fnt"/>
-                    <panel id="spacer" height="5%" width="100%"/>
-                    <text text="Bits Per Pixel" font="Interface/Fonts/Default.fnt"/>
-                    <panel id="spacer" height="5%" width="100%"/>
-                    <text text="Anti Aliasing" font="Interface/Fonts/Default.fnt"/>
-                    <panel id="spacer" height="5%" width="100%"/>
-                    <text text="Fullscreen" font="Interface/Fonts/Default.fnt"/> 
-                    <panel id="spacer" height="5%" width="100%"/>
-                    <text text="VSync" font="Interface/Fonts/Default.fnt"/> 
+                        <text text="Resolution" font="Interface/Fonts/Default.fnt"/>
+                        <panel id="spacer" height="5%" width="100%"/>
+                        <text text="Bits Per Pixel" font="Interface/Fonts/Default.fnt"/>
+                        <panel id="spacer" height="5%" width="100%"/>
+                        <text text="Anti Aliasing" font="Interface/Fonts/Default.fnt"/>
+                        <panel id="spacer" height="5%" width="100%"/>
+                        <text text="Fullscreen" font="Interface/Fonts/Default.fnt"/> 
+                        <panel id="spacer" height="5%" width="100%"/>
+                        <text text="VSync" font="Interface/Fonts/Default.fnt"/> 
                     
-                </panel>   
+                    </panel>   
             
-                <panel id="boxes" height="100%" width="50%" align="right" childLayout="vertical">
+                    <panel id="boxes" height="100%" width="50%" align="right" childLayout="vertical">
         
                   
-                    <control id="RESOLUTION_DROPDOWN" name="dropDown" />
-                    <panel id="spacer" height="5%" width="100%"/>
-                    <control id="BPP_DROPDOWN" name="dropDown" />
-                    <panel id="spacer" height="5%" width="100%"/>
-                    <control id="AA_DROPDOWN" name="dropDown" />
-                    <panel id="spacer" height="5%" width="100%"/>
-                    <control id="FULLSCREEN_DROPDOWN" name="dropDown" />
-                    <panel id="spacer" height="5%" width="100%"/>
-                    <control id="VSYNC_DROPDOWN" name="dropDown" />
+                        <control id="RESOLUTION_DROPDOWN" name="dropDown" />
+                        <panel id="spacer" height="5%" width="100%"/>
+                        <control id="BPP_DROPDOWN" name="dropDown"/>
+                        <panel id="spacer" height="5%" width="100%"/>
+                        <control id="AA_DROPDOWN" name="dropDown" />
+                        <panel id="spacer" height="5%" width="100%"/>
+                        <control id="FULLSCREEN_CHECKBOX" name="checkbox" align="right">
+                            <interact onRelease="updateResolutions()"/>
+                        </control>
+                        <panel id="spacer" height="5%" width="100%"/>
+                        <control id="VSYNC_CHECKBOX" name="checkbox" align="right"/>
 
+                    </panel>
                 </panel>
             </panel>
-        </panel>
         
-    </layer>
+        </layer>
     
-  </screen>
+    </screen>
 
 </nifty>
