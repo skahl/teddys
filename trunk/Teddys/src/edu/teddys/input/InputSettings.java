@@ -118,6 +118,27 @@ public class InputSettings {
 
     }
 
+    
+    private void clearActionValue(Map<ActionControllerEnum, Trigger[]> map, Trigger[] value) {
+        for (ActionControllerEnum a: map.keySet()) {
+            if (map.get(a)[0].getName().equals(value[0].getName())) {
+                map.put(a, new Trigger[]{});
+                actionNames.put(a, "");
+            }
+            
+        }        
+    }
+    
+    private void clearAnalogValue(Map<AnalogControllerEnum, Trigger[]> map, Trigger[] value) {
+        for (AnalogControllerEnum a: map.keySet()) {
+            if (map.get(a)[0].getName().equals(value[0].getName())) {
+                map.put(a, new Trigger[]{});
+                analogNames.put(a, "");
+            }
+        }        
+    }
+    
+    
     public Trigger[] getKey(AnalogControllerEnum analog) {
         return analogs.get(analog);
     }
@@ -138,24 +159,30 @@ public class InputSettings {
 
     public void setKey(AnalogControllerEnum analog, int key, String keyCode) {
         Trigger[] trigger = new Trigger[]{new KeyTrigger(key)};
-     
-            
+        clearAnalogValue(analogs, trigger);            
         analogs.put(analog, trigger);
         analogNames.put(analog, keyPrefix + keyCode.toUpperCase());
     }
 
     public void setKey(ActionControllerEnum action, int key, String keyCode) {
-        actions.put(action, new Trigger[]{new KeyTrigger(key)});
+        Trigger[] trigger = new Trigger[]{new KeyTrigger(key)};
+        clearActionValue(actions, trigger);  
+        actions.put(action, trigger);
         actionNames.put(action, keyPrefix + keyCode.toUpperCase());
+        
     }
 
     public void setMouseButton(AnalogControllerEnum analog, int key) {
+        Trigger[] trigger = new Trigger[]{new MouseButtonTrigger(key)};
+        clearAnalogValue(analogs, trigger);
         analogs.put(analog, new Trigger[]{new MouseButtonTrigger(key)});
         analogNames.put(analog, mousePrefix + String.valueOf(++key));
     }
 
     public void setMouseButton(ActionControllerEnum action, int key) {
-        actions.put(action, new Trigger[]{new MouseButtonTrigger(key)});
+        Trigger[] trigger = new Trigger[]{new MouseButtonTrigger(key)};
+        clearActionValue(actions, trigger);
+        actions.put(action, trigger);
         actionNames.put(action, mousePrefix + String.valueOf(++key));
     }
 }

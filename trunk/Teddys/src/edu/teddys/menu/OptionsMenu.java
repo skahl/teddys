@@ -35,7 +35,7 @@ public class OptionsMenu implements ScreenController, RawInputListener {
     private Screen screen;
     private Application app;
     
-    private Element inputPopup, systemLayer, controlsLayer;
+    private Element inputPopup, unsupported_popup, systemLayer, controlsLayer;
     
     private DropDown<String> resolution_dd, bpp_dd, aa_dd;
     private CheckBox fullscreen_cb, vsync_cb;
@@ -57,8 +57,11 @@ public class OptionsMenu implements ScreenController, RawInputListener {
         this.nifty = nifty;
         this.screen = screen;
         inputPopup = nifty.createPopup("INPUT_POPUP");
+        //unsupported_popup = nifty.createPopup("UNSUPPORTED_POPUP");
         systemLayer = nifty.getScreen("OPTIONS_MENU").findElementByName("system_layer");
-        controlsLayer = nifty.getScreen("OPTIONS_MENU").findElementByName("controls_layer");        
+        controlsLayer = nifty.getScreen("OPTIONS_MENU").findElementByName("controls_layer");    
+        
+        screen.removeLayerElement(controlsLayer);
         
         resolution_dd = screen.findNiftyControl("RESOLUTION_DROPDOWN", DropDown.class);
         bpp_dd = screen.findNiftyControl("BPP_DROPDOWN", DropDown.class);
@@ -77,6 +80,13 @@ public class OptionsMenu implements ScreenController, RawInputListener {
         this.app = app;
     }
 
+    public void updateResolutions() {
+        if (fullscreen_cb.isChecked()) {
+            resolution_dd.addAllItems(Arrays.asList(SupportedSettings.getWindowedResolutions()));
+        } else {
+            resolution_dd.addAllItems(Arrays.asList(SupportedSettings.getResolutions()));
+        }
+    }
     
     private void loadKeys() {
         InputSettings settings = InputSettings.getInstance();
@@ -104,15 +114,19 @@ public class OptionsMenu implements ScreenController, RawInputListener {
     }
     
     public void showSystem() {
-        screen.removeLayerElement(controlsLayer);
-        screen.addLayerElement(systemLayer);
-        activeLayer = SettingLayers.SYSTEM;
+        if (activeLayer != SettingLayers.SYSTEM) {
+            screen.removeLayerElement(controlsLayer);
+            screen.addLayerElement(systemLayer);
+            activeLayer = SettingLayers.SYSTEM;
+        }
     }
     
     public void showControls() {
-      screen.removeLayerElement(systemLayer);
-      screen.addLayerElement(controlsLayer);
-      activeLayer = SettingLayers.CONTROLS;
+        if (activeLayer != SettingLayers.CONTROLS) {
+            screen.removeLayerElement(systemLayer);
+            screen.addLayerElement(controlsLayer);
+            activeLayer = SettingLayers.CONTROLS;
+        }
     }
 
     public void activateInputSelection(String key) {
@@ -138,11 +152,12 @@ public class OptionsMenu implements ScreenController, RawInputListener {
                 InputSettings.getInstance().saveSettings();
                 break;
             case SYSTEM:
-                SupportedSettings.verifyAndSaveCurrentSelection(((BaseGame)app).getSettings(),
+                boolean valid = SupportedSettings.verifyAndSaveCurrentSelection(((BaseGame)app).getSettings(),
                         resolution_dd.getSelection(), 
                         bpp_dd.getSelection(), aa_dd.getSelection(), 
                         SupportedSettings.getFrequencies(resolution_dd.getSelection())[0], 
-                        fullscreen_cb.isChecked(), vsync_cb.isChecked()); 
+                        fullscreen_cb.isChecked(), vsync_cb.isChecked());
+                //if (!valid) nifty.showPopup(nifty.getCurrentScreen(), unsupported_popup.getId(), null);
        }
     }
     
@@ -181,6 +196,14 @@ public class OptionsMenu implements ScreenController, RawInputListener {
             loadKeys();
         }
     }
+    
+    public void onMouseMotionEvent(MouseMotionEvent evt) {
+        if (evt.getDeltaWheel() > 0) {
+            
+        } else if (evt.getDeltaWheel() < 0) {
+            
+        }
+    }
 
     public void beginInput() {
         //throw new UnsupportedOperationException("Not supported yet.");
@@ -195,10 +218,6 @@ public class OptionsMenu implements ScreenController, RawInputListener {
     }
 
     public void onJoyButtonEvent(JoyButtonEvent evt) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void onMouseMotionEvent(MouseMotionEvent evt) {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
 

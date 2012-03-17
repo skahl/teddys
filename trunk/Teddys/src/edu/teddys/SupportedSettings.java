@@ -15,11 +15,14 @@ import java.util.prefs.BackingStoreException;
 
 /**
  *
- * taken from com.jme3.app.SettingsDialog.java
+ * mostly taken from com.jme3.app.SettingsDialog.java
  */
 public class SupportedSettings {
 
     private static final DisplayMode[] modes;
+
+    private static String[] windowedResolutions = {"320 x 240", "640 x 480", "800 x 600",
+        "1024 x 768", "1152 x 864", "1280 x 720"};
 
     static {
         GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -151,6 +154,10 @@ public class SupportedSettings {
         String[] res = new String[depths.size()];
         depths.toArray(res);
         return res;
+    }
+    
+    public static String[] getWindowedResolutions() {
+        return windowedResolutions;
     }
 
     /**

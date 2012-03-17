@@ -35,9 +35,7 @@ public class MainMenu implements ScreenController {
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
         this.screen = screen;
-    }
-
-    public void onStartScreen() {
+        
         teddyImage = nifty.getCurrentScreen().findElementByName("teddy_image");
         teddy1 = nifty.getRenderEngine().createImage("Interface/GUI/teddy2.png", false);
         teddy2 = nifty.getRenderEngine().createImage("Interface/GUI/teddy3.png", false);
@@ -46,6 +44,10 @@ public class MainMenu implements ScreenController {
         teddy5 = nifty.getRenderEngine().createImage("Interface/GUI/teddy6.png", false);
         
         popupElement = nifty.createPopup("EXIT_POPUP");
+    }
+
+    public void onStartScreen() {
+        
     }
 
     public void onEndScreen() {
@@ -76,7 +78,7 @@ public class MainMenu implements ScreenController {
     }
     
     public void showJoinScreen() {
-        nifty.gotoScreen(MenuTypes.BLANK.name());
+        nifty.gotoScreen(MenuTypes.JOIN_GAME.name());
     }
     
     public void showCreateScreen() {
