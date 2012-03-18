@@ -12,10 +12,8 @@ import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.shadow.BasicShadowRenderer;
 import edu.teddys.callables.AttachToNodeCallable;
 import edu.teddys.BaseGame;
@@ -30,7 +28,6 @@ import edu.teddys.callables.RemoveNodeFromPhysicsSpace;
 import edu.teddys.callables.SetPositionOfTeddyCallable;
 import edu.teddys.hud.HUD;
 import edu.teddys.hud.HUDController;
-import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.map.GameLoader;
 import edu.teddys.objects.player.Player;
@@ -48,8 +45,6 @@ public class Game extends AbstractAppState {
   private AppStateManager stateManager;
   private InputManager inputManager;
   private BulletAppState bulletAppState;
-  private CameraNode camNode;
-  private CrosshairControl cameraControl;
   private Node rootNode;
   private BasicShadowRenderer shadowRenderer; // Shadow rendering
   private GameLoader gameLoader;
@@ -143,7 +138,6 @@ public class Game extends AbstractAppState {
     shadowRenderer.setDirection(sunDirection);
     this.app.getViewPort().addProcessor(shadowRenderer);
 
-
     //HUD
     hud = HUD.getInstance(this.app.getGuiNode(),
             this.app.getAssetManager(),
@@ -166,9 +160,9 @@ public class Game extends AbstractAppState {
     cursor.setWidth(crosshairSize);
     addSpatial(this.app.getGuiNode(), cursor);
 
-    Player player = Player.getInstance(Player.LOCAL_PLAYER);
-    initCamNode(player);
-    
+//    Player player = Player.getInstance(Player.LOCAL_PLAYER);
+//    initCamNode(player);
+
 //    // Camera
 //    camNode = new CameraNode("Camera", this.app.getCamera());
 //    camNode.setControlDir(ControlDirection.SpatialToCamera);
@@ -197,37 +191,6 @@ public class Game extends AbstractAppState {
 
     MegaLogger.getLogger().debug("New game instance created.");
   }
-  
-  /**
-   * 
-   * Initialize or update the CameraNode and CrosshairControl.
-   * 
-   * If the player in the CrosshairControl is different from the previous one,
-   * update the reference.
-   * 
-   * @see CameraNode
-   * @see CrosshairControl
-   * 
-   * @param player The player instance to which the camera should be attached.
-   */
-  public void initCamNode(Player player) {
-    if(camNode != null) {
-      // refresh the player used by the CrosshairControl
-      if(!cameraControl.getPlayer().equals(player)) {
-        cameraControl.setPlayer(player);
-      }
-      return;
-    }
-    // Camera
-    camNode = new CameraNode("Camera", this.app.getCamera());
-    camNode.setControlDir(ControlDirection.SpatialToCamera);
-    // initial distance between camera and player
-    camNode.move(0, 1, 8);
-    
-    cameraControl = new CrosshairControl(camNode, player, cursor,
-            this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
-    cameraControl.registerWithInput(inputManager);
-  }
 
   /**
    * 
@@ -254,15 +217,15 @@ public class Game extends AbstractAppState {
   void addCharacterControlToPhysicsSpace(CharacterControl control) {
     getApp().enqueue(new AddCharacterControlToPhysicsSpaceCallable(getBulletAppState().getPhysicsSpace(), control));
   }
-  
+
   void removeCharacterControlFromPhysicsSpace(CharacterControl control) {
     getApp().enqueue((new RemoveCharacterControlFromPhysicsSpace(getBulletAppState().getPhysicsSpace(), control)));
   }
-  
+
   public void addNodeToPhysicsSpace(Node node) {
     getApp().enqueue(new AddNodeToPhysicsSpaceCallable(getBulletAppState().getPhysicsSpace(), node));
   }
-  
+
   public void removeNodeFromPhysicsSpace(Node node) {
     getApp().enqueue((new RemoveNodeFromPhysicsSpace(getBulletAppState().getPhysicsSpace(), node)));
   }
@@ -376,11 +339,11 @@ public class Game extends AbstractAppState {
   public InputManager getInputManager() {
     return inputManager;
   }
-  
-  public CameraNode getCamNode() {
-    return camNode;
+
+  public Cursor getCursor() {
+    return cursor;
   }
-  
+
   public void loadGameMap(String levelName, String mapPath) {
     gameLoader = new GameLoader("firstlevel", "maps/firstlevel.zip", this);
     addMapModel(gameLoader.getGameMap().getMapModel());

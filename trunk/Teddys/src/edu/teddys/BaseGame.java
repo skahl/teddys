@@ -176,7 +176,6 @@ public class BaseGame extends SimpleApplication {
     inputManager.addMapping(MappingEnum.MENU.name(), new KeyTrigger(keyInput.KEY_P));
     inputManager.addListener(actionListener, new String[]{MappingEnum.MENU.name()});
     initGUI();
-    
 
     stateManager.attach(new Menu());
     stateManager.attach(Game.getInstance());
@@ -229,22 +228,21 @@ public class BaseGame extends SimpleApplication {
         MegaLogger.getLogger().warn("Could not create the lock file for the server instance!");
       }
     } else {
+      // Get the handle to the client and try to join the specified server
+      TeddyClient client = TeddyClient.getInstance();
+      MegaLogger.getLogger().info("Client has " + client.getData().getHealth() + " health points at the beginning.");
+
       // Try to connect to the server
-      if (TeddyClient.getInstance().join(TeddyClient.getInstance().getServerIP(), NetworkSettings.SERVER_PORT)) {
+      if (client.join(TeddyClient.getInstance().getServerIP(), NetworkSettings.SERVER_PORT)) {
         MegaLogger.getLogger().debug(String.format("Client started a join request to %s ", TeddyClient.getInstance().getServerIP()));
       } else {
         MegaLogger.getLogger().error("Error while connecting the server!");
         return;
       }
+      // Create the listeners for the client
+      client.registerListener(TeddyClient.ListenerFields.health, new HealthListener());
+      client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
     }
-
-    // Get the handle to the client and try to join the specified server
-    TeddyClient client = TeddyClient.getInstance();
-    MegaLogger.getLogger().info("Client has " + client.getData().getHealth() + " health points at the beginning.");
-
-    // Create the listeners for the client
-    client.registerListener(TeddyClient.ListenerFields.health, new HealthListener());
-    client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
 
     // # # # # # # # # # # # # # # GAME # # # # # # # # # # # # # # # #
 

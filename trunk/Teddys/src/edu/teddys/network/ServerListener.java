@@ -41,6 +41,7 @@ import java.util.List;
 public class ServerListener implements MessageListener<HostedConnection> {
 
   public void messageReceived(HostedConnection source, Message message) {
+    
     String inputMessage = String.format(
             "Server received a message (%s): %s",
             message.getClass().getSimpleName(), message);

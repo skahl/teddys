@@ -9,9 +9,11 @@ import com.jme3.scene.CameraNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import edu.teddys.MegaLogger;
 import edu.teddys.controls.PlayerControl;
+import edu.teddys.input.CrosshairControl;
 import edu.teddys.network.ClientData;
 import edu.teddys.states.Game;
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ public class Player {
   transient TeddyVisual visual;
   transient PlayerControl control;
   transient CapsuleCollisionShape collisionShape;
+  private CameraNode camNode = null;
+  private CrosshairControl cameraControl;
   ClientData data = new ClientData();
 
   /**
@@ -78,8 +82,14 @@ public class Player {
     }
     //TODO check if removing all players is better ...
     if (instances.containsKey(id)) {
+      Player oldPlayer = Player.getInstance(id);
       // Remove the old player
-      Game.getInstance().removePlayerFromWorld(Player.getInstance(id));
+      Game.getInstance().removePlayerFromWorld(oldPlayer);
+      // Remove the camera Node
+      if(oldPlayer.camNode != null) {
+        Game.getInstance().removeSpatial(oldPlayer.getNode(), oldPlayer.camNode);
+        oldPlayer.camNode = null;
+      }
       instances.remove(id);
     }
     // Get the current instance
@@ -88,26 +98,52 @@ public class Player {
     // and change the position in the instances List
     localPlayer.getNode().setName("player" + id.toString());
     localPlayer.getData().setId(id);
-    // Check if the camera is null. If so, create a new one ...
-    CameraNode camNode = Game.getInstance().getCamNode();
-    if (camNode == null) {
-      Game.getInstance().initCamNode(localPlayer);
-      MegaLogger.getLogger().debug("CameraNode created/updated");
-      // reload
-      camNode = Game.getInstance().getCamNode();
-    }
-    // ... and attach it to the user's Teddy
-    if (!localPlayer.getNode().hasChild(camNode)) {
-      MegaLogger.getLogger().debug("CameraNode has not been attached yet.");
-      Vector3f dir = localPlayer.getNode().getWorldTranslation().add(0, 0.75f, 0);
-      camNode.lookAt(dir, new Vector3f(0, 1, 0));
-      Game.getInstance().addSpatial(localPlayer.getNode(), camNode);
-    }
+    localPlayer.initCamNode();
     instances.put(id, localPlayer);
     // Refresh the list since the ID has changed
     instances.remove(LOCAL_PLAYER);
     // Update the LOCAL_PLAYER ID
     LOCAL_PLAYER = id;
+  }
+
+  /**
+   * 
+   * Initialize or update the CameraNode and CrosshairControl.
+   * 
+   * If the player in the CrosshairControl is different from the previous one,
+   * update the reference.
+   * 
+   * @see CameraNode
+   * @see CrosshairControl
+   * 
+   * @param player The player instance to which the camera should be attached.
+   */
+  public void initCamNode() {
+    
+    MegaLogger.getLogger().debug("Initializing CameraNode ...");
+    
+    Game gameInstance = Game.getInstance();
+    
+    if(camNode == null) {
+      // Camera
+      camNode = new CameraNode("Camera", gameInstance.getApp().getCamera());
+      camNode.setControlDir(ControlDirection.SpatialToCamera);
+      // initial distance between camera and player
+      camNode.move(0, 1, 8);
+      gameInstance.addSpatial(getNode(), camNode);
+      MegaLogger.getLogger().debug("New CameraNode created.");
+    }
+
+    // Update the camera setting
+    Vector3f dir = getNode().getWorldTranslation().add(0, 0.75f, 0);
+    camNode.lookAt(dir, new Vector3f(0, 1, 0));
+
+    cameraControl = new CrosshairControl(camNode, this,
+            gameInstance.getCursor(),
+            gameInstance.getApp().getSettings().getWidth(),
+            gameInstance.getApp().getSettings().getHeight());
+    cameraControl.registerWithInput(gameInstance.getInputManager());
+    MegaLogger.getLogger().debug("New CameraControl created.");
   }
 
   /**

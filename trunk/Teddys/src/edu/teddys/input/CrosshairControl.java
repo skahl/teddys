@@ -9,7 +9,6 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
-import com.jme3.scene.Spatial;
 import edu.teddys.objects.player.Player;
 
 /**
@@ -50,14 +49,6 @@ public class CrosshairControl implements AnalogListener {
     maxMouseY = height - crosshair.getHeight();
 
     crosshair.setPosition(width / 2 - crosshair.getWidth() / 2, height / 2 - crosshair.getHeight() / 2);
-  }
-  
-  public Player getPlayer() {
-    return player;
-  }
-  
-  public void setPlayer(Player player) {
-    this.player = player;
   }
 
   public void registerWithInput(InputManager input) {
