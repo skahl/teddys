@@ -59,6 +59,7 @@ import edu.teddys.network.NetworkSettings;
 import edu.teddys.network.messages.server.ReqMessagePlayerDisconnect;
 import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
 import edu.teddys.objects.player.Player;
+import edu.teddys.timer.ServerTimer;
 import java.io.File;
 import java.io.IOException;
 import java.util.List; 
@@ -227,6 +228,8 @@ public class BaseGame extends SimpleApplication {
       } catch (IOException ex) {
         MegaLogger.getLogger().warn("Could not create the lock file for the server instance!");
       }
+      // Now start the timer
+      ServerTimer.startTimer();
     } else {
       // Get the handle to the client and try to join the specified server
       TeddyClient client = TeddyClient.getInstance();
@@ -335,6 +338,7 @@ public class BaseGame extends SimpleApplication {
       TeddyServer.getInstance().stopServer();
       File lockfile = new File(".serverlock");
       lockfile.delete();
+      ServerTimer.stopTimer();
     }
     
     threadPool.shutdown();

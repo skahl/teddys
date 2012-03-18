@@ -7,17 +7,13 @@ import com.jme3.input.controls.AnalogListener;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import edu.teddys.MegaLogger;
-import edu.teddys.effects.HoneyBrewShot;
 import edu.teddys.hud.HUDController;
 import edu.teddys.input.AnalogControllerEnum;
 import edu.teddys.input.InputType;
 import edu.teddys.input.InputTuple;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.player.TeddyVisual;
-import edu.teddys.objects.weapons.HolyWater;
-import edu.teddys.objects.weapons.HoneyBrew;
 import edu.teddys.objects.weapons.Rocket;
-import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
 import java.util.LinkedList;
@@ -28,7 +24,6 @@ import java.util.LinkedList;
  */
 public class PlayerControl extends CharacterControl implements AnalogListener, ActionListener {
 
-  private Player player;
   private TeddyVisual visual;
   // screen positions of cursor and player
   private Vector2f vectorPlayerToCursor = new Vector2f(1f, 0f);
@@ -62,8 +57,6 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   public PlayerControl(Player player, CollisionShape collisionShape, float stepHeight, TeddyVisual vis) {
     super(collisionShape, stepHeight);
     
-    this.player = player;
-    
     visual = vis;
     serverControlInput = new LinkedList<InputTuple>();
 
@@ -83,6 +76,9 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
    * @param tpf 
    */
   public void onAnalog(String name, float value, float tpf) {
+    
+    //TODO integrate the position information from the server
+    
     if (name.equals(AnalogControllerEnum.MOVE_LEFT.name())) {
 
       // reset control timer
@@ -276,8 +272,6 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
       }
     }
 
-
-
     // increase control timer and act on it, if necessary
     controlTimer++;
     if (controlTimer > 5) {
@@ -321,7 +315,6 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
       while (serverControlInput.size() > 0) {
 
         entry = serverControlInput.pop();
-  //    MegaLogger.getLogger().debug("input: " + entry);
         if (entry.getType() == InputType.Analog) {
           onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
         } else if (entry.getType() == InputType.Action) {

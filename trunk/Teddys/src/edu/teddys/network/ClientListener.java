@@ -140,15 +140,13 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           //TODO Set game state to "Game"
           GSMessageBeginGame msg = (GSMessageBeginGame) message;
-          //TODO check!! add the player to the local world
-//          Player newPlayer = Player.getInstance(source.getId());
-//          Game.getInstance().addPlayerToWorld(newPlayer);
+          //TODO check if this is the place to add the players ...
           // start the server timer to get the tick
           // if the server is local, don't change the value.
-          if (source.getId() != Player.LOCAL_PLAYER) {
+//          if (source.getId() != Player.LOCAL_PLAYER) {
             ServerTimer.setServerTimestamp(msg.getServerTimestamp());
             ServerTimer.startTimer();
-          }
+//          }
           // start sending input data
           ClientTimer.startTimer();
           // activate the keyboard and mouse listeners
