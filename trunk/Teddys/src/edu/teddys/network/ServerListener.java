@@ -17,7 +17,6 @@ import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.GSMessagePlayerReady;
 import edu.teddys.network.messages.client.ManControllerInput;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
-import edu.teddys.network.messages.client.ManMessageSendPosition;
 import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
@@ -196,18 +195,6 @@ public class ServerListener implements MessageListener<HostedConnection> {
 
         // refresh the player's action
         Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
-      } else if (message instanceof ManMessageSendPosition) {
-        //
-        // USER POSITION RECEIVED
-        //
-        ManMessageSendPosition msg = (ManMessageSendPosition) message;
-        //TODO redistibute to the other clients
-        TeddyServer.getInstance().send(msg);
-
-        //TODO calculate the position vector
-
-        //TODO in case of a larger time frame, reset the position of the client to the last
-        // known one
       } else if (message instanceof ManMessageTriggerWeapon) {
         //
         // USER WANTS TO GET NASTY (-> WEAPONS)

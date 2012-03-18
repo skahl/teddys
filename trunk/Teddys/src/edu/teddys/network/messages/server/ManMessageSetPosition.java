@@ -15,22 +15,32 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 @Serializable
 public final class ManMessageSetPosition extends NetworkMessageManipulation {
 
-  private Vector3f newPosition;
+  private Integer clientID = new Integer(0);
+  private Vector3f position = new Vector3f();
 
   public ManMessageSetPosition() {
     super();
   }
 
-  public ManMessageSetPosition(Vector3f pos) {
+  public ManMessageSetPosition(Integer clientID, Vector3f pos) {
     this();
-    setNewPosition(pos);
+    this.clientID = clientID;
+    this.position = pos;
   }
 
-  public Vector3f getNewPosition() {
-    return newPosition;
+  public Vector3f getPosition() {
+    return position;
   }
 
-  public void setNewPosition(Vector3f newPosition) {
-    this.newPosition = newPosition;
+  public void setPosition(Vector3f newPosition) {
+    this.position = newPosition;
+  }
+
+  public Integer getClientID() {
+    return clientID;
+  }
+
+  public void setClientID(Integer clientID) {
+    this.clientID = clientID;
   }
 }

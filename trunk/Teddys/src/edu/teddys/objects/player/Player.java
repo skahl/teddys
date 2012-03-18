@@ -118,7 +118,7 @@ public class Player {
    * 
    * @param player The player instance to which the camera should be attached.
    */
-  public void initCamNode() {
+  protected void initCamNode() {
     
     MegaLogger.getLogger().debug("Initializing CameraNode ...");
     
@@ -200,7 +200,7 @@ public class Player {
 
     control = new PlayerControl(this, collisionShape, 0.02f, visual);
     if (id == LOCAL_PLAYER) {
-      //TODO check
+      // This is handled by the ClientTimerThread
 //      control.registerWithInput(game.getInputManager());
     }
 

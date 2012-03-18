@@ -7,6 +7,8 @@ package edu.teddys.timer;
 import com.jme3.math.Vector3f;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
+import edu.teddys.network.TeddyServer;
+import edu.teddys.network.messages.server.ManMessageSetPosition;
 import edu.teddys.objects.player.Player;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,9 +34,13 @@ public class ServerTimerThread extends Thread {
     while (!stop) {
       //TODO parse game events
 
+      ManMessageSetPosition posMsg = new ManMessageSetPosition();
       // update the players' positions
       for(Player player : Player.getInstanceList()) {
         addClientPosition(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
+        posMsg.setClientID(player.getData().getId());
+        posMsg.setPosition(player.getPlayerControl().getPhysicsLocation());
+        TeddyServer.getInstance().send(posMsg);
       }
       
       // increment the tick by one

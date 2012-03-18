@@ -11,6 +11,7 @@ import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageInfo;
+import edu.teddys.network.messages.server.ReqMessagePlayerDisconnect;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
@@ -212,29 +213,31 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
               + "but the server is not running (or not discoverable)!"));
       return;
     }
-
+    
     if (conn == null) {
       // can be true if the server has been shutdown in the meantime.
       return;
     }
 
-    MegaLogger.getLogger().debug("Connection with ID " + conn.getId() 
+    Integer clientID = conn.getId();
+    
+    MegaLogger.getLogger().debug("Connection with ID " + clientID 
             + " removed! Active players: "+server.getConnections().size());
 
     // check if the player exists in the current game
-    Game.getInstance().removePlayerFromWorld(Player.getInstance(conn.getId()));
+    Game.getInstance().removePlayerFromWorld(Player.getInstance(clientID));
 
     // Now search the client data of the HostedConnection and remove it 
     // from list
 
     // acquire client data because of the team allocation
     if(getData() != null && !Player.getInstances().isEmpty()) {
-      ClientData clientData = Player.getInstance(conn.getId()).getData();
+      ClientData clientData = Player.getInstance(clientID).getData();
       if (clientData != null) {
         // remove the player from the team list
         if (clientData.getTeamID() != null) {
           try {
-            getData().getTeams().get(clientData.getTeamID()).removePlayer(clientData.getId());
+            getData().getTeams().get(clientData.getTeamID()).removePlayer(clientID);
           } catch (ArrayIndexOutOfBoundsException ex) {
             //TODO ignore?
             MegaLogger.getLogger().warn(
@@ -245,13 +248,16 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
         }
 
         // remove the client data from server
-        Player.removePlayer(clientData.getId());
+        Player.removePlayer(clientID);
       }
     }
+    
+    ReqMessagePlayerDisconnect disconnectMsg = new ReqMessagePlayerDisconnect(clientID);
+    TeddyServer.getInstance().send(disconnectMsg);
 
     String message = String.format(
             "Client %s disconnected.",
-            conn.getId());
+            clientID);
     NetworkMessageInfo info = new NetworkMessageInfo(message);
     send(info);
     MegaLogger.getLogger().info(message);

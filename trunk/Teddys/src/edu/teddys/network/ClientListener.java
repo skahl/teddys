@@ -26,11 +26,13 @@ import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.GSMessageEndGame;
 import edu.teddys.network.messages.server.ManMessageActivateItem;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
+import edu.teddys.network.messages.server.ManMessageSetPosition;
 import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;
 import edu.teddys.network.messages.server.ManMessageTriggerEffect;
 import edu.teddys.network.messages.server.ReqMessageMapRequest;
 import edu.teddys.network.messages.server.ReqMessagePauseRequest;
+import edu.teddys.network.messages.server.ReqMessagePlayerDisconnect;
 import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
@@ -113,7 +115,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // A USER HAS LOADED THE MAP.
           // ADD THE CLIENT TO THE LOCAL WORLD
           //
-          ResMessageMapLoaded msg = (ResMessageMapLoaded)message;
+          ResMessageMapLoaded msg = (ResMessageMapLoaded) message;
           Player newPlayer = Player.getInstance(msg.getAffected());
           //TODO this should have been done already when the player data was received
           newPlayer.getData().setMapLoaded(true);
@@ -176,7 +178,10 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
 //          TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
         }
       } else if (message instanceof NetworkMessageManipulation) {
-        if (message instanceof ManMessageActivateItem) {
+        if (message instanceof ManMessageSetPosition) {
+          ManMessageSetPosition pos = (ManMessageSetPosition) message;
+          Player.getInstance(pos.getClientID()).getPlayerControl().setPhysicsLocation(pos.getPosition());
+        } else if (message instanceof ManMessageActivateItem) {
           //
           // THE USER HAS TO ACTIVATE THE SPECIFIED ITEM YET
           //
@@ -216,8 +221,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //overwrite the current server data
           TeddyServer.getInstance().setData(msg.getData());
           // update the positions of the clients
-          for(Entry<Integer,List<Vector3f>> posPerTeddy : msg.getData().getClientPositions().entrySet()) {
-            if(posPerTeddy.getValue().isEmpty()) {
+          for (Entry<Integer, List<Vector3f>> posPerTeddy : msg.getData().getClientPositions().entrySet()) {
+            if (posPerTeddy.getValue().isEmpty()) {
               continue;
             }
             Player curPlayer = Player.getInstance(posPerTeddy.getKey());
@@ -280,6 +285,11 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //TODO adapt to the game flow
           GSMessagePlayerReady playerReady = new GSMessagePlayerReady();
           TeddyClient.getInstance().send(playerReady);
+        } else if (message instanceof ReqMessagePlayerDisconnect) {
+          ReqMessagePlayerDisconnect disconnectMsg = (ReqMessagePlayerDisconnect) message;
+          Game.getInstance().removePlayerFromWorld(Player.getInstance(disconnectMsg.getClientID()));
+          MegaLogger.getLogger().debug(String.format(
+                  "Player %d has been disconnected from the server.", disconnectMsg.getClientID()));
         }
       }
     }
