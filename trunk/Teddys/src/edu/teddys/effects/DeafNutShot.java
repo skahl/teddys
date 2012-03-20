@@ -2,6 +2,7 @@
 package edu.teddys.effects;
 
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -15,25 +16,25 @@ import edu.teddys.states.Game;
  * 
  * @author skahl
  */
-public class HoneyBrewShot extends RigidBodyControl implements Effect {
+public class DeafNutShot extends RigidBodyControl implements Effect {
   
   // control variables
   boolean canShoot;
   
   // Effect attributes
   Node mother;
-  HoneyBrewParticle particle;
+  DeafNutParticle particle;
 //  ParticleEmmitter
   ParticleCollisionBox partColBox;
   
   
-  public HoneyBrewShot() {
+  public DeafNutShot() {
     // init control variables
     canShoot = true;
     
     // init effect attributes
-    mother = new Node("Honey Brew");
-    particle = new HoneyBrewParticle(mother.getName());
+    mother = new Node("Deaf Nut");
+    particle = new DeafNutParticle(mother.getName());
     partColBox = new ParticleCollisionBox(mother.getName(), particle);
     
     this.setCollisionShape(partColBox.getCollisionShape());
@@ -41,18 +42,19 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
     partColBox.getNode().addControl(this);
     
     setMass(1f);
-    this.setDamping(0.9f, 0.9f);
+    this.setDamping(0.0f, 0.9f);
   }
   
   @Override
   public void update(float tpf) {
     super.update(tpf);
     
+    // TODO: Sowas in allen Waffen um Refreshrate nicht abwarten zu müssen?
     if(partColBox.collidedPlayer()) {
+      
       reset();
     }
   }
-
   
   @Override
   public void trigger() {
@@ -66,13 +68,21 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
       
       Vector3f loc = mother.getWorldTranslation();
       Quaternion rot = mother.getLocalRotation();
-      if(particle.getVector().x > 0f) {
-        loc.addLocal(1.1f, 0.3f, 0f);
-      } else {
-        loc.addLocal(-1.1f, 0.3f, 0f);
-      }
+      loc.addLocal(particle.getVector());
+      
       setPhysicsLocation(loc);
       setPhysicsRotation(rot);
+            
+      // rotate the partColBox, so that the particle looks good
+      partColBox.getNode().rotateUpTo(particle.getVector());
+      partColBox.getNode().rotate(0f, 0f, -FastMath.HALF_PI);
+      
+      // linear force to apply
+      Vector3f force = new Vector3f(particle.getVector());
+      // apply velocity
+      force = force.mult(particle.getVelocity());
+      
+      setLinearVelocity(force);
       
       setEnabled(true);
     }
@@ -82,17 +92,15 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
   public void reset() {
     if(!canShoot) {
       
-      if(partColBox.collidedPlayer()) {
-        canShoot = true;
-        setEnabled(false);
+      canShoot = true;
+      setEnabled(false);
 
-        // remove the cube from the field
-        Game.getInstance().getApp().enqueue(new DetachFromNodeCallable(
-                Game.getInstance().getRootNode(), partColBox.getNode()));
-        
-        // reset rigidBody physics
-        
-      }
+      // remove the cube from the field
+      Game.getInstance().getApp().enqueue(new DetachFromNodeCallable(
+              Game.getInstance().getRootNode(), partColBox.getNode()));
+
+      // reset rigidBody physics
+
     }
   }
   

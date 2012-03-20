@@ -4,6 +4,7 @@
  */
 package edu.teddys.objects.weapons;
 
+import edu.teddys.effects.DeafNutShot;
 import edu.teddys.effects.Effect;
 
 /**
@@ -11,6 +12,8 @@ import edu.teddys.effects.Effect;
  * @author cm
  */
 public class DeafNut implements Weapon {
+  
+  DeafNutShot deafNutShot = new DeafNutShot();
   
   public String getName() {
     return "Deaf Nut";
@@ -29,7 +32,7 @@ public class DeafNut implements Weapon {
   }
 
   public float getFireRate() {
-    return 1f;
+    return 5f;
   }
 
   public float getSpawningRate() {
@@ -37,6 +40,6 @@ public class DeafNut implements Weapon {
   }
 
   public Effect getEffect() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return deafNutShot;
   }
 }

@@ -56,6 +56,7 @@ public class ParticleCollisionBox {
     
     // move the collision cube to contain the particle
     particle.setLocalTranslation(-particle.getQuadWidth()/2f, -particle.getQuadHeight()/2f, 0f);
+    
   }
   
   public BoxCollisionShape getCollisionShape() {

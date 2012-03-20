@@ -5,12 +5,15 @@
 package edu.teddys.objects.weapons;
 
 import edu.teddys.effects.Effect;
+import edu.teddys.effects.FloretsShot;
 
 /**
  *
  * @author cm
  */
 public class Florets implements Weapon {
+  
+  FloretsShot floretsShot = new FloretsShot();
   
   public String getName() {
     return "Florets";
@@ -29,7 +32,7 @@ public class Florets implements Weapon {
   }
 
   public float getFireRate() {
-    return .7f;
+    return .1f;
   }
 
   public float getSpawningRate() {
@@ -37,6 +40,6 @@ public class Florets implements Weapon {
   }
 
   public Effect getEffect() {
-    throw new UnsupportedOperationException("Not supported yet.");
+    return floretsShot;
   }
 }
