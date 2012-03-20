@@ -34,7 +34,9 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
     
     // init effect attributes
     mother = new Node("Deaf Nut");
+    // init explosion
     explosion = new Explosion(1.5f);
+    
     particle = new DeafNutParticle(mother.getName());
     partColBox = new ParticleCollisionBox(mother.getName(), particle);
     
@@ -43,7 +45,7 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
     partColBox.getNode().addControl(this);
     
     setMass(1f);
-    this.setDamping(0.0f, 0.9f);
+    this.setDamping(0.5f, 0.9f);
   }
   
   @Override
@@ -92,9 +94,10 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
   @Override
   public void reset() {
     if(!canShoot) {
+      partColBox.scaleCollisionBox(4f);
       
-      //partColBox.
-      explosion.trigger();
+      // position the explosion on the root node and explode
+      explosion.trigger(getPhysicsLocation());
       
       canShoot = true;
       setEnabled(false);
@@ -104,6 +107,7 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
               Game.getInstance().getRootNode(), partColBox.getNode()));
 
       // reset rigidBody physics
+      partColBox.resetCollisionBoxScale();
 
     }
   }
@@ -114,6 +118,7 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
     
     // enable collision listening
     partColBox.setEnabled(en);
+    
   }
   
   @Override

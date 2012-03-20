@@ -4,6 +4,7 @@ package edu.teddys.effects;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -25,6 +26,8 @@ public class ParticleCollisionBox {
   private CustomParticle particle;
   private GeometryCollisionListener colListener;
   private BoxCollisionShape csBox;
+  
+  private float scaling = 1f;
   
   /**
    * Creates a Box Geometry and a fitting BoxCollisionShape for the given CustomParticle.
@@ -65,6 +68,21 @@ public class ParticleCollisionBox {
   
   public Node getNode() {
     return particleNode;
+  }
+  
+  public void scaleCollisionBox(float factor) {
+    scaling = factor;
+        
+    colBox.scale(factor);
+    csBox.setScale(new Vector3f(factor, factor, factor));
+  }
+  
+  public void resetCollisionBoxScale() {
+    scaling = 1f - scaling; // 0.3 // -0.3
+    scaling += 1f; // 1.3 // 0.7
+    
+    colBox.scale(scaling);
+    csBox.setScale(new Vector3f(scaling, scaling, scaling));
   }
   
   public boolean collided() {

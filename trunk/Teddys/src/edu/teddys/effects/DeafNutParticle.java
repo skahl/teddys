@@ -16,7 +16,7 @@ public class DeafNutParticle extends CustomParticle {
   public DeafNutParticle(String name) {
     super(name);
     
-    this.velocity = 5f;
+    this.velocity = 10f;
     
     this.setMesh(new Quad(0.2f, 0.2f));
     
