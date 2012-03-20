@@ -30,6 +30,7 @@ public class RocketShot extends GhostControl implements Effect {
   RocketParticle particle;
   Vector3f triggerVector;
   ParticleEmitter flameEffect;
+  Explosion explosion;
   Material flames;
   ParticleCollisionBox partColBox;
   
@@ -42,6 +43,7 @@ public class RocketShot extends GhostControl implements Effect {
     // init effect attributes
     mother = new Node("Teddy Rocket");
     particle = new RocketParticle(mother.getName());
+    explosion = new Explosion(1f);
     partColBox = new ParticleCollisionBox(mother.getName(), particle);
     
     // init particle emitter for rocket flames effect
@@ -134,6 +136,9 @@ public class RocketShot extends GhostControl implements Effect {
       
       canShoot = true;
       setEnabled(false);
+      
+      // explode
+      explosion.trigger();
       
       // deactivate the flameEffect
       flameEffect.setParticlesPerSec(0);

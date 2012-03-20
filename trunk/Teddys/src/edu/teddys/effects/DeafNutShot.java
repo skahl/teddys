@@ -24,7 +24,7 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
   // Effect attributes
   Node mother;
   DeafNutParticle particle;
-//  ParticleEmmitter
+  Explosion explosion;
   ParticleCollisionBox partColBox;
   
   
@@ -34,6 +34,7 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
     
     // init effect attributes
     mother = new Node("Deaf Nut");
+    explosion = new Explosion(1.5f);
     particle = new DeafNutParticle(mother.getName());
     partColBox = new ParticleCollisionBox(mother.getName(), particle);
     
@@ -91,6 +92,9 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
   @Override
   public void reset() {
     if(!canShoot) {
+      
+      //partColBox.
+      explosion.trigger();
       
       canShoot = true;
       setEnabled(false);

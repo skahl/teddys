@@ -13,9 +13,7 @@ import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 import edu.teddys.MegaLogger;
-import edu.teddys.effects.GunShot;
 import edu.teddys.effects.JetpackEffect;
-import edu.teddys.effects.StenGunShot;
 import edu.teddys.effects.TeddyDeath;
 
 /**
@@ -61,7 +59,7 @@ public class TeddyVisual {
         node.attachChild(jetpackFx.getNode());
         
         // death effect init
-        deathFx = new TeddyDeath(assetManager);
+        deathFx = new TeddyDeath();
         node.attachChild(deathFx.getNode());
         
         
