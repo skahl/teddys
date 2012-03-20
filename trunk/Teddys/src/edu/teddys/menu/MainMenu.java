@@ -11,30 +11,27 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
 import edu.teddys.BaseGame;
 /**
  *
  * @author besient
  */
-public class MainMenu implements ScreenController {
+public class MainMenu extends MessagePopupController {
 
-    Nifty nifty;
-    Screen screen;
     
     private Application app;
     private float width, height;
     
-    InputManager input;
+    private InputManager input;
     
     private boolean enabled;
     
-    NiftyImage teddy1, teddy2, teddy3, teddy4, teddy5;
-    Element teddyImage, popupElement;
+    private NiftyImage teddy1, teddy2, teddy3, teddy4, teddy5;
+    private Element teddyImage, popupElement;
     
+    @Override
     public void bind(Nifty nifty, Screen screen) {
-        this.nifty = nifty;
-        this.screen = screen;
+        super.bind(nifty, screen);
         
         teddyImage = nifty.getCurrentScreen().findElementByName("teddy_image");
         teddy1 = nifty.getRenderEngine().createImage("Interface/GUI/teddy2.png", false);
@@ -42,17 +39,10 @@ public class MainMenu implements ScreenController {
         teddy3 = nifty.getRenderEngine().createImage("Interface/GUI/teddy4.png", false);
         teddy4 = nifty.getRenderEngine().createImage("Interface/GUI/teddy5.png", false);
         teddy5 = nifty.getRenderEngine().createImage("Interface/GUI/teddy6.png", false);
-        
-        popupElement = nifty.createPopup("EXIT_POPUP");
+
+        popupElement = nifty.createPopup(PopupTypes.EXIT_POPUP.name());
     }
 
-    public void onStartScreen() {
-        
-    }
-
-    public void onEndScreen() {
-        
-    }
     
     public void setApplication(Application app) {
         this.app = app;
@@ -76,6 +66,8 @@ public class MainMenu implements ScreenController {
             teddyImage.getRenderer(ImageRenderer.class).setImage(teddy1);
         }
     }
+    
+
     
     public void showJoinScreen() {
         nifty.gotoScreen(MenuTypes.JOIN_GAME.name());
@@ -108,5 +100,7 @@ public class MainMenu implements ScreenController {
     public void exit() {
         app.stop();
     }
+
+
     
 }

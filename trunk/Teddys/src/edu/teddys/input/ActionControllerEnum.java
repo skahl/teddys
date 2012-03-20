@@ -5,7 +5,9 @@
 package edu.teddys.input;
 
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.Trigger;
 
 /**
@@ -14,7 +16,9 @@ import com.jme3.input.controls.Trigger;
  */
 public enum ActionControllerEnum {
   
-  JETPACK(new Trigger[]{new KeyTrigger(KeyInput.KEY_SPACE)});
+  JETPACK(new Trigger[]{new KeyTrigger(KeyInput.KEY_SPACE)}),
+  PREVIOUS_WEAPON(new Trigger[]{new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false)}),
+  NEXT_WEAPON(new Trigger[]{new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true)});
   
   private final Trigger[] keys;
 

@@ -4,11 +4,12 @@
  */
 package edu.teddys.input;
 
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
 import edu.teddys.GameSettings;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.prefs.Preferences;
@@ -29,6 +30,8 @@ public class InputSettings {
     private final String keyPrefix = "Key ";
     private final String mousePrefix = "Mouse ";
     private final String nameSuffix = "_NAME";
+    private final String wheelUp = "Wheel UP";
+    private final String wheelDown = "Wheel DOWN";
 
     private InputSettings() {
 
@@ -57,8 +60,12 @@ public class InputSettings {
             if (!s.equals("")) {
                 if (s.charAt(0) == 'k') {
                     actions.put(e, new Trigger[]{new KeyTrigger(Integer.valueOf(s.substring(1)))});
-                } else {
+                } else if (s.charAt(0) == 'm') {
                     actions.put(e, new Trigger[]{new MouseButtonTrigger(Integer.valueOf(s.substring(1)))});
+                } else if (s.equals(wheelUp)) {
+                    actions.put(e, new Trigger[]{new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true)});
+                } else if (s.equals(wheelDown)) {
+                    actions.put(e, new Trigger[]{new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false)});
                 }
             }
             String n = settings.get(e.name() + nameSuffix, "");
@@ -96,8 +103,15 @@ public class InputSettings {
         for (ActionControllerEnum e : actions.keySet()) {
             if (actions.get(e)[0].getClass().equals(KeyTrigger.class)) {
                 settings.put(e.name(), "k" + ((KeyTrigger) actions.get(e)[0]).getKeyCode());
-            } else {
+            } else if (actions.get(e)[0].getClass().equals(MouseButtonTrigger.class)) {
                 settings.put(e.name(), "m" + ((MouseButtonTrigger) actions.get(e)[0]).getMouseButton());
+            } else {
+                if (((MouseAxisTrigger)actions.get(e)[0]).isNegative()) {
+                    settings.put(e.name(), wheelDown);
+                } else {
+                    settings.put(e.name(), wheelUp);
+                }
+                    
             }
 
             settings.put(e.name() + nameSuffix, actionNames.get(e));
@@ -121,7 +135,7 @@ public class InputSettings {
     
     private void clearActionValue(Map<ActionControllerEnum, Trigger[]> map, Trigger[] value) {
         for (ActionControllerEnum a: map.keySet()) {
-            if (map.get(a)[0].getName().equals(value[0].getName())) {
+            if ((map.get(a).length > 0) && map.get(a)[0].getName().equals(value[0].getName())) {
                 map.put(a, new Trigger[]{});
                 actionNames.put(a, "");
             }
@@ -131,7 +145,7 @@ public class InputSettings {
     
     private void clearAnalogValue(Map<AnalogControllerEnum, Trigger[]> map, Trigger[] value) {
         for (AnalogControllerEnum a: map.keySet()) {
-            if (map.get(a)[0].getName().equals(value[0].getName())) {
+            if ((map.get(a).length > 0) && map.get(a)[0].getName().equals(value[0].getName())) {
                 map.put(a, new Trigger[]{});
                 analogNames.put(a, "");
             }
@@ -184,5 +198,15 @@ public class InputSettings {
         clearActionValue(actions, trigger);
         actions.put(action, trigger);
         actionNames.put(action, mousePrefix + String.valueOf(++key));
+    }
+    
+    public void setMouseWheel(ActionControllerEnum action, boolean dir) {
+        Trigger[] trigger = new Trigger[]{new MouseAxisTrigger(MouseInput.AXIS_WHEEL, dir)};
+        if (dir)             
+            actionNames.put(action, wheelUp);
+         else
+            actionNames.put(action, wheelDown);
+        
+        actions.put(action, trigger);
     }
 }
