@@ -2,6 +2,13 @@
 package edu.teddys.effects;
 
 import com.jme3.bullet.control.GhostControl;
+import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.ParticleMesh;
+import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.material.RenderState.FaceCullMode;
+import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import edu.teddys.callables.AttachToNodeCallable;
@@ -22,7 +29,8 @@ public class RocketShot extends GhostControl implements Effect {
   Node mother;
   RocketParticle particle;
   Vector3f triggerVector;
-//  ParticleEmmitter
+  ParticleEmitter flameEffect;
+  Material flames;
   ParticleCollisionBox partColBox;
   
   
@@ -35,6 +43,29 @@ public class RocketShot extends GhostControl implements Effect {
     mother = new Node("Teddy Rocket");
     particle = new RocketParticle(mother.getName());
     partColBox = new ParticleCollisionBox(mother.getName(), particle);
+    
+    // init particle emitter for rocket flames effect
+    flames = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Particle.j3md");
+    flames.setTexture("Texture", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/Smoke/Smoke.png"));
+    flames.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+    flames.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
+    flames.getAdditionalRenderState().setAlphaTest(true);
+    
+    flameEffect = new ParticleEmitter("Flames", ParticleMesh.Type.Triangle, 10);
+    flameEffect.setMaterial(flames);
+    flameEffect.setImagesX(15); flameEffect.setImagesY(1);
+    flameEffect.setEndColor(new ColorRGBA(1f, 0.5f, 0.5f, 1f));   // red
+    flameEffect.setStartColor(new ColorRGBA(1f, 1f, 1f, 1f)); // yellow-ish
+    flameEffect.getParticleInfluencer().setInitialVelocity(Vector3f.UNIT_X);
+    flameEffect.setStartSize(0.2f);
+    flameEffect.setEndSize(0.02f);
+    flameEffect.setGravity(0,0,0);
+    flameEffect.setLowLife(0.2f);
+    flameEffect.setHighLife(0.3f);
+    flameEffect.getParticleInfluencer().setVelocityVariation(0.1f);  
+    flameEffect.setParticlesPerSec(0);
+    
+    partColBox.getNode().attachChild(flameEffect);
     
     this.setCollisionShape(partColBox.getCollisionShape());
     
@@ -85,6 +116,14 @@ public class RocketShot extends GhostControl implements Effect {
       // store the vector at trigger time, so that the rocket can fly uncontrolled
       triggerVector = new Vector3f(particle.getVector());
       
+      // rotate the partColBox, so that the particle looks good
+      partColBox.getNode().rotateUpTo(particle.getVector());
+      partColBox.getNode().rotate(0f, 0f, -FastMath.HALF_PI);
+      
+      // activate the flameEffect
+      flameEffect.getParticleInfluencer().setInitialVelocity(triggerVector.negate());
+      flameEffect.setParticlesPerSec(10);
+      
       setEnabled(true);
     }
   }
@@ -95,6 +134,9 @@ public class RocketShot extends GhostControl implements Effect {
       
       canShoot = true;
       setEnabled(false);
+      
+      // deactivate the flameEffect
+      flameEffect.setParticlesPerSec(0);
 
       // remove the cube from the field
       Game.getInstance().getApp().enqueue(new DetachFromNodeCallable(
