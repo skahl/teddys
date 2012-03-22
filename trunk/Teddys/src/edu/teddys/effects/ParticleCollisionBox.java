@@ -11,6 +11,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import edu.teddys.controls.GeometryCollisionListener;
+import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
 
 /**
@@ -36,7 +37,7 @@ public class ParticleCollisionBox {
    * @param node
    * @param p 
    */
-  public ParticleCollisionBox(String name, CustomParticle p) {
+  public ParticleCollisionBox(String name, Weapon weapon, CustomParticle p) {
     particle = p;
     particleNode = new Node(name);
     
@@ -51,7 +52,7 @@ public class ParticleCollisionBox {
     
     csBox = new BoxCollisionShape(new Vector3f(box.xExtent, box.yExtent, box.zExtent));
     
-    colListener = new GeometryCollisionListener(particleNode);
+    colListener = new GeometryCollisionListener(particleNode, weapon);
     
     // attach particle and collision box to node
     particleNode.attachChild(particle);

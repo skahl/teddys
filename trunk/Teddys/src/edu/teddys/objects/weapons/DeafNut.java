@@ -13,7 +13,17 @@ import edu.teddys.effects.Effect;
  */
 public class DeafNut implements Weapon {
   
-  DeafNutShot deafNutShot = new DeafNutShot();
+  DeafNutShot deafNutShot;
+  Integer playerID;
+  
+  public DeafNut(Integer playerID) {
+    this.playerID = playerID;
+    deafNutShot = new DeafNutShot(this);
+  }
+  
+  public Integer getPlayerID() {
+    return playerID;
+  }
   
   public String getName() {
     return "Deaf Nut";

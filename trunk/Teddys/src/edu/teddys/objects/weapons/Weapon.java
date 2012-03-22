@@ -21,4 +21,5 @@ public interface Weapon {
   public float getAccuracy();
   public float getFireRate(); // times per second
   public float getSpawningRate();
+  public Integer getPlayerID();
 }

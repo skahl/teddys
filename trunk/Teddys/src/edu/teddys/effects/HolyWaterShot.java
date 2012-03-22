@@ -6,6 +6,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import edu.teddys.callables.AttachToNodeCallable;
 import edu.teddys.callables.DetachFromNodeCallable;
+import edu.teddys.objects.weapons.HolyWater;
 import edu.teddys.states.Game;
 
 
@@ -15,7 +16,7 @@ import edu.teddys.states.Game;
  * @author skahl
  */
 public class HolyWaterShot extends GhostControl implements Effect {
-  
+  HolyWater weapon;
   // control variables
   boolean canShoot;
   
@@ -26,15 +27,15 @@ public class HolyWaterShot extends GhostControl implements Effect {
   ParticleCollisionBox partColBox;
   
   
-  public HolyWaterShot() {
-    
+  public HolyWaterShot(HolyWater weapon) {
+    this.weapon = weapon;
     // init control variables
     canShoot = true;
     
     // init effect attributes
     mother = new Node("Holy Water");
     particle = new HolyWaterParticle(mother.getName());
-    partColBox = new ParticleCollisionBox(mother.getName(), particle);
+    partColBox = new ParticleCollisionBox(mother.getName(), weapon, particle);
     
     this.setCollisionShape(partColBox.getCollisionShape());
     

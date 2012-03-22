@@ -8,6 +8,8 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import edu.teddys.callables.AttachToNodeCallable;
 import edu.teddys.callables.DetachFromNodeCallable;
+import edu.teddys.objects.weapons.DeafNut;
+import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
 
 /**
@@ -18,6 +20,7 @@ import edu.teddys.states.Game;
  */
 public class DeafNutShot extends RigidBodyControl implements Effect {
   
+  DeafNut weapon;
   // control variables
   boolean canShoot;
   
@@ -28,7 +31,9 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
   ParticleCollisionBox partColBox;
   
   
-  public DeafNutShot() {
+  
+  public DeafNutShot(DeafNut weapon) {
+    this.weapon = weapon;
     // init control variables
     canShoot = true;
     
@@ -38,7 +43,7 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
     explosion = new Explosion(1.5f);
     
     particle = new DeafNutParticle(mother.getName());
-    partColBox = new ParticleCollisionBox(mother.getName(), particle);
+    partColBox = new ParticleCollisionBox(mother.getName(), weapon, particle);
     
     this.setCollisionShape(partColBox.getCollisionShape());
     

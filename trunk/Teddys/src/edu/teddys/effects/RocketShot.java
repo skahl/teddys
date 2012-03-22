@@ -14,6 +14,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import edu.teddys.callables.AttachToNodeCallable;
 import edu.teddys.callables.DetachFromNodeCallable;
+import edu.teddys.objects.weapons.Rocket;
 import edu.teddys.states.Game;
 
 /**
@@ -22,7 +23,7 @@ import edu.teddys.states.Game;
  * @author skahl
  */
 public class RocketShot extends GhostControl implements Effect {
-  
+  Rocket weapon;
   // control variables
   boolean canShoot;
   
@@ -37,7 +38,8 @@ public class RocketShot extends GhostControl implements Effect {
   
   
   
-  public RocketShot() {
+  public RocketShot(Rocket weapon) {
+    this.weapon = weapon;
     // init control variables
     canShoot = true;
     
@@ -47,7 +49,7 @@ public class RocketShot extends GhostControl implements Effect {
     
     // init the explosion
     explosion = new Explosion(1f);
-    partColBox = new ParticleCollisionBox(mother.getName(), particle);
+    partColBox = new ParticleCollisionBox(mother.getName(), weapon, particle);
     
     // init particle emitter for rocket flames effect
     flames = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Particle.j3md");

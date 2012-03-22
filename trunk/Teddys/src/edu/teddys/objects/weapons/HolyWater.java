@@ -13,8 +13,17 @@ import edu.teddys.effects.HolyWaterShot;
  */
 public class HolyWater implements Weapon {
   
-  HolyWaterShot holyWater = new HolyWaterShot();
+  HolyWaterShot holyWater;
+  Integer playerID;
   
+  public HolyWater(Integer playerID) {
+    this.playerID = playerID;
+    holyWater = new HolyWaterShot(this);
+  }
+  
+  public Integer getPlayerID() {
+    return playerID;
+  }
   public String getName() {
     return "Holy Water";
   }
