@@ -14,27 +14,20 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 @Serializable
 public class ManMessageSendDamage extends NetworkMessageManipulation {
 
-  private Integer source;
-  private Integer damage;
+  private Integer source = new Integer(0);
+  private Integer damagedTeddy = new Integer(0);
+  private Integer damage = new Integer(0);
   
   public ManMessageSendDamage() {
     super();
   }
 
-  public ManMessageSendDamage(Integer source, Integer clientID, Integer damage) {
-    super(new Integer[]{clientID});
+  public ManMessageSendDamage(Integer source, Integer damagedTeddy, Integer damage) {
+    super();
     this.source = source;
-    if (clientID == null || damage == null || damage <= 0) {
-      throw new InstantiationError("Client or positive damage value must be specified!");
-    }
-    setDamage(damage);
-  }
-
-  public ManMessageSendDamage(Integer source, Integer[] clientIDs, Integer damage) {
-    super(clientIDs);
-    this.source = source;
-    if (clientIDs == null || clientIDs.length < 1 || damage == null || damage <= 0) {
-      throw new InstantiationError("Client or positive damage value must be specified!");
+    this.damagedTeddy = damagedTeddy;
+    if (damagedTeddy == null || damage == null || damage <= 0) {
+      throw new InstantiationError("Teddy ID is null or positive damage value must be specified!");
     }
     setDamage(damage);
   }
@@ -53,5 +46,13 @@ public class ManMessageSendDamage extends NetworkMessageManipulation {
 
   private void setDamage(Integer damage) {
     this.damage = damage;
+  }
+
+  public Integer getDamagedTeddy() {
+    return damagedTeddy;
+  }
+
+  public void setDamagedTeddy(Integer damagedTeddy) {
+    this.damagedTeddy = damagedTeddy;
   }
 }

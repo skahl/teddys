@@ -25,7 +25,7 @@ import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.GSMessageEndGame;
 import edu.teddys.network.messages.server.ManMessageActivateItem;
-import edu.teddys.network.messages.server.ManMessageSendDamage;
+import edu.teddys.network.messages.server.ManMessageSendDamage;se
 import edu.teddys.network.messages.server.ManMessageSetPosition;
 import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;
@@ -179,7 +179,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         if (message instanceof ManMessageSetPosition) {
           ManMessageSetPosition pos = (ManMessageSetPosition) message;
           Player curPlayer = Player.getInstance(pos.getClientID());
-//          curPlayer.getPlayerControl().setWalkDirection(pos.getPosition().subtract(curPlayer.getPlayerControl().getPhysicsLocation()).normalize());
+          curPlayer.getPlayerControl().setWalkDirection(pos.getPosition().subtract(curPlayer.getPlayerControl().getPhysicsLocation()).normalize());
         } else if (message instanceof ManMessageActivateItem) {
           //
           // THE USER HAS TO ACTIVATE THE SPECIFIED ITEM YET
@@ -192,8 +192,11 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // A DAMAGE REQUEST TO BE APPLIED
           //
           ManMessageSendDamage msg = (ManMessageSendDamage) message;
+          
+          //TODO care about the local damage which has been already calculated!
+          
           // Add a painful scar
-          TeddyClient.getInstance().addDamage(msg.getDamage());
+          Player.getInstance(msg.getDamagedTeddy()).addDamage(msg.getDamage());
           try {
             String goodTeddy = Player.getInstance(Player.LOCAL_PLAYER).getData().getName();
             String badTeddy = Player.getInstance(msg.getSource()).getData().getName();

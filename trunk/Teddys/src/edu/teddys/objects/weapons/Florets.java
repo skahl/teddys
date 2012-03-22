@@ -4,6 +4,7 @@
  */
 package edu.teddys.objects.weapons;
 
+import com.jme3.network.serializing.Serializable;
 import edu.teddys.effects.Effect;
 import edu.teddys.effects.FloretsShot;
 import edu.teddys.objects.player.Player;
@@ -12,12 +13,13 @@ import edu.teddys.objects.player.Player;
  *
  * @author cm
  */
+@Serializable
 public class Florets implements Weapon {
   
-  FloretsShot floretsShot;
+  transient FloretsShot floretsShot;
   Player player;
   
-  public Florets(Integer playerID) {
+  public Florets(Player player) {
     this.player = player;
     floretsShot = new FloretsShot(this);
   }

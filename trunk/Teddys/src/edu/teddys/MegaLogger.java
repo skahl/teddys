@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 public class MegaLogger {
 
     private static Logger logger = Logger.getLogger(BaseGame.class);
-    public static MegaLoggerListener listener;
 
     public static Logger getLogger() {
         return logger;

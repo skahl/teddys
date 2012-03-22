@@ -319,4 +319,21 @@ public class Player {
     }
     return null;
   }
+
+  /**
+   * 
+   * Adds the specified damage value to the current teddy. Checks also if
+   * the teddy is dead from now on and notifies all listeners of that fact 
+   * if so.
+   * 
+   * @param damage Positive value as it is the damage to the teddy
+   */
+  public void addDamage(Integer damage) {
+    Integer newHealth = getData().getHealth() - damage;
+    if (newHealth > 0) {
+      getData().setHealth(newHealth);
+      return;
+    }
+    getData().setHealth(0);
+  }
 }
