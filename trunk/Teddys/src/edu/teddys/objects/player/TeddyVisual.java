@@ -211,8 +211,6 @@ public class TeddyVisual {
      * Let the Teddy die!
      */
     public void die() {
-      geo.setCullHint(CullHint.Always);
-      //deathFx.getNode().setCullHint(CullHint.Never);
       deathFx.die();
     }
     

@@ -9,6 +9,7 @@ import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import edu.teddys.callables.AttachToNodeCallable;
 import edu.teddys.states.Game;
 
 /**
@@ -95,6 +96,12 @@ public class TeddyDeath {
      * In order to trigger the effect, call this method.
      */
     public void die() {
+      Vector3f pos = mother.getWorldTranslation();
+      
+      Game.getInstance().getApp().enqueue(new AttachToNodeCallable(
+              Game.getInstance().getRootNode(), mother));
+      
+      mother.setLocalTranslation(pos);
       smoke.emitAllParticles();
       plush.emitAllParticles();
     }

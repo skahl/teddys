@@ -11,6 +11,7 @@ import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.objects.box.items.Item;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.weapons.Weapon;
+import edu.teddys.states.Game;
 import edu.teddys.timer.ClientTimer;
 import java.util.ArrayList;
 import java.util.Date;

@@ -5,6 +5,7 @@
 package edu.teddys.callables;
 
 import edu.teddys.hud.HUDController;
+import edu.teddys.objects.player.Player;
 import java.util.concurrent.Callable;
 
 /**

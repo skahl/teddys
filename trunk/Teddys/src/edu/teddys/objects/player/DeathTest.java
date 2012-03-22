@@ -5,7 +5,9 @@
 package edu.teddys.objects.player;
 
 import edu.teddys.MegaLogger;
+import edu.teddys.callables.TeddyDeadCallable;
 import edu.teddys.network.AttributeListener;
+import edu.teddys.states.Game;
 
 /**
  *
@@ -15,6 +17,8 @@ public class DeathTest implements AttributeListener<Boolean> {
 
   public void attributeChanged(Boolean value) {
     MegaLogger.getLogger().info("Your teddy is dead. Muahahahaha!");
+    
+    Game.getInstance().getApp().enqueue(new TeddyDeadCallable(Player.getInstance(Player.LOCAL_PLAYER)));
   }
   
 }
