@@ -6,6 +6,7 @@ package edu.teddys.objects.weapons;
 
 import edu.teddys.effects.Effect;
 import edu.teddys.effects.HoneyBrewShot;
+import edu.teddys.objects.player.Player;
 
 /**
  *
@@ -14,15 +15,15 @@ import edu.teddys.effects.HoneyBrewShot;
 public class HoneyBrew implements Weapon {
   
   HoneyBrewShot honeyBrew;
-  Integer playerID;
+  Player player;
   
   public HoneyBrew(Integer playerID) {
-    this.playerID = playerID;
+    this.player = player;
     honeyBrew = new HoneyBrewShot(this);
   }
   
   public Integer getPlayerID() {
-    return playerID;
+    return player.getData().getId();
   }
   public String getName() {
     return "Honey Brew";

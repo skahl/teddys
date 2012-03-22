@@ -6,6 +6,7 @@ package edu.teddys.objects.weapons;
 
 import edu.teddys.effects.Effect;
 import edu.teddys.effects.StenGunShot;
+import edu.teddys.objects.player.Player;
 
 /**
  *
@@ -14,10 +15,10 @@ import edu.teddys.effects.StenGunShot;
 public class StenGun implements Weapon {
   
   StenGunShot shot;
-  Integer playerID;
+  Player player;
   
   public StenGun(Integer playerID) {
-    this.playerID = playerID;
+    this.player = player;
     shot = new StenGunShot(this);
   }
   
@@ -50,6 +51,6 @@ public class StenGun implements Weapon {
   }
 
   public Integer getPlayerID() {
-    return playerID;
+    return player.getData().getId();
   }
 }

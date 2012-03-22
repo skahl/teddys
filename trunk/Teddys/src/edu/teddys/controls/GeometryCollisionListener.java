@@ -10,6 +10,7 @@ import com.jme3.math.FastMath;
 import com.jme3.scene.Node;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
+import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
@@ -54,25 +55,27 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
   
   public void collision(PhysicsCollisionEvent event) {
     Integer hitPlayerID = 0;
+    String nodeA = event.getNodeA().getName();
+    String nodeB = event.getNodeB().getName();
     
-    if(event.getNodeA().getName().equals(node.getName())) {
+    if(nodeA.equals(node.getName())) {
       
-      if(event.getNodeB().getName().contains("player")) {
+      if(nodeB.contains("player")) {
         collidedPlayer = true;
         doDamage = true;
         
-        hitPlayerID = Integer.getInteger(event.getNodeB().getName().substring(6));
+        hitPlayerID = Integer.getInteger(nodeB.substring(6));
       }
       
       collided = true;
       
-    } else if(event.getNodeB().getName().contains(node.getName())) {
+    } else if(nodeB.contains(node.getName())) {
       
-      if(event.getNodeA().getName().contains("player")) {
+      if(nodeA.contains("player")) {
         collidedPlayer = true;
         doDamage = true;
         
-        hitPlayerID = Integer.getInteger(event.getNodeA().getName().substring(6));
+        hitPlayerID = Integer.getInteger(nodeA.substring(6));
       }
       
       collided = true;
@@ -95,6 +98,8 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
         // playerID, getroffener playerID, schaden
         ManMessageSendDamage msg = new ManMessageSendDamage(weapon.getPlayerID(), 
                 hitPlayerID, resDamage);
+        
+        TeddyServer.getInstance().send(msg);
       }
     }
   }

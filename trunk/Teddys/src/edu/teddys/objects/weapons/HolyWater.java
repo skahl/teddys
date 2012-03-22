@@ -6,6 +6,7 @@ package edu.teddys.objects.weapons;
 
 import edu.teddys.effects.Effect;
 import edu.teddys.effects.HolyWaterShot;
+import edu.teddys.objects.player.Player;
 
 /**
  *
@@ -14,15 +15,15 @@ import edu.teddys.effects.HolyWaterShot;
 public class HolyWater implements Weapon {
   
   HolyWaterShot holyWater;
-  Integer playerID;
+  Player player;
   
   public HolyWater(Integer playerID) {
-    this.playerID = playerID;
+    this.player = player;
     holyWater = new HolyWaterShot(this);
   }
   
   public Integer getPlayerID() {
-    return playerID;
+    return player.getData().getId();
   }
   public String getName() {
     return "Holy Water";

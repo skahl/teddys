@@ -6,6 +6,7 @@ package edu.teddys.objects.weapons;
 
 import edu.teddys.effects.Effect;
 import edu.teddys.effects.FloretsShot;
+import edu.teddys.objects.player.Player;
 
 /**
  *
@@ -14,15 +15,15 @@ import edu.teddys.effects.FloretsShot;
 public class Florets implements Weapon {
   
   FloretsShot floretsShot;
-  Integer playerID;
+  Player player;
   
   public Florets(Integer playerID) {
-    this.playerID = playerID;
+    this.player = player;
     floretsShot = new FloretsShot(this);
   }
   
   public Integer getPlayerID() {
-    return playerID;
+    return player.getData().getId();
   }
   
   public String getName() {

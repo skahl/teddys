@@ -6,6 +6,7 @@ package edu.teddys.objects.weapons;
 
 import edu.teddys.effects.DeafNutShot;
 import edu.teddys.effects.Effect;
+import edu.teddys.objects.player.Player;
 
 /**
  *
@@ -14,15 +15,15 @@ import edu.teddys.effects.Effect;
 public class DeafNut implements Weapon {
   
   DeafNutShot deafNutShot;
-  Integer playerID;
+  Player player;
   
-  public DeafNut(Integer playerID) {
-    this.playerID = playerID;
+  public DeafNut(Player player) {
+    this.player = player;
     deafNutShot = new DeafNutShot(this);
   }
   
   public Integer getPlayerID() {
-    return playerID;
+    return player.getData().getId();
   }
   
   public String getName() {

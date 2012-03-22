@@ -27,7 +27,7 @@ import java.util.LinkedList;
  *
  * @author besient,skahl,cm
  */
-public class PlayerControl extends CharacterControl implements AnalogListener, ActionListener {
+public class PlayerControl extends CharacterControl {
 
   private Player player;
   private TeddyVisual visual;
@@ -70,7 +70,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     left = new Vector3f(-1, 0, 0);
     right = new Vector3f(1, 0, 0);
     
-    currentWeapon = new DeafNut(player.getData().getId());//new Rocket();//new Florets();//new HoneyBrew();//new HolyWater();//new StenGun();
+    currentWeapon = new DeafNut(player);//new Rocket();//new Florets();//new HoneyBrew();//new HolyWater();//new StenGun();
 
     Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
   }

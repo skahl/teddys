@@ -6,6 +6,7 @@ package edu.teddys.objects.weapons;
 
 import edu.teddys.effects.Effect;
 import edu.teddys.effects.RocketShot;
+import edu.teddys.objects.player.Player;
 
 /**
  *
@@ -14,15 +15,15 @@ import edu.teddys.effects.RocketShot;
 public class Rocket implements Weapon {
   
   RocketShot rocketShot;
-  Integer playerID;
+  Player player;
   
   public Rocket(Integer playerID) {
-    this.playerID = playerID;
+    this.player = player;
     rocketShot = new RocketShot(this);
   }
   
   public Integer getPlayerID() {
-    return playerID;
+    return player.getData().getId();
   }
   public String getName() {
     return "Teddy Rocket";
