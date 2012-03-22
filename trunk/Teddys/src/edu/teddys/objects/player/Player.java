@@ -12,6 +12,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import edu.teddys.MegaLogger;
+import edu.teddys.callables.TeddyDeadCallable;
 import edu.teddys.controls.PlayerControl;
 import edu.teddys.input.CrosshairControl;
 import edu.teddys.network.ClientData;
@@ -335,5 +336,7 @@ public class Player {
       return;
     }
     getData().setHealth(0);
+    
+    Game.getInstance().getApp().enqueue(new TeddyDeadCallable(Player.getInstance(getData().getId())));
   }
 }

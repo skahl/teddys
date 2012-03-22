@@ -239,8 +239,8 @@ public class BaseGame extends SimpleApplication {
         return;
       }
       // Create the listeners for the client
-      client.registerListener(TeddyClient.ListenerFields.health, new HealthListener());
-      client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
+//      client.registerListener(TeddyClient.ListenerFields.health, new HealthListener());
+//      client.registerListener(TeddyClient.ListenerFields.isDead, new DeathTest());
     }
 
     // # # # # # # # # # # # # # # GAME # # # # # # # # # # # # # # # #

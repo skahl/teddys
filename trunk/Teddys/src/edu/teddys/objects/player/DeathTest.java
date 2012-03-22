@@ -18,7 +18,6 @@ public class DeathTest implements AttributeListener<Boolean> {
   public void attributeChanged(Boolean value) {
     MegaLogger.getLogger().info("Your teddy is dead. Muahahahaha!");
     
-    Game.getInstance().getApp().enqueue(new TeddyDeadCallable(Player.getInstance(Player.LOCAL_PLAYER)));
   }
   
 }

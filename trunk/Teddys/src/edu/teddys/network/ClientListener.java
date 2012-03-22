@@ -25,7 +25,7 @@ import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.GSMessageEndGame;
 import edu.teddys.network.messages.server.ManMessageActivateItem;
-import edu.teddys.network.messages.server.ManMessageSendDamage;se
+import edu.teddys.network.messages.server.ManMessageSendDamage;
 import edu.teddys.network.messages.server.ManMessageSetPosition;
 import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;

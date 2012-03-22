@@ -45,7 +45,6 @@ public class HUDController extends UpdateControl implements ActionListener {
         Game.getInstance().getApp().enqueue(new SetHealthCallable(value));
       }
     };
-    TeddyClient.getInstance().registerListener(TeddyClient.ListenerFields.health, healthListener);
 
     currentItemListener = new AttributeListener() {
 
