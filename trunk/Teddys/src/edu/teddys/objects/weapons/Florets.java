@@ -13,7 +13,17 @@ import edu.teddys.effects.FloretsShot;
  */
 public class Florets implements Weapon {
   
-  FloretsShot floretsShot = new FloretsShot();
+  FloretsShot floretsShot;
+  Integer playerID;
+  
+  public Florets(Integer playerID) {
+    this.playerID = playerID;
+    floretsShot = new FloretsShot(this);
+  }
+  
+  public Integer getPlayerID() {
+    return playerID;
+  }
   
   public String getName() {
     return "Florets";

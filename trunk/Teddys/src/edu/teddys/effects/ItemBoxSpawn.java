@@ -33,7 +33,7 @@ public class ItemBoxSpawn extends RigidBodyControl implements Effect {
     // init effect attributes
     mother = new Node("Item Box");
     particle = new ItemBoxParticle(mother.getName());
-    partColBox = new ParticleCollisionBox(mother.getName(), particle);
+    partColBox = new ParticleCollisionBox(mother.getName(), null, particle);
     
     this.setCollisionShape(partColBox.getCollisionShape());
     

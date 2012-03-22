@@ -12,6 +12,16 @@ import edu.teddys.effects.Effect;
  */
 public class SniperRifle implements Weapon {
   
+  Integer playerID;
+  
+  public SniperRifle(Integer playerID) {
+    this.playerID = playerID;
+  }
+  
+  public Integer getPlayerID() {
+    return playerID;
+  }
+  
   public String getName() {
     return "Sniper Rifle";
   }

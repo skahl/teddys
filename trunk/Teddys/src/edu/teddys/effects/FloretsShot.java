@@ -8,6 +8,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import edu.teddys.callables.AttachToNodeCallable;
 import edu.teddys.callables.DetachFromNodeCallable;
+import edu.teddys.objects.weapons.Florets;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ClientTimer;
 import edu.teddys.timer.ServerTimer;
@@ -19,6 +20,7 @@ import edu.teddys.timer.ServerTimer;
  * @author skahl
  */
 public class FloretsShot extends GhostControl implements Effect {
+  Florets weapon;
   
   // control variables
   boolean canShoot;
@@ -31,15 +33,15 @@ public class FloretsShot extends GhostControl implements Effect {
   ParticleCollisionBox partColBox;
   
   
-  public FloretsShot() {
-    
+  public FloretsShot(Florets weapon) {
+    this.weapon = weapon;
     // init control variables
     canShoot = true;
     
     // init effect attributes
     mother = new Node("Florets");
     particle = new FloretsParticle(mother.getName());
-    partColBox = new ParticleCollisionBox(mother.getName(), particle);
+    partColBox = new ParticleCollisionBox(mother.getName(), weapon, particle);
     
     this.setCollisionShape(partColBox.getCollisionShape());
     

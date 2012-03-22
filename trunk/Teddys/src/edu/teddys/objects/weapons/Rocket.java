@@ -13,8 +13,17 @@ import edu.teddys.effects.RocketShot;
  */
 public class Rocket implements Weapon {
   
-  RocketShot rocketShot = new RocketShot();
-
+  RocketShot rocketShot;
+  Integer playerID;
+  
+  public Rocket(Integer playerID) {
+    this.playerID = playerID;
+    rocketShot = new RocketShot(this);
+  }
+  
+  public Integer getPlayerID() {
+    return playerID;
+  }
   public String getName() {
     return "Teddy Rocket";
   }

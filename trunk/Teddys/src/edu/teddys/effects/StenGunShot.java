@@ -9,6 +9,7 @@ import com.jme3.scene.Node;
 import edu.teddys.MegaLogger;
 import edu.teddys.callables.AttachToNodeCallable;
 import edu.teddys.callables.DetachFromNodeCallable;
+import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.states.Game;
 
 /**
@@ -17,7 +18,7 @@ import edu.teddys.states.Game;
  * @author skahl
  */
 public class StenGunShot extends GhostControl implements Effect {
-  
+  StenGun weapon;
   // control variables
   boolean canShoot;
   
@@ -30,7 +31,8 @@ public class StenGunShot extends GhostControl implements Effect {
   
   
   
-  public StenGunShot() {
+  public StenGunShot(StenGun weapon) {
+    this.weapon = weapon;
     // init control variables
     canShoot = true;
     triggerVector = Vector3f.UNIT_X;
@@ -38,7 +40,7 @@ public class StenGunShot extends GhostControl implements Effect {
     // init effect attributes
     mother = new Node("Sten Gun");
     particle = new StenGunParticle(mother.getName());
-    partColBox = new ParticleCollisionBox(mother.getName(), particle);
+    partColBox = new ParticleCollisionBox(mother.getName(), weapon, particle);
     
     this.setCollisionShape(partColBox.getCollisionShape());
     

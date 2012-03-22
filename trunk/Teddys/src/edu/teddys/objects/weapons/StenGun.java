@@ -14,9 +14,11 @@ import edu.teddys.effects.StenGunShot;
 public class StenGun implements Weapon {
   
   StenGunShot shot;
+  Integer playerID;
   
-  public StenGun() {
-    shot = new StenGunShot();
+  public StenGun(Integer playerID) {
+    this.playerID = playerID;
+    shot = new StenGunShot(this);
   }
   
   public String getName() {
@@ -45,5 +47,9 @@ public class StenGun implements Weapon {
 
   public Effect getEffect() {
     return shot;
+  }
+
+  public Integer getPlayerID() {
+    return playerID;
   }
 }
