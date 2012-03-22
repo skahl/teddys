@@ -45,6 +45,16 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
   }
   
   @Override
+  public void update(float tpf) {
+    super.update(tpf);
+    
+    if(partColBox.collidedPlayer()) {
+      reset();
+    }
+  }
+
+  
+  @Override
   public void trigger() {
         
     if(canShoot) {

@@ -2,6 +2,7 @@
 .DS_STORE
 *.jar
 private.properties
+private.xml
 build.xml
 dist/
 build/

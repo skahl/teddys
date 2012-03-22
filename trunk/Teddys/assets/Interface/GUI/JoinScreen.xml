@@ -34,7 +34,7 @@
             
         </panel>
         <panel id="mid_panel" backgroundColor="#888f"  height="100%" width="5%" align="center" childLayout="vertical"/>
-        <panel id="entries_mid_panel" backgroundColor="#0008" height="100%" width="60%" align="center" childLayout="vertical">
+        <panel id="entries_mid_panel" backgroundColor="#333f" height="100%" width="60%" align="center" childLayout="vertical">
             <text text="choose server" font="Interface/Fonts/Default.fnt" align="left"/>
             <control id="server_list_box" name="listBox" vertical="optional" horizontal="optional" displayItems="10" />
             <panel id="ip_field_panel" childLayout="horizontal">

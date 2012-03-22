@@ -6,10 +6,10 @@ import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
-import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import edu.teddys.states.Game;
 
 /**
  * When a Teddy dies, he vanishes with a puff of smoke and leaves a cloud of plush.
@@ -28,9 +28,10 @@ public class TeddyDeath {
     
     
     
-    public TeddyDeath(AssetManager assetManager) {
+    public TeddyDeath() {
+            
       mother = new Node("DeathNode");
-      this.assetManager = assetManager;
+      this.assetManager = Game.getInstance().getAssetManager();
 
       int numSmoke = 8;
       int numPlush = 10;

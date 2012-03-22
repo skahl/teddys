@@ -6,41 +6,43 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import edu.teddys.MegaLogger;
 import edu.teddys.callables.AttachToNodeCallable;
 import edu.teddys.callables.DetachFromNodeCallable;
 import edu.teddys.states.Game;
+import edu.teddys.timer.ClientTimer;
+import edu.teddys.timer.ServerTimer;
+
 
 /**
- * Implements the RocketShot Effect. Triggering an unstoppable rocket. Smoke appears. 
+ * Implements the HolyWaterShot Effect. Triggering a splash of holy water. Water disappears on impact. 
  * 
  * @author skahl
  */
-public class StenGunShot extends GhostControl implements Effect {
+public class FloretsShot extends GhostControl implements Effect {
   
   // control variables
   boolean canShoot;
+  float tickCounter = 0f;
   
   // Effect attributes
   Node mother;
-  StenGunParticle particle;
-  Vector3f triggerVector;
+  FloretsParticle particle;
 //  ParticleEmmitter
   ParticleCollisionBox partColBox;
   
   
-  
-  public StenGunShot() {
+  public FloretsShot() {
+    
     // init control variables
     canShoot = true;
-    triggerVector = Vector3f.UNIT_X;
     
     // init effect attributes
-    mother = new Node("Sten Gun");
-    particle = new StenGunParticle(mother.getName());
+    mother = new Node("Florets");
+    particle = new FloretsParticle(mother.getName());
     partColBox = new ParticleCollisionBox(mother.getName(), particle);
     
     this.setCollisionShape(partColBox.getCollisionShape());
+    
     
     partColBox.getNode().addControl(this);
   }
@@ -49,49 +51,34 @@ public class StenGunShot extends GhostControl implements Effect {
   public void update(float tpf) {
     super.update(tpf);
     
-    if(partColBox.collided()) {
-      if(partColBox.collidedPlayer()) {
-        
-      }
-      
+    if(partColBox.collidedPlayer()) {
       reset();
     } else {
-      
-      // linear force to apply
-      Vector3f force = triggerVector;
-      // apply velocity
-      force = force.mult(particle.getVelocity());
-      
-      force = force.mult(tpf);
-      
-      partColBox.getNode().move(force);
+      // movement
+      tickCounter += tpf;
+      Vector3f mov = new Vector3f(0f, FastMath.sin(tickCounter)*0.005f, 0f);
+      partColBox.getNode().move(mov);
     }
   }
-
   
   @Override
   public void trigger() {
     
     if(canShoot) {
       canShoot = false;
-      
-      
+            
       // attach the collision cube to the root node, not the player node!
       Game.getInstance().getApp().enqueue(new AttachToNodeCallable(
               Game.getInstance().getRootNode(), partColBox.getNode()));
       
-      
       Vector3f loc = mother.getWorldTranslation();
-      loc.addLocal(particle.getVector());
-      
+      Quaternion rot = mother.getLocalRotation();
+      if(particle.getVector().x > 0f) {
+        loc.addLocal(0.8f, 0.2f, 0f);
+      } else {
+        loc.addLocal(-0.8f, 0.2f, 0f);
+      }
       partColBox.getNode().setLocalTranslation(loc);
-      
-      // store the vector at trigger time, so that the gunshot can fly uncontrolled
-      triggerVector = new Vector3f(particle.getVector());
-      
-      // rotate the partColBox, so that the particle looks good
-      partColBox.getNode().rotateUpTo(particle.getVector());
-      partColBox.getNode().rotate(0f, 0f, -FastMath.HALF_PI);
       
       setEnabled(true);
     }
@@ -101,13 +88,18 @@ public class StenGunShot extends GhostControl implements Effect {
   public void reset() {
     if(!canShoot) {
       
-      canShoot = true;
-      setEnabled(false);
+      if(partColBox.collidedPlayer()) {
+        canShoot = true;
+        setEnabled(false);
 
-      // remove the cube from the field
-      Game.getInstance().getApp().enqueue(new DetachFromNodeCallable(
-              Game.getInstance().getRootNode(), partColBox.getNode()));
-      
+        // remove the cube from the field
+        Game.getInstance().getApp().enqueue(new DetachFromNodeCallable(
+                Game.getInstance().getRootNode(), partColBox.getNode()));
+        
+        // reset control variables
+        tickCounter = 0f;
+        
+      }
     }
   }
   
@@ -124,7 +116,6 @@ public class StenGunShot extends GhostControl implements Effect {
     return super.isEnabled();
   }
 
-
   public Node getNode() {
     return mother;
   }
@@ -134,7 +125,6 @@ public class StenGunShot extends GhostControl implements Effect {
   }
 
   public void setVector(Vector3f vector) {
-    
     particle.setVector(vector);
   }
 

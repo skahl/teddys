@@ -13,7 +13,12 @@ import edu.teddys.input.InputType;
 import edu.teddys.input.InputTuple;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.player.TeddyVisual;
+import edu.teddys.objects.weapons.DeafNut;
+import edu.teddys.objects.weapons.Florets;
+import edu.teddys.objects.weapons.HolyWater;
+import edu.teddys.objects.weapons.HoneyBrew;
 import edu.teddys.objects.weapons.Rocket;
+import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
 import java.util.LinkedList;
@@ -24,6 +29,7 @@ import java.util.LinkedList;
  */
 public class PlayerControl extends CharacterControl implements AnalogListener, ActionListener {
 
+  private Player player;
   private TeddyVisual visual;
   // screen positions of cursor and player
   private Vector2f vectorPlayerToCursor = new Vector2f(1f, 0f);
@@ -57,6 +63,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
   public PlayerControl(Player player, CollisionShape collisionShape, float stepHeight, TeddyVisual vis) {
     super(collisionShape, stepHeight);
     
+    this.player = player;
     visual = vis;
     serverControlInput = new LinkedList<InputTuple>();
 
@@ -64,7 +71,7 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     right = new Vector3f(1, 0, 0);
     
     // Initialize the currentWeapon with a Sten Gun
-    currentWeapon = new Rocket();//new HoneyBrew();//new HolyWater();//new StenGun();
+    currentWeapon = new DeafNut();//new Rocket();//new Florets();//new HoneyBrew();//new HolyWater();//new StenGun();
     Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
   }
 

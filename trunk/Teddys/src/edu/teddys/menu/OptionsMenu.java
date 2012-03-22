@@ -18,7 +18,6 @@ import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
 import edu.teddys.BaseGame;
 import edu.teddys.SupportedSettings;
 import edu.teddys.input.InputSettings;
@@ -29,10 +28,8 @@ import java.util.Arrays;
  *
  * @author besient
  */
-public class OptionsMenu implements ScreenController, RawInputListener {
+public class OptionsMenu extends MessagePopupController implements RawInputListener {
 
-    private Nifty nifty;
-    private Screen screen;
     private Application app;
     
     private Element inputPopup, unsupported_popup, systemLayer, controlsLayer;
@@ -53,11 +50,13 @@ public class OptionsMenu implements ScreenController, RawInputListener {
     
     private SettingLayers activeLayer = SettingLayers.SYSTEM;
      
+    @Override
     public void bind(Nifty nifty, Screen screen) {
-        this.nifty = nifty;
-        this.screen = screen;
-        inputPopup = nifty.createPopup("INPUT_POPUP");
-        //unsupported_popup = nifty.createPopup("UNSUPPORTED_POPUP");
+
+        super.bind(nifty, screen);
+        
+        inputPopup = nifty.createPopup(PopupTypes.INPUT_POPUP.name());
+        unsupported_popup = nifty.createPopup("UNSUPPORTED_POPUP");
         systemLayer = nifty.getScreen("OPTIONS_MENU").findElementByName("system_layer");
         controlsLayer = nifty.getScreen("OPTIONS_MENU").findElementByName("controls_layer");    
         
@@ -74,7 +73,10 @@ public class OptionsMenu implements ScreenController, RawInputListener {
         
         fullscreen_cb = screen.findNiftyControl("FULLSCREEN_CHECKBOX", CheckBox.class);
         vsync_cb = screen.findNiftyControl("VSYNC_CHECKBOX", CheckBox.class);
+        
+        loadKeys();
     }
+    
     
     public void setApplication(Application app) {
         this.app = app;
@@ -99,15 +101,14 @@ public class OptionsMenu implements ScreenController, RawInputListener {
                 .getRenderer(TextRenderer.class).setText(settings.getName(AnalogControllerEnum.MOVE_RIGHT));
         nifty.getScreen("OPTIONS_MENU").findElementByName("WEAPON_LABEL")
                 .getRenderer(TextRenderer.class).setText(settings.getName(AnalogControllerEnum.WEAPON));
+        nifty.getScreen("OPTIONS_MENU").findElementByName("NEXT_WEAPON_LABEL")
+                .getRenderer(TextRenderer.class).setText(settings.getName(ActionControllerEnum.NEXT_WEAPON));
+        nifty.getScreen("OPTIONS_MENU").findElementByName("PREVIOUS_WEAPON_LABEL")
+                .getRenderer(TextRenderer.class).setText(settings.getName(ActionControllerEnum.PREVIOUS_WEAPON));
+        
+        
         }
 
-    public void onStartScreen() {
-        loadKeys();
-    }    
-        
-    public void onEndScreen() {
-        
-    }
     
     public void back() {
         nifty.gotoScreen(MenuTypes.MAIN_MENU.name());
@@ -157,16 +158,14 @@ public class OptionsMenu implements ScreenController, RawInputListener {
                         bpp_dd.getSelection(), aa_dd.getSelection(), 
                         SupportedSettings.getFrequencies(resolution_dd.getSelection())[0], 
                         fullscreen_cb.isChecked(), vsync_cb.isChecked());
-                //if (!valid) nifty.showPopup(nifty.getCurrentScreen(), unsupported_popup.getId(), null);
+                if (!valid) nifty.showPopup(nifty.getCurrentScreen(), unsupported_popup.getId(), null);
        }
     }
     
     public void onKeyEvent(KeyInputEvent evt) {
-        String keyChar;
-        if (evt.getKeyChar() == ' ') {
-            keyChar = String.valueOf(evt.getKeyCode());
-        } else {
-            keyChar = String.valueOf(evt.getKeyChar());
+        String keyChar = String.valueOf(evt.getKeyChar());
+        if (keyChar.equals(" ")) {
+            keyChar = String.valueOf(evt.getKeyCode());            
         }
         if (selectAnalog != null) {
             InputSettings.getInstance().setKey(selectAnalog, evt.getKeyCode(), keyChar);
@@ -198,11 +197,19 @@ public class OptionsMenu implements ScreenController, RawInputListener {
     }
     
     public void onMouseMotionEvent(MouseMotionEvent evt) {
-        if (evt.getDeltaWheel() > 0) {
+        int delta = evt.getDeltaWheel();
+        if (delta != 0 && (selectAction != null)) {
+            if (delta < 0)
+                InputSettings.getInstance().setMouseWheel(selectAction, false);
+            else 
+                InputSettings.getInstance().setMouseWheel(selectAction, true);
             
-        } else if (evt.getDeltaWheel() < 0) {
-            
-        }
+            evt.setConsumed();
+            app.getInputManager().removeRawInputListener(this);
+            nifty.closePopup(inputPopup.getId());
+            loadKeys();
+        }      
+        
     }
 
     public void beginInput() {

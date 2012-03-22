@@ -5,7 +5,7 @@
     <useControls filename="nifty-default-controls.xml"/>
     <useStyles filename="nifty-default-styles.xml"/>
   
-    <popup id="EXIT_POPUP" childLayout="center" controller="edu.teddys.menu.MainMenu">
+    <popup id="EXIT_POPUP" childLayout="center" >
         <panel id="popup_panel" style="nifty-panel-red" height="25%" width="35%" align="center" childLayout="vertical" visibleToMouse="true"> 
             
             <text text="Really want to quit?" align="center" font="Interface/Fonts/Default.fnt"/>
@@ -74,10 +74,22 @@
     <popup id="UNSUPPORTED_POPUP" childLayout="center" controller="edu.teddys.menu.MainMenu">
         <panel id="popup_panel" style="nifty-panel-red" height="25%" width="35%" align="center" childLayout="vertical"> 
             
-            <text text="Press any key" align="center" font="Interface/Fonts/Default.fnt"/>
-            
-            <control name="button" label="Ok" id="ok_button"  visibleToMouse="true">
+            <text text="Unsupported selection!" id="text" align="center" font="Interface/Fonts/Default.fnt"/>
+            <panel id="spacer" height="50%"/>
+            <control name="button" label="Ok" id="ok_button"  align="center" visibleToMouse="true">
                 <interact onRelease="closePopup()"/>
+            </control>
+                      
+        </panel>
+    </popup>
+    
+    <popup id="MESSAGE_POPUP" childLayout="center">
+        <panel id="popup_panel" style="nifty-panel-red" height="25%" width="35%" align="center" childLayout="vertical"> 
+            
+            <text text="" id="text" align="center" font="Interface/Fonts/Default.fnt"/>
+            <panel id="spacer" height="50%"/>
+            <control name="button" label="Ok" id="ok_button"  align="center" visibleToMouse="true">
+                <interact onRelease="closeMessagePopup()"/>
             </control>
                       
         </panel>

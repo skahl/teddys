@@ -5,24 +5,14 @@
 package edu.teddys.menu;
 
 import com.jme3.app.Application;
-import com.jme3.app.state.AbstractAppState;
-import com.jme3.app.state.AppStateManager;
 import com.jme3.input.InputManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.nifty.screen.ScreenController;
-import edu.teddys.BaseGame;
-import edu.teddys.hud.HUDController;
-import edu.teddys.menu.MenuTypes;
-
 /**
  *
  * @author besient
  */
-public class PauseMenu implements ScreenController {
-
-    private Nifty nifty;
-    private Screen screen;
+public class PauseMenu extends MessagePopupController {
     
     private Application app;
     
@@ -30,18 +20,11 @@ public class PauseMenu implements ScreenController {
     
     private boolean enabled;
     
+    @Override
     public void bind(Nifty nifty, Screen screen) {
-        this.nifty = nifty;
-        this.screen = screen;
+        super.bind(nifty, screen);
     }
 
-    public void onStartScreen() {
-        
-    }
-
-    public void onEndScreen() {
-        
-    }
 
     public void setApplication(Application app) {
         this.app = app;
