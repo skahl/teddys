@@ -34,7 +34,6 @@ import edu.teddys.network.messages.NetworkMessageResponse;
 import edu.teddys.network.messages.client.GSMessageGamePaused;
 import edu.teddys.network.messages.client.GSMessagePlayerReady;
 import edu.teddys.network.messages.client.ManControllerInput;
-import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
@@ -125,7 +124,6 @@ public class BaseGame extends SimpleApplication {
     // Set the log level to ALL in order to be informed of all loggable events
     MegaLogger.getLogger().setLevel(Level.ALL);
     PatternLayout basicLayout = new PatternLayout("%d{ISO8601} %-5p (%F:%L): %m%n");
-    PatternLayout guiLayout = new PatternLayout("%d{ISO8601} %-3p %m%n");
     // Set up a daily log file. If a new day has begun, empty the log file and
     // save it with the specified date format in logs/.
     try {
@@ -136,8 +134,6 @@ public class BaseGame extends SimpleApplication {
     }
     // add the console logger with the specified layout
     MegaLogger.getLogger().addAppender(new ConsoleAppender(basicLayout));
-    // add the custom appender to react to some infos
-    MegaLogger.getLogger().addAppender(new MegaLoggerListener(guiLayout));
 
     AppSettings settings = new AppSettings(true);
 
@@ -271,7 +267,6 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(GSMessageGamePaused.class);
     Serializer.registerClass(GSMessagePlayerReady.class);
     Serializer.registerClass(ManControllerInput.class);
-    Serializer.registerClass(ManMessageTriggerWeapon.class);
     Serializer.registerClass(ResMessageMapLoaded.class);
     Serializer.registerClass(ResMessageSendChecksum.class);
     Serializer.registerClass(ResMessageSendClientData.class);
@@ -295,6 +290,9 @@ public class BaseGame extends SimpleApplication {
   private void initGUI() {
     niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
     nifty = niftyDisplay.getNifty();
+    // add the custom appender to react to some infos
+    PatternLayout guiLayout = new PatternLayout("%d{ISO8601} %-3p %m%n");
+    MegaLogger.getLogger().addAppender(new MegaLoggerListener(guiLayout, nifty));
     guiViewPort.addProcessor(niftyDisplay);
  
     nifty.addXml("Interface/GUI/MainMenuScreen.xml");

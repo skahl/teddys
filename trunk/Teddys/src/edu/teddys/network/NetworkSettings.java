@@ -14,19 +14,12 @@ public class NetworkSettings {
   /**
    * The default value for server connection. Used for development issues yet.
    */
+//  public static final String DEFAULT_SERVER = "192.168.4.1";
   public static final String DEFAULT_SERVER = "127.0.0.1";
-  /**
-   * The default IP for the local server.
-   */
-  public static final String LOCAL_IP = "127.0.0.1";
   /**
    * The port on which the socket will be opened.
    */
   public static final Integer SERVER_PORT = 6100;
-  /**
-   * The port on which the socket will be opened.
-   */
-  public static final Integer LOCAL_SERVER_PORT = 6101;
   /**
    * Use encryption for the whole communication.
    */

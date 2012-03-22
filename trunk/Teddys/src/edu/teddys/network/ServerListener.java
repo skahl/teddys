@@ -17,7 +17,6 @@ import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.GSMessagePlayerReady;
 import edu.teddys.network.messages.client.ManControllerInput;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
-import edu.teddys.network.messages.client.ManMessageTriggerWeapon;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
@@ -195,18 +194,6 @@ public class ServerListener implements MessageListener<HostedConnection> {
 
         // refresh the player's action
         Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
-      } else if (message instanceof ManMessageTriggerWeapon) {
-        //
-        // USER WANTS TO GET NASTY (-> WEAPONS)
-        //
-        //MegaLogger.getLogger().debug("A weapon was triggered! " + message);
-        //TODO read the target list, calculate the damage 
-        // and send them to the appropriate clients
-        //TODO This is a TEST
-//        for (Integer clientID : TeddyServer.getInstance().getClientIDs()) {
-//          ManMessageSendDamage damMsg = new ManMessageSendDamage(clientID, 25);
-//          TeddyServer.getInstance().send(damMsg);
-//        }
       }
       //TODO check if trigger effect is also possible for clients
     }

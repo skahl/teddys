@@ -71,7 +71,8 @@ public class PlayerControl extends CharacterControl implements AnalogListener, A
     right = new Vector3f(1, 0, 0);
     
     // Initialize the currentWeapon with a Sten Gun
-    currentWeapon = new DeafNut();//new Rocket();//new Florets();//new HoneyBrew();//new HolyWater();//new StenGun();
+//    currentWeapon = new DeafNut();
+    currentWeapon = new Rocket();//new Florets();//new HoneyBrew();//new HolyWater();//new StenGun();
     Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
   }
 

@@ -4,6 +4,7 @@
  */
 package edu.teddys;
 
+import de.lessvoid.nifty.Nifty;
 import edu.teddys.hud.HUDController;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
@@ -16,9 +17,12 @@ import org.apache.log4j.spi.LoggingEvent;
  * @author cm
  */
 public class MegaLoggerListener extends AppenderSkeleton {
+  
+  private Nifty nifty;
 
-  public MegaLoggerListener(Layout layout) {
+  public MegaLoggerListener(Layout layout, Nifty nifty) {
     this.layout = layout;
+    this.nifty = nifty;
     this.name = getClass().getSimpleName();
   }
   

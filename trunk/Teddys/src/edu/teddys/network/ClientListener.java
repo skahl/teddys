@@ -178,7 +178,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       } else if (message instanceof NetworkMessageManipulation) {
         if (message instanceof ManMessageSetPosition) {
           ManMessageSetPosition pos = (ManMessageSetPosition) message;
-          Player.getInstance(pos.getClientID()).getPlayerControl().setPhysicsLocation(pos.getPosition());
+          Player curPlayer = Player.getInstance(pos.getClientID());
+//          curPlayer.getPlayerControl().setWalkDirection(pos.getPosition().subtract(curPlayer.getPlayerControl().getPhysicsLocation()).normalize());
         } else if (message instanceof ManMessageActivateItem) {
           //
           // THE USER HAS TO ACTIVATE THE SPECIFIED ITEM YET
