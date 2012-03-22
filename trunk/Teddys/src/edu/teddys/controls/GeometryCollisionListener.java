@@ -54,17 +54,18 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
   }
   
   public void collision(PhysicsCollisionEvent event) {
-    Integer hitPlayerID = 0;
     String nodeA = event.getNodeA().getName();
     String nodeB = event.getNodeB().getName();
     
     if(nodeA.equals(node.getName())) {
       
       if(nodeB.contains("player")) {
-        collidedPlayer = true;
-        doDamage = true;
-        
-        hitPlayerID = Integer.getInteger(nodeB.substring(6));
+        if(!collidedPlayer) {
+          collidedPlayer = true;
+          Integer hitPlayerID = Integer.parseInt(nodeB.substring(6));
+          
+          trigger(hitPlayerID);
+        }
       }
       
       collided = true;
@@ -72,36 +73,17 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
     } else if(nodeB.contains(node.getName())) {
       
       if(nodeA.contains("player")) {
-        collidedPlayer = true;
-        doDamage = true;
-        
-        hitPlayerID = Integer.getInteger(nodeA.substring(6));
+        if(!collidedPlayer) {
+          collidedPlayer = true;
+          Integer hitPlayerID = Integer.parseInt(nodeA.substring(6));
+          
+          trigger(hitPlayerID);
+        }
       }
       
       collided = true;
     }
     
-    if(doDamage) {
-      doDamage = false;
-      
-      MegaLogger.getLogger().info("player"+hitPlayerID+" was hit by "+node.getName());
-
-      if(weapon != null) {
-        // damage calculation
-        RandomDataImpl rnd = new RandomDataImpl();
-        Float weaponDamage = FastMath.abs((float)rnd.nextGaussian(weapon.getBaseDamage(), GameSettings.DAMAGE_SIGMA));
-        Float weaponAccuracy = FastMath.abs((float)rnd.nextGaussian(weapon.getAccuracy(), GameSettings.DAMAGE_SIGMA));
-        Float damage = GameSettings.DAMAGE_MAX * weaponDamage * weaponAccuracy;
-
-        int resDamage = (int) Math.ceil(damage);
-
-        // playerID, getroffener playerID, schaden
-        ManMessageSendDamage msg = new ManMessageSendDamage(weapon.getPlayerID(), 
-                hitPlayerID, resDamage);
-        
-        TeddyServer.getInstance().send(msg);
-      }
-    }
   }
   
   public boolean collided() {
@@ -115,5 +97,23 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
   private void reset() {
     collided = false;
     collidedPlayer = false;
+  }
+  
+  private void trigger(Integer hitPlayerID) {
+    if(weapon != null) {
+        
+        // damage calculation
+        RandomDataImpl rnd = new RandomDataImpl();
+        Float weaponDamage = FastMath.abs((float)rnd.nextGaussian(weapon.getBaseDamage(), GameSettings.DAMAGE_SIGMA));
+        Float weaponAccuracy = FastMath.abs((float)rnd.nextGaussian(weapon.getAccuracy(), GameSettings.DAMAGE_SIGMA));
+        Float damage = GameSettings.DAMAGE_MAX * weaponDamage * weaponAccuracy;
+
+        int resDamage = (int) Math.ceil(damage);
+
+        ManMessageSendDamage msg = new ManMessageSendDamage(weapon.getPlayerID(), 
+                hitPlayerID, resDamage);
+        
+        TeddyServer.getInstance().send(msg);
+      }
   }
 }
