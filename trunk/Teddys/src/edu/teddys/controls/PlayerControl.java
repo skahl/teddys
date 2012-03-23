@@ -2,8 +2,6 @@ package edu.teddys.controls;
 
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.AnalogListener;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import edu.teddys.MegaLogger;
@@ -14,11 +12,6 @@ import edu.teddys.input.InputTuple;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.player.TeddyVisual;
 import edu.teddys.objects.weapons.DeafNut;
-import edu.teddys.objects.weapons.Florets;
-import edu.teddys.objects.weapons.HolyWater;
-import edu.teddys.objects.weapons.HoneyBrew;
-import edu.teddys.objects.weapons.Rocket;
-import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
 import java.util.LinkedList;
@@ -252,8 +245,11 @@ public class PlayerControl extends CharacterControl {
    * @param playerPos
    * @param cursorPos 
    */
-  public void setScreenPositions(Vector2f playerPos, Vector2f cursorPos) {
-    vectorPlayerToCursor = (cursorPos.subtract(playerPos)).normalizeLocal();
+  public void setScreenPositions(Vector2f cursorPos) {
+    
+    Vector3f playerPos = Game.getInstance().getApp().getCamera().getScreenCoordinates(player.getNode().getWorldTranslation());
+    
+    vectorPlayerToCursor = (cursorPos.subtract(new Vector2f(playerPos.x, playerPos.y))).normalizeLocal();
     currentWeapon.getEffect().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
   }
 
@@ -311,8 +307,10 @@ public class PlayerControl extends CharacterControl {
         // inform the visual representation of this player about the view vector
         visual.setViewVector(vectorPlayerToCursor);
         
-        // update HUD 
-        HUDController.getInstance().setJetpackEnergy((int) currentEnergy);
+        // update HUD
+        if(player.getHUDController() != null) {
+          player.getHUDController().setJetpackEnergy((int) currentEnergy);
+        }
     }
 
     InputTuple entry = null;

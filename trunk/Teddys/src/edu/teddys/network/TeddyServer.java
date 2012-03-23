@@ -34,13 +34,17 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
   private TeddyServerData data = new TeddyServerData();
   private static TeddyServer instance;
   
-  private NetworkCommunicatorSpidermonkeyServer spidermonkeyServer = new NetworkCommunicatorSpidermonkeyServer(NetworkSettings.SERVER_PORT);
+  private NetworkCommunicatorSpidermonkeyServer spidermonkeyServer = null;
   
   public static TeddyServer getInstance() {
     if (instance == null) {
       instance = new TeddyServer();
     }
     return instance;
+  }
+  
+  private TeddyServer() {
+    spidermonkeyServer = new NetworkCommunicatorSpidermonkeyServer(NetworkSettings.SERVER_PORT);
   }
 
   /**
@@ -70,7 +74,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
    * @return true if the server is running, else false.
    */
   protected boolean isRunning() {
-    return spidermonkeyServer.isRunning();
+    return (spidermonkeyServer != null && spidermonkeyServer.isRunning());
   }
 
   /**

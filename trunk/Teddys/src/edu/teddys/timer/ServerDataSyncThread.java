@@ -40,7 +40,7 @@ public class ServerDataSyncThread extends Thread {
       }
       data.setClientPositions(pos);
       ManMessageTransferServerData msg = new ManMessageTransferServerData(data);
-      TeddyClient.getInstance().send(msg);
+      TeddyServer.getInstance().send(msg);
       // ... and sleep an amount of time.
       try {
         sleep(GameSettings.NETWORK_SERVER_SYNC_INTERVAL);

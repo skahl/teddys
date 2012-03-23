@@ -9,6 +9,8 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
+import edu.teddys.network.TeddyClient;
+import edu.teddys.network.messages.client.ManCursorPosition;
 import edu.teddys.objects.player.Player;
 
 /**
@@ -62,7 +64,8 @@ public class CrosshairControl implements AnalogListener {
     input.addListener(this, new String[]{"scrollLeft",
               "scrollRight",
               "scrollUp",
-              "scrollDown"});
+              "scrollDown",
+              AnalogControllerEnum.WEAPON.name()});
   }
 
   public void setMouseBorders(float border) {
@@ -92,7 +95,6 @@ public class CrosshairControl implements AnalogListener {
     Vector3f mouseVel = new Vector3f();
     Vector3f camVel = new Vector3f();
 
-
     if (name.equals("scrollLeft")) {
       mouseVel = Vector3f.UNIT_X.mult(-value * mouseSpeed);
       camVel = Vector3f.UNIT_X.mult(-value * scrollSpeed);
@@ -113,10 +115,16 @@ public class CrosshairControl implements AnalogListener {
     newPos.y = FastMath.clamp(newPos.y, minMouseY, maxMouseY);
 
     crosshair.setPosition(newPos.x, newPos.y);
+    
+    System.out.println(name);
+    if(name.equals(AnalogControllerEnum.WEAPON.name())) {
+      ManCursorPosition curPosMsg = new ManCursorPosition(new Vector3f(newPos.x, newPos.y, 0));
+      //TODO this should be only done by a client
+      TeddyClient.getInstance().send(curPosMsg);
+    }
 
     boolean move = true;
     Vector3f playerPos = cam.getScreenCoordinates(player.getNode().getWorldTranslation());
-
 
     if (playerPos.x < minCamX) {
       if (left.dot(camVel) > 0) {
@@ -148,8 +156,8 @@ public class CrosshairControl implements AnalogListener {
     }
 
 
-    // inform the player about the cursor's position
-    player.getPlayerControl().setScreenPositions(new Vector2f(playerPos.x, playerPos.y), crosshair.getPosition());
+    // inform the (local) player about the cursor's position
+    player.getPlayerControl().setScreenPositions(crosshair.getPosition());
 
   }
 }

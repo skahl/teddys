@@ -54,10 +54,12 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
   }
   
   public void collision(PhysicsCollisionEvent event) {
+    
     String nodeA = event.getNodeA().getName();
     String nodeB = event.getNodeB().getName();
     
     if(nodeA.equals(node.getName())) {
+      MegaLogger.getLogger().debug("callision() called."+nodeA+";"+nodeB);
       
       if(nodeB.contains("player")) {
         if(!collidedPlayer) {
@@ -71,6 +73,7 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
       collided = true;
       
     } else if(nodeB.contains(node.getName())) {
+      MegaLogger.getLogger().debug("callision() called."+nodeA+";"+nodeB);
       
       if(nodeA.contains("player")) {
         if(!collidedPlayer) {

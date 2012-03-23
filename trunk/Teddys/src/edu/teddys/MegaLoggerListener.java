@@ -6,6 +6,7 @@ package edu.teddys;
 
 import de.lessvoid.nifty.Nifty;
 import edu.teddys.hud.HUDController;
+import edu.teddys.objects.player.Player;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
@@ -42,7 +43,9 @@ public class MegaLoggerListener extends AppenderSkeleton {
     if(le.getLevel().isGreaterOrEqual(Level.INFO)) {
       String message = this.layout.format(le);
       //TODO this is dependent from the game state!
-      HUDController.getInstance().addMessage(message);
+      if(Player.LOCAL_PLAYER != -1 && Player.getInstance(Player.LOCAL_PLAYER).getHUDController() != null) {
+        Player.getInstance(Player.LOCAL_PLAYER).getHUDController().addMessage(message);
+      }
     }
   }
 

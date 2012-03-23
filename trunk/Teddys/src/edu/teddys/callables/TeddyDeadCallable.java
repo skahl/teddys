@@ -29,7 +29,8 @@ public class TeddyDeadCallable implements Callable {
     player.getPlayerVisual().die();
     
     // Rid player of all items and weapons except the StenGun
-    Game.getInstance().getApp().enqueue(new SetHealthCallable(100));
+    Game.getInstance().getApp().enqueue(new SetHealthCallable(player.getData().getId(), 100));
+    player.getData().setHealth(100);
     
     // Respawn player at a new position
     Game.getInstance().setRandomPlayerPosition(player);

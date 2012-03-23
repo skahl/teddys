@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import edu.teddys.network.AttributeListener;
-import edu.teddys.network.TeddyClient;
-import edu.teddys.objects.player.Player;
-import edu.teddys.states.Game;
 
 /**
  *
@@ -36,15 +33,8 @@ public class HUDController extends UpdateControl implements ActionListener {
   private float timeShown = 0;
   private InputManager input;
 
-  private HUDController() {
+  public HUDController() {
     messages = new ArrayList<String>();
-
-    healthListener = new AttributeListener<Integer>() {
-
-      public void attributeChanged(Integer value) {
-        Game.getInstance().getApp().enqueue(new SetHealthCallable(value));
-      }
-    };
 
     currentItemListener = new AttributeListener() {
 
@@ -59,7 +49,6 @@ public class HUDController extends UpdateControl implements ActionListener {
         throw new UnsupportedOperationException("Not supported yet.");
       }
     };
-
   }
 
   public void setHUD(final HUD hud) {
@@ -71,12 +60,12 @@ public class HUDController extends UpdateControl implements ActionListener {
     }
   }
 
-  public static HUDController getInstance() {
-    if (instance == null) {
-      instance = new HUDController();
-    }
-    return instance;
-  }
+//  public static HUDController getInstance() {
+//    if (instance == null) {
+//      instance = new HUDController();
+//    }
+//    return instance;
+//  }
 
   public void addMessage(String message) {
 

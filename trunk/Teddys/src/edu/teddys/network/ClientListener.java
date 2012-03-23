@@ -213,8 +213,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // (NOTE: CURRENTLY NOT USED)
           //
           ManMessageTransferPlayerData msg = (ManMessageTransferPlayerData) message;
-          //overwrite the current player data
-          Player.setInstanceList(msg.getData());
+          //TODO overwrite the current player data
+//          Player.setInstanceList(msg.getData());
         } else if (message instanceof ManMessageTransferServerData) {
           //
           // NEW SERVER DATA AVAILABLE. SYNC
@@ -230,7 +230,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
             Player curPlayer = Player.getInstance(posPerTeddy.getKey());
             // ... and set the position of the player
             SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(curPlayer, posPerTeddy.getValue());
-            Game.getInstance().getApp().enqueue(setPos);
+            //TODO think about it
+//            Game.getInstance().getApp().enqueue(setPos);
           }
         } else if (message instanceof ManMessageTriggerEffect) {
           //

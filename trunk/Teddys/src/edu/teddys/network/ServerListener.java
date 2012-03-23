@@ -4,6 +4,8 @@
  */
 package edu.teddys.network;
 
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
@@ -16,6 +18,7 @@ import edu.teddys.network.messages.client.GSMessageGamePaused;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.GSMessagePlayerReady;
 import edu.teddys.network.messages.client.ManControllerInput;
+import edu.teddys.network.messages.client.ManCursorPosition;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
 import edu.teddys.network.messages.server.GSMessageBeginGame;
@@ -194,6 +197,10 @@ public class ServerListener implements MessageListener<HostedConnection> {
 
         // refresh the player's action
         Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
+      } else if(message instanceof ManCursorPosition) {
+        ManCursorPosition cursorPos = (ManCursorPosition)message;
+        Vector3f cursor = cursorPos.getCursor();
+        Player.getInstance(source.getId()).getPlayerControl().setScreenPositions(new Vector2f(cursor.x, cursor.y));
       }
       //TODO check if trigger effect is also possible for clients
     }

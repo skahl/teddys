@@ -18,8 +18,6 @@ import edu.teddys.controls.MappingEnum;
 import edu.teddys.input.ControllerEvents;
 import edu.teddys.input.ControllerInputListener;
 import edu.teddys.network.ClientData;
-import edu.teddys.objects.player.DeathTest;
-import edu.teddys.objects.player.HealthListener;
 import edu.teddys.network.SessionClientData;
 import edu.teddys.network.Team;
 import edu.teddys.network.TeddyClient;
@@ -55,6 +53,7 @@ import edu.teddys.menu.MainMenu;
 import edu.teddys.menu.OptionsMenu;
 import edu.teddys.menu.PauseMenu;
 import edu.teddys.network.NetworkSettings;
+import edu.teddys.network.messages.client.ManCursorPosition;
 import edu.teddys.network.messages.server.ReqMessagePlayerDisconnect;
 import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
 import edu.teddys.objects.player.Player;
@@ -267,6 +266,7 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(GSMessageGamePaused.class);
     Serializer.registerClass(GSMessagePlayerReady.class);
     Serializer.registerClass(ManControllerInput.class);
+    Serializer.registerClass(ManCursorPosition.class);
     Serializer.registerClass(ResMessageMapLoaded.class);
     Serializer.registerClass(ResMessageSendChecksum.class);
     Serializer.registerClass(ResMessageSendClientData.class);
@@ -330,13 +330,13 @@ public class BaseGame extends SimpleApplication {
   public void stop() {
     super.stop();
 
-    TeddyClient.getInstance().disconnect();
-
     if(createdLockfile) {
       TeddyServer.getInstance().stopServer();
       File lockfile = new File(".serverlock");
       lockfile.delete();
       ServerTimer.stopTimer();
+    } else {
+      TeddyClient.getInstance().disconnect();
     }
     
     threadPool.shutdown();

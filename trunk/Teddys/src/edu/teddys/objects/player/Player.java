@@ -11,10 +11,15 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
+import edu.teddys.GameModeEnum;
 import edu.teddys.MegaLogger;
+import edu.teddys.callables.SetHealthCallable;
 import edu.teddys.callables.TeddyDeadCallable;
 import edu.teddys.controls.PlayerControl;
+import edu.teddys.hud.HUD;
+import edu.teddys.hud.HUDController;
 import edu.teddys.input.CrosshairControl;
+import edu.teddys.input.Cursor;
 import edu.teddys.network.ClientData;
 import edu.teddys.states.Game;
 import java.util.ArrayList;
@@ -35,7 +40,7 @@ public class Player {
    * The local player ID will be set to the network ID
    * if the connection to a game server has been established.
    */
-  public static transient Integer LOCAL_PLAYER = 0;
+  public static transient Integer LOCAL_PLAYER = -1;
   /**
    * The map of instances. It holds all players' data.
    */
@@ -45,8 +50,11 @@ public class Player {
   transient TeddyVisual visual;
   transient PlayerControl control;
   transient CapsuleCollisionShape collisionShape;
-  private CameraNode camNode = null;
-  private CrosshairControl cameraControl;
+  transient private CameraNode camNode = null;
+  transient private CrosshairControl cameraControl;
+  transient private HUD hud;
+  transient private HUDController hudController;
+  private Cursor cursor;
   ClientData data = new ClientData();
 
   /**
@@ -91,6 +99,10 @@ public class Player {
         Game.getInstance().removeSpatial(oldPlayer.getNode(), oldPlayer.camNode);
         oldPlayer.camNode = null;
       }
+      if(oldPlayer.cursor != null) {
+        Game.getInstance().removeSpatial(oldPlayer.getNode(), oldPlayer.cursor);
+        oldPlayer.cursor = null;
+      }
       instances.remove(id);
     }
     // Get the current instance
@@ -99,6 +111,7 @@ public class Player {
     // and change the position in the instances List
     localPlayer.getNode().setName("player" + id.toString());
     localPlayer.getData().setId(id);
+    localPlayer.initHUD();
     localPlayer.initCamNode();
     instances.put(id, localPlayer);
     // Refresh the list since the ID has changed
@@ -140,11 +153,38 @@ public class Player {
     camNode.lookAt(dir, new Vector3f(0, 1, 0));
 
     cameraControl = new CrosshairControl(camNode, this,
-            gameInstance.getCursor(),
+            getCursor(),
             gameInstance.getApp().getSettings().getWidth(),
             gameInstance.getApp().getSettings().getHeight());
     cameraControl.registerWithInput(gameInstance.getInputManager());
     MegaLogger.getLogger().debug("New CameraControl created.");
+  }
+  
+  private void initHUD() {
+    
+    Game gameInstance = Game.getInstance();
+    
+    // Crosshair
+    int crosshairSize = gameInstance.getApp().getSettings().getHeight() / 15;
+    gameInstance.getAssetManager().loadTexture("Interface/HUD/crosshair.png");
+
+    cursor = Cursor.getInstance();
+    cursor.setImage(gameInstance.getAssetManager(), "Interface/HUD/crosshair.png", true);
+    cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
+    cursor.setHeight(crosshairSize);
+    cursor.setWidth(crosshairSize);
+    gameInstance.addSpatial(gameInstance.getApp().getGuiNode(), cursor);
+    
+    hud = HUD.getInstance(gameInstance.getApp().getGuiNode(),
+            gameInstance.getAssetManager(),
+            gameInstance.getApp().getSettings().getWidth(),
+            gameInstance.getApp().getSettings().getHeight(),
+            GameModeEnum.CAPTURE_THE_HONEY);
+
+    hud.show();
+    hudController = new HUDController();
+    hudController.setHUD(hud);
+    hudController.registerWithInput(gameInstance.getInputManager());
   }
 
   /**
@@ -248,6 +288,10 @@ public class Player {
   public Node getNode() {
     return node;
   }
+  
+  public CameraNode getCameraNode() {
+    return camNode;
+  }
 
   /**
    * Player is a singleton. Use this to obtain the object by player ID.
@@ -333,10 +377,23 @@ public class Player {
     Integer newHealth = getData().getHealth() - damage;
     if (newHealth > 0) {
       getData().setHealth(newHealth);
+      Game.getInstance().getApp().enqueue(new SetHealthCallable(getData().getId(), newHealth));
       return;
     }
     getData().setHealth(0);
     
     Game.getInstance().getApp().enqueue(new TeddyDeadCallable(Player.getInstance(getData().getId())));
+  }
+
+  public Cursor getCursor() {
+    return cursor;
+  }
+
+  public HUD getHUD() {
+    return hud;
+  }
+  
+  public HUDController getHUDController() {
+    return hudController;
   }
 }

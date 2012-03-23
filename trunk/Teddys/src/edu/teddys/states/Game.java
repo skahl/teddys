@@ -48,8 +48,6 @@ public class Game extends AbstractAppState {
   private Node rootNode;
   private BasicShadowRenderer shadowRenderer; // Shadow rendering
   private GameLoader gameLoader;
-  public static HUD hud;
-  private Cursor cursor;
   private boolean paused;
 
   //private boolean enabled;
@@ -84,7 +82,9 @@ public class Game extends AbstractAppState {
 
       // attach keys
       initKeys(true);
-      hud.show();
+      
+      Player.getInstance(Player.LOCAL_PLAYER).getHUD().show();
+      
       super.setEnabled(true);
 
     } else if (!isActive && this.isEnabled()) {
@@ -97,7 +97,9 @@ public class Game extends AbstractAppState {
 
       // detach keys
       initKeys(false);
-      hud.hide();
+      
+      Player.getInstance(Player.LOCAL_PLAYER).getHUD().hide();
+      
       super.setEnabled(false);
     }
   }
@@ -139,48 +141,16 @@ public class Game extends AbstractAppState {
     this.app.getViewPort().addProcessor(shadowRenderer);
 
     //HUD
-    hud = HUD.getInstance(this.app.getGuiNode(),
-            this.app.getAssetManager(),
-            this.app.getSettings().getWidth(),
-            this.app.getSettings().getHeight(), GameModeEnum.CAPTURE_THE_HONEY);
-
-    hud.show();
-    HUDController hudController = HUDController.getInstance();
-    hudController.setHUD(hud);
-    hudController.registerWithInput(inputManager);
-
-    // Crosshair
-    int crosshairSize = this.app.getSettings().getHeight() / 15;
-    this.app.getAssetManager().loadTexture("Interface/HUD/crosshair.png");
-
-    cursor = Cursor.getInstance();
-    cursor.setImage(this.app.getAssetManager(), "Interface/HUD/crosshair.png", true);
-    cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
-    cursor.setHeight(crosshairSize);
-    cursor.setWidth(crosshairSize);
-    addSpatial(this.app.getGuiNode(), cursor);
-
-//    Player player = Player.getInstance(Player.LOCAL_PLAYER);
-//    initCamNode(player);
-
-//    // Camera
-//    camNode = new CameraNode("Camera", this.app.getCamera());
-//    camNode.setControlDir(ControlDirection.SpatialToCamera);
+    //INFO moved to Player
+//    hud = HUD.getInstance(this.app.getGuiNode(),
+//            this.app.getAssetManager(),
+//            this.app.getSettings().getWidth(),
+//            this.app.getSettings().getHeight(), GameModeEnum.CAPTURE_THE_HONEY);
 //
-//    // initial distance between camera and player
-//    camNode.move(0, 1, 8);
-//
-//    Player player = Player.getInstance(Player.LOCAL_PLAYER);
-//    // Update the camNode. Note that the camNode has been already attached to the player
-//    // when the LOCAL_PLAYER id was set.
-//    Vector3f dir = player.getNode().getWorldTranslation().add(0, 0.75f, 0);
-//    camNode.lookAt(dir, new Vector3f(0, 1, 0));
-////    player.getNode().attachChild(camNode);
-//
-//    // Input
-//    CrosshairControl cameraControl = new CrosshairControl(camNode, player, cursor,
-//            this.app.getSettings().getWidth(), this.app.getSettings().getHeight());
-//    cameraControl.registerWithInput(inputManager);
+//    hud.show();
+//    HUDController hudController = HUDController.getInstance();
+//    hudController.setHUD(hud);
+//    hudController.registerWithInput(inputManager);
 
     // physics debug (shows collission meshes):
 
@@ -302,20 +272,19 @@ public class Game extends AbstractAppState {
   }
 
   public void setPaused(boolean paused) {
+    Player player = Player.getInstance(Player.LOCAL_PLAYER);
     if (paused && !this.paused) {
       this.paused = true;
 
-      //TODO gui node
-      removeSpatial(this.app.getGuiNode(), cursor);
+      player.getHUD().hide();
+      removeSpatial(this.app.getGuiNode(), player.getCursor());
 //      this.app.getGuiNode().detachChildNamed("Cursor");
-      hud.hide();
 
     } else if (!paused && this.paused) {
       this.paused = false;
 
-      hud.show();
-      //TODO gui node
-      addSpatial(this.app.getGuiNode(), cursor);
+      player.getHUD().show();
+      addSpatial(this.app.getGuiNode(), player.getCursor());
 //      this.app.getGuiNode().attachChild(cursor);
     }
   }
@@ -338,10 +307,6 @@ public class Game extends AbstractAppState {
 
   public InputManager getInputManager() {
     return inputManager;
-  }
-
-  public Cursor getCursor() {
-    return cursor;
   }
 
   public void loadGameMap(String levelName, String mapPath) {

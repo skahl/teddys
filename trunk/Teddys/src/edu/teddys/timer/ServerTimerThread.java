@@ -40,7 +40,7 @@ public class ServerTimerThread extends Thread {
         addClientPosition(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
         posMsg.setClientID(player.getData().getId());
         posMsg.setPosition(player.getPlayerControl().getPhysicsLocation());
-        TeddyServer.getInstance().send(posMsg);
+//        TeddyServer.getInstance().send(posMsg);
       }
       
       // increment the tick by one

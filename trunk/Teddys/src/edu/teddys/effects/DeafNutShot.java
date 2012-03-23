@@ -80,7 +80,7 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
       
       setPhysicsLocation(loc);
       setPhysicsRotation(rot);
-            
+      
       // rotate the partColBox, so that the particle looks good
       partColBox.getNode().rotateUpTo(particle.getVector());
       partColBox.getNode().rotate(0f, 0f, -FastMath.HALF_PI);

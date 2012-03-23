@@ -9,19 +9,27 @@ import edu.teddys.objects.player.Player;
 import java.util.concurrent.Callable;
 
 /**
+ * 
+ * Refreshed the indicator bar regarding the health of the local Teddy.
  *
  * @author cm
  */
 public class SetHealthCallable implements Callable {
 
+  private Integer playerID;
   private Integer health;
 
-  public SetHealthCallable(Integer health) {
+  public SetHealthCallable(Integer playerID, Integer health) {
+    this.playerID = playerID;
     this.health = health;
   }
 
   public Object call() {
-    HUDController.getInstance().setHealth(health);
+    Player player = Player.getInstance(playerID);
+    player.getData().setHealth(health);
+    if(player.getHUDController() != null) {
+      player.getHUDController().setHealth(health);
+    }
     return null;
   }
 }
