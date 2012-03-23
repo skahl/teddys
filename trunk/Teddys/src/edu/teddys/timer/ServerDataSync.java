@@ -20,6 +20,8 @@ public class ServerDataSync {
   /**
    * Start the checksum manager timer. This sends checksum requests every intervall
    * to the clients of the server.
+   * 
+   * Note: If an instance is already active, just return.
    */
   public static void startTimer() {
     if (thread != null) {

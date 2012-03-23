@@ -7,10 +7,11 @@ package edu.teddys.timer;
 import com.jme3.math.Vector3f;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
-import edu.teddys.network.TeddyClient;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.TeddyServerData;
+import edu.teddys.network.messages.server.ManMessageSetPosition;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;
+import edu.teddys.objects.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,15 +33,23 @@ public class ServerDataSyncThread extends Thread {
     while (!stop) {
       //TODO(nice to have) delta compression?
       
-      TeddyServerData data = TeddyServer.getInstance().getData();
-      Map<Integer,List<Vector3f>> pos = new TreeMap<Integer,List<Vector3f>>();
-      // add the positions to the clientPositions Map
-      for(Entry<Integer,LinkedBlockingQueue<Vector3f>> entry : ServerTimer.getClientPositions().entrySet()) {
-        pos.put(entry.getKey(), new ArrayList<Vector3f>(entry.getValue()));
+//      TeddyServerData data = TeddyServer.getInstance().getData();
+//      Map<Integer,List<Vector3f>> pos = new TreeMap<Integer,List<Vector3f>>();
+//      // add the positions to the clientPositions Map
+//      for(Entry<Integer,LinkedBlockingQueue<Vector3f>> entry : ServerTimer.getClientPositions().entrySet()) {
+//        pos.put(entry.getKey(), new ArrayList<Vector3f>(entry.getValue()));
+//      }
+//      data.setClientPositions(pos);
+//      ManMessageTransferServerData msg = new ManMessageTransferServerData(data);
+//      TeddyServer.getInstance().send(msg);
+      
+      ManMessageSetPosition posMsg = new ManMessageSetPosition();
+      // update the players' positions
+      for(Player player : Player.getInstanceList()) {
+        posMsg.getPositions().put(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
       }
-      data.setClientPositions(pos);
-      ManMessageTransferServerData msg = new ManMessageTransferServerData(data);
-      TeddyServer.getInstance().send(msg);
+      TeddyServer.getInstance().send(posMsg);
+      
       // ... and sleep an amount of time.
       try {
         sleep(GameSettings.NETWORK_SERVER_SYNC_INTERVAL);

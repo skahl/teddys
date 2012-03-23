@@ -28,6 +28,7 @@ import edu.teddys.network.messages.server.ReqMessageMapRequest;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
+import edu.teddys.timer.ServerDataSync;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +43,14 @@ import java.util.List;
 public class ServerListener implements MessageListener<HostedConnection> {
 
   public void messageReceived(HostedConnection source, Message message) {
-    
-    String inputMessage = String.format(
-            "Server received a message (%s): %s",
-            message.getClass().getSimpleName(), message);
-    MegaLogger.getLogger().debug(inputMessage);
+
+    if (!(message instanceof ManControllerInput)) {
+      String inputMessage = String.format(
+              "Server received a message (%s): %s",
+              message.getClass().getSimpleName(), message);
+      MegaLogger.getLogger().debug(inputMessage);
+    }
+
     if (message instanceof NetworkMessageInfo) {
       //
       // RECEIVED A SIMPLE MESSAGE
@@ -98,13 +102,13 @@ public class ServerListener implements MessageListener<HostedConnection> {
         TeddyServer.getInstance().send(msg);
         Player newPlayer = Player.getInstance(source.getId());
         newPlayer.getData().setMapLoaded(true);
+        // add the player to the game world (if not already joined?)
+        Game.getInstance().addPlayerToWorld(newPlayer);
         Game.getInstance().setRandomPlayerPosition(newPlayer);
+        MegaLogger.getLogger().debug("Client has ben added to the world and the position has been set.");
         // refresh the clients' positions
         ManMessageTransferPlayerData playerData = new ManMessageTransferPlayerData(Player.getInstances());
         TeddyServer.getInstance().send(playerData);
-        // add the player to the game world (if not already joined?)
-        Game.getInstance().addPlayerToWorld(newPlayer);
-        MegaLogger.getLogger().debug("Client has ben added to the world.");
         // If all players have loaded the map, "I wanna play a game with you".
         int numPlayers = 0;
         for (Player player : Player.getInstanceList()) {
@@ -116,12 +120,15 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //TODO now that the player has been added to the world, send him a message
         // that the game has begun yet
 
+//        ServerDataSync.startTimer();
+
 //        if(numPlayers == TeddyServer.getInstance().getConnections().size()) {
 //          ServerTimer.startTimer();
 //          //TODO check when the game has ended! the timer must be stopped!
 //          // Now start a game
         GSMessageBeginGame beginGame = new GSMessageBeginGame(source.getId());
         TeddyServer.getInstance().send(beginGame);
+
 //        }
       } else if (message instanceof ResMessageSendClientData) {
         //
@@ -197,8 +204,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
 
         // refresh the player's action
         Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
-      } else if(message instanceof ManCursorPosition) {
-        ManCursorPosition cursorPos = (ManCursorPosition)message;
+      } else if (message instanceof ManCursorPosition) {
+        ManCursorPosition cursorPos = (ManCursorPosition) message;
         Vector3f cursor = cursorPos.getCursor();
         Player.getInstance(source.getId()).getPlayerControl().setScreenPositions(new Vector2f(cursor.x, cursor.y));
       }

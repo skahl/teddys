@@ -116,7 +116,6 @@ public class CrosshairControl implements AnalogListener {
 
     crosshair.setPosition(newPos.x, newPos.y);
     
-    System.out.println(name);
     if(name.equals(AnalogControllerEnum.WEAPON.name())) {
       ManCursorPosition curPosMsg = new ManCursorPosition(new Vector3f(newPos.x, newPos.y, 0));
       //TODO this should be only done by a client

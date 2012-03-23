@@ -178,8 +178,15 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       } else if (message instanceof NetworkMessageManipulation) {
         if (message instanceof ManMessageSetPosition) {
           ManMessageSetPosition pos = (ManMessageSetPosition) message;
-          Player curPlayer = Player.getInstance(pos.getClientID());
-          curPlayer.getPlayerControl().setWalkDirection(pos.getPosition().subtract(curPlayer.getPlayerControl().getPhysicsLocation()).normalize());
+          MegaLogger.getLogger().debug("Received a request to change or set the position");
+          for(Entry<Integer, Vector3f> entry : pos.getPositions().entrySet()) {
+            SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(
+                    Player.getInstance(entry.getKey()),
+                    entry.getValue()
+                    );
+            Game.getInstance().getApp().enqueue(setPos);
+          }
+//          curPlayer.getPlayerControl().setWalkDirection(pos.getPosition().subtract(curPlayer.getPlayerControl().getPhysicsLocation()).normalize());
         } else if (message instanceof ManMessageActivateItem) {
           //
           // THE USER HAS TO ACTIVATE THE SPECIFIED ITEM YET

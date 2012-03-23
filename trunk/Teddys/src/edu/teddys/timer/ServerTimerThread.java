@@ -34,14 +34,14 @@ public class ServerTimerThread extends Thread {
     while (!stop) {
       //TODO parse game events
 
-      ManMessageSetPosition posMsg = new ManMessageSetPosition();
-      // update the players' positions
-      for(Player player : Player.getInstanceList()) {
-        addClientPosition(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
-        posMsg.setClientID(player.getData().getId());
-        posMsg.setPosition(player.getPlayerControl().getPhysicsLocation());
-//        TeddyServer.getInstance().send(posMsg);
-      }
+//      ManMessageSetPosition posMsg = new ManMessageSetPosition();
+//      // update the players' positions
+//      for(Player player : Player.getInstanceList()) {
+//        addClientPosition(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
+//        posMsg.setClientID(player.getData().getId());
+//        posMsg.setPosition(player.getPlayerControl().getPhysicsLocation());
+////        TeddyServer.getInstance().send(posMsg);
+//      }
       
       // increment the tick by one
       ++tick;

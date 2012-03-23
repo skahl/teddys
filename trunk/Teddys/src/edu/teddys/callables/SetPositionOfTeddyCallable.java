@@ -6,9 +6,8 @@ package edu.teddys.callables;
 
 import com.jme3.math.Vector3f;
 import edu.teddys.MegaLogger;
-import edu.teddys.network.TeddyServer;
 import edu.teddys.objects.player.Player;
-import edu.teddys.timer.ServerTimerThread;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -24,6 +23,12 @@ public class SetPositionOfTeddyCallable implements Callable {
   public SetPositionOfTeddyCallable(Player playerInstance, List<Vector3f> positions) {
     this.player = playerInstance;
     this.positions = positions;
+  }
+
+  public SetPositionOfTeddyCallable(Player playerInstance, Vector3f position) {
+    this.player = playerInstance;
+    this.positions = new ArrayList<Vector3f>();
+    this.positions.add(position);
   }
 
   public Object call() throws Exception {

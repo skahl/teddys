@@ -17,7 +17,6 @@ import java.util.concurrent.Callable;
 public class TeddyDeadCallable implements Callable {
 
   private Player player;
-  List<Vector3f> positions = null;
 
   public TeddyDeadCallable(Player playerInstance) {
     this.player = playerInstance;
@@ -34,7 +33,6 @@ public class TeddyDeadCallable implements Callable {
     
     // Respawn player at a new position
     Game.getInstance().setRandomPlayerPosition(player);
-    
     
     return null;
   }

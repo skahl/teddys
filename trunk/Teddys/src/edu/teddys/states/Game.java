@@ -30,6 +30,8 @@ import edu.teddys.hud.HUD;
 import edu.teddys.hud.HUDController;
 import edu.teddys.input.Cursor;
 import edu.teddys.map.GameLoader;
+import edu.teddys.network.TeddyServer;
+import edu.teddys.network.messages.server.ManMessageSetPosition;
 import edu.teddys.objects.player.Player;
 import java.util.Arrays;
 import org.apache.commons.math.random.RandomDataImpl;
@@ -211,10 +213,13 @@ public class Game extends AbstractAppState {
     //TODO use some spawn points
     Vector3f pos = new Vector3f(rnd.nextLong(0, 6), rnd.nextLong(1, 2), GameSettings.WORLD_Z_INDEX);
     // this is the first position of the Teddy, so initialize a new List
-    SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(player, Arrays.asList(pos));
+    SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(player, pos);
     getApp().enqueue(setPos);
     MegaLogger.getLogger().debug("Position of the player has been randomly set to "
             + pos + " (ID: " + player.getData().getId() + ")");
+    ManMessageSetPosition posMsg = new ManMessageSetPosition();
+    posMsg.getPositions().put(player.getData().getId(), pos);
+    TeddyServer.getInstance().send(posMsg);
   }
 
   /**
