@@ -149,7 +149,8 @@ public class BaseGame extends SimpleApplication {
     if(lockfile.exists()) {
       app.start();
     } else {
-      app.start(JmeContext.Type.Headless);
+//      app.start(JmeContext.Type.Headless);
+      app.start();
     }
   }
 
@@ -165,7 +166,7 @@ public class BaseGame extends SimpleApplication {
     
     flyCam.setEnabled(false);
     setDisplayFps(true);
-    setDisplayStatView(false);
+    setDisplayStatView(true);
     inputManager.setCursorVisible(false);
     rootNode.setShadowMode(ShadowMode.Off);
     renderManager.setAlphaToCoverage(false);
@@ -226,6 +227,8 @@ public class BaseGame extends SimpleApplication {
       }
       // Now start the timer
       ServerTimer.startTimer();
+      // Load the map
+      Game.getInstance().loadGameMap("firstlevel", "maps/firstlevel.zip");
     } else {
       // Get the handle to the client and try to join the specified server
       TeddyClient client = TeddyClient.getInstance();

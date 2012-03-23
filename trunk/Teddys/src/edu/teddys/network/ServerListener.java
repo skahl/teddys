@@ -28,10 +28,10 @@ import edu.teddys.network.messages.server.ReqMessageMapRequest;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
-import edu.teddys.timer.ServerDataSync;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * 
@@ -77,7 +77,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
         Player.getInstance(source.getId()).getData().setReady(true);
 
         //TODO change to the chosen map name
-        ReqMessageMapRequest mapRequest = new ReqMessageMapRequest("firstlevel", "maps/firstlevel.zip");
+        Entry<String, String> levelData = Game.getInstance().getLevelData();
+        ReqMessageMapRequest mapRequest = new ReqMessageMapRequest(levelData.getKey(), levelData.getValue());
         TeddyServer.getInstance().send(mapRequest);
       }
     } else if (message instanceof NetworkMessageResponse) {

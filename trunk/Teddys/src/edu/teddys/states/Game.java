@@ -18,7 +18,6 @@ import com.jme3.shadow.BasicShadowRenderer;
 import edu.teddys.callables.AttachToNodeCallable;
 import edu.teddys.BaseGame;
 import edu.teddys.callables.DetachFromNodeCallable;
-import edu.teddys.GameModeEnum;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.callables.AddCharacterControlToPhysicsSpaceCallable;
@@ -26,14 +25,12 @@ import edu.teddys.callables.AddNodeToPhysicsSpaceCallable;
 import edu.teddys.callables.RemoveCharacterControlFromPhysicsSpace;
 import edu.teddys.callables.RemoveNodeFromPhysicsSpace;
 import edu.teddys.callables.SetPositionOfTeddyCallable;
-import edu.teddys.hud.HUD;
-import edu.teddys.hud.HUDController;
-import edu.teddys.input.Cursor;
 import edu.teddys.map.GameLoader;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.server.ManMessageSetPosition;
 import edu.teddys.objects.player.Player;
-import java.util.Arrays;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 import org.apache.commons.math.random.RandomDataImpl;
 
 /**
@@ -51,6 +48,7 @@ public class Game extends AbstractAppState {
   private BasicShadowRenderer shadowRenderer; // Shadow rendering
   private GameLoader gameLoader;
   private boolean paused;
+  private Entry<String, String> levelData = new SimpleEntry<String, String>("firstlevel", "maps/firstlevel.zip");
 
   //private boolean enabled;
   protected Game() {
@@ -315,7 +313,12 @@ public class Game extends AbstractAppState {
   }
 
   public void loadGameMap(String levelName, String mapPath) {
-    gameLoader = new GameLoader("firstlevel", "maps/firstlevel.zip", this);
+    levelData = new SimpleEntry<String, String>(levelName, mapPath);
+    gameLoader = new GameLoader(levelName, mapPath, this);
     addMapModel(gameLoader.getGameMap().getMapModel());
+  }
+  
+  public Entry<String, String> getLevelData() {
+    return levelData;
   }
 }

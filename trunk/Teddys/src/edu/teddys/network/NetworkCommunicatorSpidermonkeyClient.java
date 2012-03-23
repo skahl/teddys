@@ -102,9 +102,6 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
       // close the active connection
       disconnect(client.getData().getId());
     }
-    // Get the server settings
-//    String serverIP = client.getServerIP();
-//    Integer serverPort = NetworkSettings.SERVER_PORT;
     if (serverIP == null || serverPort == null) {
       String msg = "Invalid server configuration! serverIP or serverPort is null. "
               + "Please check your network settings!";
@@ -113,15 +110,15 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     }
     // Try to connect to the server
     try {
+      MegaLogger.getLogger().debug(String.format("Trying to connect to %s:%d ...", serverIP, serverPort));
       networkClient = com.jme3.network.Network.connectToServer(serverIP, serverPort);
       addClientStateListener(client);
       networkClient.start();
       // Configure the client to receive messages
       networkClient.addMessageListener(new ClientListener());
-      MegaLogger.getLogger().debug("Client: Join request sent.");
       return true;
     } catch (IOException ex) {
-      MegaLogger.getLogger().error(new Throwable("Client: Join request failed!", ex));
+      MegaLogger.getLogger().error("[Client] Join request failed: " + ex.getMessage());
       return false;
     }
   }
