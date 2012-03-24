@@ -73,6 +73,8 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
           hitPlayerID = Integer.parseInt(nodeB.substring(startPlayerID));
         }
       }
+      
+      collided = true;
     } else if (nodeB.contains(node.getName())) {
       MegaLogger.getLogger().debug("collision() called." + nodeA + ";" + nodeB);
 
@@ -82,13 +84,14 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
           hitPlayerID = Integer.parseInt(nodeA.substring(startPlayerID));
         }
       }
+      
+      collided = true;
     }
 
     if (hitPlayerID != null) {
       MegaLogger.getLogger().debug("Player " + hitPlayerID + " was hit.");
       trigger(hitPlayerID);
       MegaLogger.getLogger().debug("Damage message sent.");
-      collided = true;
     }
   }
 

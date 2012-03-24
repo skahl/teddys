@@ -95,8 +95,7 @@ public class TeddyDeath {
     /**
      * In order to trigger the effect, call this method.
      */
-    public void die() {
-      Vector3f pos = mother.getWorldTranslation();
+    public void die(Vector3f pos) {
       
       Game.getInstance().getApp().enqueue(new AttachToNodeCallable(
               Game.getInstance().getRootNode(), mother));

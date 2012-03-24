@@ -17,7 +17,7 @@ public class HolyWater implements Weapon {
   HolyWaterShot holyWater;
   Player player;
   
-  public HolyWater(Integer playerID) {
+  public HolyWater(Player player) {
     this.player = player;
     holyWater = new HolyWaterShot(this);
   }

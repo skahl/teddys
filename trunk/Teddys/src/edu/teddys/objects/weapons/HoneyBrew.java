@@ -17,7 +17,7 @@ public class HoneyBrew implements Weapon {
   HoneyBrewShot honeyBrew;
   Player player;
   
-  public HoneyBrew(Integer playerID) {
+  public HoneyBrew(Player player) {
     this.player = player;
     honeyBrew = new HoneyBrewShot(this);
   }

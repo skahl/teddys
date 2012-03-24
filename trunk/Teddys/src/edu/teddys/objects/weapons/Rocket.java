@@ -17,7 +17,7 @@ public class Rocket implements Weapon {
   RocketShot rocketShot;
   Player player;
   
-  public Rocket(Integer playerID) {
+  public Rocket(Player player) {
     this.player = player;
     rocketShot = new RocketShot(this);
   }

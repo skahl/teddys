@@ -17,7 +17,7 @@ public class StenGun implements Weapon {
   StenGunShot shot;
   Player player;
   
-  public StenGun(Integer playerID) {
+  public StenGun(Player player) {
     this.player = player;
     shot = new StenGunShot(this);
   }

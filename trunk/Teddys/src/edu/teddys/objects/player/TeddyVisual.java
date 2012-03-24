@@ -211,7 +211,7 @@ public class TeddyVisual {
      * Let the Teddy die!
      */
     public void die() {
-      deathFx.die();
+      deathFx.die(node.getWorldTranslation());
     }
     
     /**
@@ -306,5 +306,9 @@ public class TeddyVisual {
                 running.setBoolean("Reverse", false);
             }
         }
+    }
+    
+    public void resetDeath() {
+        node.attachChild(deathFx.getNode());
     }
 }
