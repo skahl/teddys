@@ -1,5 +1,6 @@
 package edu.teddys.objects.player;
 
+import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -85,6 +86,7 @@ public class Player {
    * @param id The new player ID
    */
   public synchronized static void setLocalPlayerId(Integer id) {
+    
     if (id == LOCAL_PLAYER) {
       // no change
       return;
@@ -301,6 +303,7 @@ public class Player {
    */
   public static Player getInstance(Integer id) {
     if (instances.isEmpty() || instances.get(id) == null) {
+      MegaLogger.getLogger().debug("IMPORTANT: Adding Player");
       instances.put(id, new Player(id));
     }
     return instances.get(id);

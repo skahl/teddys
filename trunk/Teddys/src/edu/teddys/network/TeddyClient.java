@@ -149,6 +149,7 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
   }
 
   public void clientConnected(Client c) {
+    
     Player.setLocalPlayerId(c.getId());
     TeddyClient.getInstance().setJoinedServer(new Date());
     MegaLogger.getLogger().debug("Client joined the server at "

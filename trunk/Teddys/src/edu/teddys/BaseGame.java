@@ -144,6 +144,7 @@ public class BaseGame extends SimpleApplication {
     settings.setResolution(GameSettings.WIDTH, GameSettings.HEIGHT);
     
     app.setSettings(settings);
+//    app.setPauseOnLostFocus(false);
 
     File lockfile = new File(".serverlock");
     if(lockfile.exists()) {
@@ -164,7 +165,7 @@ public class BaseGame extends SimpleApplication {
     // Change the level of some jME log messages to WARNING
     Logger.getLogger("").setLevel(java.util.logging.Level.WARNING);
     
-    flyCam.setEnabled(false);
+    
     setDisplayFps(true);
     setDisplayStatView(true);
     inputManager.setCursorVisible(false);
@@ -214,6 +215,8 @@ public class BaseGame extends SimpleApplication {
     // Create the server "on demand"
     File lockfile = new File(".serverlock");
     if(!lockfile.exists()) {
+      flyCam.setEnabled(true);
+      
       TeddyServer server = TeddyServer.getInstance();
       server.startServer(NetworkSettings.SERVER_PORT);
       //TODO dirty (use port information)
@@ -229,7 +232,10 @@ public class BaseGame extends SimpleApplication {
       ServerTimer.startTimer();
       // Load the map
       Game.getInstance().loadGameMap("firstlevel", "maps/firstlevel.zip");
+      
     } else {
+      flyCam.setEnabled(false);
+      
       // Get the handle to the client and try to join the specified server
       TeddyClient client = TeddyClient.getInstance();
       MegaLogger.getLogger().info("Client has " + client.getData().getHealth() + " health points at the beginning.");

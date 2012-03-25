@@ -102,11 +102,11 @@ public class ServerListener implements MessageListener<HostedConnection> {
         ResMessageMapLoaded msg = (ResMessageMapLoaded) message;
         TeddyServer.getInstance().send(msg);
         Player newPlayer = Player.getInstance(source.getId());
+        MegaLogger.getLogger().debug("Trying to add Player to the world, having the ID: "+String.valueOf(source.getId()));
         newPlayer.getData().setMapLoaded(true);
         // add the player to the game world (if not already joined?)
         Game.getInstance().addPlayerToWorld(newPlayer);
         Game.getInstance().setRandomPlayerPosition(newPlayer);
-        MegaLogger.getLogger().debug("Client has ben added to the world and the position has been set.");
         // refresh the clients' positions
         ManMessageTransferPlayerData playerData = new ManMessageTransferPlayerData(Player.getInstances());
         TeddyServer.getInstance().send(playerData);
