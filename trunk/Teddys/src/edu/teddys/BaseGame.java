@@ -57,6 +57,7 @@ import edu.teddys.network.messages.client.ManCursorPosition;
 import edu.teddys.network.messages.server.ReqMessagePlayerDisconnect;
 import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
 import edu.teddys.objects.player.Player;
+import edu.teddys.states.AppStateSwitcher;
 import edu.teddys.timer.ServerDataSync;
 import edu.teddys.timer.ServerTimer;
 import java.io.File;
@@ -89,24 +90,23 @@ public class BaseGame extends SimpleApplication {
   private ActionListener actionListener = new ActionListener() {
 
     public void onAction(String name, boolean keyPressed, float tpf) {
-
+      
+      
       if (name.equals(MappingEnum.MENU.name()) && !keyPressed) {
         if (!stateManager.getState(Pause.class).isEnabled()) {
-
           // if a game is running while menu is activated
           if (stateManager.getState(Game.class).isEnabled()) {
             // pause the game
-            stateManager.getState(Game.class).setPaused(true);
+            stateManager.getState(Game.class).setEnabled(false);
           }
 
           stateManager.getState(Pause.class).setEnabled(true);
 
         } else {
-
           // if a game is running while menu is deactivated
-          if (stateManager.getState(Game.class).isEnabled()) {
+          if (!stateManager.getState(Game.class).isEnabled()) {
             // unpause the game
-            stateManager.getState(Game.class).setPaused(false);
+            stateManager.getState(Game.class).setEnabled(true);
           }
 
           stateManager.getState(Pause.class).setEnabled(false);
@@ -298,6 +298,7 @@ public class BaseGame extends SimpleApplication {
   }
   
   private void initGUI() {
+    AppStateSwitcher.getInstance(stateManager);
     niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
     nifty = niftyDisplay.getNifty();
     // add the custom appender to react to some infos

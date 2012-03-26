@@ -39,7 +39,8 @@ public class Pause extends AbstractAppState {
     
     @Override
     public void setEnabled(boolean isActive) {
-        if(isActive && !this.isEnabled()) {
+        super.setEnabled(isActive);
+        if(isActive) {
             // activate
             
             // TODO: Pause app state enabled code
@@ -48,7 +49,7 @@ public class Pause extends AbstractAppState {
             nifty.gotoScreen(MenuTypes.PAUSE_MENU.name());
             super.setEnabled(true);
             
-        } else if(!isActive && this.isEnabled()) {
+        } else {
             // deactivate
 
             // TODO: Pause app state disabled code
@@ -61,14 +62,15 @@ public class Pause extends AbstractAppState {
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app);
-        this.app = (BaseGame)app;
-        super.setEnabled(false);
-        this.inputManager = this.app.getInputManager();
-        nifty = ((BaseGame)app).getNifty();
-        
-        // TODO: Pause app state init code
-        
+        if (!isInitialized()) {
+            super.initialize(stateManager, app);
+            this.app = (BaseGame) app;
+            super.setEnabled(false);
+            this.inputManager = this.app.getInputManager();
+            nifty = ((BaseGame) app).getNifty();
+
+            // TODO: Pause app state init code
+        }
     }
     
     @Override

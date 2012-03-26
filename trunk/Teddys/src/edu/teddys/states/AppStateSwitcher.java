@@ -46,10 +46,26 @@ public class AppStateSwitcher {
         }
     }
     
-    public void unpause() {
-        manager.getState(Pause.class).setEnabled(false);
-        manager.getState(Game.class).setPaused(false);
+    public AppState getState(AppStateEnum state) {
+        AppState returnState = null;
+        switch(state) {
+            case PAUSE:
+                returnState = manager.getState(Pause.class);
+                break;
+            case MENU:
+                returnState = manager.getState(Menu.class);
+                break;
+            case GAME:
+                returnState = manager.getState(Game.class);
+        }
+        
+        return returnState;
     }
+    
+//    public void unpause() {
+//        manager.getState(Pause.class).setEnabled(false);
+//        manager.getState(Game.class).setPaused(false);
+//    }
     
         
     public static AppStateSwitcher getInstance(AppStateManager manager) {

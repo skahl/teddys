@@ -78,7 +78,8 @@ public class Game extends AbstractAppState {
 //  }
   @Override
   public void setEnabled(boolean isActive) {
-    if (isActive && !this.isEnabled()) {
+    super.setEnabled(isActive);  
+    if (isActive) {
       // activate
 
       // here one could attach and detach the whole scene graph
@@ -88,10 +89,10 @@ public class Game extends AbstractAppState {
       initKeys(true);
       
       Player.getInstance(Player.LOCAL_PLAYER).getHUD().show();
-      
+      addSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
       super.setEnabled(true);
 
-    } else if (!isActive && this.isEnabled()) {
+    } else {
       // deactivate
       //this.app.getRootNode().detachChild(rotationNode);
 
@@ -103,49 +104,50 @@ public class Game extends AbstractAppState {
       initKeys(false);
       
       Player.getInstance(Player.LOCAL_PLAYER).getHUD().hide();
-      
+      removeSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
       super.setEnabled(false);
     }
   }
 
   @Override
-  public void initialize(AppStateManager stateManager, Application app) {
-    super.initialize(stateManager, app);
-    this.app = (BaseGame) app;
-    this.stateManager = stateManager;
-    this.inputManager = this.app.getInputManager();
-    this.rootNode = this.app.getRootNode();
+    public void initialize(AppStateManager stateManager, Application app) {
+        if (!isInitialized()) {
+            super.initialize(stateManager, app);
+            this.app = (BaseGame) app;
+            this.stateManager = stateManager;
+            this.inputManager = this.app.getInputManager();
+            this.rootNode = this.app.getRootNode();
 
-    app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
+            app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
 
-    this.paused = false;
-    //super.setEnabled(false);
+            this.paused = false;
+            super.setEnabled(false);
 
 
-    // init physics  renderstate
-    bulletAppState = new BulletAppState();
-    stateManager.attach(bulletAppState);
+            // init physics  renderstate
+            bulletAppState = new BulletAppState();
+            stateManager.attach(bulletAppState);
 
-    // shed some light
-    Vector3f sunDirection = new Vector3f(-1f, -1f, -1.2f);
-    sunDirection.normalizeLocal();
+            // shed some light
+            Vector3f sunDirection = new Vector3f(-1f, -1f, -1.2f);
+            sunDirection.normalizeLocal();
 
-    DirectionalLight sunL = new DirectionalLight();
-    sunL.setColor(ColorRGBA.White.mult(0.5f));
-    sunL.setDirection(sunDirection);
-    rootNode.addLight(sunL);
+            DirectionalLight sunL = new DirectionalLight();
+            sunL.setColor(ColorRGBA.White.mult(0.5f));
+            sunL.setDirection(sunDirection);
+            rootNode.addLight(sunL);
 
-    AmbientLight sunA = new AmbientLight();
-    sunA.setColor(ColorRGBA.White.mult(0.3f));
-    rootNode.addLight(sunA);
+            AmbientLight sunA = new AmbientLight();
+            sunA.setColor(ColorRGBA.White.mult(0.3f));
+            rootNode.addLight(sunA);
 
-    // init shadow renderstate
-    shadowRenderer = new BasicShadowRenderer(this.app.getAssetManager(), 256);
-    shadowRenderer.setDirection(sunDirection);
-    this.app.getViewPort().addProcessor(shadowRenderer);
+            // init shadow renderstate
+            shadowRenderer = new BasicShadowRenderer(this.app.getAssetManager(), 256);
+            shadowRenderer.setDirection(sunDirection);
+            this.app.getViewPort().addProcessor(shadowRenderer);
 
-    //HUD
-    //INFO moved to Player
+            //HUD
+            //INFO moved to Player
 //    hud = HUD.getInstance(this.app.getGuiNode(),
 //            this.app.getAssetManager(),
 //            this.app.getSettings().getWidth(),
@@ -156,15 +158,16 @@ public class Game extends AbstractAppState {
 //    hudController.setHUD(hud);
 //    hudController.registerWithInput(inputManager);
 
-    // physics debug (shows collission meshes):
+            // physics debug (shows collission meshes):
 
-    if (GameSettings.DEBUG) {
-      // debug switch not working
-      bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
+            if (GameSettings.DEBUG) {
+                // debug switch not working
+                bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
+            }
+
+            MegaLogger.getLogger().debug("New game instance created.");
+        }
     }
-
-    MegaLogger.getLogger().debug("New game instance created.");
-  }
 
   /**
    * 
@@ -283,23 +286,6 @@ public class Game extends AbstractAppState {
 
   }
 
-  public void setPaused(boolean paused) {
-    Player player = Player.getInstance(Player.LOCAL_PLAYER);
-    if (paused && !this.paused) {
-      this.paused = true;
-
-      player.getHUD().hide();
-      removeSpatial(this.app.getGuiNode(), player.getCursor());
-//      this.app.getGuiNode().detachChildNamed("Cursor");
-
-    } else if (!paused && this.paused) {
-      this.paused = false;
-
-      player.getHUD().show();
-      addSpatial(this.app.getGuiNode(), player.getCursor());
-//      this.app.getGuiNode().attachChild(cursor);
-    }
-  }
 
   public BaseGame getApp() {
     return app;

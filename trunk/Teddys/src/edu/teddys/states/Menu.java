@@ -47,7 +47,8 @@ public class Menu extends AbstractAppState {
     
     @Override
     public void setEnabled(boolean isActive) {
-        if(isActive && !this.isEnabled()) {
+        super.setEnabled(isActive);
+        if(isActive) {
             // activate
             this.initKeys(true);
             
@@ -55,7 +56,7 @@ public class Menu extends AbstractAppState {
             inputManager.setCursorVisible(true);
             super.setEnabled(true);
             
-        } else if(!isActive && this.isEnabled()) {
+        } else {
             // deactivate
             this.initKeys(false);
             
@@ -67,15 +68,17 @@ public class Menu extends AbstractAppState {
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app);
-        this.app = (BaseGame)app;
-        this.inputManager = this.app.getInputManager();
-        super.setEnabled(false);
-        
-        nifty = ((BaseGame)app).getNifty();
-        
-        //initKeys(true);
-        // TODO: init menu background and other menu objects
+        if (!isInitialized()) {
+            super.initialize(stateManager, app);
+            this.app = (BaseGame) app;
+            this.inputManager = this.app.getInputManager();
+            super.setEnabled(false);
+
+            nifty = ((BaseGame) app).getNifty();
+
+            //initKeys(true);
+            // TODO: init menu background and other menu objects
+        }
     }
     
     @Override
