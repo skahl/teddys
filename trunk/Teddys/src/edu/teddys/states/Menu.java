@@ -54,7 +54,6 @@ public class Menu extends AbstractAppState {
             
             nifty.gotoScreen(MenuTypes.MAIN_MENU.name());
             inputManager.setCursorVisible(true);
-            super.setEnabled(true);
             
         } else {
             // deactivate
@@ -62,7 +61,6 @@ public class Menu extends AbstractAppState {
             
             nifty.gotoScreen(MenuTypes.BLANK.name());
             inputManager.setCursorVisible(false);
-            super.setEnabled(false);
         }
     }
     

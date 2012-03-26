@@ -90,14 +90,13 @@ public class Game extends AbstractAppState {
       
       Player.getInstance(Player.LOCAL_PLAYER).getHUD().show();
       addSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
-      super.setEnabled(true);
-
+      
     } else {
       // deactivate
       //this.app.getRootNode().detachChild(rotationNode);
 
       // TODO: Why nullpointer exception on exit?
-      stateManager.cleanup();
+      //stateManager.cleanup();
 //      rootNode.detachAllChildren();
 
       // detach keys
@@ -105,7 +104,6 @@ public class Game extends AbstractAppState {
       
       Player.getInstance(Player.LOCAL_PLAYER).getHUD().hide();
       removeSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
-      super.setEnabled(false);
     }
   }
 

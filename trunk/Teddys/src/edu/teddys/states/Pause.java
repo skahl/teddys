@@ -47,7 +47,6 @@ public class Pause extends AbstractAppState {
             
             inputManager.setCursorVisible(true);
             nifty.gotoScreen(MenuTypes.PAUSE_MENU.name());
-            super.setEnabled(true);
             
         } else {
             // deactivate
@@ -56,7 +55,6 @@ public class Pause extends AbstractAppState {
             
             nifty.gotoScreen(MenuTypes.BLANK.name());
             inputManager.setCursorVisible(false);
-            super.setEnabled(false);
         }
     }
     
