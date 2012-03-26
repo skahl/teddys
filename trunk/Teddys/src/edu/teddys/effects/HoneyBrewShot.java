@@ -40,6 +40,7 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
     
     this.setCollisionShape(partColBox.getCollisionShape());
     
+    setCcdMotionThreshold(partColBox.getCollisionShape().getHalfExtents().x);
     partColBox.getNode().addControl(this);
     
     setMass(1f);

@@ -25,6 +25,7 @@ import edu.teddys.callables.AddNodeToPhysicsSpaceCallable;
 import edu.teddys.callables.RemoveCharacterControlFromPhysicsSpace;
 import edu.teddys.callables.RemoveNodeFromPhysicsSpace;
 import edu.teddys.callables.SetPositionOfTeddyCallable;
+import edu.teddys.controls.GeometryCollisionListener;
 import edu.teddys.map.GameLoader;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.server.ManMessageSetPosition;
@@ -50,6 +51,9 @@ public class Game extends AbstractAppState {
   private boolean paused;
   private Entry<String, String> levelData = new SimpleEntry<String, String>("firstlevel", "maps/firstlevel.zip");
 
+  // TESTING PHYSICS PROBLEMS
+  private GeometryCollisionListener geoColListener;
+  
   //private boolean enabled;
   protected Game() {
     super();
@@ -235,6 +239,10 @@ public class Game extends AbstractAppState {
     // add to the world
     addSpatial(getRootNode(), player.getNode());
     addCharacterControlToPhysicsSpace(player.getPlayerControl());
+    
+    MegaLogger.getLogger().debug("IMPORTANT: Adding Geometry Collision Listener on player.getNode()!");
+    geoColListener = new GeometryCollisionListener(player.getNode(), null);
+    geoColListener.setListen(true);
   }
 
   public void removePlayerFromWorld(Player player) {
@@ -249,6 +257,7 @@ public class Game extends AbstractAppState {
     MegaLogger.getLogger().debug("Map model " + mapModel + " should be added to the Root Node and to the PhysicsSpace.");
     addSpatial(getRootNode(), mapModel);
     addNodeToPhysicsSpace(mapModel);
+    
   }
 
   @Override

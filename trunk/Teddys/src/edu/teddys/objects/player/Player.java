@@ -242,17 +242,19 @@ public class Player {
     collisionShape = new CapsuleCollisionShape(visual.getWidth() * 0.3f, visual.getHeight() * 0.35f, 1);
 
     control = new PlayerControl(this, collisionShape, 0.02f, visual);
+    control.setCcdMotionThreshold((visual.getWidth()*0.3f)/2f);
     if (id == LOCAL_PLAYER) {
       // This is handled by the ClientTimerThread
 //      control.registerWithInput(game.getInputManager());
     }
 
+    // Set a binding
+    node.addControl(control);
+    
     control.setJumpSpeed(5);
     control.setGravity(5);
     control.setFallSpeed(5);
 
-    // Set a binding
-    node.addControl(control);
 
 
     // The location of the CharacterControl Spatial should be the same as from the Player's node
