@@ -105,6 +105,8 @@ public class HolyWaterShot extends GhostControl implements Effect {
       canShoot = true;
       
       setEnabled(false);
+      // deactivate the holyEffect
+      holyEffect.setParticlesPerSec(0);
       
       Game.getInstance().getApp().enqueue(new DetachFromNodeCallable(mother, partColBox.getNode()));
     }

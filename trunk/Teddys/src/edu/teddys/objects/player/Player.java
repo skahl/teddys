@@ -305,7 +305,6 @@ public class Player {
    */
   public static Player getInstance(Integer id) {
     if (instances.isEmpty() || instances.get(id) == null) {
-      MegaLogger.getLogger().debug("IMPORTANT: Adding Player");
       instances.put(id, new Player(id));
     }
     return instances.get(id);

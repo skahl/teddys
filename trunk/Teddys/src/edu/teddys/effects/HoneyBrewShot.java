@@ -2,6 +2,11 @@
 package edu.teddys.effects;
 
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.ParticleMesh;
+import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -24,6 +29,8 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
   // Effect attributes
   Node mother;
   HoneyBrewParticle particle;
+  Material honeyPart;
+  ParticleEmitter honeyEffect;
 //  ParticleEmmitter
   ParticleCollisionBox partColBox;
   
@@ -37,6 +44,27 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
     mother = new Node("Honey Brew");
     particle = new HoneyBrewParticle(mother.getName());
     partColBox = new ParticleCollisionBox(mother.getName(), weapon, particle);
+    
+    // init particle emitter for honey brew shoot effect
+    honeyPart = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Particle.j3md");
+    honeyPart.setTexture("Texture", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/honeyParticle.png"));
+    honeyPart.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+    honeyPart.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
+    honeyPart.getAdditionalRenderState().setAlphaTest(true);
+    
+    honeyEffect = new ParticleEmitter("Honey", ParticleMesh.Type.Triangle, 10);
+    honeyEffect.setMaterial(honeyPart);
+    honeyEffect.setImagesX(1); honeyEffect.setImagesY(1);
+    honeyEffect.getParticleInfluencer().setInitialVelocity(Vector3f.UNIT_X);
+    honeyEffect.setStartSize(0.2f);
+    honeyEffect.setEndSize(0.02f);
+    honeyEffect.setGravity(0,0,0);
+    honeyEffect.setLowLife(0.2f);
+    honeyEffect.setHighLife(0.3f);
+    honeyEffect.getParticleInfluencer().setVelocityVariation(0.5f);  
+    honeyEffect.setParticlesPerSec(0);
+    
+    mother.attachChild(honeyEffect);
     
     this.setCollisionShape(partColBox.getCollisionShape());
     
@@ -77,6 +105,11 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
       setPhysicsLocation(loc);
       setPhysicsRotation(rot);
       
+      
+      // activate the honeyEffect
+      honeyEffect.getParticleInfluencer().setInitialVelocity(particle.getVector());
+      honeyEffect.setParticlesPerSec(10);
+      
       setEnabled(true);
     }
   }
@@ -96,6 +129,8 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
         // reset rigidBody physics
         
       }
+      
+      honeyEffect.setParticlesPerSec(0);
     }
   }
   
