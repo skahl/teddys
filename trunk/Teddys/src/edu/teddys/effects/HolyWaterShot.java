@@ -2,6 +2,11 @@
 package edu.teddys.effects;
 
 import com.jme3.bullet.control.GhostControl;
+import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.ParticleMesh;
+import com.jme3.material.Material;
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.material.RenderState.FaceCullMode;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import edu.teddys.callables.AttachToNodeCallable;
@@ -23,6 +28,9 @@ public class HolyWaterShot extends GhostControl implements Effect {
   // Effect attributes
   Node mother;
   HolyWaterParticle particle;
+  
+  Material holyPart;
+  ParticleEmitter holyEffect;
 //  ParticleEmmitter
   ParticleCollisionBox partColBox;
   
@@ -36,6 +44,29 @@ public class HolyWaterShot extends GhostControl implements Effect {
     mother = new Node("Holy Water");
     particle = new HolyWaterParticle(mother.getName());
     partColBox = new ParticleCollisionBox(mother.getName(), weapon, particle);
+    
+    
+    // init particle emitter for holy water shoot effect
+    holyPart = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Particle.j3md");
+    holyPart.setTexture("Texture", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/holywaterParticle.png"));
+    holyPart.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+    holyPart.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
+    holyPart.getAdditionalRenderState().setAlphaTest(true);
+    
+    holyEffect = new ParticleEmitter("HolyWater", ParticleMesh.Type.Triangle, 10);
+    holyEffect.setMaterial(holyPart);
+    holyEffect.setImagesX(1); holyEffect.setImagesY(1);
+    holyEffect.getParticleInfluencer().setInitialVelocity(Vector3f.UNIT_X);
+    holyEffect.setStartSize(0.2f);
+    holyEffect.setEndSize(0.02f);
+    holyEffect.setGravity(0,0,0);
+    holyEffect.setLowLife(0.2f);
+    holyEffect.setHighLife(0.3f);
+    holyEffect.getParticleInfluencer().setVelocityVariation(0.5f);  
+    holyEffect.setParticlesPerSec(0);
+    
+    mother.attachChild(holyEffect);
+    
     
     this.setCollisionShape(partColBox.getCollisionShape());
     
@@ -58,6 +89,11 @@ public class HolyWaterShot extends GhostControl implements Effect {
       } else {
         partColBox.getNode().setLocalTranslation(-0.8f, 0.1f, 0f);
       }
+      
+      
+      // activate the holyEffect
+      holyEffect.getParticleInfluencer().setInitialVelocity(particle.getVector());
+      holyEffect.setParticlesPerSec(10);
       
       setEnabled(true);
     }
