@@ -8,7 +8,7 @@ import com.jme3.app.state.AppState;
 import com.jme3.app.state.AppStateManager;
 
 /**
- *
+ * Used for convenient change of game states
  * @author besient
  */
 public class AppStateSwitcher {
@@ -26,6 +26,10 @@ public class AppStateSwitcher {
         this.manager = manager;
     }
     
+    /**
+     * Activates the given state, deactivates all others.
+     * @param state The state to be activated
+     */
     public void activateState(AppStateEnum state) {
         switch (state) {
             case GAME:
@@ -46,6 +50,11 @@ public class AppStateSwitcher {
         }
     }
     
+    /**
+     * Gets the given state from the AppStateManager.
+     * @param state
+     * @return 
+     */
     public AppState getState(AppStateEnum state) {
         AppState returnState = null;
         switch(state) {
@@ -67,7 +76,11 @@ public class AppStateSwitcher {
 //        manager.getState(Game.class).setPaused(false);
 //    }
     
-        
+    /**
+     * Used to obtain the singleton object.
+     * @param manager
+     * @return 
+     */    
     public static AppStateSwitcher getInstance(AppStateManager manager) {
         if (instance == null) 
             instance = new AppStateSwitcher(manager);        

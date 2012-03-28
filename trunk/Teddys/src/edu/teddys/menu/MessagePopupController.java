@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
+ * Base class for screens that can display MessagePopups.
  * @author besient
  */
 public class MessagePopupController implements ScreenController {
@@ -22,24 +22,32 @@ public class MessagePopupController implements ScreenController {
     protected Screen screen;
     private Element messagePopup;
     private Element message;
-    
     private List<String> messageQueue;
     private boolean showing = false;
-    
+
+    /**
+     * {@inheritDoc} 
+     */
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
         this.screen = screen;
-        
+
         messageQueue = new LinkedList<String>();
-        
+
     }
     
-        public void addMessage(String text) {
-            messageQueue.add(text);
-            if (!showing) showNextMessage();
+    /**
+     * Add a message to the queue. The message will be diplayed when all older messages are closed.
+     * @param text 
+     */
+    public void addMessage(String text) {
+        messageQueue.add(text);
+        if (!showing) {
+            showNextMessage();
         }
-    
-        private void showNextMessage() {
+    }
+
+    private void showNextMessage() {
 //        Element p = nifty.createPopupWithId(PopupTypes.MESSAGE_POPUP.name(), PopupTypes.MESSAGE_POPUP.name());
 //        Element e = p.findElementByName("text");
 //        
@@ -49,39 +57,47 @@ public class MessagePopupController implements ScreenController {
             //String text = messageQueue.remove(0);
             message.getRenderer(TextRenderer.class).setText(messageQueue.get(0));
         } else {
-            messagePopup = nifty.findPopupByName(PopupTypes.MESSAGE_POPUP.name());    
-            if (messagePopup == null)
+            messagePopup = nifty.findPopupByName(PopupTypes.MESSAGE_POPUP.name());
+            if (messagePopup == null) {
                 messagePopup = nifty.createPopupWithId(PopupTypes.MESSAGE_POPUP.name(), PopupTypes.MESSAGE_POPUP.name());
+            }
             message = messagePopup.findElementByName("text");
             message.getRenderer(TextRenderer.class).setText(messageQueue.get(0));
             nifty.showPopup(nifty.getCurrentScreen(), messagePopup.getId(), null);
             showing = true;
         }
-        
+
 
     }
-    
+
+    /**
+     * Closes the popup. Should only be called from the popup itself.
+     */
     public void closeMessagePopup() {
         Element p = nifty.findPopupByName("MESSAGE_POPUP");
 
-        
+
         messageQueue.remove(0);
-        
+
         if (!messageQueue.isEmpty()) {
             showNextMessage();
         } else {
-            if(nifty.findPopupByName("MESSAGE_POPUP") != null)
-            nifty.closePopup("MESSAGE_POPUP");
-            showing = false;            
+            if (nifty.findPopupByName("MESSAGE_POPUP") != null) {
+                nifty.closePopup("MESSAGE_POPUP");
+            }
+            showing = false;
         }
     }
 
+    /**
+     * {@inheritDoc} 
+     */
     public void onStartScreen() {
-        
     }
 
+    /**
+     * {@inheritDoc} 
+     */
     public void onEndScreen() {
-        
     }
-    
 }

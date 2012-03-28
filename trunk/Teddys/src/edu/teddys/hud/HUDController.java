@@ -16,7 +16,8 @@ import java.util.List;
 import edu.teddys.network.AttributeListener;
 
 /**
- *
+ * The HUD's controller class
+ * 
  * @author besient
  */
 public class HUDController extends UpdateControl implements ActionListener {
@@ -33,6 +34,9 @@ public class HUDController extends UpdateControl implements ActionListener {
   private float timeShown = 0;
   private InputManager input;
 
+  /**
+   * Contructor
+   */
   public HUDController() {
     messages = new ArrayList<String>();
 
@@ -51,6 +55,10 @@ public class HUDController extends UpdateControl implements ActionListener {
     };
   }
 
+  /**
+   * Set the HUD to be controlled.
+   * @param hud 
+   */
   public void setHUD(final HUD hud) {
     if (!hudSet) {
       this.hud = hud;
@@ -67,6 +75,10 @@ public class HUDController extends UpdateControl implements ActionListener {
 //    return instance;
 //  }
 
+  /**
+   * Add a message at the bottom of the HUD's message area.
+   * @param message 
+   */
   public void addMessage(String message) {
 
     //Game.hud.setMessage(0, message);
@@ -103,25 +115,41 @@ public class HUDController extends UpdateControl implements ActionListener {
     hud.setJetpackEnergy(energy);
   }
 
+  /**
+   * Highlight the next entry in the weapon list.
+   */
   private void nextWeapon() {
     hud.getWeaponList().highlightNext();
   }
 
+  /**
+   * Highlight the previous entry in the weapon list.
+   */
   private void previousWeapon() {
     hud.getWeaponList().highlightPrevious();
   }
 
+  /**
+   * show the weapon list.
+   */
   private void showWeapons() {
     hud.getWeaponList().show();
     weaponsShown = true;
     timeShown = 0;
   }
 
+  /**
+   * Hide the weapon list.
+   */
   private void hideWeapons() {
     hud.getWeaponList().hide();
     weaponsShown = false;
   }
 
+  /**
+   * Display the specified entry of the weapon list.
+   * @param name 
+   */
   public void selectWeapon(String name) {
   }
 

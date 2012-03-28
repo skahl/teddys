@@ -25,7 +25,7 @@ import edu.teddys.input.ActionControllerEnum;
 import edu.teddys.input.AnalogControllerEnum;
 import java.util.Arrays;
 /**
- *
+ * ScreenController for the options menu.
  * @author besient
  */
 public class OptionsMenu extends MessagePopupController implements RawInputListener {
@@ -49,7 +49,10 @@ public class OptionsMenu extends MessagePopupController implements RawInputListe
     };
     
     private SettingLayers activeLayer = SettingLayers.SYSTEM;
-     
+    
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public void bind(Nifty nifty, Screen screen) {
 
@@ -77,11 +80,17 @@ public class OptionsMenu extends MessagePopupController implements RawInputListe
         loadKeys();
     }
     
-    
+    /**
+     * Setter method for the application object.
+     * @param app 
+     */
     public void setApplication(Application app) {
         this.app = app;
     }
 
+    /**
+     * Updates the resolution list depending on whether fullscreen is selected or not.
+     */
     public void updateResolutions() {
         if (fullscreen_cb.isChecked()) {
             resolution_dd.addAllItems(Arrays.asList(SupportedSettings.getWindowedResolutions()));
@@ -90,6 +99,9 @@ public class OptionsMenu extends MessagePopupController implements RawInputListe
         }
     }
     
+    /**
+     * Displays the current key bindings.
+     */
     private void loadKeys() {
         InputSettings settings = InputSettings.getInstance();
         
@@ -110,10 +122,16 @@ public class OptionsMenu extends MessagePopupController implements RawInputListe
         }
 
     
+    /**
+     * Return to the main menu.
+     */
     public void back() {
         nifty.gotoScreen(MenuTypes.MAIN_MENU.name());
     }
     
+    /**
+     * Show the system page.
+     */
     public void showSystem() {
         if (activeLayer != SettingLayers.SYSTEM) {
             screen.removeLayerElement(controlsLayer);
@@ -122,6 +140,9 @@ public class OptionsMenu extends MessagePopupController implements RawInputListe
         }
     }
     
+    /**
+     * Show the controls page
+     */
     public void showControls() {
         if (activeLayer != SettingLayers.CONTROLS) {
             screen.removeLayerElement(systemLayer);
@@ -130,6 +151,10 @@ public class OptionsMenu extends MessagePopupController implements RawInputListe
         }
     }
 
+    /**
+     * Ask the user to press a key and attach the input listener.
+     * @param key 
+     */
     public void activateInputSelection(String key) {
         try {
             selectAnalog = AnalogControllerEnum.valueOf(key);
@@ -147,6 +172,9 @@ public class OptionsMenu extends MessagePopupController implements RawInputListe
         nifty.showPopup(nifty.getCurrentScreen(), inputPopup.getId(), null);
     }
     
+    /**
+     * Saves the current settings.
+     */
     public void save() {
         switch (activeLayer) {
             case CONTROLS:
@@ -162,6 +190,9 @@ public class OptionsMenu extends MessagePopupController implements RawInputListe
        }
     }
     
+    /**
+     * Process the user's key selection and close the popup. 
+     */
     public void onKeyEvent(KeyInputEvent evt) {
         String keyChar = String.valueOf(evt.getKeyChar());
         if (keyChar.equals(" ")) {
@@ -180,6 +211,9 @@ public class OptionsMenu extends MessagePopupController implements RawInputListe
         loadKeys();    
     }
     
+    /**
+     * Process the user's mouse button selection and close the popup. 
+     */
     public void onMouseButtonEvent(MouseButtonEvent evt) {
         if (evt.isPressed()) {
             if (selectAction != null) {
@@ -196,6 +230,9 @@ public class OptionsMenu extends MessagePopupController implements RawInputListe
         }
     }
     
+    /**
+     * Process the user's mouse wheel selection and close the popup.
+     */
     public void onMouseMotionEvent(MouseMotionEvent evt) {
         int delta = evt.getDeltaWheel();
         if (delta != 0 && (selectAction != null)) {

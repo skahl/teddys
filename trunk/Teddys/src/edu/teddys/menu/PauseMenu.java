@@ -9,7 +9,7 @@ import com.jme3.input.InputManager;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.screen.Screen;
 /**
- *
+ * ScreenController for the pause menu
  * @author besient
  */
 public class PauseMenu extends MessagePopupController {
@@ -20,28 +20,41 @@ public class PauseMenu extends MessagePopupController {
     
     private boolean enabled;
     
+    
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public void bind(Nifty nifty, Screen screen) {
         super.bind(nifty, screen);
     }
 
 
+    /**
+     * Setter method for the application object.
+     * @param app 
+     */
     public void setApplication(Application app) {
         this.app = app;
     }
     
+    /**
+     * Hides the menu.
+     */
     public void returnToGame() {
         nifty.gotoScreen(MenuTypes.BLANK.name());
     }
     
-    public void showOptionsScreen() {
-        
-    }
-    
+    /**
+     * Disconnect from the server.
+     */
     public void disconnect() {
         
     }
     
+    /**
+     * Stop the application.
+     */
     public void exit() {
         app.stop();
     }

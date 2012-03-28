@@ -12,8 +12,10 @@ import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import edu.teddys.BaseGame;
+
 /**
- *
+ * ScreenController for the main menu
+ * 
  * @author besient
  */
 public class MainMenu extends MessagePopupController {
@@ -29,6 +31,9 @@ public class MainMenu extends MessagePopupController {
     private NiftyImage teddy1, teddy2, teddy3, teddy4, teddy5;
     private Element teddyImage, popupElement;
     
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public void bind(Nifty nifty, Screen screen) {
         super.bind(nifty, screen);
@@ -43,7 +48,10 @@ public class MainMenu extends MessagePopupController {
         popupElement = nifty.createPopup(PopupTypes.EXIT_POPUP.name());
     }
 
-    
+    /**
+     * Setter method for the application object
+     * @param app 
+     */
     public void setApplication(Application app) {
         this.app = app;
         input = app.getInputManager();
@@ -51,6 +59,9 @@ public class MainMenu extends MessagePopupController {
         height = ((BaseGame)app).getSettings().getHeight();
     }
     
+    /**
+     * Update the weapon's orientation depending on the mouse position.
+     */
     public void processMousePosition() {
         float mouseY = input.getCursorPosition().y;
        
@@ -68,35 +79,58 @@ public class MainMenu extends MessagePopupController {
     }
     
 
-    
+    /**
+     * Shows the join screen.
+     */
     public void showJoinScreen() {
         nifty.gotoScreen(MenuTypes.JOIN_GAME.name());
     }
     
+    /**
+     * Shows the create screen.
+     */
     public void showCreateScreen() {
         nifty.gotoScreen(MenuTypes.CREATE_GAME.name());
     }
     
+    /**
+     * Shows the options screen.
+     */
     public void showOptionsScreen() {
         nifty.gotoScreen(MenuTypes.OPTIONS_MENU.name());
     }
     
+    /**
+     * Shows the credits screen.
+     */
     public void showCreditsScreen() {
         nifty.gotoScreen(MenuTypes.CREDITS.name());
     }
     
+    /**
+     * Return to the main menu.
+     */
     public void back() {
         nifty.gotoScreen(MenuTypes.MAIN_MENU.name());
     }
     
+    /**
+     * Shows the exit confirmation dialog.
+     */
     public void reallyQuit() {
         nifty.showPopup(nifty.getCurrentScreen(), popupElement.getId(), null);
     }
     
+    /**
+     * Closes the exit confirmation dialog.
+     */
     public void closePopup() {
         nifty.closePopup(popupElement.getId());
     }
     
+    /**
+     * Stops the application.
+     */
     public void exit() {
         app.stop();
     }
