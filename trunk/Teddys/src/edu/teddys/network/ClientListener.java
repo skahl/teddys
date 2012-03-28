@@ -114,6 +114,10 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
             Player player = Player.getInstance(Player.LOCAL_PLAYER);
             // update the HUD data
             player.getHUD().setPlayerName(player.getData().getName());
+            player.getHUD().setTeam(
+                    TeddyServer.getInstance().getData().getTeams().get(
+                    player.getData().getTeamID()
+                    ).getName());
           }
         } else if (message instanceof ResMessageMapLoaded) {
           //
