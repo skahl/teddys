@@ -44,14 +44,18 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
 
     if (isListening && !listen) {
       isListening = false;
-      Game.getInstance().getBulletAppState().getPhysicsSpace().remove(node);
-      Game.getInstance().getBulletAppState().getPhysicsSpace().removeCollisionListener(this);
+//      Game.getInstance().getBulletAppState().getPhysicsSpace().remove(node);
+      Game.getInstance().removeNodeFromPhysicsSpace(node);
+//      Game.getInstance().getBulletAppState().getPhysicsSpace().removeCollisionListener(this);
+      Game.getInstance().removeCollisionListenerFromPhysicsSpace(this);
 
       reset();
     } else if (!isListening && listen) {
       isListening = true;
-      Game.getInstance().getBulletAppState().getPhysicsSpace().add(node);
-      Game.getInstance().getBulletAppState().getPhysicsSpace().addCollisionListener(this);
+//      Game.getInstance().getBulletAppState().getPhysicsSpace().add(node);
+      Game.getInstance().addNodeToPhysicsSpace(node);
+//      Game.getInstance().getBulletAppState().getPhysicsSpace().addCollisionListener(this);
+      Game.getInstance().addCollisionListenerToPhysicsSpace(this);
     }
   }
 
@@ -64,10 +68,8 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
     Integer hitPlayerID = null;
 
     if (nodeA.equals(node.getName())) {
-      MegaLogger.getLogger().debug("collision() called." + nodeA + ";" + nodeB);
 
       if (nodeB.contains("player")) {
-
         if (!collidedPlayer) {
           collidedPlayer = true;
           hitPlayerID = Integer.parseInt(nodeB.substring(startPlayerID));
@@ -76,7 +78,6 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
 
       collided = true;
     } else if (nodeB.contains(node.getName())) {
-      MegaLogger.getLogger().debug("collision() called." + nodeA + ";" + nodeB);
 
       if (nodeA.contains("player")) {
         if (!collidedPlayer) {
@@ -86,6 +87,10 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
       }
 
       collided = true;
+    }
+    
+    if(collided) {
+      MegaLogger.getLogger().debug("collision() called." + nodeA + ";" + nodeB);
     }
 
     //TODO THIS SHOULD BE ONLY CALLED BY THE SERVER!!
