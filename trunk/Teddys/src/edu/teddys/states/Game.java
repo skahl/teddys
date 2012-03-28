@@ -88,8 +88,12 @@ public class Game extends AbstractAppState {
       // attach keys
       initKeys(true);
       
-      Player.getInstance(Player.LOCAL_PLAYER).getHUD().show();
-      addSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
+      if(Player.getInstance(Player.LOCAL_PLAYER).getHUD() != null) {
+        Player.getInstance(Player.LOCAL_PLAYER).getHUD().show();
+      }
+      if(Player.getInstance(Player.LOCAL_PLAYER).getCursor() != null) {
+        addSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
+      }
       
     } else {
       // deactivate
@@ -102,8 +106,12 @@ public class Game extends AbstractAppState {
       // detach keys
       initKeys(false);
       
-      Player.getInstance(Player.LOCAL_PLAYER).getHUD().hide();
-      removeSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
+      if(Player.getInstance(Player.LOCAL_PLAYER).getHUD() != null) {
+        Player.getInstance(Player.LOCAL_PLAYER).getHUD().hide();
+      }
+      if(Player.getInstance(Player.LOCAL_PLAYER).getCursor() != null) {
+        removeSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
+      }
     }
   }
 

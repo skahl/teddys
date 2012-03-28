@@ -219,7 +219,6 @@ public class BaseGame extends SimpleApplication {
       
       TeddyServer server = TeddyServer.getInstance();
       server.startServer(NetworkSettings.SERVER_PORT);
-      //TODO dirty (use port information)
       server.getData().setDiscoverable(true);
       try {
         lockfile.createNewFile();

@@ -19,6 +19,9 @@ public class AttachToNodeCallable implements Callable {
   Spatial child;
 
   public AttachToNodeCallable(Node parent, Spatial child) {
+    if(parent == null || child == null) {
+      throw new ExceptionInInitializerError("Parent or child is null!");
+    }
     this.parent = parent;
     this.child = child;
   }
