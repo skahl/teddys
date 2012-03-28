@@ -42,7 +42,7 @@ public class HoneyBrew implements Weapon {
   }
 
   public float getFireRate() {
-    return .1f;
+    return 1f;
   }
 
   public float getSpawningRate() {

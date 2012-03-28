@@ -135,16 +135,16 @@ public class Game extends AbstractAppState {
             stateManager.attach(bulletAppState);
 
             // shed some light
-            Vector3f sunDirection = new Vector3f(-1f, -1f, -1.2f);
+            Vector3f sunDirection = new Vector3f(-1f, -1f, -2f);
             sunDirection.normalizeLocal();
 
             DirectionalLight sunL = new DirectionalLight();
-            sunL.setColor(ColorRGBA.White.mult(0.5f));
+            sunL.setColor(ColorRGBA.White.mult(0.7f));
             sunL.setDirection(sunDirection);
             rootNode.addLight(sunL);
 
             AmbientLight sunA = new AmbientLight();
-            sunA.setColor(ColorRGBA.White.mult(0.3f));
+            sunA.setColor(ColorRGBA.White.mult(0.5f));
             rootNode.addLight(sunA);
 
             // init shadow renderstate

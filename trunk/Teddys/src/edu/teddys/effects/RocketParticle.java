@@ -21,8 +21,8 @@ public class RocketParticle extends CustomParticle {
     
     this.setMesh(new Quad(0.2f, 0.15f));
     
-    mat = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Particle.j3md");
-    mat.setTexture("Texture", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/rocketParticle.png"));
+    mat = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+    mat.setTexture("ColorMap", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/rocketParticle.png"));
     mat.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
     mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
     this.setMaterial(mat);
