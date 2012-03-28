@@ -19,6 +19,7 @@ import edu.teddys.network.messages.NetworkMessageRequest;
 import edu.teddys.network.messages.NetworkMessageResponse;
 import edu.teddys.network.messages.client.GSMessageGamePaused;
 import edu.teddys.network.messages.client.GSMessagePlayerReady;
+import edu.teddys.network.messages.client.ManControllerInput;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
 import edu.teddys.network.messages.client.ResMessageSendClientData;
@@ -176,7 +177,11 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
 //          TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
         }
       } else if (message instanceof NetworkMessageManipulation) {
-        if (message instanceof ManMessageSetPosition) {
+        if (message instanceof ManControllerInput) {
+        ManControllerInput input = (ManControllerInput) message;
+        // refresh the player's action
+        Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
+      } else if (message instanceof ManMessageSetPosition) {
           ManMessageSetPosition pos = (ManMessageSetPosition) message;
           MegaLogger.getLogger().debug("Received a request to change or set the position");
           for(Entry<Integer, Vector3f> entry : pos.getPositions().entrySet()) {

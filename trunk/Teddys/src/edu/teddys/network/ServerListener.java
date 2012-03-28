@@ -30,6 +30,7 @@ import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -194,17 +195,14 @@ public class ServerListener implements MessageListener<HostedConnection> {
       if (message instanceof ManControllerInput) {
         ManControllerInput input = (ManControllerInput) message;
 
-        //TODO local player ...
-        if (input.getSource() == Player.LOCAL_PLAYER) {
-          // ignore it, it is handled by the input manager attached to the local
-          // player
-          // sync with the input data if the server has been created locally
-          // (local join)
-//          return;
-        }
-
         // refresh the player's action
         Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
+        // send to the other players
+        List<Integer> clients = TeddyServer.getInstance().getClientIDs();
+//        clients.remove(input.getSource());
+        // redistribute
+        input.setRecipients(clients.toArray(new Integer[clients.size()]));
+        TeddyServer.getInstance().send(input);
       } else if (message instanceof ManCursorPosition) {
         ManCursorPosition cursorPos = (ManCursorPosition) message;
         Vector3f cursor = cursorPos.getCursor();

@@ -152,18 +152,6 @@ public class Game extends AbstractAppState {
             shadowRenderer.setDirection(sunDirection);
             this.app.getViewPort().addProcessor(shadowRenderer);
 
-            //HUD
-            //INFO moved to Player
-//    hud = HUD.getInstance(this.app.getGuiNode(),
-//            this.app.getAssetManager(),
-//            this.app.getSettings().getWidth(),
-//            this.app.getSettings().getHeight(), GameModeEnum.CAPTURE_THE_HONEY);
-//
-//    hud.show();
-//    HUDController hudController = HUDController.getInstance();
-//    hudController.setHUD(hud);
-//    hudController.registerWithInput(inputManager);
-
             // physics debug (shows collission meshes):
 
             if (GameSettings.DEBUG) {
@@ -230,6 +218,7 @@ public class Game extends AbstractAppState {
             + pos + " (ID: " + player.getData().getId() + ")");
     ManMessageSetPosition posMsg = new ManMessageSetPosition();
     posMsg.getPositions().put(player.getData().getId(), pos);
+    // In case this is the server instance, send the position data
     TeddyServer.getInstance().send(posMsg);
   }
 

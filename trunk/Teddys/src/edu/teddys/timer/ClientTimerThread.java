@@ -30,7 +30,7 @@ public class ClientTimerThread extends Thread {
     while(!stop) {
 
       List<InputTuple> inputList = ClientTimer.getInput();
-      Player.getInstance(Player.LOCAL_PLAYER).getPlayerControl().newInput(new LinkedList<InputTuple>(inputList));
+//      Player.getInstance(Player.LOCAL_PLAYER).getPlayerControl().newInput(new LinkedList<InputTuple>(inputList));
       if (!inputList.isEmpty()) {
         ManControllerInput input = new ManControllerInput(Player.LOCAL_PLAYER, new LinkedList<InputTuple>(inputList));
         // The timestamp has been already set in the empty constructor of
