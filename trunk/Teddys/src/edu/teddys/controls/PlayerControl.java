@@ -12,7 +12,11 @@ import edu.teddys.input.InputTuple;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.player.TeddyVisual;
 import edu.teddys.objects.weapons.DeafNut;
+import edu.teddys.objects.weapons.Florets;
+import edu.teddys.objects.weapons.HolyWater;
+import edu.teddys.objects.weapons.HoneyBrew;
 import edu.teddys.objects.weapons.Rocket;
+import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
 import java.util.LinkedList;
@@ -64,7 +68,7 @@ public class PlayerControl extends CharacterControl {
     left = new Vector3f(-1, 0, 0);
     right = new Vector3f(1, 0, 0);
     
-    currentWeapon = new Rocket(player);//new DeafNut(player);//new Florets(player);//new HoneyBrew(player);//new HolyWater(player);//new StenGun(player);
+    currentWeapon = new DeafNut(player);//new Florets(player);//new Rocket(player);//new HolyWater(player);//new HoneyBrew(player);//new StenGun(player);//
 
     Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
   }

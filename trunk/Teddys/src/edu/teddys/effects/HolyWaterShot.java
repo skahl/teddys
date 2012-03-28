@@ -47,22 +47,22 @@ public class HolyWaterShot extends GhostControl implements Effect {
     
     
     // init particle emitter for holy water shoot effect
-    holyPart = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Particle.j3md");
-    holyPart.setTexture("Texture", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/holywaterParticle.png"));
+    holyPart = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+    holyPart.setTexture("ColorMap", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/holywaterParticle.png"));
     holyPart.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
     holyPart.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
     holyPart.getAdditionalRenderState().setAlphaTest(true);
     
-    holyEffect = new ParticleEmitter("HolyWater", ParticleMesh.Type.Triangle, 10);
+    holyEffect = new ParticleEmitter("HolyWater", ParticleMesh.Type.Triangle, 20);
     holyEffect.setMaterial(holyPart);
     holyEffect.setImagesX(1); holyEffect.setImagesY(1);
     holyEffect.getParticleInfluencer().setInitialVelocity(Vector3f.UNIT_X);
-    holyEffect.setStartSize(0.2f);
-    holyEffect.setEndSize(0.02f);
-    holyEffect.setGravity(0,0,0);
-    holyEffect.setLowLife(0.2f);
-    holyEffect.setHighLife(0.3f);
-    holyEffect.getParticleInfluencer().setVelocityVariation(0.5f);  
+    holyEffect.setStartSize(0.1f);
+    holyEffect.setEndSize(0.1f);
+    holyEffect.setGravity(0,1f,0);
+    holyEffect.setLowLife(0.6f);
+    holyEffect.setHighLife(0.6f);
+    holyEffect.getParticleInfluencer().setVelocityVariation(0.2f);  
     holyEffect.setParticlesPerSec(0);
     
     mother.attachChild(holyEffect);
@@ -83,16 +83,19 @@ public class HolyWaterShot extends GhostControl implements Effect {
       canShoot = false;
       
       Game.getInstance().getApp().enqueue(new AttachToNodeCallable(mother, partColBox.getNode()));
-      
+      Vector3f particleVector;
       if(particle.getVector().x > 0f) {
+        particleVector = new Vector3f(3f, 0.5f, 0f);
         partColBox.getNode().setLocalTranslation(0.8f, 0.1f, 0f);
       } else {
+        
+        particleVector = new Vector3f(-3f, 0.5f, 0f);
         partColBox.getNode().setLocalTranslation(-0.8f, 0.1f, 0f);
       }
       
       
       // activate the holyEffect
-      holyEffect.getParticleInfluencer().setInitialVelocity(particle.getVector());
+      holyEffect.getParticleInfluencer().setInitialVelocity(particleVector);
       holyEffect.setParticlesPerSec(10);
       
       setEnabled(true);

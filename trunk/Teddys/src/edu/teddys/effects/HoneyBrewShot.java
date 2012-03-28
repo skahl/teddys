@@ -46,29 +46,29 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
     partColBox = new ParticleCollisionBox(mother.getName(), weapon, particle);
     
     // init particle emitter for honey brew shoot effect
-    honeyPart = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Particle.j3md");
-    honeyPart.setTexture("Texture", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/honeyParticle.png"));
+    honeyPart = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
+    honeyPart.setTexture("ColorMap", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/honeyParticle.png"));
     honeyPart.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
     honeyPart.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
     honeyPart.getAdditionalRenderState().setAlphaTest(true);
     
-    honeyEffect = new ParticleEmitter("Honey", ParticleMesh.Type.Triangle, 10);
+    honeyEffect = new ParticleEmitter("Honey", ParticleMesh.Type.Triangle, 20);
     honeyEffect.setMaterial(honeyPart);
     honeyEffect.setImagesX(1); honeyEffect.setImagesY(1);
     honeyEffect.getParticleInfluencer().setInitialVelocity(Vector3f.UNIT_X);
-    honeyEffect.setStartSize(0.2f);
-    honeyEffect.setEndSize(0.02f);
-    honeyEffect.setGravity(0,0,0);
-    honeyEffect.setLowLife(0.2f);
+    honeyEffect.setStartSize(0.1f);
+    honeyEffect.setEndSize(0.1f);
+    honeyEffect.setGravity(0,1,0);
+    honeyEffect.setLowLife(0.3f);
     honeyEffect.setHighLife(0.3f);
-    honeyEffect.getParticleInfluencer().setVelocityVariation(0.5f);  
+    honeyEffect.getParticleInfluencer().setVelocityVariation(0.3f);  
     honeyEffect.setParticlesPerSec(0);
     
     mother.attachChild(honeyEffect);
     
     this.setCollisionShape(partColBox.getCollisionShape());
     
-    setCcdMotionThreshold(partColBox.getCollisionShape().getHalfExtents().x);
+    //setCcdMotionThreshold(partColBox.getCollisionShape().getHalfExtents().x);
     partColBox.getNode().addControl(this);
     
     setMass(1f);
@@ -95,11 +95,15 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
       Game.getInstance().getApp().enqueue(new AttachToNodeCallable(
               Game.getInstance().getRootNode(), partColBox.getNode()));
       
+      Vector3f particleVector;
       Vector3f loc = mother.getWorldTranslation();
       Quaternion rot = mother.getLocalRotation();
       if(particle.getVector().x > 0f) {
+        particleVector = new Vector3f(3f, 0.5f, 0f);
         loc.addLocal(1.1f, 0.3f, 0f);
       } else {
+        
+        particleVector = new Vector3f(-3f, 0.5f, 0f);
         loc.addLocal(-1.1f, 0.3f, 0f);
       }
       setPhysicsLocation(loc);
@@ -107,8 +111,8 @@ public class HoneyBrewShot extends RigidBodyControl implements Effect {
       
       
       // activate the honeyEffect
-      honeyEffect.getParticleInfluencer().setInitialVelocity(particle.getVector());
-      honeyEffect.setParticlesPerSec(10);
+      honeyEffect.getParticleInfluencer().setInitialVelocity(particleVector);
+      honeyEffect.setParticlesPerSec(20);
       
       setEnabled(true);
     }

@@ -46,7 +46,7 @@ public class ParticleCollisionBox {
     colBox = new Geometry(name, box);
     
     Material blue = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-    blue.setColor("Color", ColorRGBA.Blue);
+    //blue.setColor("Color", ColorRGBA.Blue);
     colBox.setMaterial(blue);
     colBox.setCullHint(Spatial.CullHint.Always); // collision box is invisible
     

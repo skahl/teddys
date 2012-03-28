@@ -46,12 +46,12 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
     partColBox = new ParticleCollisionBox(mother.getName(), weapon, particle);
     
     this.setCollisionShape(partColBox.getCollisionShape());
-    setCcdMotionThreshold(partColBox.getCollisionShape().getHalfExtents().x);
+    //setCcdMotionThreshold(partColBox.getCollisionShape().getHalfExtents().x);
     
     partColBox.getNode().addControl(this);
     
     setMass(1f);
-    this.setDamping(0.5f, 0.9f);
+    this.setDamping(0.9f, 0.9f);
   }
   
   @Override
