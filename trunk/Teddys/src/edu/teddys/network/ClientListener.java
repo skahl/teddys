@@ -55,10 +55,13 @@ import java.util.Map.Entry;
 public class ClientListener implements MessageListener<com.jme3.network.Client> {
 
   public void messageReceived(com.jme3.network.Client source, Message message) {
-    String inputMessage = String.format(
-            "Client received a message (%s): %s",
-            message.getClass().getSimpleName(), message);
-    MegaLogger.getLogger().debug(inputMessage);
+    
+    if(!(message instanceof ManControllerInput)) {
+      String inputMessage = String.format(
+              "Client received a message (%s): %s",
+              message.getClass().getSimpleName(), message);
+      MegaLogger.getLogger().debug(inputMessage);
+    }
 
     if (message instanceof DisconnectMessage) {
       //

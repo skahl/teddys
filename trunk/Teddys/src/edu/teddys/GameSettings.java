@@ -90,6 +90,10 @@ public class GameSettings {
    */
   public static final Integer MAX_CLIENT_INTERPOL_CAPACITY = 5;
   /**
+   * Transmit the position of all Teddys every n-th tick. Default: 3
+   */
+  public static final Integer TRANSMIT_POSITION_MOD = 30;
+  /**
    * Checksum interval in milliseconds (Default: 3000 ms)
    * @see ChecksumManager
    */

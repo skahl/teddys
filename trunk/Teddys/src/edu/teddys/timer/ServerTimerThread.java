@@ -20,17 +20,16 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class ServerTimerThread extends Thread {
 
-  
   private boolean stop = false;
   private Long tick = new Long(0);
   /**
    * History of the clients' positions for the lag compensation.
    */
-  private Map<Integer,LinkedBlockingQueue<Vector3f>> clientPositions = new HashMap<Integer,LinkedBlockingQueue<Vector3f>>();
-  
+  private Map<Integer, LinkedBlockingQueue<Vector3f>> clientPositions = new HashMap<Integer, LinkedBlockingQueue<Vector3f>>();
+
   @Override
   public void run() {
-    
+
     while (!stop) {
       //TODO parse game events
 
@@ -42,11 +41,20 @@ public class ServerTimerThread extends Thread {
 //        posMsg.setPosition(player.getPlayerControl().getPhysicsLocation());
 ////        TeddyServer.getInstance().send(posMsg);
 //      }
-      
+
+      if (tick % GameSettings.TRANSMIT_POSITION_MOD == 0) {
+        ManMessageSetPosition posMsg = new ManMessageSetPosition();
+        // update the players' positions
+        for (Player player : Player.getInstanceList()) {
+          posMsg.getPositions().put(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
+        }
+        TeddyServer.getInstance().send(posMsg);
+      }
+
       // increment the tick by one
       ++tick;
       try {
-          sleep(GameSettings.SERVER_TIMESTAMP_INTERVAL);
+        sleep(GameSettings.SERVER_TIMESTAMP_INTERVAL);
       } catch (InterruptedException ex) {
         MegaLogger.getLogger().debug(new Throwable("Sleep request from timer interrupted!", ex));
       }
@@ -64,7 +72,7 @@ public class ServerTimerThread extends Thread {
   public Map<Integer, LinkedBlockingQueue<Vector3f>> getClientPositions() {
     return clientPositions;
   }
-  
+
   /**
    * 
    * Adds an element to the position List. If the capacity has been reached, dismiss the first value.
@@ -76,17 +84,17 @@ public class ServerTimerThread extends Thread {
    * @param pos The last "known" position.
    */
   public synchronized void addClientPosition(Integer clientId, Vector3f pos) {
-    if(!getClientPositions().containsKey(clientId)) {
+    if (!getClientPositions().containsKey(clientId)) {
       getClientPositions().put(clientId, new LinkedBlockingQueue<Vector3f>(GameSettings.MAX_SERVER_POS_CAPACITY));
     }
     // check if the queue is full
-    if(getClientPositions().get(clientId).remainingCapacity() == 0) {
+    if (getClientPositions().get(clientId).remainingCapacity() == 0) {
       getClientPositions().get(clientId).poll();
     }
     // now the position is added :)
     getClientPositions().get(clientId).offer(pos);
   }
-  
+
   /**
    * 
    * Set the flag to stop the current thread.

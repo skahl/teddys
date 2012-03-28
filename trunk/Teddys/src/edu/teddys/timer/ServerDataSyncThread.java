@@ -29,9 +29,8 @@ public class ServerDataSyncThread extends Thread {
 
   @Override
   public void run() {
-    //TODO dismiss old values
+    
     while (!stop) {
-      //TODO(nice to have) delta compression?
       
 //      TeddyServerData data = TeddyServer.getInstance().getData();
 //      Map<Integer,List<Vector3f>> pos = new TreeMap<Integer,List<Vector3f>>();
@@ -43,12 +42,12 @@ public class ServerDataSyncThread extends Thread {
 //      ManMessageTransferServerData msg = new ManMessageTransferServerData(data);
 //      TeddyServer.getInstance().send(msg);
       
-      ManMessageSetPosition posMsg = new ManMessageSetPosition();
-      // update the players' positions
-      for(Player player : Player.getInstanceList()) {
-        posMsg.getPositions().put(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
-      }
-      TeddyServer.getInstance().send(posMsg);
+//      ManMessageSetPosition posMsg = new ManMessageSetPosition();
+//      // update the players' positions
+//      for(Player player : Player.getInstanceList()) {
+//        posMsg.getPositions().put(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
+//      }
+//      TeddyServer.getInstance().send(posMsg);
       
       // ... and sleep an amount of time.
       try {
