@@ -22,6 +22,7 @@ public class GameMap {
 
   public GameMap(String mapPath, Game game) {
     mapPath = "Models/firstlevel/firstlevel.j3o";
+//    mapPath = "Models/darkness/darkness.j3o";
 
     try {
 

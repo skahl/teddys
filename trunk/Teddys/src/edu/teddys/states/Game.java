@@ -124,7 +124,8 @@ public class Game extends AbstractAppState {
             this.inputManager = this.app.getInputManager();
             this.rootNode = this.app.getRootNode();
 
-            app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
+            //app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
+            app.getViewPort().setBackgroundColor(new ColorRGBA(0f, 0f, 0f, 1f));
 
             this.paused = false;
             super.setEnabled(false);
@@ -135,17 +136,17 @@ public class Game extends AbstractAppState {
             stateManager.attach(bulletAppState);
 
             // shed some light
-            Vector3f sunDirection = new Vector3f(-1f, -1f, -2f);
+            Vector3f sunDirection = new Vector3f(-1f, -1f, -1f);
             sunDirection.normalizeLocal();
 
-            DirectionalLight sunL = new DirectionalLight();
-            sunL.setColor(ColorRGBA.White.mult(0.7f));
-            sunL.setDirection(sunDirection);
-            rootNode.addLight(sunL);
-
-            AmbientLight sunA = new AmbientLight();
-            sunA.setColor(ColorRGBA.White.mult(0.5f));
-            rootNode.addLight(sunA);
+//            DirectionalLight sunL = new DirectionalLight();
+//            sunL.setColor(ColorRGBA.White.mult(0.7f));
+//            sunL.setDirection(sunDirection);
+//            rootNode.addLight(sunL);
+//
+//            AmbientLight sunA = new AmbientLight();
+//            sunA.setColor(ColorRGBA.White.mult(0.5f));
+//            rootNode.addLight(sunA);
 
             // init shadow renderstate
             shadowRenderer = new BasicShadowRenderer(this.app.getAssetManager(), 256);
