@@ -221,12 +221,13 @@ public class Game extends AbstractAppState {
     //TODO use some spawn points
     Vector3f pos = new Vector3f(rnd.nextLong(0, 6), rnd.nextLong(1, 2), GameSettings.WORLD_Z_INDEX);
     // this is the first position of the Teddy, so initialize a new List
-    SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(player, pos);
+    SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(player, pos, true);
     getApp().enqueue(setPos);
     MegaLogger.getLogger().debug("Position of the player has been randomly set to "
             + pos + " (ID: " + player.getData().getId() + ")");
     ManMessageSetPosition posMsg = new ManMessageSetPosition();
     posMsg.getPositions().put(player.getData().getId(), pos);
+    posMsg.setFixed(true);
     // In case this is the server instance, send the position data
     TeddyServer.getInstance().send(posMsg);
   }

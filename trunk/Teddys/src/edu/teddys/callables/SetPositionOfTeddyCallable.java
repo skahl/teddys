@@ -19,22 +19,33 @@ public class SetPositionOfTeddyCallable implements Callable {
 
   private Player player;
   List<Vector3f> positions = null;
+  Boolean fixed = false;
 
-  public SetPositionOfTeddyCallable(Player playerInstance, List<Vector3f> positions) {
+  public SetPositionOfTeddyCallable(Player playerInstance, List<Vector3f> positions, Boolean fixed) {
     this.player = playerInstance;
     this.positions = positions;
+    this.fixed = fixed;
   }
 
-  public SetPositionOfTeddyCallable(Player playerInstance, Vector3f position) {
+  public SetPositionOfTeddyCallable(Player playerInstance, Vector3f position, Boolean fixed) {
     this.player = playerInstance;
     this.positions = new ArrayList<Vector3f>();
     this.positions.add(position);
+    this.fixed = fixed;
   }
 
   public Object call() throws Exception {
-    //TODO if the array contains more than entry, use smoothed movements.
+    if(positions.isEmpty()) {
+      return null;
+    }
     Vector3f lastPosition = positions.get(positions.size() - 1);
-    player.getPlayerControl().setPhysicsLocation(lastPosition);
+    if(fixed) {
+      player.getPlayerControl().setPhysicsLocation(lastPosition);
+      MegaLogger.getLogger().debug("Player set to a FIXED position.");
+    } else {
+      //TODO smoothed movement
+      MegaLogger.getLogger().debug("SMOOOOOOOOTH");
+    }
     MegaLogger.getLogger().debug(String.format("Position of player %d set to %s",
             player.getData().getId(), lastPosition));
     return null;

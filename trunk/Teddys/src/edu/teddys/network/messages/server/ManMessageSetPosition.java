@@ -18,6 +18,7 @@ import java.util.Map;
 public final class ManMessageSetPosition extends NetworkMessageManipulation {
 
   private Map<Integer, Vector3f> positions = new HashMap<Integer, Vector3f>();
+  private Boolean fixed = false;
 
   public ManMessageSetPosition() {
     super();
@@ -29,5 +30,13 @@ public final class ManMessageSetPosition extends NetworkMessageManipulation {
 
   public void setPositions(Map<Integer, Vector3f> positions) {
     this.positions = positions;
+  }
+  
+  public void setFixed(Boolean fixed) {
+    this.fixed = fixed;
+  }
+  
+  public Boolean isFixed() {
+    return fixed;
   }
 }

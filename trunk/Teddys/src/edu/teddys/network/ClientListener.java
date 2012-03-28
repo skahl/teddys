@@ -206,7 +206,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           for(Entry<Integer, Vector3f> entry : pos.getPositions().entrySet()) {
             SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(
                     Player.getInstance(entry.getKey()),
-                    entry.getValue()
+                    entry.getValue(),
+                    pos.isFixed()
                     );
             Game.getInstance().getApp().enqueue(setPos);
           }
@@ -259,7 +260,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
             }
             Player curPlayer = Player.getInstance(posPerTeddy.getKey());
             // ... and set the position of the player
-            SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(curPlayer, posPerTeddy.getValue());
+//            SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(curPlayer, posPerTeddy.getValue());
             //TODO think about it
 //            Game.getInstance().getApp().enqueue(setPos);
           }

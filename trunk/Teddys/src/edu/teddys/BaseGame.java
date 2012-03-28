@@ -150,6 +150,7 @@ public class BaseGame extends SimpleApplication {
       app.start();
     } else {
 //      app.start(JmeContext.Type.Headless);
+      app.setShowSettings(false);
       app.start();
     }
   }

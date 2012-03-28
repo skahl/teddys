@@ -48,6 +48,8 @@ public class ServerTimerThread extends Thread {
         for (Player player : Player.getInstanceList()) {
           posMsg.getPositions().put(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
         }
+        // use smooth movements
+        posMsg.setFixed(false);
         TeddyServer.getInstance().send(posMsg);
       }
 
