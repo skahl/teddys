@@ -43,6 +43,7 @@ import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
 import edu.teddys.timer.ServerTimer;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
 
 /**
@@ -114,6 +115,10 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
             Player player = Player.getInstance(Player.LOCAL_PLAYER);
             // update the HUD data
             player.getHUD().setPlayerName(player.getData().getName());
+            player.getHUD().setTeam(
+                    TeddyServer.getInstance().getData().getTeams().get(
+                    player.getData().getTeamID()
+                    ).getName());
           }
         } else if (message instanceof ResMessageMapLoaded) {
           //
@@ -245,16 +250,16 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //overwrite the current server data
           TeddyServer.getInstance().setData(msg.getData());
           // update the positions of the clients
-//          for (Entry<Integer, List<Vector3f>> posPerTeddy : msg.getData().getClientPositions().entrySet()) {
-//            if (posPerTeddy.getValue().isEmpty()) {
-//              continue;
-//            }
-//            Player curPlayer = Player.getInstance(posPerTeddy.getKey());
-//            // ... and set the position of the player
-//            SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(curPlayer, posPerTeddy.getValue());
-//            //TODO think about it
-////            Game.getInstance().getApp().enqueue(setPos);
-//          }
+          for (Entry<Integer, List<Vector3f>> posPerTeddy : msg.getData().getClientPositions().entrySet()) {
+            if (posPerTeddy.getValue().isEmpty()) {
+              continue;
+            }
+            Player curPlayer = Player.getInstance(posPerTeddy.getKey());
+            // ... and set the position of the player
+            SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(curPlayer, posPerTeddy.getValue());
+            //TODO think about it
+//            Game.getInstance().getApp().enqueue(setPos);
+          }
         } else if (message instanceof ManMessageTriggerEffect) {
           //
           // CALL THE GIVEN EFFECT

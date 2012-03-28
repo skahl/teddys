@@ -5,6 +5,7 @@ import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
@@ -22,8 +23,10 @@ import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.callables.AddCharacterControlToPhysicsSpaceCallable;
 import edu.teddys.callables.AddNodeToPhysicsSpaceCallable;
+import edu.teddys.callables.AddPhysicsCollisionListener;
 import edu.teddys.callables.RemoveCharacterControlFromPhysicsSpace;
 import edu.teddys.callables.RemoveNodeFromPhysicsSpace;
+import edu.teddys.callables.RemovePhysicsCollisionListener;
 import edu.teddys.callables.SetPositionOfTeddyCallable;
 import edu.teddys.controls.GeometryCollisionListener;
 import edu.teddys.map.GameLoader;
@@ -192,6 +195,14 @@ public class Game extends AbstractAppState {
 
   void removeCharacterControlFromPhysicsSpace(CharacterControl control) {
     getApp().enqueue((new RemoveCharacterControlFromPhysicsSpace(getBulletAppState().getPhysicsSpace(), control)));
+  }
+  
+  public void addCollisionListenerToPhysicsSpace(PhysicsCollisionListener listener) {
+    getApp().enqueue(new AddPhysicsCollisionListener(getBulletAppState().getPhysicsSpace(), listener));
+  }
+  
+  public void removeCollisionListenerFromPhysicsSpace(PhysicsCollisionListener listener) {
+    getApp().enqueue(new RemovePhysicsCollisionListener(getBulletAppState().getPhysicsSpace(), listener));
   }
 
   public void addNodeToPhysicsSpace(Node node) {
