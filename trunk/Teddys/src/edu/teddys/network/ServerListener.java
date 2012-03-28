@@ -106,8 +106,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
         MegaLogger.getLogger().debug("Trying to add Player to the world, having the ID: "+String.valueOf(source.getId()));
         newPlayer.getData().setMapLoaded(true);
         // add the player to the game world (if not already joined?)
-        Game.getInstance().addPlayerToWorld(newPlayer);
         Game.getInstance().setRandomPlayerPosition(newPlayer);
+        Game.getInstance().addPlayerToWorld(newPlayer);
         // refresh the clients' positions
         List<ClientData> clientDataList = new ArrayList<ClientData>();
         for(Player curPlayer : Player.getInstanceList()) {
