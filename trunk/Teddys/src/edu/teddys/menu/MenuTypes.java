@@ -5,7 +5,7 @@
 package edu.teddys.menu;
 
 /**
- *
+ * Enum for the different screen types.
  * @author besient
  */
 public enum MenuTypes {

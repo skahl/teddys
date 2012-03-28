@@ -17,7 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * The HUD containing indicator bars for health, ammo and jetpack energy, a message area, the player's name and team, 
+ * the weapon list and the current item.
+ * 
  * @author besient
  */
 public class HUD {
@@ -53,6 +55,7 @@ public class HUD {
     private final float teamListYLocation;
     private VerticalIconList teamList;
 
+    
     private HUD(Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
 
         hudNode = new Node("hudNode");
@@ -255,6 +258,9 @@ public class HUD {
         //teamList.show();
     }
 
+    /**
+     * Attach the HUD to the scene graph
+     */
     public void show() {
         if (!parent.hasChild(hudNode)) {
             //TODO add node
@@ -263,6 +269,9 @@ public class HUD {
         }
     }
 
+    /**
+     * Detach the HUD from the scene graph
+     */
     public void hide() {
         if (parent.hasChild(hudNode)) {
             //TODO add node
@@ -271,6 +280,15 @@ public class HUD {
         }
     }
 
+    /**
+     * Returns the singleton object.
+     * @param parent The parent node, the HUD will be attached to
+     * @param assetManager
+     * @param width The horizontal screen resolution
+     * @param height the vertical screen resolution
+     * @param mode The game mode
+     * @return The singleton object
+     */
     public static HUD getInstance(Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
         if (instance == null) {
             instance = new HUD(parent, assetManager, width, height, mode);
@@ -278,14 +296,27 @@ public class HUD {
         return instance;
     }
 
+    /**
+     * Display some text in the message area
+     * @param index The position in the message list
+     * @param message 
+     */
     public void setMessage(int index, String message) {
         messages.get(index).setText(message);
     }
 
+    /**
+     * Change the ammo of the currently active weapon
+     * @param num 
+     */
     public void setAmmo(int num) {
         weaponIndicator.setValue(num);
     }
 
+    /**
+     * Change the player's health
+     * @param health 
+     */
     public void setHealth(int health) {
         //TODO call a repaint method
         //healthText.setText(Integer.toString(health)+"%");
@@ -299,10 +330,19 @@ public class HUD {
         healthIndicator.setValue(health);
     }
 
+    
+    /**
+     * Change the jetpack energy
+     * @param energy 
+     */
     public void setJetpackEnergy(int energy) {
         jetpackIndicator.setValue(energy);
     }
 
+    /**
+     * Change the active weapon
+     * @param name 
+     */
     public void setActiveWeapon(String name) {
         if (!name.equals(activeWeapon)) {
             activeWeapon = name;
@@ -310,6 +350,11 @@ public class HUD {
         }
     }
 
+    /**
+     * Change the ammo for the specified weapon
+     * @param weapon
+     * @param ammo 
+     */
     public void setAmmo(String weapon, int ammo) {
         weaponBars.get(weapon).setValue(ammo);
         if (weapon.equals(activeWeapon)) {
@@ -317,6 +362,10 @@ public class HUD {
         }
     }
 
+    /**
+     * Diplay the icon for a collected item
+     * @param item 
+     */
     public void setItem(String item) {
         if (hudNode.getChild("item") != null) {
             //TODO remove node
@@ -329,7 +378,10 @@ public class HUD {
 //      hudNode.attachChild(items.get(item));
         }
     }
-
+    /**
+     * Remove the icon of an item
+     * @param item 
+     */
     public void removeItem(String item) {
         if (hudNode.getChild("item") != null) {
             Game.getInstance().removeSpatial(hudNode, items.get(item));
@@ -338,18 +390,34 @@ public class HUD {
         }
     }
 
+    /**
+     * Set the player's display name
+     * @param name 
+     */
     public void setPlayerName(String name) {
         playerName.setText(name);
     }
 
+    /**
+     * Change the display name of the player's team
+     * @param team 
+     */
     public void setTeam(String team) {
         this.team.setText(team);
     }
 
+    /**
+     * Getter method for the weapon list
+     * @return 
+     */
     public IconList getWeaponList() {
         return weaponList;
     }
 
+    /**
+     * Getter method for the HUD's parent node
+     * @return 
+     */
     public Node getNode() {
         return hudNode;
     }

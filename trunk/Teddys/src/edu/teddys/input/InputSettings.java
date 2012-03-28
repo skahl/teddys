@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.prefs.Preferences;
 
 /**
- *
+ * Holds the key/mouse mappings. The mappings can be changed, saved and loaded again.
  * @author besient
  */
 public class InputSettings {
@@ -90,7 +90,11 @@ public class InputSettings {
         }
 
     }
-
+    
+    /**
+     * Used to obtain the singleton object.
+     * @return 
+     */
     public static InputSettings getInstance() {
         if (instance == null) {
             instance = new InputSettings();
@@ -99,6 +103,9 @@ public class InputSettings {
         return instance;
     }
 
+    /**
+     * Saves the current settings.
+     */
     public void saveSettings() {
         for (ActionControllerEnum e : actions.keySet()) {
             if (actions.get(e)[0].getClass().equals(KeyTrigger.class)) {
@@ -152,25 +159,50 @@ public class InputSettings {
         }        
     }
     
-    
+    /**
+     * Returns the key which is mapped to the given event
+     * @param analog
+     * @return 
+     */
     public Trigger[] getKey(AnalogControllerEnum analog) {
         return analogs.get(analog);
     }
 
+    /**
+     * Returns the key which is mapped to the given event
+     * @param action
+     * @return 
+     */
     public Trigger[] getKey(ActionControllerEnum action) {
         return actions.get(action);
     }
 
+    /**
+     * Returns the display name for the given event
+     * @param analog
+     * @return 
+     */
     public String getName(AnalogControllerEnum analog) {
         return analogNames.get(analog);
 
     }
 
+    /**
+     * Returns the display name for the given event
+     * @param action
+     * @return 
+     */
     public String getName(ActionControllerEnum action) {
         return actionNames.get(action);
 
     }
 
+    /**
+     * Sets a key mapping.
+     * @param analog The analog event to be triggered by the key
+     * @param key 
+     * @param keyCode This will be part of the display name
+     */
     public void setKey(AnalogControllerEnum analog, int key, String keyCode) {
         Trigger[] trigger = new Trigger[]{new KeyTrigger(key)};
         clearAnalogValue(analogs, trigger);            
@@ -178,6 +210,12 @@ public class InputSettings {
         analogNames.put(analog, keyPrefix + keyCode.toUpperCase());
     }
 
+    /**
+     * Sets a key mapping.
+     * @param action The action event to be triggered by the key
+     * @param key 
+     * @param keyCode This will be part of the display name
+     */
     public void setKey(ActionControllerEnum action, int key, String keyCode) {
         Trigger[] trigger = new Trigger[]{new KeyTrigger(key)};
         clearActionValue(actions, trigger);  
@@ -186,6 +224,11 @@ public class InputSettings {
         
     }
 
+    /**
+     * Sets a mouse button mapping.
+     * @param analog The analog event to be triggered by the key
+     * @param key The mouse button id
+     */
     public void setMouseButton(AnalogControllerEnum analog, int key) {
         Trigger[] trigger = new Trigger[]{new MouseButtonTrigger(key)};
         clearAnalogValue(analogs, trigger);
@@ -193,6 +236,11 @@ public class InputSettings {
         analogNames.put(analog, mousePrefix + String.valueOf(++key));
     }
 
+    /**
+     * Sets a mouse button mapping
+     * @param action The action event to be triggered
+     * @param key The mouse button id
+     */
     public void setMouseButton(ActionControllerEnum action, int key) {
         Trigger[] trigger = new Trigger[]{new MouseButtonTrigger(key)};
         clearActionValue(actions, trigger);
@@ -200,6 +248,11 @@ public class InputSettings {
         actionNames.put(action, mousePrefix + String.valueOf(++key));
     }
     
+    /**
+     * Sets a moues wheel mapping
+     * @param action The action event to be triggered
+     * @param dir The wheel direction
+     */
     public void setMouseWheel(ActionControllerEnum action, boolean dir) {
         Trigger[] trigger = new Trigger[]{new MouseAxisTrigger(MouseInput.AXIS_WHEEL, dir)};
         if (dir)             

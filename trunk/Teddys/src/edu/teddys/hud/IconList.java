@@ -14,7 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Base class for lists of icons with an optional indicator bar.
+ * 
  * @author besient
  */
 public abstract class IconList {
@@ -31,7 +32,15 @@ public abstract class IconList {
    
    private int highlightedItem = -1;
    
-   
+   /**
+    * Contructor
+    * 
+    * @param entrySize The icon's size
+    * @param x The x coordinate of list's head
+    * @param y The y coordinate of the lists head
+    * @param assetManager 
+    * @param parent The parent node, the list will be attached to
+    */
    public IconList(float entrySize, float x, float y, AssetManager assetManager, Node parent) {
        this.assetManager = assetManager;
        this.x = x;
@@ -46,24 +55,50 @@ public abstract class IconList {
        listNode = new Node("List");
    }
    
+   /**
+    * Add an item to the list
+    * @param name The item's id
+    * @param position The position in the
+    * @param path The path to the icon file
+    * @param color The color of the indicator bar
+    */
    public abstract void addItem(String name, Integer position, String path, ColorRGBA color);
    
+   /**
+    * Remove an item from the list
+    * @param name 
+    */
    public abstract void removeItem(String name);
    
+   /**
+    * Set the value of the indicator bar for the specified entry
+    * @param name The entry id
+    * @param percentage 
+    */
    public void setValue(String name, int percentage) {
        bars.get(name).setValue(percentage);
    }
    
+   /**
+    * Attach the list to the scene graph
+    */
    public void show() {
        if (!parent.hasChild(listNode))
            parent.attachChild(listNode);
    }
    
+   /**
+    * Detach the list from the scene graph
+    */
    public void hide() {
        if (parent.hasChild(listNode))
            parent.detachChild(listNode);
    }
    
+   /**
+    * Highlight a list entry
+    * @param index 
+    */
    public void highlight(int index) {
         if ((index >= 0) && (index < indices.size())) {
             if (highlightedItem >= 0) {
@@ -74,6 +109,9 @@ public abstract class IconList {
         }
     }
     
+   /**
+    * Highlight the entry next to the one currently highlighted
+    */
     public void highlightNext() {
         if (highlightedItem == indices.size() - 1) {
             highlight(0);
@@ -82,6 +120,9 @@ public abstract class IconList {
         }
     }
     
+    /**
+    * Highlight the entry previous to the one currently highlighted
+    */
     public void highlightPrevious() {
         if (highlightedItem <= 0) {
             highlight(indices.size() - 1);

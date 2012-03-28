@@ -25,6 +25,17 @@ public class BarIndicator {
   private float width, height, geomWidth, geomHeight;
   private int percentage;
 
+  /**
+   * Contructor
+   * 
+   * @param width The bar's widh
+   * @param height The bar's height
+   * @param x The x coordinate of the bar's position
+   * @param y The y coordinate of the bar's position
+   * @param assetManager
+   * @param color The bar's color
+   * @param parent The parent node, the bar will be attached to
+   */
   public BarIndicator(float width, float height, float x, float y, AssetManager assetManager, ColorRGBA color, Node parent) {
     Quad bar = new Quad(width, height);
     geom = new Geometry("BarGeom", bar);
@@ -41,15 +52,27 @@ public class BarIndicator {
     geomHeight = geom.getLocalScale().y;
   }
 
+  /**
+   * Set the new size in percent
+   * @param percentage 
+   */
   public void setValue(int percentage) {
     geom.setLocalScale(geomWidth * percentage / 100, geomHeight, 0);
     this.percentage = percentage;
   }
 
+  /**
+   * 
+   * @return The current size in percent
+   */
   public int getValue() {
     return percentage;
   }
 
+  /**
+   * Getter method for the spatial object
+   * @return 
+   */
   public Spatial getSpatial() {
     return geom;
   }
