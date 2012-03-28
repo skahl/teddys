@@ -9,8 +9,6 @@ import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -53,10 +51,9 @@ public class Game extends AbstractAppState {
   private GameLoader gameLoader;
   private boolean paused;
   private Entry<String, String> levelData = new SimpleEntry<String, String>("firstlevel", "maps/firstlevel.zip");
-
   // TESTING PHYSICS PROBLEMS
   private GeometryCollisionListener geoColListener;
-  
+
   //private boolean enabled;
   protected Game() {
     super();
@@ -81,7 +78,7 @@ public class Game extends AbstractAppState {
 //  }
   @Override
   public void setEnabled(boolean isActive) {
-    super.setEnabled(isActive);  
+    super.setEnabled(isActive);
     if (isActive) {
       // activate
 
@@ -90,14 +87,14 @@ public class Game extends AbstractAppState {
 
       // attach keys
       initKeys(true);
-      
-      if(Player.getInstance(Player.LOCAL_PLAYER).getHUD() != null) {
+
+      if (Player.getInstance(Player.LOCAL_PLAYER).getHUD() != null) {
         Player.getInstance(Player.LOCAL_PLAYER).getHUD().show();
       }
-      if(Player.getInstance(Player.LOCAL_PLAYER).getCursor() != null) {
+      if (Player.getInstance(Player.LOCAL_PLAYER).getCursor() != null) {
         addSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
       }
-      
+
     } else {
       // deactivate
       //this.app.getRootNode().detachChild(rotationNode);
@@ -108,39 +105,39 @@ public class Game extends AbstractAppState {
 
       // detach keys
       initKeys(false);
-      
-      if(Player.getInstance(Player.LOCAL_PLAYER).getHUD() != null) {
+
+      if (Player.getInstance(Player.LOCAL_PLAYER).getHUD() != null) {
         Player.getInstance(Player.LOCAL_PLAYER).getHUD().hide();
       }
-      if(Player.getInstance(Player.LOCAL_PLAYER).getCursor() != null) {
+      if (Player.getInstance(Player.LOCAL_PLAYER).getCursor() != null) {
         removeSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
       }
     }
   }
 
   @Override
-    public void initialize(AppStateManager stateManager, Application app) {
-        if (!isInitialized()) {
-            super.initialize(stateManager, app);
-            this.app = (BaseGame) app;
-            this.stateManager = stateManager;
-            this.inputManager = this.app.getInputManager();
-            this.rootNode = this.app.getRootNode();
+  public void initialize(AppStateManager stateManager, Application app) {
+    if (!isInitialized()) {
+      super.initialize(stateManager, app);
+      this.app = (BaseGame) app;
+      this.stateManager = stateManager;
+      this.inputManager = this.app.getInputManager();
+      this.rootNode = this.app.getRootNode();
 
-            //app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
-            app.getViewPort().setBackgroundColor(new ColorRGBA(0f, 0f, 0f, 1f));
+      //app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
+      app.getViewPort().setBackgroundColor(new ColorRGBA(0f, 0f, 0f, 1f));
 
-            this.paused = false;
-            super.setEnabled(false);
+      this.paused = false;
+      super.setEnabled(false);
 
 
-            // init physics  renderstate
-            bulletAppState = new BulletAppState();
-            stateManager.attach(bulletAppState);
+      // init physics  renderstate
+      bulletAppState = new BulletAppState();
+      stateManager.attach(bulletAppState);
 
-            // shed some light
-            Vector3f sunDirection = new Vector3f(-1f, -1f, -1f);
-            sunDirection.normalizeLocal();
+      // shed some light
+      Vector3f sunDirection = new Vector3f(-1f, -1f, -1f);
+      sunDirection.normalizeLocal();
 
 //            DirectionalLight sunL = new DirectionalLight();
 //            sunL.setColor(ColorRGBA.White.mult(0.7f));
@@ -151,21 +148,21 @@ public class Game extends AbstractAppState {
 //            sunA.setColor(ColorRGBA.White.mult(0.5f));
 //            rootNode.addLight(sunA);
 
-            // init shadow renderstate
-            shadowRenderer = new BasicShadowRenderer(this.app.getAssetManager(), 256);
-            shadowRenderer.setDirection(sunDirection);
-            this.app.getViewPort().addProcessor(shadowRenderer);
+      // init shadow renderstate
+      shadowRenderer = new BasicShadowRenderer(this.app.getAssetManager(), 256);
+      shadowRenderer.setDirection(sunDirection);
+      this.app.getViewPort().addProcessor(shadowRenderer);
 
-            // physics debug (shows collission meshes):
+      // physics debug (shows collission meshes):
 
-            if (GameSettings.DEBUG) {
-                // debug switch not working
-                bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
-            }
+      if (GameSettings.DEBUG) {
+        // debug switch not working
+        bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
+      }
 
-            MegaLogger.getLogger().debug("New game instance created.");
-        }
+      MegaLogger.getLogger().debug("New game instance created.");
     }
+  }
 
   /**
    * 
@@ -196,11 +193,11 @@ public class Game extends AbstractAppState {
   void removeCharacterControlFromPhysicsSpace(CharacterControl control) {
     getApp().enqueue((new RemoveCharacterControlFromPhysicsSpace(getBulletAppState().getPhysicsSpace(), control)));
   }
-  
+
   public void addCollisionListenerToPhysicsSpace(PhysicsCollisionListener listener) {
     getApp().enqueue(new AddPhysicsCollisionListener(getBulletAppState().getPhysicsSpace(), listener));
   }
-  
+
   public void removeCollisionListenerFromPhysicsSpace(PhysicsCollisionListener listener) {
     getApp().enqueue(new RemovePhysicsCollisionListener(getBulletAppState().getPhysicsSpace(), listener));
   }
@@ -249,7 +246,7 @@ public class Game extends AbstractAppState {
     // add to the world
     addSpatial(getRootNode(), player.getNode());
     addCharacterControlToPhysicsSpace(player.getPlayerControl());
-    
+
     MegaLogger.getLogger().debug("IMPORTANT: Adding Geometry Collision Listener on player.getNode()!");
     geoColListener = new GeometryCollisionListener(player.getNode(), null);
     geoColListener.setListen(true);
@@ -267,7 +264,7 @@ public class Game extends AbstractAppState {
     MegaLogger.getLogger().debug("Map model " + mapModel + " should be added to the Root Node and to the PhysicsSpace.");
     addSpatial(getRootNode(), mapModel);
     addNodeToPhysicsSpace(mapModel);
-    
+
   }
 
   @Override
@@ -293,7 +290,6 @@ public class Game extends AbstractAppState {
 
   }
 
-
   public BaseGame getApp() {
     return app;
   }
@@ -315,11 +311,12 @@ public class Game extends AbstractAppState {
   }
 
   public void loadGameMap(String levelName, String mapPath) {
+    MegaLogger.getLogger().debug("Loading map (" + levelName + "): " + mapPath);
     levelData = new SimpleEntry<String, String>(levelName, mapPath);
     gameLoader = new GameLoader(levelName, mapPath, this);
     addMapModel(gameLoader.getGameMap().getMapModel());
   }
-  
+
   public Entry<String, String> getLevelData() {
     return levelData;
   }

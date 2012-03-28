@@ -21,8 +21,10 @@ public class GameLoader {
 
       //game.getApp().getAssetManager().registerLocator(packagePath, ZipLocator.class.getName());
 
-      gameMap = new GameMap(name + ".j3o", game);
-      gameMapCfg = new GameMapConfig(name + ".cfg");
+//      gameMap = new GameMap(name + ".j3o", game);
+//      gameMapCfg = new GameMapConfig(name + ".cfg");
+      gameMap = new GameMap(packagePath, game);
+      gameMapCfg = new GameMapConfig(packagePath);
 
     } catch (AssetLoadException e) {
       MegaLogger.getLogger().fatal(new Throwable("Map could not be loaded!", e));

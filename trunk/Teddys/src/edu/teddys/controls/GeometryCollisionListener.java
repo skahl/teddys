@@ -89,7 +89,7 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
       collided = true;
     }
     
-    if(collided) {
+    if(collidedPlayer) {
       MegaLogger.getLogger().debug("collision() called." + nodeA + ";" + nodeB);
     }
 
