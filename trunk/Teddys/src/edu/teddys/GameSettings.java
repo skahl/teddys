@@ -10,6 +10,7 @@ import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
 import edu.teddys.timer.ServerDataSync;
 import edu.teddys.timer.ServerTimer;
+import edu.teddys.timer.ServerTimerThread;
 
 /**
  *
@@ -109,10 +110,11 @@ public class GameSettings {
    */
   public static final Integer SERVER_TIMESTAMP_INTERVAL = 15;
   /**
-   * The maximum number of client positions on the server.
-   * @see TeddyServerData
+   * The maximum number of positions of the clients (i.e. the #ticks) on the server.
+   * 
+   * @see ServerTimerThread
    */
-  public static final Integer MAX_SERVER_POS_CAPACITY = 10;
+  public static final Integer MAX_SERVER_POS_CAPACITY = 20;
   /**
    * Set a delay for testing purposes. This holds back a message for the
    * specified time in ms on the server.

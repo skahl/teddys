@@ -33,14 +33,16 @@ public class TeddyServerData {
    * The list of teams registered on the server.
    */
   private List<Team> teams = new ArrayList<Team>();
-  /*
-   * //TODO integrate a singleton gameMode
-   */
   /**
    * True if the server should be visible to other clients.
    */
   private boolean discoverable = false;
-  private Map<Integer,List<Vector3f>> clientPositions = new TreeMap<Integer,List<Vector3f>>();
+  /**
+   * History of the positions of the clients.
+   * 
+   * TODO: This should be used for the collision detection because of the index 'tick'!
+   */
+  private TreeMap<Long, Map<Integer,Vector3f>> clientPositions = new TreeMap<Long, Map<Integer,Vector3f>>();
   
   public TeddyServerData() {
     super();
@@ -79,11 +81,11 @@ public class TeddyServerData {
     this.teams = teams;
   }
 
-  public Map<Integer, List<Vector3f>> getClientPositions() {
+  public TreeMap<Long, Map<Integer, Vector3f>> getClientPositions() {
     return clientPositions;
   }
 
-  public void setClientPositions(Map<Integer, List<Vector3f>> clientPositions) {
+  public synchronized void setClientPositions(TreeMap<Long, Map<Integer, Vector3f>> clientPositions) {
     this.clientPositions = clientPositions;
   }
 }

@@ -75,8 +75,4 @@ public class ServerTimer {
     }
     thread.setTick(ts);
   }
-  
-  public static Map<Integer,LinkedBlockingQueue<Vector3f>> getClientPositions() {
-    return thread.getClientPositions();
-  }
 }

@@ -10,9 +10,8 @@ import edu.teddys.MegaLogger;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.server.ManMessageSetPosition;
 import edu.teddys.objects.player.Player;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.TreeMap;
 
 /**
  *
@@ -22,35 +21,27 @@ public class ServerTimerThread extends Thread {
 
   private boolean stop = false;
   private Long tick = new Long(0);
-  /**
-   * History of the clients' positions for the lag compensation.
-   */
-  private Map<Integer, LinkedBlockingQueue<Vector3f>> clientPositions = new HashMap<Integer, LinkedBlockingQueue<Vector3f>>();
 
   @Override
   public void run() {
 
     while (!stop) {
-      //TODO parse game events
+      //TODO parse game events?
 
-//      ManMessageSetPosition posMsg = new ManMessageSetPosition();
-//      // update the players' positions
-//      for(Player player : Player.getInstanceList()) {
-//        addClientPosition(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
-//        posMsg.setClientID(player.getData().getId());
-//        posMsg.setPosition(player.getPlayerControl().getPhysicsLocation());
-////        TeddyServer.getInstance().send(posMsg);
-//      }
-
-      if (tick % GameSettings.TRANSMIT_POSITION_MOD == 0) {
-        ManMessageSetPosition posMsg = new ManMessageSetPosition();
-        // update the players' positions
-        for (Player player : Player.getInstanceList()) {
-          posMsg.getPositions().put(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
+      // The following steps are only necessary for the server because it collects the
+      // players' positions.
+      if(TeddyServer.getInstance().isRunning()) {
+        if (tick % GameSettings.TRANSMIT_POSITION_MOD == 0) {
+          ManMessageSetPosition posMsg = new ManMessageSetPosition();
+          // update the players' positions
+          for (Player player : Player.getInstanceList()) {
+            posMsg.getPositions().put(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
+          }
+          addClientPosition(posMsg.getPositions());
+          // use smooth movements
+          posMsg.setFixed(false);
+          TeddyServer.getInstance().send(posMsg);
         }
-        // use smooth movements
-        posMsg.setFixed(false);
-        TeddyServer.getInstance().send(posMsg);
       }
 
       // increment the tick by one
@@ -71,30 +62,23 @@ public class ServerTimerThread extends Thread {
     tick = ts;
   }
 
-  public Map<Integer, LinkedBlockingQueue<Vector3f>> getClientPositions() {
-    return clientPositions;
-  }
-
   /**
    * 
-   * Adds an element to the position List. If the capacity has been reached, dismiss the first value.
-   * So, every time this is called, add the position to the tail of the List.
+   * Adds an element to the position List in TeddyServerData.
+   * If the capacity (@see GameSettings.MAX_SERVER_POS_CAPACITY) has been reached, dismiss the first value.
    * 
-   * If the List does not exist for the user, it is created automatically.
+   * So, every time this is called, add the positions to the tail of the List.
    * 
-   * @param clientId  The player ID.
-   * @param pos The last "known" position.
+   * @param posClients Positions of the clients
    */
-  public synchronized void addClientPosition(Integer clientId, Vector3f pos) {
-    if (!getClientPositions().containsKey(clientId)) {
-      getClientPositions().put(clientId, new LinkedBlockingQueue<Vector3f>(GameSettings.MAX_SERVER_POS_CAPACITY));
+  public synchronized void addClientPosition(Map<Integer, Vector3f> posClients) {
+    TreeMap<Long, Map<Integer,Vector3f>> posMap = TeddyServer.getInstance().getData().getClientPositions();
+    if(posMap.size() > GameSettings.MAX_SERVER_POS_CAPACITY) {
+      // Remove the first entry
+      posMap.pollFirstEntry();
     }
-    // check if the queue is full
-    if (getClientPositions().get(clientId).remainingCapacity() == 0) {
-      getClientPositions().get(clientId).poll();
-    }
-    // now the position is added :)
-    getClientPositions().get(clientId).offer(pos);
+    posMap.put(tick, posClients);
+    TeddyServer.getInstance().getData().setClientPositions(posMap);
   }
 
   /**

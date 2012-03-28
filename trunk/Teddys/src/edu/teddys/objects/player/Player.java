@@ -91,7 +91,7 @@ public class Player {
       // no change
       return;
     }
-    //TODO check if removing all players is better ...
+    
     if (instances.containsKey(id)) {
       Player oldPlayer = Player.getInstance(id);
       // Remove the old player
@@ -107,6 +107,7 @@ public class Player {
       }
       instances.remove(id);
     }
+    
     // Get the current instance
     Player localPlayer = Player.getInstance(LOCAL_PLAYER);
     // Instead of copying all data, rename the node 
@@ -154,12 +155,14 @@ public class Player {
     Vector3f dir = getNode().getWorldTranslation().add(0, 0.75f, 0);
     camNode.lookAt(dir, new Vector3f(0, 1, 0));
 
-    cameraControl = new CrosshairControl(camNode, this,
-            getCursor(),
-            gameInstance.getApp().getSettings().getWidth(),
-            gameInstance.getApp().getSettings().getHeight());
-    cameraControl.registerWithInput(gameInstance.getInputManager());
-    MegaLogger.getLogger().debug("New CameraControl created.");
+    if(cameraControl == null) {
+      cameraControl = new CrosshairControl(camNode, this,
+              getCursor(),
+              gameInstance.getApp().getSettings().getWidth(),
+              gameInstance.getApp().getSettings().getHeight());
+      cameraControl.registerWithInput(gameInstance.getInputManager());
+      MegaLogger.getLogger().debug("New CameraControl created.");
+    }
   }
   
   private void initHUD() {
@@ -169,7 +172,7 @@ public class Player {
     // Crosshair
     int crosshairSize = gameInstance.getApp().getSettings().getHeight() / 15;
     gameInstance.getAssetManager().loadTexture("Interface/HUD/crosshair.png");
-
+    
     cursor = Cursor.getInstance();
     cursor.setImage(gameInstance.getAssetManager(), "Interface/HUD/crosshair.png", true);
     cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
@@ -181,12 +184,15 @@ public class Player {
             gameInstance.getAssetManager(),
             gameInstance.getApp().getSettings().getWidth(),
             gameInstance.getApp().getSettings().getHeight(),
-            GameModeEnum.CAPTURE_THE_HONEY);
+            GameModeEnum.DEATHMATCH);
 
     hud.show();
-    hudController = new HUDController();
-    hudController.setHUD(hud);
-    hudController.registerWithInput(gameInstance.getInputManager());
+    
+    if(hudController == null) {
+      hudController = new HUDController();
+      hudController.setHUD(hud);
+      hudController.registerWithInput(gameInstance.getInputManager());
+    }
   }
 
   /**
@@ -214,7 +220,7 @@ public class Player {
    * @param id Players are differentiated by this ID.
    */
   private Player(Integer id) {
-
+    
     Game game = Game.getInstance();
 
     // Use the toString() method to generate a quite uniquely identified Node
