@@ -27,7 +27,7 @@
                 <panel id="image_panel" backgroundColor="#888f" height="100%" width="40%" childLayout="center" visibleToMouse="true">
                     <!--panel id="spacer" height="25%" width="100%"/-->
                     <!--panel id="spacer" align="center" childLayout="center" height="25%" width="100%"-->
-                    <image id="teddy_image" height="50%" width="50%" valign="center" filename="Interface/GUI/teddy2.png" />
+                    <image id="teddy_image" height="30%" width="40%" valign="center" filename="Interface/GUI/teddy2.png" />
                     <!--/panel-->
                     <!--panel id="spacer" height="25%" width="100%"/-->
                 </panel>

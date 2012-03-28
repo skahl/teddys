@@ -83,9 +83,9 @@
         </panel>
     </popup>
     
-    <popup id="MESSAGE_POPUP" childLayout="center">
-        <panel id="popup_panel" style="nifty-panel-red" height="25%" width="35%" align="center" childLayout="vertical"> 
-            
+    <popup id="MESSAGE_POPUP" childLayout="center" backgroundColor="#0008">
+        <panel id="popup_panel" height="25%" width="100%" align="center" childLayout="vertical" backgroundColor="#000b"> 
+            <panel id="spacer" height="10%"/>
             <text text="" id="text" align="center" font="Interface/Fonts/Default.fnt"/>
             <panel id="spacer" height="50%"/>
             <control name="button" label="Ok" id="ok_button"  align="center" visibleToMouse="true">
