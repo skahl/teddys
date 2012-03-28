@@ -73,7 +73,7 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
    * 
    * @return true if the server is running, else false.
    */
-  protected boolean isRunning() {
+  public boolean isRunning() {
     return (spidermonkeyServer != null && spidermonkeyServer.isRunning());
   }
 

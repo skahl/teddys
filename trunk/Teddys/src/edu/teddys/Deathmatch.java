@@ -7,6 +7,8 @@ package edu.teddys;
 import com.jme3.network.serializing.Serializable;
 
 /**
+ * 
+ * TODO There should be a maximum number of kills/deaths ...
  *
  * @author cm
  */

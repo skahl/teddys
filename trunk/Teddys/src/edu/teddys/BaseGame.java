@@ -12,7 +12,6 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.system.AppSettings;
-import com.jme3.system.JmeContext;
 import de.lessvoid.nifty.Nifty;
 import edu.teddys.controls.MappingEnum;
 import edu.teddys.input.ControllerEvents;
@@ -58,7 +57,6 @@ import edu.teddys.network.messages.server.ReqMessagePlayerDisconnect;
 import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.AppStateSwitcher;
-import edu.teddys.timer.ServerDataSync;
 import edu.teddys.timer.ServerTimer;
 import java.io.File;
 import java.io.IOException;
@@ -138,6 +136,7 @@ public class BaseGame extends SimpleApplication {
     AppSettings settings = new AppSettings(true);
 
     BaseGame app = new BaseGame();
+    app.setPauseOnLostFocus(false);
     settings.setTitle(GameSettings.TITLE);
     settings.setVSync(GameSettings.VSYNC);
     settings.setSamples(GameSettings.MSAA);

@@ -4,10 +4,9 @@
  */
 package edu.teddys.callables;
 
-import com.jme3.math.Vector3f;
+import edu.teddys.network.TeddyServer;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
@@ -26,6 +25,11 @@ public class TeddyDeadCallable implements Callable {
     
     // Trigger PlayerVisual.die()
     player.getPlayerVisual().die();
+    
+    //TODO increment just for the server?
+    if(TeddyServer.getInstance().isRunning()) {
+      player.getData().getSession().incDeaths();
+    }
     
     // Rid player of all items and weapons except the StenGun
     Game.getInstance().getApp().enqueue(new SetHealthCallable(player.getData().getId(), 100));

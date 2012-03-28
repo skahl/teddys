@@ -43,7 +43,6 @@ import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
 import edu.teddys.timer.ServerTimer;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map.Entry;
 
 /**
@@ -107,10 +106,15 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       } else if (message instanceof NetworkMessageResponse) {
         if (message instanceof ResMessageSendClientData) {
           //
-          // A NEW TEAM MEMBER JOINED THE SERVER
+          // A NEW TEAM MEMBER JOINED THE SERVER / UPDATED PLAYER DATA
           //
           ResMessageSendClientData msg = (ResMessageSendClientData) message;
-
+          Player.getInstance(Player.LOCAL_PLAYER).setData(msg.getClientData());
+          if(msg.getClientData().getId() == Player.LOCAL_PLAYER) {
+            Player player = Player.getInstance(Player.LOCAL_PLAYER);
+            // update the HUD data
+            player.getHUD().setPlayerName(player.getData().getName());
+          }
         } else if (message instanceof ResMessageMapLoaded) {
           //
           // A USER HAS LOADED THE MAP.
@@ -152,6 +156,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           ClientTimer.startTimer();
           // activate the keyboard and mouse listeners
           Game.getInstance().getInputManager().addListener(ControllerInputListener.getInstance());
+          Player.getInstance(Player.LOCAL_PLAYER).getData().getSession().incRounds();
         } else if (message instanceof GSMessageEndGame) {
           //
           // END OF THE GAME. DISPLAY STATISTICS ...
@@ -165,6 +170,12 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           ClientTimer.stopTimer();
           Game.getInstance().getInputManager().removeListener(ControllerInputListener.getInstance());
           //TODO what about the other players?
+          for(Player player : Player.getInstanceList()) {
+            // Reset the data
+            player.getData().getSession().setDeaths(0);
+            player.getData().getSession().setKills(0);
+            //TODO statistics!!
+          }
         } else if (message instanceof GSMessagePlayerReady) {
           //
           // A PLAYER IS READY TO START THE GAME
@@ -222,11 +233,10 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           // NEW PLAYER DATA AVAILABLE. SYNC
           //
-          // (NOTE: CURRENTLY NOT USED)
-          //
           ManMessageTransferPlayerData msg = (ManMessageTransferPlayerData) message;
-          //TODO overwrite the current player data
-//          Player.setInstanceList(msg.getData());
+          for(ClientData data : msg.getData()) {
+            Player.getInstance(data.getId()).setData(data);
+          }
         } else if (message instanceof ManMessageTransferServerData) {
           //
           // NEW SERVER DATA AVAILABLE. SYNC
@@ -235,16 +245,16 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //overwrite the current server data
           TeddyServer.getInstance().setData(msg.getData());
           // update the positions of the clients
-          for (Entry<Integer, List<Vector3f>> posPerTeddy : msg.getData().getClientPositions().entrySet()) {
-            if (posPerTeddy.getValue().isEmpty()) {
-              continue;
-            }
-            Player curPlayer = Player.getInstance(posPerTeddy.getKey());
-            // ... and set the position of the player
-            SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(curPlayer, posPerTeddy.getValue());
-            //TODO think about it
-//            Game.getInstance().getApp().enqueue(setPos);
-          }
+//          for (Entry<Integer, List<Vector3f>> posPerTeddy : msg.getData().getClientPositions().entrySet()) {
+//            if (posPerTeddy.getValue().isEmpty()) {
+//              continue;
+//            }
+//            Player curPlayer = Player.getInstance(posPerTeddy.getKey());
+//            // ... and set the position of the player
+//            SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(curPlayer, posPerTeddy.getValue());
+//            //TODO think about it
+////            Game.getInstance().getApp().enqueue(setPos);
+//          }
         } else if (message instanceof ManMessageTriggerEffect) {
           //
           // CALL THE GIVEN EFFECT

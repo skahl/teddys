@@ -5,11 +5,12 @@
 package edu.teddys.network.messages.server;
 
 import com.jme3.network.serializing.Serializable;
-import edu.teddys.network.TeddyServerData;
+import edu.teddys.network.ClientData;
 import edu.teddys.network.messages.NetworkMessageManipulation;
 import edu.teddys.objects.player.Player;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  *
@@ -18,22 +19,22 @@ import java.util.TreeMap;
 @Serializable
 public class ManMessageTransferPlayerData extends NetworkMessageManipulation {
 
-  private Map<Integer, Player> data = new TreeMap<Integer, Player>();
+  private List<ClientData> data = new ArrayList<ClientData>();
 
   public ManMessageTransferPlayerData() {
     super();
   }
 
-  public ManMessageTransferPlayerData(Map<Integer, Player> data) {
+  public ManMessageTransferPlayerData(List<ClientData> data) {
     this();
     setData(data);
   }
 
-  public Map<Integer, Player> getData() {
+  public List<ClientData> getData() {
     return data;
   }
 
-  private void setData(Map<Integer, Player> data) {
+  private void setData(List<ClientData> data) {
     this.data = data;
   }
 }

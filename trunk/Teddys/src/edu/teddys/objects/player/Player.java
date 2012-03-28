@@ -202,13 +202,6 @@ public class Player {
     instances.remove(id);
   }
 
-  public synchronized static void setInstanceList(Map<Integer, Player> playerMap) {
-    //TODO Problems: The Nodes are not transmitted
-    //TODO What about lag compensation? use smoothed movements etc ...
-//    instances = playerMap;
-    //TODO refresh the positions in the local world if a game is active
-  }
-
   /**
    * DON'T CALL THIS!!! THIS IS FOR SERIALIZING PURPOSES ONLY!
    */
@@ -258,7 +251,7 @@ public class Player {
 
 
     // The location of the CharacterControl Spatial should be the same as from the Player's node
-    //control.setPhysicsLocation(node.getWorldTranslation().add(new Vector3f(0f, 0f, -1.2f)));
+    control.setPhysicsLocation(node.getWorldTranslation().add(new Vector3f(0f, 0f, -1.2f)));
 
 
     // Set the (network) client ID
@@ -385,7 +378,6 @@ public class Player {
       return;
     }
     getData().setHealth(0);
-    
     Game.getInstance().getApp().enqueue(new TeddyDeadCallable(Player.getInstance(getData().getId())));
   }
 

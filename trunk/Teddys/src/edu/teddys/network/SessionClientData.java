@@ -62,4 +62,24 @@ public class SessionClientData {
   public void setWins(Integer wins) {
     this.wins = wins;
   }
+  
+  public void incDeaths() {
+    deaths++;
+  }
+  
+  public void incKills() {
+    kills++;
+  }
+  
+  public void incLosses() {
+    losses++;
+  }
+  
+  public void incWins() {
+    wins++;
+  }
+  
+  public void incRounds() {
+    rounds++;
+  }
 }

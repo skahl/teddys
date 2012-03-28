@@ -109,7 +109,11 @@ public class ServerListener implements MessageListener<HostedConnection> {
         Game.getInstance().addPlayerToWorld(newPlayer);
         Game.getInstance().setRandomPlayerPosition(newPlayer);
         // refresh the clients' positions
-        ManMessageTransferPlayerData playerData = new ManMessageTransferPlayerData(Player.getInstances());
+        List<ClientData> clientDataList = new ArrayList<ClientData>();
+        for(Player curPlayer : Player.getInstanceList()) {
+          clientDataList.add(curPlayer.getData());
+        }
+        ManMessageTransferPlayerData playerData = new ManMessageTransferPlayerData(clientDataList);
         TeddyServer.getInstance().send(playerData);
         // If all players have loaded the map, "I wanna play a game with you".
         int numPlayers = 0;
@@ -156,6 +160,11 @@ public class ServerListener implements MessageListener<HostedConnection> {
         Integer teamId = 0;
         // Add the player to the team
         TeddyServer.getInstance().getData().getTeams().get(teamId).addPlayer(clientID);
+        
+        // Since a new team has been created, update the TeddyServerData on the clients
+        ManMessageTransferServerData serverDataMsg = new ManMessageTransferServerData(TeddyServer.getInstance().getData());
+        TeddyServer.getInstance().send(serverDataMsg);
+        
         // Refresh the teamID
         player.getData().setTeam(teamId);
         msg.getClientData().setTeam(teamId);
@@ -167,7 +176,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // Get the other clients
         List<Integer> rec = new ArrayList<Integer>(Player.getInstances().keySet());
         // Remove the current clientID
-        rec.remove(clientID);
+//        rec.remove(clientID);
         // Refresh the recipient list
         msg.setRecipients(rec.toArray(new Integer[rec.size()]));
         // And send the data to the clients
@@ -180,6 +189,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
           }
           ResMessageSendClientData tmp = new ResMessageSendClientData(clientID, playerInstance.getData());
           TeddyServer.getInstance().send(tmp);
+          //TODO not all players may have loaded the map ...
           // Since the active players have loaded the map, send an info to the new one
           ResMessageMapLoaded tmpMapLoaded = new ResMessageMapLoaded(new Integer[]{clientID}, playerInstance.getData().getId());
           TeddyServer.getInstance().send(tmpMapLoaded);
@@ -188,8 +198,6 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // Now update the player data on the clients
 //        ManMessageTransferPlayerData playerDataMsg = new ManMessageTransferPlayerData(Player.getInstances());
 //        TeddyServer.getInstance().send(playerDataMsg);
-        ManMessageTransferServerData serverDataMsg = new ManMessageTransferServerData(TeddyServer.getInstance().getData());
-        TeddyServer.getInstance().send(serverDataMsg);
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManControllerInput) {
@@ -199,7 +207,6 @@ public class ServerListener implements MessageListener<HostedConnection> {
         Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
         // send to the other players
         List<Integer> clients = TeddyServer.getInstance().getClientIDs();
-//        clients.remove(input.getSource());
         // redistribute
         input.setRecipients(clients.toArray(new Integer[clients.size()]));
         TeddyServer.getInstance().send(input);

@@ -73,7 +73,7 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
           hitPlayerID = Integer.parseInt(nodeB.substring(startPlayerID));
         }
       }
-      
+
       collided = true;
     } else if (nodeB.contains(node.getName())) {
       MegaLogger.getLogger().debug("collision() called." + nodeA + ";" + nodeB);
@@ -84,14 +84,17 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
           hitPlayerID = Integer.parseInt(nodeA.substring(startPlayerID));
         }
       }
-      
+
       collided = true;
     }
 
-    if (hitPlayerID != null) {
-      MegaLogger.getLogger().debug("Player " + hitPlayerID + " was hit.");
-      trigger(hitPlayerID);
-      MegaLogger.getLogger().debug("Damage message sent.");
+    //TODO THIS SHOULD BE ONLY CALLED BY THE SERVER!!
+    if (TeddyServer.getInstance().isRunning()) {
+      if (hitPlayerID != null) {
+        MegaLogger.getLogger().debug("Player " + hitPlayerID + " was hit.");
+        trigger(hitPlayerID);
+        MegaLogger.getLogger().debug("Damage message sent.");
+      }
     }
   }
 
@@ -109,7 +112,7 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
   }
 
   private void trigger(Integer hitPlayerID) {
-    
+
     if (weapon != null) {
       // damage calculation
       RandomDataImpl rnd = new RandomDataImpl();
@@ -120,7 +123,11 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
       int resDamage = (int) Math.ceil(damage);
 
       // Parse the damage value
-      Player.getInstance(hitPlayerID).addDamage(resDamage);
+      Player hitPlayer = Player.getInstance(hitPlayerID);
+      hitPlayer.addDamage(resDamage);
+      if (hitPlayer.getData().getHealth() == 0) {
+        Player.getInstance(weapon.getPlayerID()).getData().getSession().incKills();
+      }
       // Inform the user
       ManMessageSendDamage msg = new ManMessageSendDamage(weapon.getPlayerID(), hitPlayerID, resDamage);
 
