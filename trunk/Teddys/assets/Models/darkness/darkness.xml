@@ -15,15 +15,15 @@
     <higherBound>8.0f,-6.25f,-0.7f</higherBound>
   </spawnSpace>
   <spawnSpace>
-    <lowerBound>-5.0f,-4.0f,-0.7f</lowerBound>
-    <higherBound>0.5f,-3.6f,-0.7f</higherBound>
+    <lowerBound>-5.0f,-3.0f,-0.7f</lowerBound>
+    <higherBound>0.5f,-3.0f,-0.7f</higherBound>
   </spawnSpace>
   <spawnSpace>
-    <lowerBound>-6.7f,-1.1f,-0.7f</lowerBound>
+    <lowerBound>-6.7f,-1.0f,-0.7f</lowerBound>
     <higherBound>7.5f,0.0f,-0.7f</higherBound>
   </spawnSpace>
   <spawnSpace>
-    <lowerBound>-4.7f,1.8f,-0.7f</lowerBound>
+    <lowerBound>-4.7f,2.0f,-0.7f</lowerBound>
     <higherBound>7.5f,4.0f,-0.7f</higherBound>
   </spawnSpace>
   <light>
