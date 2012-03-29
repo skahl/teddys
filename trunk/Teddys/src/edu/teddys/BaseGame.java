@@ -183,7 +183,6 @@ public class BaseGame extends SimpleApplication {
 
     // init start state
     AppStateSwitcher.getInstance().setApp(this);
-    AppStateSwitcher.getInstance().activateState(AppStateSwitcher.AppStateEnum.GAME);
 
     // set the ControllerInputListener as input listener
     getInputManager().addListener(
@@ -201,6 +200,8 @@ public class BaseGame extends SimpleApplication {
     if (!lockfile.exists()) {
       flyCam.setEnabled(true);
 
+      AppStateSwitcher.getInstance().activateState(AppStateSwitcher.AppStateEnum.GAME); 
+      
       TeddyServer server = TeddyServer.getInstance();
       server.startServer(NetworkSettings.SERVER_PORT);
       server.getData().setDiscoverable(true);
@@ -221,6 +222,9 @@ public class BaseGame extends SimpleApplication {
     } else {
       flyCam.setEnabled(false);
 
+      
+      AppStateSwitcher.getInstance().activateState(AppStateSwitcher.AppStateEnum.MENU); 
+      
       // Get the handle to the client and try to join the specified server
       TeddyClient client = TeddyClient.getInstance();
       MegaLogger.getLogger().info("Client has " + Player.getInstance(Player.LOCAL_PLAYER).getData().getHealth() + " health points at the beginning.");
