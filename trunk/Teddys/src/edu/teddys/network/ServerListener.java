@@ -24,6 +24,7 @@ import edu.teddys.network.messages.server.GSMessageBeginGame;
 import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
 import edu.teddys.network.messages.server.ManMessageTransferServerData;
 import edu.teddys.network.messages.server.ReqMessageMapRequest;
+import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
@@ -31,6 +32,7 @@ import edu.teddys.timer.ServerDataSync;
 import edu.teddys.timer.ServerTimer;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -69,8 +71,10 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //
         // USER HAS CHANGED HIS PAUSE STATUS
         //
-        // Just distribute the message to the other clients
-        GSMessageGamePaused msg = (GSMessageGamePaused) message;
+        Boolean pause = ((GSMessageGamePaused)message).isPaused();
+        List<Integer> clientIDs = TeddyServer.getInstance().getClientIDs();
+        clientIDs.remove(new Integer(source.getId()));
+        ReqMessagePauseRequest msg = new ReqMessagePauseRequest(clientIDs.toArray(new Integer[clientIDs.size()]), pause);
         TeddyServer.getInstance().send(msg);
       }
     } else if (message instanceof NetworkMessageResponse) {
@@ -171,26 +175,6 @@ public class ServerListener implements MessageListener<HostedConnection> {
         teamInfoMsg.setServerMessage(true);
         TeddyServer.getInstance().send(teamInfoMsg);
 
-//        // Send this message to all clients (the current one has a new team assignment)
-//        List<Integer> rec = new ArrayList<Integer>(Player.getInstances().keySet());
-//        // Refresh the recipient list
-//        msg.setRecipients(rec.toArray(new Integer[rec.size()]));
-//        // And send the data to the clients
-//        TeddyServer.getInstance().send(msg);
-
-        // Send the data of the "old" clients to the new member
-//        for (Player playerInstance : Player.getInstanceList()) {
-//          if (playerInstance.getData().getId() == clientID) {
-//            continue;
-//          }
-//          ResMessageSendClientData tmp = new ResMessageSendClientData(clientID, playerInstance.getData());
-//          TeddyServer.getInstance().send(tmp);
-//          //TODO not all players may have loaded the map ...
-//          // Since the active players have loaded the map, send an info to the new one
-//          ResMessageMapLoaded tmpMapLoaded = new ResMessageMapLoaded(new Integer[]{clientID}, playerInstance.getData().getId());
-//          TeddyServer.getInstance().send(tmpMapLoaded);
-//        }
-
         // Now update the player data on the clients
         List<ClientData> playerData = new ArrayList<ClientData>();
         List<Integer> playerWithActiveMap = new ArrayList<Integer>();
@@ -212,13 +196,9 @@ public class ServerListener implements MessageListener<HostedConnection> {
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManControllerInput) {
         ManControllerInput input = (ManControllerInput) message;
-
         // refresh the player's action
         Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
-        // send to the other players
-        List<Integer> clients = TeddyServer.getInstance().getClientIDs();
-        // redistribute
-        input.setRecipients(clients.toArray(new Integer[clients.size()]));
+        // send this message to all players since there's no local input manager attached to the users
         TeddyServer.getInstance().send(input);
       } else if (message instanceof ManCursorPosition) {
         ManCursorPosition cursorPos = (ManCursorPosition) message;

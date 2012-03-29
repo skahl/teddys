@@ -26,11 +26,10 @@ public class ServerTimerThread extends Thread {
   public void run() {
 
     while (!stop) {
-      //TODO parse game events?
 
       // The following steps are only necessary for the server because it collects the
       // players' positions.
-      if(TeddyServer.getInstance().isRunning()) {
+      if (TeddyServer.getInstance().isRunning()) {
         if (tick % GameSettings.TRANSMIT_POSITION_MOD == 0) {
           ManMessageSetPosition posMsg = new ManMessageSetPosition();
           // update the players' positions
@@ -72,8 +71,8 @@ public class ServerTimerThread extends Thread {
    * @param posClients Positions of the clients
    */
   public synchronized void addClientPosition(Map<Integer, Vector3f> posClients) {
-    TreeMap<Long, Map<Integer,Vector3f>> posMap = TeddyServer.getInstance().getData().getClientPositions();
-    if(posMap.size() > GameSettings.MAX_SERVER_POS_CAPACITY) {
+    TreeMap<Long, Map<Integer, Vector3f>> posMap = TeddyServer.getInstance().getData().getClientPositions();
+    if (posMap.size() > GameSettings.MAX_SERVER_POS_CAPACITY) {
       // Remove the first entry
       posMap.pollFirstEntry();
     }

@@ -10,7 +10,9 @@ import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.weapons.Weapon;
+import edu.teddys.states.AppStateSwitcher;
 import edu.teddys.timer.ClientTimer;
+import edu.teddys.timer.ServerTimer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,10 +73,6 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
 
   public boolean isCurrentConnection() {
     return currentConnection;
-  }
-
-  public void setCurrentConnection(boolean currentConnection) {
-    this.currentConnection = currentConnection;
   }
 
   public Date getJoinedServer() {
@@ -154,15 +152,16 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
     TeddyClient.getInstance().setJoinedServer(new Date());
     MegaLogger.getLogger().debug("Client joined the server at "
             + TeddyClient.getInstance().getJoinedServer().toLocaleString());
+    currentConnection = true;
   }
 
   public void clientDisconnected(Client c, DisconnectInfo info) {
     // Note: The client ID for the local player is kept until a new connection
     // has been established.
     ClientTimer.stopTimer();
+    ServerTimer.stopTimer();
     MegaLogger.getLogger().warn("Client has been disconnected from the server");
-    //TODO react to this event, such as settings the appropriate GameState
-    //TODO what about the player ID?
-//    Player.LOCAL_PLAYER = -1;
+    AppStateSwitcher.getInstance().activateState(AppStateSwitcher.AppStateEnum.MENU);
+    currentConnection = false;
   }
 }

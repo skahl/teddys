@@ -20,6 +20,7 @@ import edu.teddys.timer.ServerTimer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -130,8 +131,16 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     if (!isRunning()) {
       return;
     }
-    //TODO close the connestion
-//    conn.close(reason);
+    if(getConnections().isEmpty()) {
+      // Strange query ...
+      return;
+    }
+    HostedConnection conn = null;
+    for(Iterator<HostedConnection> it=getConnections().iterator(); it.hasNext(); conn=it.next()) {
+      if(conn.getId() == client) {
+        conn.close(reason);
+      }
+    }
     MegaLogger.getLogger().debug(String.format("The specified client (%d) has been disconnected yet.", client));
   }
 

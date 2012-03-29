@@ -10,6 +10,7 @@ import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.objects.player.Player;
+import edu.teddys.states.AppStateSwitcher;
 import java.io.IOException;
 
 /**
@@ -42,7 +43,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     if (networkClient == null) {
       return false;
     }
-    if(conCheck % GameSettings.NETWORK_CLIENT_CON_CHECK == 0) {
+    if (conCheck % GameSettings.NETWORK_CLIENT_CON_CHECK == 0) {
       return networkClient.isConnected();
     }
     return true;
@@ -77,7 +78,7 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
    */
   public void send(NetworkMessage message) {
     if (isValidConnection()) {
-      if(GameSettings.NETWORK_CLIENT_LAG_DELAY != 0) {
+      if (GameSettings.NETWORK_CLIENT_LAG_DELAY != 0) {
         try {
           Thread.sleep(GameSettings.NETWORK_CLIENT_LAG_DELAY);
         } catch (InterruptedException ex) {
@@ -102,8 +103,6 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     if (isValidConnection()) {
       // close the active connection
       disconnect(Player.LOCAL_PLAYER);
-      //TODO REMOVE PLAYER??
-//      Player.LOCAL_PLAYER = -1;
     }
     if (serverIP == null || serverPort == null) {
       String msg = "Invalid server configuration! serverIP or serverPort is null. "
@@ -128,10 +127,11 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
 
   public void disconnect(Integer clientID) {
     MegaLogger.getLogger().warn("Server connection lost!");
-    if(networkClient != null && networkClient.isConnected()) {
+    if (networkClient != null && networkClient.isConnected()) {
       networkClient.close();
     }
-    //TODO change game state
+    // Switch game state
+    AppStateSwitcher.getInstance().activateState(AppStateSwitcher.AppStateEnum.MENU);
   }
 
   public Client getNetworkClient() {

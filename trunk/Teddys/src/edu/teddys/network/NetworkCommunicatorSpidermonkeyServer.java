@@ -106,17 +106,19 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
         MegaLogger.getLogger().debug(new Throwable("Lag delay sleep has been interrupted!", ex));
       }
     }
-    if (message.getRecipients() == null || message.getRecipients().length < 1) {
+    
+    if (message.getRecipients() == null || !message.isRestrictedRecipients()) {
       // Don't filter, send a broadcast
       networkServer.broadcast(message);
-    }
-    // Send a message to the appropriate clients
-    for (Integer clientID : message.getRecipients()) {
-      try {
-        networkServer.getConnection(clientID).send(message);
-      } catch (NullPointerException ex) {
-        MegaLogger.getLogger().warn("Specified client ID does not exist: " 
-                + clientID + ". Message: " + message);
+    } else {
+      // Send a message to the appropriate clients
+      for (Integer clientID : message.getRecipients()) {
+        try {
+          networkServer.getConnection(clientID).send(message);
+        } catch (NullPointerException ex) {
+          MegaLogger.getLogger().warn("Specified client ID does not exist: " 
+                  + clientID + ". Message: " + message);
+        }
       }
     }
   }
