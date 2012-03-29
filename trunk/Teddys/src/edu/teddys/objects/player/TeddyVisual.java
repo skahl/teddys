@@ -3,6 +3,7 @@ package edu.teddys.objects.player;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
@@ -15,6 +16,7 @@ import com.jme3.texture.Texture;
 import edu.teddys.MegaLogger;
 import edu.teddys.effects.JetpackEffect;
 import edu.teddys.effects.TeddyDeath;
+import edu.teddys.hud.BarIndicator;
 
 /**
  * TeddyVisual contains everything visual specific about a character.
@@ -39,13 +41,15 @@ public class TeddyVisual {
     JetpackEffect jetpackFx;
     TeddyDeath deathFx;
     
+    private BarIndicator healthBar;
+    
     /**
      * TeddyVisual constructor.
      * 
      * @param node
      * @param assetManager 
      */
-    public TeddyVisual(Node node, AssetManager assetManager) {
+    public TeddyVisual(Node node, AssetManager assetManager, boolean showHealthBar) {
         this.node = node;
       
         // control init
@@ -99,7 +103,11 @@ public class TeddyVisual {
         geo.setQueueBucket(Bucket.Transparent);
         
         node.attachChild(geo);
-    }
+        
+        if (showHealthBar)
+            healthBar = new BarIndicator(0.4f, 0.1f, geo.getLocalTranslation().x, 
+                geo.getLocalTranslation().y+0.8f, assetManager, ColorRGBA.Red, node);
+    }   
     
     /**
      * Node getter.
@@ -162,6 +170,15 @@ public class TeddyVisual {
      */
     public JetpackEffect getJetpack() {
         return jetpackFx;
+    }
+
+    
+    /**
+     * Getter method for the teddey's health bar.
+     * @return 
+     */
+    public BarIndicator getHealthBar() {
+        return healthBar;
     }
     
     /**

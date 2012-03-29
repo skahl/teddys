@@ -5,7 +5,8 @@
 package edu.teddys;
 
 import edu.teddys.controls.PlayerControl;
-import edu.teddys.network.TeddyServerData;
+import edu.teddys.network.NetworkCommunicatorSpidermonkeyClient;
+import edu.teddys.network.NetworkCommunicatorSpidermonkeyServer;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
 import edu.teddys.timer.ServerDataSync;
@@ -97,7 +98,7 @@ public class GameSettings {
   /**
    * Low-pass filtered interpolation of the Teddy position in case of deviance.
    */
-  public static final Float CLIENT_INTERPOL_SMOOTHING = 0.3f;
+  public static final Float CLIENT_INTERPOL_SMOOTHING = 0.7f;
   /**
    * Checksum interval in milliseconds (Default: 3000 ms)
    * @see ChecksumManager

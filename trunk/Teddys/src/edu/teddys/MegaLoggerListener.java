@@ -48,6 +48,7 @@ public class MegaLoggerListener extends AppenderSkeleton {
       if (AppStateSwitcher.getInstance(null).getState(AppStateSwitcher.AppStateEnum.GAME).isEnabled()) {
         HUDController.getInstance().addMessage(message);
       } else {
+        //TODO change so there's no ClassCastException anymore in specific situations .....
         ((MessagePopupController) nifty.getCurrentScreen().getScreenController()).addMessage(message);
       }
     }

@@ -1,9 +1,10 @@
 package edu.teddys.objects.player;
 
-import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.network.serializing.Serializable;
 import com.jme3.scene.CameraNode;
@@ -12,7 +13,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
-import edu.teddys.GameModeEnum;
+import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.callables.SetHealthCallable;
 import edu.teddys.callables.TeddyDeadCallable;
@@ -22,12 +23,12 @@ import edu.teddys.hud.HUDController;
 import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.network.ClientData;
+import edu.teddys.network.TeddyServer;
 import edu.teddys.objects.weapons.DeafNut;
 import edu.teddys.objects.weapons.Florets;
 import edu.teddys.objects.weapons.HolyWater;
 import edu.teddys.objects.weapons.HoneyBrew;
 import edu.teddys.objects.weapons.Rocket;
-import edu.teddys.objects.weapons.SniperRifle;
 import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.states.Game;
 import java.util.ArrayList;
@@ -95,28 +96,28 @@ public class Player {
    * @param id The new player ID
    */
   public synchronized static void setLocalPlayerId(Integer id) {
-    
+
     if (id == LOCAL_PLAYER) {
       // no change
       return;
     }
-    
+
     if (instances.containsKey(id)) {
       Player oldPlayer = Player.getInstance(id);
       // Remove the old player
       Game.getInstance().removePlayerFromWorld(oldPlayer);
       // Remove the camera Node
-      if(oldPlayer.camNode != null) {
+      if (oldPlayer.camNode != null) {
         Game.getInstance().removeSpatial(oldPlayer.getNode(), oldPlayer.camNode);
         oldPlayer.camNode = null;
       }
-      if(oldPlayer.cursor != null) {
+      if (oldPlayer.cursor != null) {
         Game.getInstance().removeSpatial(oldPlayer.getNode(), oldPlayer.cursor);
         oldPlayer.cursor = null;
       }
       instances.remove(id);
     }
-    
+
     // Get the current instance
     Player localPlayer = Player.getInstance(LOCAL_PLAYER);
     // Instead of copying all data, rename the node 
@@ -145,12 +146,12 @@ public class Player {
    * @param player The player instance to which the camera should be attached.
    */
   protected void initCamNode() {
-    
+
     MegaLogger.getLogger().debug("Initializing CameraNode ...");
-    
+
     Game gameInstance = Game.getInstance();
-    
-    if(camNode == null) {
+
+    if (camNode == null) {
       // Camera
       camNode = new CameraNode("Camera", gameInstance.getApp().getCamera());
       camNode.setControlDir(ControlDirection.SpatialToCamera);
@@ -164,7 +165,7 @@ public class Player {
     Vector3f dir = getNode().getWorldTranslation().add(0, 0.75f, 0);
     camNode.lookAt(dir, new Vector3f(0, 1, 0));
 
-    if(cameraControl == null) {
+    if (cameraControl == null) {
       cameraControl = new CrosshairControl(camNode, this,
               getCursor(),
               gameInstance.getApp().getSettings().getWidth(),
@@ -173,15 +174,15 @@ public class Player {
       MegaLogger.getLogger().debug("New CameraControl created.");
     }
   }
-  
+
   private void initHUD() {
-    
+
     Game gameInstance = Game.getInstance();
-    
+
     // Crosshair
     int crosshairSize = gameInstance.getApp().getSettings().getHeight() / 15;
     gameInstance.getAssetManager().loadTexture("Interface/HUD/crosshair.png");
-    
+
     cursor = Cursor.getInstance();
     cursor.setImage(gameInstance.getAssetManager(), "Interface/HUD/crosshair.png", true);
     cursor.getMaterial().getAdditionalRenderState().setAlphaTest(true);
@@ -215,12 +216,14 @@ public class Player {
    * @param id Players are differentiated by this ID.
    */
   private Player(Integer id) {
-    
+
     Game game = Game.getInstance();
 
     // Use the toString() method to generate a quite uniquely identified Node
     node = new Node("player" + id.toString());
-    visual = new TeddyVisual(node, game.getAssetManager());
+    
+    boolean showHealthBar = ((id != LOCAL_PLAYER) && !TeddyServer.getInstance().isRunning());
+    visual = new TeddyVisual(node, game.getAssetManager(), showHealthBar);
 
     // attach a cube to the model, so it becomes shootable
     Box invisibleBox = new Box(0.3f, 0.3f, 0.5f);
@@ -236,7 +239,7 @@ public class Player {
     collisionShape = new CapsuleCollisionShape(visual.getWidth() * 0.3f, visual.getHeight() * 0.35f, 1);
 
     control = new PlayerControl(this, collisionShape, 0.02f, visual);
-    control.setCcdMotionThreshold((visual.getWidth()*0.3f)/2f);
+    control.setCcdMotionThreshold((visual.getWidth() * 0.3f) / 2f);
     if (id == LOCAL_PLAYER) {
       // This is handled by the ClientTimerThread
 //      control.registerWithInput(game.getInputManager());
@@ -244,7 +247,7 @@ public class Player {
 
     // Set a binding
     node.addControl(control);
-    
+
     control.setJumpSpeed(5);
     control.setGravity(5);
     control.setFallSpeed(5);
@@ -256,11 +259,10 @@ public class Player {
     weapons.add(Florets.class.getName());
     weapons.add(HolyWater.class.getName());
     weapons.add(HoneyBrew.class.getName());
-    weapons.add(SniperRifle.class.getName());
 
-    
+
     // The location of the CharacterControl Spatial should be the same as from the Player's node
-    control.setPhysicsLocation(node.getWorldTranslation().add(new Vector3f(0f, 0f, -1.2f)));
+    control.setPhysicsLocation(node.getWorldTranslation().add(new Vector3f(0f, 0f, GameSettings.WORLD_Z_INDEX)));
 
 
     // Set the (network) client ID
@@ -268,24 +270,28 @@ public class Player {
 
     MegaLogger.getLogger().debug("New player created (id=" + id + ")");
   }
-  
+
   public String getNextWeapon() {
-      if (++activeWeaponIndex < weapons.size()) {
-          return weapons.get(activeWeaponIndex);
-      } else {
-          activeWeaponIndex = 0;
-          return weapons.get(activeWeaponIndex);
-      }
-          
+    if (++activeWeaponIndex < weapons.size()) {
+      return weapons.get(activeWeaponIndex);
+    } else {
+      activeWeaponIndex = 0;
+      return weapons.get(activeWeaponIndex);
+    }
+
   }
-  
+
   public String getPreviousWeapon() {
-      if (--activeWeaponIndex >= 0) {
-          return weapons.get(activeWeaponIndex);
-      } else {
-          activeWeaponIndex = weapons.size() - 1;
-          return weapons.get(activeWeaponIndex);
-      }
+    if (--activeWeaponIndex >= 0) {
+      return weapons.get(activeWeaponIndex);
+    } else {
+      activeWeaponIndex = weapons.size() - 1;
+      return weapons.get(activeWeaponIndex);
+    }
+  }
+
+  public String getActiveWeapon() {
+    return weapons.get(activeWeaponIndex);
   }
 
   /**
@@ -313,7 +319,7 @@ public class Player {
   public Node getNode() {
     return node;
   }
-  
+
   public CameraNode getCameraNode() {
     return camNode;
   }
@@ -415,5 +421,24 @@ public class Player {
 
   public HUD getHUD() {
     return hud;
+  }
+
+  public Boolean collidedWithLevel(Vector3f destPosition) {
+    
+    Ray ray = new Ray(getPlayerControl().getPhysicsLocation(), destPosition);
+    //ray.setLimit(); ??? 
+    CollisionResults hits = new CollisionResults();
+    Game.getInstance().getRootNode().collideWith(ray, hits);
+
+    if (hits.size() >= 1) {
+      Geometry p;
+      for(int i=0; i<hits.size(); i++) {
+        p = hits.getCollision(i).getGeometry();
+        if(!p.getParent().getName().contains("player")) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

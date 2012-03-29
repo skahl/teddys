@@ -46,12 +46,12 @@
             </panel>
         
             <panel id="scores_panel" height="70%" width="75%" align="center" childLayout="horizontal" backgroundColor="#0000">
-                
-                <panel id="column0" width="25%" childLayout="vertical">
+                <panel id="spacer" width="5%"/>
+                <panel id="column0" width="20%" childLayout="vertical">
                     <text text="Rank" font="Interface/Fonts/Default.fnt" align="left"/>
                     
                     <panel id="spacer" height="5%"/>
-                    <text id="rank0" text="1" font="Interface/Fonts/Default.fnt" align="left"/>
+                    <text id="rank0" text="" font="Interface/Fonts/Default.fnt" align="left"/>
                     <panel id="spacer" height="5%"/>
                     <text id="rank1" text="" font="Interface/Fonts/Default.fnt" align="left"/>
                     <panel id="spacer" height="5%"/>
@@ -62,11 +62,11 @@
                     <text id="rank4" text="" font="Interface/Fonts/Default.fnt" align="left"/>
                 </panel>    
             
-                <panel id="column1" width="25%" childLayout="vertical">
+                <panel id="column1" width="20%" childLayout="vertical">
                     <text text="Name" font="Interface/Fonts/Default.fnt" align="left"/>
                     
                     <panel id="spacer" height="5%"/>
-                    <text id="name0" text="Teddy" font="Interface/Fonts/Default.fnt" align="left"/>
+                    <text id="name0" text="" font="Interface/Fonts/Default.fnt" align="left"/>
                     <panel id="spacer" height="5%"/>
                     <text id="name1" text="" font="Interface/Fonts/Default.fnt" align="left"/>
                     <panel id="spacer" height="5%"/>
@@ -77,11 +77,11 @@
                     <text id="name4" text="" font="Interface/Fonts/Default.fnt" align="left"/>
                 </panel>
             
-                <panel id="column2" width="25%" childLayout="vertical">
+                <panel id="column2" width="20%" childLayout="vertical">
                    <text text="Kills" font="Interface/Fonts/Default.fnt" align="left"/>
                     
                     <panel id="spacer" height="5%"/>
-                    <text id="kills0" text="0" font="Interface/Fonts/Default.fnt" align="left"/>
+                    <text id="kills0" text="" font="Interface/Fonts/Default.fnt" align="left"/>
                     <panel id="spacer" height="5%"/>
                     <text id="kills1" text="" font="Interface/Fonts/Default.fnt" align="left"/>
                     <panel id="spacer" height="5%"/>
@@ -92,11 +92,11 @@
                     <text id="kills4" text="" font="Interface/Fonts/Default.fnt" align="left"/>
                 </panel>
             
-                <panel id="column3" width="25%" childLayout="vertical">
+                <panel id="column3" width="20%" childLayout="vertical">
                     <text text="Deaths" font="Interface/Fonts/Default.fnt" align="left"/>
                     
                     <panel id="spacer" height="5%"/>
-                    <text id="deaths0" text="0" font="Interface/Fonts/Default.fnt" align="left"/>
+                    <text id="deaths0" text="" font="Interface/Fonts/Default.fnt" align="left"/>
                     <panel id="spacer" height="5%"/>
                     <text id="deaths1" text="" font="Interface/Fonts/Default.fnt" align="left"/>
                     <panel id="spacer" height="5%"/>

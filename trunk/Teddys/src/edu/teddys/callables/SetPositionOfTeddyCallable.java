@@ -39,19 +39,21 @@ public class SetPositionOfTeddyCallable implements Callable {
     if(positions.isEmpty()) {
       return null;
     }
-    Vector3f lastPosition = positions.get(positions.size() - 1);
+    Vector3f serverPosition = positions.get(positions.size() - 1);
     if(fixed) {
-      player.getPlayerControl().setPhysicsLocation(lastPosition);
+      player.getPlayerControl().setPhysicsLocation(serverPosition);
       MegaLogger.getLogger().debug("Player set to a FIXED position.");
     } else {
       //TODO integrate smooth movement
-      MegaLogger.getLogger().debug("SMOOOOOOOOTH");
       Vector3f curPos = player.getPlayerControl().getPhysicsLocation();
-      player.getPlayerControl().setPhysicsLocation(lastPosition.interpolate(curPos,
+      player.getPlayerControl().setPhysicsLocation(serverPosition.interpolate(curPos,
               GameSettings.CLIENT_INTERPOL_SMOOTHING));
+      if(curPos.distance(serverPosition) >= 1 && player.collidedWithLevel(serverPosition)) {
+        // Set the Teddy directly to the position
+        player.getPlayerControl().setPhysicsLocation(serverPosition);
+        MegaLogger.getLogger().debug("User set to the desired position directly because there is a collision with the level");
+      }
     }
-    MegaLogger.getLogger().debug(String.format("Position of player %d set to %s",
-            player.getData().getId(), lastPosition));
     return null;
   }
 }

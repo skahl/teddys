@@ -15,7 +15,11 @@ import edu.teddys.objects.player.TeddyVisual;
 import edu.teddys.objects.weapons.Rocket;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /** Control class responsible for character controls and visuals, based on input.
  *
@@ -23,106 +27,105 @@ import java.util.LinkedList;
  */
 public class PlayerControl extends CharacterControl {
 
-  private Player player;
-  private TeddyVisual visual;
-  // screen positions of cursor and player
-  private Vector2f vectorPlayerToCursor = new Vector2f(1f, 0f);
-  private float moveSpeed = 2f;
-  private boolean jetpackActive;
-  private float jetpackDischargeRate = 75f;
-  private float jetpackChargeRate = 25f;
-  private float totalJetpackEnergy = 100f;
-  private float currentEnergy = totalJetpackEnergy;
-  private float oldGravity = 4f;
-  private Vector3f left, right;
-  // player control input from server
-  private LinkedList<InputTuple> serverControlInput = new LinkedList<InputTuple>();
-  private short controlTimer = 0;
-  private short jetpackTimer = 0;
-  private float weaponTimer = 0.0f;
-  private short hudUpdateTimer = 0;
-  private Vector3f positionCorrection = new Vector3f();
-  // Weapon
-  Weapon currentWeapon;
+    private Player player;
+    private TeddyVisual visual;
+    // screen positions of cursor and player
+    private Vector2f vectorPlayerToCursor = new Vector2f(1f, 0f);
+    private float moveSpeed = 2f;
+    private boolean jetpackActive;
+    private float jetpackDischargeRate = 75f;
+    private float jetpackChargeRate = 25f;
+    private float totalJetpackEnergy = 100f;
+    private float currentEnergy = totalJetpackEnergy;
+    private float oldGravity = 4f;
+    private Vector3f left, right;
+    // player control input from server
+    private LinkedList<InputTuple> serverControlInput = new LinkedList<InputTuple>();
+    private short controlTimer = 0;
+    private short jetpackTimer = 0;
+    private float weaponTimer = 0.0f;
+    private short hudUpdateTimer = 0;
+    // Weapon
+    Weapon currentWeapon;
 
-  /**
-   * PlayerControl constructor. Sets physics properties.
-   * 
-   * @param player
-   * @param collisionShape
-   * @param stepHeight
-   * @param vis 
-   */
-  public PlayerControl(Player player, CollisionShape collisionShape, float stepHeight, TeddyVisual vis) {
-    super(collisionShape, stepHeight);
+    /**
+     * PlayerControl constructor. Sets physics properties.
+     * 
+     * @param player
+     * @param collisionShape
+     * @param stepHeight
+     * @param vis 
+     */
+    public PlayerControl(Player player, CollisionShape collisionShape, float stepHeight, TeddyVisual vis) {
+        super(collisionShape, stepHeight);
 
-    this.player = player;
-    visual = vis;
-    serverControlInput = new LinkedList<InputTuple>();
+        this.player = player;
+        visual = vis;
+        serverControlInput = new LinkedList<InputTuple>();
 
-    left = new Vector3f(-1, 0, 0);
-    right = new Vector3f(1, 0, 0);
+        left = new Vector3f(-1, 0, 0);
+        right = new Vector3f(1, 0, 0);
 
 //    currentWeapon = new DeafNut(player);//new Florets(player);//new Rocket(player);//new HolyWater(player);//new HoneyBrew(player);//new StenGun(player);//
-    currentWeapon = new Rocket(player);
+        currentWeapon = new Rocket(player);
 //    currentWeapon = new Florets(player);
 //    currentWeapon = new HolyWater(player);
 //    currentWeapon = new HoneyBrew(player);
 //    currentWeapon = new StenGun(player);
 
-    Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
-  }
-
-  /** 
-   * Analog Control listeners. Walking, Jetpack and Shooting.
-   * 
-   * @param name
-   * @param value
-   * @param tpf 
-   */
-  public void onAnalog(String name, float value, float tpf) {
-
-    //TODO integrate the position information from the server
-
-    if (name.equals(AnalogControllerEnum.MOVE_LEFT.name())) {
-
-      // reset control timer
-      controlTimer = 0;
-
-      // better for physics than warp(getPhysicsLocation().add(vel));
-      setWalkDirection(left.mult(moveSpeed * tpf));
-
-      // visual
-      if (!jetpackActive && onGround()) {
-        visual.runLeft();
-      } else {
-        visual.stand();
-      }
-
-    } else if (name.equals(AnalogControllerEnum.MOVE_RIGHT.name())) {
-
-      // reset control timer
-      controlTimer = 0;
-
-      // better for physics than warp(getPhysicsLocation().add(vel));
-      setWalkDirection(right.mult(moveSpeed * tpf));
-
-      // visual
-      if (!jetpackActive && onGround()) {
-        visual.runRight();
-      } else {
-        visual.stand();
-      }
-
+        Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
     }
 
-    if (name.equals(AnalogControllerEnum.WEAPON.name())) {
+    /** 
+     * Analog Control listeners. Walking, Jetpack and Shooting.
+     * 
+     * @param name
+     * @param value
+     * @param tpf 
+     */
+    public void onAnalog(String name, float value, float tpf) {
 
-      // check if weapon can fire again
-      if (currentWeapon.getEffect().isTriggerable()) {
+        //TODO integrate the position information from the server
 
-        // visual
-        currentWeapon.getEffect().trigger();
+        if (name.equals(AnalogControllerEnum.MOVE_LEFT.name())) {
+
+            // reset control timer
+            controlTimer = 0;
+
+            // better for physics than warp(getPhysicsLocation().add(vel));
+            setWalkDirection(left.mult(moveSpeed * tpf));
+
+            // visual
+            if (!jetpackActive && onGround()) {
+                visual.runLeft();
+            } else {
+                visual.stand();
+            }
+
+        } else if (name.equals(AnalogControllerEnum.MOVE_RIGHT.name())) {
+
+            // reset control timer
+            controlTimer = 0;
+
+            // better for physics than warp(getPhysicsLocation().add(vel));
+            setWalkDirection(right.mult(moveSpeed * tpf));
+
+            // visual
+            if (!jetpackActive && onGround()) {
+                visual.runRight();
+            } else {
+                visual.stand();
+            }
+
+        }
+
+        if (name.equals(AnalogControllerEnum.WEAPON.name())) {
+
+            // check if weapon can fire again
+            if (currentWeapon.getEffect().isTriggerable()) {
+
+                // visual
+                currentWeapon.getEffect().trigger();
 
 //        Ray ray = new Ray(getPhysicsLocation(), currentWeapon.getEffect().getVector());
 //        // I could do that!
@@ -173,28 +176,28 @@ public class PlayerControl extends CharacterControl {
 //            TeddyServer.getInstance().send(dmgMsg);
 //          }
 //        }
-      }
+            }
+        }
+
+        if (name.contains(AnalogControllerEnum.JETPACK.name())) {
+
+            jetpackTimer = 0;
+
+            if (!jetpackActive) {
+                startJetpack();
+            }
+        }
+
     }
 
-    if (name.contains(AnalogControllerEnum.JETPACK.name())) {
-
-      jetpackTimer = 0;
-
-      if (!jetpackActive) {
-        startJetpack();
-      }
-    }
-
-  }
-
-  /** 
-   * Action Control listener.
-   * 
-   * @param name
-   * @param isPressed
-   * @param tpf 
-   */
-  public void onAction(String name, boolean isPressed, float tpf) {
+    /** 
+     * Action Control listener.
+     * 
+     * @param name
+     * @param isPressed
+     * @param tpf 
+     */
+    public void onAction(String name, boolean isPressed, float tpf) {
 //    if (name.equals(ActionControllerEnum.JETPACK.name())) {
 //      if (!jetpackActive && isPressed) {
 //        startJetpack();
@@ -202,180 +205,215 @@ public class PlayerControl extends CharacterControl {
 //        stopJetpack();
 //      }
 //    }
-      if (name.equals(ActionControllerEnum.NEXT_WEAPON.name())) {
-          
+        //System.out.println("PlayerControl received event " + name);
+        if (name.equals(ActionControllerEnum.NEXT_WEAPON.name())) {
+            
+
+            Class currentClassWeapon;
+            Constructor currentContructor;
+
             try {
-                try {
-                    currentWeapon = (Weapon)Class.forName(player.getNextWeapon()).newInstance();
-                    HUDController.getInstance().nextWeapon();
-                } catch (InstantiationException ex) {
-                    
-                } catch (IllegalAccessException ex) {
-                    
-                }
+                currentClassWeapon = Class.forName(player.getNextWeapon());
+                currentContructor = currentClassWeapon.getConstructor(Player.class);
+                currentWeapon = (Weapon) currentContructor.newInstance(player);
+                //HUDController.getInstance().showWeapons();
+                //HUDController.getInstance().nextWeapon();
+                HUDController.getInstance().selectWeapon(player.getActiveWeapon());
+            } catch (InstantiationException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchMethodException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SecurityException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
-                
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
             }
-      } else if (name.equals(ActionControllerEnum.PREVIOUS_WEAPON.name())) {
+
+
+
+
+
+            MegaLogger.getLogger().debug("Weapon changed: " + player.getActiveWeapon());
+
+        } else if (name.equals(ActionControllerEnum.PREVIOUS_WEAPON.name())) {
+            Class currentClassWeapon;
+            Constructor currentContructor;
+
             try {
-                try {
-                    currentWeapon = (Weapon)Class.forName(player.getNextWeapon()).newInstance();
-                    HUDController.getInstance().previousWeapon();
-                } catch (InstantiationException ex) {
-                    
-                } catch (IllegalAccessException ex) {
-                    
-                }
+                currentClassWeapon = Class.forName(player.getPreviousWeapon());
+                currentContructor = currentClassWeapon.getConstructor(Player.class);
+                currentWeapon = (Weapon) currentContructor.newInstance(player);
+                //HUDController.getInstance().showWeapons();
+                //HUDController.getInstance().nextWeapon();
+                HUDController.getInstance().selectWeapon(player.getActiveWeapon());
+            } catch (InstantiationException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchMethodException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SecurityException ex) {
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
-                
+                Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
             }
-          
-          
-      }
-  }
 
-  /** 
-   * Start Jetpack firing, with gravity controls and visuals.
-   * 
-   */
-  private void startJetpack() {
-    if (currentEnergy > 25f) {
-      oldGravity = getGravity();
-      setGravity(-getGravity());
-      jetpackActive = true;
 
-      visual.stand();
-      visual.getJetpack().trigger();
-    } else {
-      stopJetpack();
-    }
-  }
-
-  /** 
-   * Set everything back to normal after Jetpack use.
-   * 
-   */
-  private void stopJetpack() {
-    setGravity(oldGravity);
-    jetpackActive = false;
-
-    visual.getJetpack().reset();
-  }
-
-  /** 
-   * Gravity setter method, for player gravity.
-   * 
-   * @param value 
-   */
-  @Override
-  public void setGravity(float value) {
-    super.setGravity(value);
-  }
-
-  /** 
-   * Usually only used on Crosshair movement updates!
-   * 
-   * Feed udpated Player and Cursor positions to this control class.
-   * 
-   * @param playerPos
-   * @param cursorPos 
-   */
-  public void setScreenPositions(Vector2f cursorPos) {
-
-    Vector3f playerPos = Game.getInstance().getApp().getCamera().getScreenCoordinates(player.getNode().getWorldTranslation());
-
-    vectorPlayerToCursor = (cursorPos.subtract(new Vector2f(playerPos.x, playerPos.y))).normalizeLocal();
-    currentWeapon.getEffect().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
-  }
-
-  /**
-   * This control's update method. Is being called from JME, automatically.
-   * Basically forwards and processes the input queue.
-   * 
-   * @param tpf 
-   */
-  @Override
-  public void update(float tpf) {
-    super.update(tpf);
-
-    if (jetpackActive) {
-      if (currentEnergy > 0) {
-        currentEnergy -= jetpackDischargeRate * tpf;
-      } else {
-        stopJetpack();
-      }
-    } else {
-      if (currentEnergy < totalJetpackEnergy) {
-        currentEnergy += jetpackChargeRate * tpf;
-      }
-    }
-
-    // increase control timer and act on it, if necessary
-    controlTimer++;
-    if (controlTimer > 5) {
-      setWalkDirection(Vector3f.ZERO);
-      visual.stand(); // enough running without input, stand still!
-
-      controlTimer = 0;
-    }
-
-    // increase jetpack timer and act on it
-    jetpackTimer++;
-    if (jetpackTimer > 5) {
-      stopJetpack();
-
-      jetpackTimer = 0;
-    }
-
-    // increase weapon timer
-    weaponTimer += tpf;
-    if (weaponTimer > currentWeapon.getFireRate()) {
-      currentWeapon.getEffect().reset();
-      weaponTimer = 0.0f;
-    }
-
-    // increase HUD timer and act on it, if necessary
-    hudUpdateTimer++;
-    if (hudUpdateTimer > 4) {
-      hudUpdateTimer = 0;
-
-      // inform the visual representation of this player about the view vector
-      visual.setViewVector(vectorPlayerToCursor);
-
-      // update HUD
-      HUDController.getInstance().setJetpackEnergy((int) currentEnergy);
-    }
-
-    InputTuple entry = null;
-
-    synchronized (serverControlInput) {
-
-      while (serverControlInput.size() > 0) {
-
-        entry = serverControlInput.pop();
-        if (entry.getType() == InputType.Analog) {
-          onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
-        } else if (entry.getType() == InputType.Action) {
-          if (entry.getValue() instanceof Boolean) {
-            onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
-          } else {
-            MegaLogger.getLogger().error(new Throwable("Action event invalid! Value is not a Boolean!"));
-          }
         }
-      }
     }
-  }
 
-  /**
-   * 
-   * New input data has arrived, that means some events can be triggered,
-   * such as jumps, jetpack activation etc.
-   * These should only be triggered in control updates, so we just store inputs here,
-   * for further processing, when update is triggered.
-   * 
-   * @param input A queue of actions gathered in the last time frame.
-   */
-  public synchronized void newInput(LinkedList<InputTuple> input) {
-    serverControlInput.addAll(input);
-  }
+    /** 
+     * Start Jetpack firing, with gravity controls and visuals.
+     * 
+     */
+    private void startJetpack() {
+        if (currentEnergy > 25f) {
+            oldGravity = getGravity();
+            setGravity(-getGravity());
+            jetpackActive = true;
+
+            visual.stand();
+            visual.getJetpack().trigger();
+        } else {
+            stopJetpack();
+        }
+    }
+
+    /** 
+     * Set everything back to normal after Jetpack use.
+     * 
+     */
+    private void stopJetpack() {
+        setGravity(oldGravity);
+        jetpackActive = false;
+
+        visual.getJetpack().reset();
+    }
+
+    /** 
+     * Gravity setter method, for player gravity.
+     * 
+     * @param value 
+     */
+    @Override
+    public void setGravity(float value) {
+        super.setGravity(value);
+    }
+
+    /** 
+     * Usually only used on Crosshair movement updates!
+     * 
+     * Feed udpated Player and Cursor positions to this control class.
+     * 
+     * @param playerPos
+     * @param cursorPos 
+     */
+    public void setScreenPositions(Vector2f cursorPos) {
+
+        Vector3f playerPos = Game.getInstance().getApp().getCamera().getScreenCoordinates(player.getNode().getWorldTranslation());
+
+        vectorPlayerToCursor = (cursorPos.subtract(new Vector2f(playerPos.x, playerPos.y))).normalizeLocal();
+        currentWeapon.getEffect().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
+    }
+
+    /**
+     * This control's update method. Is being called from JME, automatically.
+     * Basically forwards and processes the input queue.
+     * 
+     * @param tpf 
+     */
+    @Override
+    public void update(float tpf) {
+        super.update(tpf);
+
+        if (jetpackActive) {
+            if (currentEnergy > 0) {
+                currentEnergy -= jetpackDischargeRate * tpf;
+            } else {
+                stopJetpack();
+            }
+        } else {
+            if (currentEnergy < totalJetpackEnergy) {
+                currentEnergy += jetpackChargeRate * tpf;
+            }
+        }
+
+        // increase control timer and act on it, if necessary
+        controlTimer++;
+        if (controlTimer > 5) {
+            setWalkDirection(Vector3f.ZERO);
+            visual.stand(); // enough running without input, stand still!
+
+            controlTimer = 0;
+        }
+
+        // increase jetpack timer and act on it
+        jetpackTimer++;
+        if (jetpackTimer > 5) {
+            stopJetpack();
+
+            jetpackTimer = 0;
+        }
+
+        // increase weapon timer
+        weaponTimer += tpf;
+        if (weaponTimer > currentWeapon.getFireRate()) {
+            currentWeapon.getEffect().reset();
+            weaponTimer = 0.0f;
+        }
+
+        // increase HUD timer and act on it, if necessary
+        hudUpdateTimer++;
+        if (hudUpdateTimer > 4) {
+            hudUpdateTimer = 0;
+
+            // inform the visual representation of this player about the view vector
+            visual.setViewVector(vectorPlayerToCursor);
+
+            // update HUD
+            HUDController.getInstance().setJetpackEnergy((int) currentEnergy);
+        }
+
+        InputTuple entry = null;
+
+        synchronized (serverControlInput) {
+
+            while (serverControlInput.size() > 0) {
+
+                entry = serverControlInput.pop();
+                if (entry.getType() == InputType.Analog) {
+                    onAnalog(entry.getKey(), (Float) entry.getValue(), entry.getTpf());
+                } else if (entry.getType() == InputType.Action) {
+                    if (entry.getValue() instanceof Boolean) {
+                        onAction(entry.getKey(), (Boolean) entry.getValue(), entry.getTpf());
+                    } else {
+                        MegaLogger.getLogger().error(new Throwable("Action event invalid! Value is not a Boolean!"));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 
+     * New input data has arrived, that means some events can be triggered,
+     * such as jumps, jetpack activation etc.
+     * These should only be triggered in control updates, so we just store inputs here,
+     * for further processing, when update is triggered.
+     * 
+     * @param input A queue of actions gathered in the last time frame.
+     */
+    public synchronized void newInput(LinkedList<InputTuple> input) {
+        serverControlInput.addAll(input);
+    }
 }

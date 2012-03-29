@@ -29,7 +29,6 @@ import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
 import java.awt.Color;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -42,6 +41,11 @@ import java.util.Map.Entry;
  * @author cm
  */
 public class ServerListener implements MessageListener<HostedConnection> {
+  
+  /**
+   * This is just for alternating team allocation.
+   */
+  private boolean firstTeamAssignment = true;
 
   public void messageReceived(HostedConnection source, Message message) {
 
@@ -148,29 +152,37 @@ public class ServerListener implements MessageListener<HostedConnection> {
         Player player = Player.getInstance(clientID);
         // Update the data
         player.setData(data);
-        //TODO Add member to a team
 
-        //TEST
-        Team newTeam = new Team(Color.BLUE, "Molche");
         if (TeddyServer.getInstance().getData().getTeams().isEmpty()) {
           // Create a new team
-          TeddyServer.getInstance().getData().getTeams().add(newTeam);
+          TeddyServer.getInstance().getData().getTeams().add(new Team(Color.RED, "1337e Molche"));
+          // Create a second team
+          TeddyServer.getInstance().getData().getTeams().add(new Team(Color.BLUE, "Stramme Quaster"));
         }
-
-        Integer teamId = 0;
+        
+        Team assignedTeam = null;
+        // Now read alternatingly the team
+        if(firstTeamAssignment) {
+          assignedTeam = TeddyServer.getInstance().getData().getTeams().get(0);
+        } else {
+          assignedTeam = TeddyServer.getInstance().getData().getTeams().get(1);
+        }
+        firstTeamAssignment = !firstTeamAssignment;
+        Integer teamID = assignedTeam.getTeamID();
+        
         // Add the player to the team
-        TeddyServer.getInstance().getData().getTeams().get(teamId).addPlayer(clientID);
+        TeddyServer.getInstance().getData().getTeams().get(teamID).addPlayer(clientID);
         
         // Since a new team has been created, update the TeddyServerData on the clients
         ManMessageTransferServerData serverDataMsg = new ManMessageTransferServerData(TeddyServer.getInstance().getData());
         TeddyServer.getInstance().send(serverDataMsg);
         
         // Refresh the teamID
-        player.getData().setTeam(teamId);
-        msg.getClientData().setTeam(teamId);
-        NetworkMessageInfo teamInfoMsg = new NetworkMessageInfo(
-                "Teddy has sent his client data. " + data.getName()
-                + " belongs to the team " + newTeam.getName() + "!");
+        player.getData().setTeam(teamID);
+        msg.getClientData().setTeam(teamID);
+        String infoString = String.format("Teddy %s has joined the team %s!", data.getName(), assignedTeam.getName());
+        MegaLogger.getLogger().info(infoString);
+        NetworkMessageInfo teamInfoMsg = new NetworkMessageInfo(infoString);
         TeddyServer.getInstance().send(teamInfoMsg);
 
 //        // Send this message to all clients (the current one has a new team assignment)
@@ -224,7 +236,6 @@ public class ServerListener implements MessageListener<HostedConnection> {
         Vector3f cursor = cursorPos.getCursor();
         Player.getInstance(source.getId()).getPlayerControl().setScreenPositions(new Vector2f(cursor.x, cursor.y));
       }
-      //TODO check if trigger effect is also possible for clients
     }
   }
 }

@@ -127,7 +127,10 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
   }
 
   public void disconnect(Integer clientID) {
-    MegaLogger.getLogger().warn("No active connection to the specified server!");
+    MegaLogger.getLogger().warn("Server connection lost!");
+    if(networkClient != null && networkClient.isConnected()) {
+      networkClient.close();
+    }
     //TODO change game state
   }
 
