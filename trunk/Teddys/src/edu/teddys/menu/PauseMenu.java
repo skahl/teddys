@@ -13,9 +13,9 @@ import de.lessvoid.nifty.screen.Screen;
 import edu.teddys.network.SessionClientData;
 import edu.teddys.objects.player.Player;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * ScreenController for the pause menu
@@ -45,8 +45,8 @@ public class PauseMenu extends MessagePopupController {
         for (int i = 0; i < numEntries; i++) {
             ranks.add(nifty.getScreen("PAUSE_MENU").findElementByName("rank" + i));
             names.add(nifty.getScreen("PAUSE_MENU").findElementByName("name" + i));
-            kills.add(nifty.getScreen("PAUSE_MENU").findElementByName("kill" + i));
-            deaths.add(nifty.getScreen("PAUSE_MENU").findElementByName("death" + i));
+            kills.add(nifty.getScreen("PAUSE_MENU").findElementByName("kills" + i));
+            deaths.add(nifty.getScreen("PAUSE_MENU").findElementByName("deaths" + i));
         }
     }
 
@@ -55,32 +55,52 @@ public class PauseMenu extends MessagePopupController {
         updateScores();
     }
 
+    /**
+     * Retrieves the player data and displays them in order.
+     */
     private void updateScores() {
-        int i = 0;
-        for (Player p : Player.getInstanceList()) {
+        
+        Player[] players = new Player[Player.getInstanceList().size()]; 
+        Player.getInstanceList().toArray(players);
+        Comparator comp = new Comparator() {
+            public int compare(Object t, Object t1) {
+                float r1;
+                if (((Player) t).getData().getSession().getDeaths()==0)
+                    r1 = ((Player) t).getData().getSession().getKills();
+                else
+                    r1 = ((Player) t).getData().getSession().getKills() /
+                        ((Player) t).getData().getSession().getDeaths();
+                float r2;
+                if (((Player) t1).getData().getSession().getDeaths()==0)
+                    r2 = ((Player) t1).getData().getSession().getKills();
+                else
+                    r2 = ((Player) t1).getData().getSession().getKills() /
+                        ((Player) t1).getData().getSession().getDeaths();
+                if (r1 < r2) return -1;
+                else if (r1 > r2) return 1;
+                else return 0;
+            }            
+        };
+        Arrays.sort(players, comp);
+        
+        for (int i = 0; i < players.length; i++) {
+            SessionClientData data = players[i].getData().getSession();            
+            
             if (i < numEntries) {
-                SessionClientData data = p.getData().getSession();
-                ranks.get(i).getRenderer(TextRenderer.class).setText(String.valueOf(i));
-                names.get(i).getRenderer(TextRenderer.class).setText(p.getData().getName());
-                //kills.get(i).getRenderer(TextRenderer.class).setText(String.valueOf(data.getKills()));
-                //deaths.get(i).getRenderer(TextRenderer.class).setText(String.valueOf(data.getDeaths()));
-                i++;
+                
+                ranks.get(i).getRenderer(TextRenderer.class).setText(String.valueOf(i+1));
+                names.get(i).getRenderer(TextRenderer.class).setText(players[i].getData().getName());
+                kills.get(i).getRenderer(TextRenderer.class).setText(String.valueOf(data.getKills()));
+                deaths.get(i).getRenderer(TextRenderer.class).setText(String.valueOf(data.getDeaths()));
+                
             } else {
                 return;
             }
         }
 
-//        for (int i = 0; i < scores.size(); i++) {
-//            String[] score = scores.get(i).split(":");
-//            ranks.get(i).getRenderer(TextRenderer.class).setText(String.valueOf(i));
-//            names.get(i).getRenderer(TextRenderer.class).setText(score[0]);
-//            kills.get(i).getRenderer(TextRenderer.class).setText(score[1]);
-//            deaths.get(i).getRenderer(TextRenderer.class).setText(score[2]);
-//        }
+
     }
 
-    public void setScore(String score) {
-    }
 
     /**
      * Setter method for the application object.
