@@ -33,7 +33,7 @@ public class HUDController extends UpdateControl implements ActionListener {
   private static HUDController instance = null;
   private HUD hud;
   private boolean weaponsShown;
-  private float timeToShow = 5;
+  private float timeToShow = 1;
   private float timeShown = 0;
   private InputManager input;
 
@@ -67,7 +67,7 @@ public class HUDController extends UpdateControl implements ActionListener {
 
     hud.show();
 
-    registerWithInput(gameInstance.getInputManager());
+    //registerWithInput(gameInstance.getInputManager());
   }
 
   public static HUDController getInstance() {
@@ -147,7 +147,7 @@ public class HUDController extends UpdateControl implements ActionListener {
   /**
    * show the weapon list.
    */
-  private void showWeapons() {
+  public void showWeapons() {
     hud.getWeaponList().show();
     weaponsShown = true;
     timeShown = 0;
