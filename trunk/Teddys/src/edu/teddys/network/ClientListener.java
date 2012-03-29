@@ -17,7 +17,6 @@ import edu.teddys.network.messages.NetworkMessageInfo;
 import edu.teddys.network.messages.NetworkMessageManipulation;
 import edu.teddys.network.messages.NetworkMessageRequest;
 import edu.teddys.network.messages.NetworkMessageResponse;
-import edu.teddys.network.messages.client.GSMessageGamePaused;
 import edu.teddys.network.messages.client.ManControllerInput;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
@@ -37,6 +36,7 @@ import edu.teddys.network.messages.server.ReqMessageRelocateServer;
 import edu.teddys.network.messages.server.ReqMessageSendChecksum;
 import edu.teddys.network.messages.server.ReqMessageSendClientData;
 import edu.teddys.objects.player.Player;
+import edu.teddys.states.AppStateSwitcher;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
@@ -53,8 +53,8 @@ import java.util.Map.Entry;
 public class ClientListener implements MessageListener<com.jme3.network.Client> {
 
   public void messageReceived(com.jme3.network.Client source, Message message) {
-    
-    if(!(message instanceof ManControllerInput)) {
+
+    if (!(message instanceof ManControllerInput)) {
       String inputMessage = String.format(
               "Client received a message (%s): %s",
               message.getClass().getSimpleName(), message);
@@ -69,7 +69,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       String logMsg = "Client has been disconnected from the server!";
       logMsg += (!reason.isEmpty()) ? " Reason: " + reason : "";
       MegaLogger.getLogger().info(new Throwable(logMsg));
-      //TODO change game state
+      AppStateSwitcher.getInstance().activateState(AppStateSwitcher.AppStateEnum.MENU);
     } else if (message instanceof NetworkMessage) {
 
       // CHECK CLIENT ID
@@ -91,7 +91,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         // RECEIVED A SIMPLE MESSAGE
         //
         NetworkMessageInfo info = (NetworkMessageInfo) message;
-        if(info.isServerMessage()) {
+        if (info.isServerMessage()) {
           MegaLogger.getLogger().info(message);
         } else {
           String teddyName = "";
@@ -113,14 +113,13 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           ResMessageSendClientData msg = (ResMessageSendClientData) message;
           Player.getInstance(Player.LOCAL_PLAYER).setData(msg.getClientData());
-          if(msg.getClientData().getId() == Player.LOCAL_PLAYER) {
+          if (msg.getClientData().getId() == Player.LOCAL_PLAYER) {
             Player player = Player.getInstance(Player.LOCAL_PLAYER);
             // update the HUD data
             player.getHUD().setPlayerName(player.getData().getName());
             player.getHUD().setTeam(
                     TeddyServer.getInstance().getData().getTeams().get(
-                    player.getData().getTeamID()
-                    ).getName());
+                    player.getData().getTeamID()).getName());
           }
         } else if (message instanceof ResMessageMapLoaded) {
           //
@@ -129,33 +128,24 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           ResMessageMapLoaded msg = (ResMessageMapLoaded) message;
           Player curPlayer;
-          for(Integer affected : msg.getAffected()) {
+          for (Integer affected : msg.getAffected()) {
             curPlayer = Player.getInstance(affected);
             curPlayer.getData().setMapLoaded(true);
             MegaLogger.getLogger().info(
                     String.format("Teddy %s (%d) is ready yet!",
-                      curPlayer.getData().getName(),
-                      affected));
+                    curPlayer.getData().getName(),
+                    affected));
             // The position is transferred from the server
             Game.getInstance().addPlayerToWorld(Player.getInstance(affected));
           }
         }
       } else if (message instanceof NetworkMessageGameState) {
-        if (message instanceof GSMessageGamePaused) {
-          //
-          // RECEIVED A PAUSE STATUS CHANGE REQUEST
-          //
-          GSMessageGamePaused msg = (GSMessageGamePaused) message;
-          if (msg.isPaused()) {
-            //TODO Set game state to "Paused"
-          } else {
-            //TODO Set game state to "Game"
-          }
-        } else if (message instanceof GSMessageBeginGame) {
+        if (message instanceof GSMessageBeginGame) {
           //
           // START THE ACCEPTED GAME
           //
-          //TODO Set game state to "Game"
+          // Switch game state
+          AppStateSwitcher.getInstance().activateState(AppStateSwitcher.AppStateEnum.GAME);
           GSMessageBeginGame msg = (GSMessageBeginGame) message;
           //TODO check if this is the place to add the players ...
           // start the server timer to get the tick
@@ -167,18 +157,17 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           Game.getInstance().getInputManager().addListener(ControllerInputListener.getInstance());
           Player.getInstance(Player.LOCAL_PLAYER).getData().getSession().incRounds();
         } else if (message instanceof GSMessageEndGame) {
+          //TODO This message has to be sent by the server!
           //
           // END OF THE GAME. DISPLAY STATISTICS ...
           //
-          //TODO Set game state to "EndGame"
-          //TODO This message has to be sent by the server!
           ServerTimer.stopTimer();
 
           Player.getInstance(Player.LOCAL_PLAYER).getData().setMapLoaded(false);
           // Stop sending the actions to the server
           ClientTimer.stopTimer();
           Game.getInstance().getInputManager().removeListener(ControllerInputListener.getInstance());
-          for(Player player : Player.getInstanceList()) {
+          for (Player player : Player.getInstanceList()) {
             // Reset the data
             player.getData().getSession().setDeaths(0);
             player.getData().getSession().setKills(0);
@@ -187,18 +176,17 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         }
       } else if (message instanceof NetworkMessageManipulation) {
         if (message instanceof ManControllerInput) {
-        ManControllerInput input = (ManControllerInput) message;
-        // refresh the player's action
-        Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
-      } else if (message instanceof ManMessageSetPosition) {
+          ManControllerInput input = (ManControllerInput) message;
+          // refresh the player's action
+          Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
+        } else if (message instanceof ManMessageSetPosition) {
           ManMessageSetPosition pos = (ManMessageSetPosition) message;
           MegaLogger.getLogger().debug("Received a request to change or set the position");
-          for(Entry<Integer, Vector3f> entry : pos.getPositions().entrySet()) {
+          for (Entry<Integer, Vector3f> entry : pos.getPositions().entrySet()) {
             SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(
                     Player.getInstance(entry.getKey()),
                     entry.getValue(),
-                    pos.isFixed()
-                    );
+                    pos.isFixed());
             Game.getInstance().getApp().enqueue(setPos);
           }
 //          curPlayer.getPlayerControl().setWalkDirection(pos.getPosition().subtract(curPlayer.getPlayerControl().getPhysicsLocation()).normalize());
@@ -214,7 +202,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // A DAMAGE REQUEST TO BE APPLIED
           //
           ManMessageSendDamage msg = (ManMessageSendDamage) message;
-          
+
           // Add a painful scar
           Player.getInstance(msg.getDamagedTeddy()).addDamage(msg.getDamage());
           try {
@@ -231,7 +219,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // NEW PLAYER DATA AVAILABLE. SYNC
           //
           ManMessageTransferPlayerData msg = (ManMessageTransferPlayerData) message;
-          for(ClientData data : msg.getData()) {
+          for (ClientData data : msg.getData()) {
             Player.getInstance(data.getId()).setData(data);
           }
         } else if (message instanceof ManMessageTransferServerData) {
@@ -260,9 +248,17 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           TeddyClient.getInstance().send(mapLoaded);
         } else if (message instanceof ReqMessagePauseRequest) {
           //
-          //TODO check if GSMessageGamePaused is better ...
+          // A USER PAUSED HIS GAME
           //
-          //TODO call the game state "pause"
+          ReqMessagePauseRequest req = (ReqMessagePauseRequest) message;
+          MegaLogger.getLogger().debug("Pause request!!");
+          if (req.isPaused()) {
+            AppStateSwitcher.getInstance().pause(false);
+            MegaLogger.getLogger().debug("Paused!!");
+          } else {
+            AppStateSwitcher.getInstance().unpause(false);
+            MegaLogger.getLogger().debug("Unpaused!!");
+          }
         } else if (message instanceof ReqMessageRelocateServer) {
           //
           // THE ACTIVE NETWORK SERVER SHOULD BE CHANGED
@@ -274,8 +270,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           NetworkMessageInfo newServerMsg = new NetworkMessageInfo(String.format(
                   "I just started my server. Join me at %s:%d",
                   "127.0.0.1",
-                  NetworkSettings.SERVER_PORT
-                  ));
+                  NetworkSettings.SERVER_PORT));
           TeddyClient.getInstance().send(newServerMsg);
           MegaLogger.getLogger().debug("Relocated server.");
         } else if (message instanceof ReqMessageSendChecksum) {

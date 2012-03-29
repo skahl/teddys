@@ -17,8 +17,8 @@
     
             <panel id="left_panel" backgroundColor="#888f"  height="100%" width="35%" align="center" childLayout="vertical">  
         
-                <panel id="spacer" height="5%" width="100%"/>
-                <text text="Create Screen" font="Interface/Fonts/Default.fnt" align="right"/>
+                <!--panel id="spacer" height="5%" width="100%"/-->
+                <text text="Create Game" font="Interface/Fonts/Default.fnt" align="right"/>
             
                 <panel id="spacer" height="85%" width="100%"/>
             
@@ -36,7 +36,14 @@
             <panel id="mid_panel" backgroundColor="#888f"  height="100%" width="5%" align="center" childLayout="vertical"/>
             <panel id="entries_mid_panel" backgroundColor="#333f"  height="100%" width="60%" align="center" childLayout="vertical">
             
-      
+                <panel id="choose_map_panel" childLayout="vertical">
+                    <text text="Choose a map" font="Interface/Fonts/Default.fnt" align="left"/>
+                    <!--panel id="spacer" height="5%"/-->        
+                    <control id="map_dd" name="dropDown" />
+                    <control name="button" label="Create" align="left" id="connect_button">
+                        <interact onRelease="create()"/>
+                    </control>
+                </panel>
             </panel>
         
             <panel id="entries_bottom_panel" height="10%" width="100%" align="center" childLayout="center">

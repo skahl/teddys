@@ -88,26 +88,11 @@ public class BaseGame extends SimpleApplication {
 
     public void onAction(String name, boolean keyPressed, float tpf) {
 
-
       if (name.equals(MappingEnum.MENU.name()) && !keyPressed) {
-        if (!stateManager.getState(Pause.class).isEnabled()) {
-          // if a game is running while menu is activated
-          if (stateManager.getState(Game.class).isEnabled()) {
-            // pause the game
-            stateManager.getState(Game.class).setEnabled(false);
-          }
-
-          stateManager.getState(Pause.class).setEnabled(true);
-
+        if(AppStateSwitcher.getInstance().isPaused()) {
+          AppStateSwitcher.getInstance().unpause(true);
         } else {
-          // if a game is running while menu is deactivated
-          if (!stateManager.getState(Game.class).isEnabled()) {
-            // unpause the game
-            stateManager.getState(Game.class).setEnabled(true);
-          }
-
-          stateManager.getState(Pause.class).setEnabled(false);
-
+          AppStateSwitcher.getInstance().pause(true);
         }
       }
     }

@@ -33,7 +33,8 @@ public class NetworkMessage extends AbstractMessage {
    * The clients that should get this message.
    */
   private Integer[] recipients = new Integer[0];
-
+  private boolean restrictedRecipients = false;
+  
   public Long getLocalTimestamp() {
     return localTimestamp;
   }
@@ -61,6 +62,7 @@ public class NetworkMessage extends AbstractMessage {
 
   public void setRecipients(Integer[] recipients) {
     this.recipients = recipients;
+    restrictedRecipients = true;
   }
 
   public NetworkMessage() {
@@ -73,6 +75,11 @@ public class NetworkMessage extends AbstractMessage {
   public NetworkMessage(Integer[] recipients) {
     this();
     this.recipients = recipients;
+    restrictedRecipients = true;
+  }
+
+  public boolean isRestrictedRecipients() {
+    return restrictedRecipients;
   }
   
   @Override

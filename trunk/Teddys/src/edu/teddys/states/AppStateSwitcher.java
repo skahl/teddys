@@ -8,6 +8,8 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppState;
 import com.jme3.app.state.AppStateManager;
 import edu.teddys.MegaLogger;
+import edu.teddys.network.TeddyClient;
+import edu.teddys.network.messages.client.GSMessageGamePaused;
 
 /**
  * Used for convenient change of game states
@@ -24,6 +26,7 @@ public class AppStateSwitcher {
   private static AppStateSwitcher instance = null;
   private AppStateManager manager;
   private Application app;
+  private AppStateEnum activeState = null;
 
   private AppStateSwitcher() {
   }
@@ -38,18 +41,57 @@ public class AppStateSwitcher {
         manager.getState(Menu.class).setEnabled(false);
         manager.getState(Pause.class).setEnabled(false);
         manager.getState(Game.class).setEnabled(true);
+        activeState = AppStateEnum.GAME;
         break;
       case MENU:
         manager.getState(Menu.class).setEnabled(true);
         manager.getState(Pause.class).setEnabled(false);
         manager.getState(Game.class).setEnabled(false);
+        activeState = AppStateEnum.MENU;
         break;
       case PAUSE:
         manager.getState(Menu.class).setEnabled(false);
         manager.getState(Pause.class).setEnabled(true);
         manager.getState(Game.class).setEnabled(false);
+        activeState = AppStateEnum.PAUSE;
     }
     MegaLogger.getLogger().debug("App State switched to " + state.name());
+  }
+
+  /**
+   * 
+   * Returns the currently active AppState as Enum value specified above.
+   * 
+   * @return The AppState that is active
+   */
+  public AppStateEnum getActiveState() {
+    return activeState;
+  }
+
+  public void pause(boolean notify) {
+    if(getActiveState().equals(AppStateEnum.PAUSE)) {
+      return;
+    }
+    activateState(AppStateEnum.PAUSE);
+    if (notify) {
+      GSMessageGamePaused paused = new GSMessageGamePaused(true);
+      TeddyClient.getInstance().send(paused);
+    }
+  }
+
+  public void unpause(boolean notify) {
+    if(getActiveState().equals(AppStateEnum.GAME)) {
+      return;
+    }
+    activateState(AppStateEnum.GAME);
+    if (notify) {
+      GSMessageGamePaused paused = new GSMessageGamePaused(false);
+      TeddyClient.getInstance().send(paused);
+    }
+  }
+  
+  public boolean isPaused() {
+    return activeState.equals(AppStateEnum.PAUSE);
   }
 
   /**
@@ -73,21 +115,6 @@ public class AppStateSwitcher {
     return returnState;
   }
 
-//    public void unpause() {
-//        manager.getState(Pause.class).setEnabled(false);
-//        manager.getState(Game.class).setPaused(false);
-//    }
-//  /**
-//   * Used to obtain the singleton object.
-//   * @param manager
-//   * @return 
-//   */
-//  public static AppStateSwitcher getInstance(AppStateManager manager) {
-//    if (instance == null) {
-//      instance = new AppStateSwitcher(manager);
-//    }
-//    return instance;
-//  }
   /**
    * Used to obtain the singleton object.
    * @param manager
