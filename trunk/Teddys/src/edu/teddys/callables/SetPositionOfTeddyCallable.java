@@ -5,6 +5,7 @@
 package edu.teddys.callables;
 
 import com.jme3.math.Vector3f;
+import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.objects.player.Player;
 import java.util.ArrayList;
@@ -46,8 +47,8 @@ public class SetPositionOfTeddyCallable implements Callable {
       //TODO integrate smooth movement
       MegaLogger.getLogger().debug("SMOOOOOOOOTH");
       Vector3f curPos = player.getPlayerControl().getPhysicsLocation();
-      player.getPlayerControl().setPhysicsLocation(lastPosition);
-//      player.getPlayerControl().setWalkDirection(lastPosition.subtract(curPos));
+      player.getPlayerControl().setPhysicsLocation(lastPosition.interpolate(curPos,
+              GameSettings.CLIENT_INTERPOL_SMOOTHING));
     }
     MegaLogger.getLogger().debug(String.format("Position of player %d set to %s",
             player.getData().getId(), lastPosition));

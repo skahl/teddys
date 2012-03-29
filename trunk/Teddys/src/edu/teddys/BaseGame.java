@@ -60,7 +60,7 @@ import edu.teddys.states.AppStateSwitcher;
 import edu.teddys.timer.ServerTimer;
 import java.io.File;
 import java.io.IOException;
-import java.util.List; 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -70,6 +70,7 @@ import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.DailyRollingFileAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
+import org.apache.log4j.Priority;
 
 /**
  * BaseGame
@@ -82,14 +83,13 @@ public class BaseGame extends SimpleApplication {
   private NiftyJmeDisplay niftyDisplay;
   private Nifty nifty;
   private boolean createdLockfile = false;
-  
   public ScheduledThreadPoolExecutor threadPool; // Multithreading
   // ActionListener
   private ActionListener actionListener = new ActionListener() {
 
     public void onAction(String name, boolean keyPressed, float tpf) {
-      
-      
+
+
       if (name.equals(MappingEnum.MENU.name()) && !keyPressed) {
         if (!stateManager.getState(Pause.class).isEnabled()) {
           // if a game is running while menu is activated
@@ -126,6 +126,7 @@ public class BaseGame extends SimpleApplication {
     // save it with the specified date format in logs/.
     try {
       DailyRollingFileAppender fileAppender = new DailyRollingFileAppender(basicLayout, "logs/teddys.log", "'.'yyyy-MM-dd_HH");
+      fileAppender.setThreshold(Priority.INFO);
       MegaLogger.getLogger().addAppender(fileAppender);
     } catch (IOException ex) {
       MegaLogger.getLogger().error(new Throwable("Creation of the log file appender aborted!", ex));
@@ -141,12 +142,12 @@ public class BaseGame extends SimpleApplication {
     settings.setVSync(GameSettings.VSYNC);
     settings.setSamples(GameSettings.MSAA);
     settings.setResolution(GameSettings.WIDTH, GameSettings.HEIGHT);
-    
+
     app.setSettings(settings);
 //    app.setPauseOnLostFocus(false);
 
     File lockfile = new File(".serverlock");
-    if(lockfile.exists()) {
+    if (lockfile.exists()) {
       app.start();
     } else {
 //      app.start(JmeContext.Type.Headless);
@@ -164,14 +165,14 @@ public class BaseGame extends SimpleApplication {
 
     // Change the level of some jME log messages to WARNING
     Logger.getLogger("").setLevel(java.util.logging.Level.WARNING);
-    
-    
+
+
     setDisplayFps(true);
     setDisplayStatView(true);
     inputManager.setCursorVisible(false);
     rootNode.setShadowMode(ShadowMode.Off);
     renderManager.setAlphaToCoverage(false);
-    
+
     inputManager.addMapping(MappingEnum.MENU.name(), new KeyTrigger(keyInput.KEY_P));
     inputManager.addListener(actionListener, new String[]{MappingEnum.MENU.name()});
     initGUI();
@@ -199,7 +200,7 @@ public class BaseGame extends SimpleApplication {
     stateManager.getState(Game.class).setEnabled(true);
     //stateManager.getState(Menu.class).initialize(stateManager, this);
     //stateManager.getState(Menu.class).setEnabled(true);
-    
+
     //TODO check if this is correct
     // set the ControllerInputListener as input listener
     getInputManager().addListener(
@@ -214,9 +215,9 @@ public class BaseGame extends SimpleApplication {
 
     // Create the server "on demand"
     File lockfile = new File(".serverlock");
-    if(!lockfile.exists()) {
+    if (!lockfile.exists()) {
       flyCam.setEnabled(true);
-      
+
       TeddyServer server = TeddyServer.getInstance();
       server.startServer(NetworkSettings.SERVER_PORT);
       server.getData().setDiscoverable(true);
@@ -230,12 +231,18 @@ public class BaseGame extends SimpleApplication {
       // Now start the timer
       ServerTimer.startTimer();
       // Load the map
+<<<<<<< HEAD
 //      Game.getInstance().loadGameMap("firstlevel", "Models/firstlevel/firstlevel.j3o");
       Game.getInstance().loadGameMap("darkness", "Models/darkness/darkness.j3o");
       
+=======
+      Game.getInstance().loadGameMap("firstlevel", "Models/firstlevel/firstlevel.j3o");
+//      Game.getInstance().loadGameMap("darkness", "Models/darkness/darkness.j3o");
+
+>>>>>>> 0e7aa009b3bfe2b2a7e2109554adca5df54be3bc
     } else {
       flyCam.setEnabled(false);
-      
+
       // Get the handle to the client and try to join the specified server
       TeddyClient client = TeddyClient.getInstance();
       MegaLogger.getLogger().info("Client has " + Player.getInstance(Player.LOCAL_PLAYER).getData().getHealth() + " health points at the beginning.");
@@ -254,7 +261,7 @@ public class BaseGame extends SimpleApplication {
 
     // # # # # # # # # # # # # # # GAME # # # # # # # # # # # # # # # #
 
-    
+
   }
 
   private void initSerializer() {
@@ -296,7 +303,7 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(ReqMessageSendChecksum.class);
     Serializer.registerClass(ReqMessageSendClientData.class);
   }
-  
+
   private void initGUI() {
     AppStateSwitcher.getInstance(stateManager);
     niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
@@ -305,7 +312,7 @@ public class BaseGame extends SimpleApplication {
     PatternLayout guiLayout = new PatternLayout("%d{ISO8601} %-3p %m%n");
     MegaLogger.getLogger().addAppender(new MegaLoggerListener(guiLayout, nifty));
     guiViewPort.addProcessor(niftyDisplay);
- 
+
     nifty.addXml("Interface/GUI/MainMenuScreen.xml");
     nifty.addXml("Interface/GUI/PauseScreen.xml");
     nifty.addXml("Interface/GUI/BlankScreen.xml");
@@ -314,25 +321,25 @@ public class BaseGame extends SimpleApplication {
     nifty.addXml("Interface/GUI/JoinScreen.xml");
     nifty.addXml("Interface/GUI/OptionsScreen.xml");
     nifty.addXml("Interface/GUI/Popups.xml");
-    if(TeddyServer.getInstance().isRunning()) {
+    if (TeddyServer.getInstance().isRunning()) {
       nifty.gotoScreen(MenuTypes.BLANK.name());
 //    } else {
 //      nifty.gotoScreen(MenuTypes.MAIN_MENU.name());
     }
-    
-    ((PauseMenu) nifty.getScreen(MenuTypes.PAUSE_MENU.name()).getScreenController()).setApplication(this);    
+
+    ((PauseMenu) nifty.getScreen(MenuTypes.PAUSE_MENU.name()).getScreenController()).setApplication(this);
     ((MainMenu) nifty.getScreen(MenuTypes.MAIN_MENU.name()).getScreenController()).setApplication(this);
     ((OptionsMenu) nifty.getScreen(MenuTypes.OPTIONS_MENU.name()).getScreenController()).setApplication(this);
   }
 
   public Nifty getNifty() {
-      return nifty;
+    return nifty;
   }
 
   @Override
   public void simpleUpdate(float tpf) {
   }
-  
+
   @Override
   public void update() {
     super.update();
@@ -346,7 +353,7 @@ public class BaseGame extends SimpleApplication {
   public void stop() {
     super.stop();
 
-    if(createdLockfile) {
+    if (createdLockfile) {
       TeddyServer.getInstance().stopServer();
       File lockfile = new File(".serverlock");
       lockfile.delete();
@@ -354,7 +361,7 @@ public class BaseGame extends SimpleApplication {
     } else {
       TeddyClient.getInstance().disconnect();
     }
-    
+
     threadPool.shutdown();
   }
 

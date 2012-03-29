@@ -93,7 +93,11 @@ public class GameSettings {
   /**
    * Transmit the position of all Teddys every n-th tick. Default: 3
    */
-  public static final Integer TRANSMIT_POSITION_MOD = 30;
+  public static final Integer TRANSMIT_POSITION_MOD = 10;
+  /**
+   * Low-pass filtered interpolation of the Teddy position in case of deviance.
+   */
+  public static final Float CLIENT_INTERPOL_SMOOTHING = 0.3f;
   /**
    * Checksum interval in milliseconds (Default: 3000 ms)
    * @see ChecksumManager

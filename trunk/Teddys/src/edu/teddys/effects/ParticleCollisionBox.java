@@ -41,7 +41,7 @@ public class ParticleCollisionBox {
     particle = p;
     particleNode = new Node(name);
     
-    box = new Box(particle.getQuadWidth()/2f, particle.getQuadHeight()/2f, 0.4f);
+    box = new Box(particle.getQuadWidth()/2f, particle.getQuadHeight()/2f, 0.3f);
     
     colBox = new Geometry(name, box);
     
