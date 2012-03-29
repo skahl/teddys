@@ -339,7 +339,9 @@ public class BaseGame extends SimpleApplication {
       lockfile.delete();
       ServerTimer.stopTimer();
     } else {
-      TeddyClient.getInstance().disconnect();
+      if(TeddyClient.getInstance().isCurrentConnection()) {
+        TeddyClient.getInstance().disconnect();
+      }
     }
 
     threadPool.shutdown();
