@@ -11,8 +11,16 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.ui.Picture;
 import edu.teddys.GameModeEnum;
+import edu.teddys.objects.weapons.DeafNut;
+import edu.teddys.objects.weapons.Florets;
+import edu.teddys.objects.weapons.HolyWater;
+import edu.teddys.objects.weapons.HoneyBrew;
+import edu.teddys.objects.weapons.Rocket;
+import edu.teddys.objects.weapons.SniperRifle;
+import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.states.Game;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +44,7 @@ public class HUD {
     private String activeWeapon;
     private Map<String, Picture> weaponImages;
     private Map<String, BarIndicator> weaponBars;
+    private Map<String, Integer> weaponIndices;
     private IconList weaponList;
     private BitmapText playerName, team;
     private final String bar = "Interface/HUD/bar_bar_white.png";
@@ -227,7 +236,14 @@ public class HUD {
         weaponTail.setHeight(imageSize);
         hudNode.attachChild(weaponTail);
 
-
+        weaponIndices = new HashMap<String, Integer>();
+        weaponIndices.put(StenGun.class.getName(), 0);
+        weaponIndices.put(Rocket.class.getName(), 1);
+        weaponIndices.put(DeafNut.class.getName(), 2);
+        weaponIndices.put(Florets.class.getName(), 3);
+        weaponIndices.put(HolyWater.class.getName(), 4);
+        weaponIndices.put(HoneyBrew.class.getName(), 5);
+        
         weaponList = new HorizontalIconList(imageSize, iconOffset, 2 * imageSize, assetManager, hudNode);
 
         //test weapon list
@@ -237,7 +253,6 @@ public class HUD {
         weaponList.addItem("flower", 3, flowerIcon, ColorRGBA.Yellow);
         weaponList.addItem("holyWater", 4, holyWaterIcon, ColorRGBA.Yellow);
         weaponList.addItem("honeyBrew", 5, honeyBrewIcon, ColorRGBA.Yellow);
-        weaponList.addItem("sniper", 6, pistoleIcon, ColorRGBA.Yellow);
         //weaponList.show();
 
         //parent.attachChild(hudNode);
@@ -356,6 +371,10 @@ public class HUD {
             activeWeapon = name;
             weaponIndicator.setValue(weaponBars.get(name).getValue());
         }
+    }
+    
+    public void selectWeapon(String name) {
+        weaponList.highlight(weaponIndices.get(name));
     }
 
     /**

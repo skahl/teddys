@@ -257,7 +257,6 @@ public class Player {
     weapons.add(Florets.class.getName());
     weapons.add(HolyWater.class.getName());
     weapons.add(HoneyBrew.class.getName());
-    weapons.add(SniperRifle.class.getName());
 
     
     // The location of the CharacterControl Spatial should be the same as from the Player's node
@@ -287,6 +286,10 @@ public class Player {
           activeWeaponIndex = weapons.size() - 1;
           return weapons.get(activeWeaponIndex);
       }
+  }
+  
+  public String getActiveWeapon() {
+      return weapons.get(activeWeaponIndex);
   }
 
   /**
