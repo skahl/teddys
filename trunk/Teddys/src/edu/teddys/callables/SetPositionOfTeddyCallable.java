@@ -39,15 +39,16 @@ public class SetPositionOfTeddyCallable implements Callable {
       return null;
     }
     Vector3f lastPosition = positions.get(positions.size() - 1);
-//    if(fixed) {
+    if(fixed) {
       player.getPlayerControl().setPhysicsLocation(lastPosition);
       MegaLogger.getLogger().debug("Player set to a FIXED position.");
-//    } else {
+    } else {
       //TODO integrate smooth movement
       MegaLogger.getLogger().debug("SMOOOOOOOOTH");
       Vector3f curPos = player.getPlayerControl().getPhysicsLocation();
+      player.getPlayerControl().setPhysicsLocation(lastPosition);
 //      player.getPlayerControl().setWalkDirection(lastPosition.subtract(curPos));
-//    }
+    }
     MegaLogger.getLogger().debug(String.format("Position of player %d set to %s",
             player.getData().getId(), lastPosition));
     return null;

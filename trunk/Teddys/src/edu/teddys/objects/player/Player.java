@@ -179,20 +179,6 @@ public class Player {
     cursor.setHeight(crosshairSize);
     cursor.setWidth(crosshairSize);
     gameInstance.addSpatial(gameInstance.getApp().getGuiNode(), cursor);
-    
-    hud = HUD.getInstance(gameInstance.getApp().getGuiNode(),
-            gameInstance.getAssetManager(),
-            gameInstance.getApp().getSettings().getWidth(),
-            gameInstance.getApp().getSettings().getHeight(),
-            GameModeEnum.DEATHMATCH);
-
-    hud.show();
-    
-    if(hudController == null) {
-      hudController = new HUDController();
-      hudController.setHUD(hud);
-      hudController.registerWithInput(gameInstance.getInputManager());
-    }
   }
 
   /**
@@ -393,9 +379,5 @@ public class Player {
 
   public HUD getHUD() {
     return hud;
-  }
-  
-  public HUDController getHUDController() {
-    return hudController;
   }
 }

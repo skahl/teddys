@@ -29,8 +29,8 @@ import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
 import java.awt.Color;
+import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -173,31 +173,40 @@ public class ServerListener implements MessageListener<HostedConnection> {
                 + " belongs to the team " + newTeam.getName() + "!");
         TeddyServer.getInstance().send(teamInfoMsg);
 
-        // Get the other clients
-        List<Integer> rec = new ArrayList<Integer>(Player.getInstances().keySet());
-        // Remove the current clientID
-//        rec.remove(clientID);
-        // Refresh the recipient list
-        msg.setRecipients(rec.toArray(new Integer[rec.size()]));
-        // And send the data to the clients
-        TeddyServer.getInstance().send(msg);
+//        // Send this message to all clients (the current one has a new team assignment)
+//        List<Integer> rec = new ArrayList<Integer>(Player.getInstances().keySet());
+//        // Refresh the recipient list
+//        msg.setRecipients(rec.toArray(new Integer[rec.size()]));
+//        // And send the data to the clients
+//        TeddyServer.getInstance().send(msg);
 
         // Send the data of the "old" clients to the new member
-        for (Player playerInstance : Player.getInstanceList()) {
-          if (playerInstance.getData().getId() == clientID) {
-            continue;
-          }
-          ResMessageSendClientData tmp = new ResMessageSendClientData(clientID, playerInstance.getData());
-          TeddyServer.getInstance().send(tmp);
-          //TODO not all players may have loaded the map ...
-          // Since the active players have loaded the map, send an info to the new one
-          ResMessageMapLoaded tmpMapLoaded = new ResMessageMapLoaded(new Integer[]{clientID}, playerInstance.getData().getId());
-          TeddyServer.getInstance().send(tmpMapLoaded);
-        }
+//        for (Player playerInstance : Player.getInstanceList()) {
+//          if (playerInstance.getData().getId() == clientID) {
+//            continue;
+//          }
+//          ResMessageSendClientData tmp = new ResMessageSendClientData(clientID, playerInstance.getData());
+//          TeddyServer.getInstance().send(tmp);
+//          //TODO not all players may have loaded the map ...
+//          // Since the active players have loaded the map, send an info to the new one
+//          ResMessageMapLoaded tmpMapLoaded = new ResMessageMapLoaded(new Integer[]{clientID}, playerInstance.getData().getId());
+//          TeddyServer.getInstance().send(tmpMapLoaded);
+//        }
 
         // Now update the player data on the clients
-//        ManMessageTransferPlayerData playerDataMsg = new ManMessageTransferPlayerData(Player.getInstances());
-//        TeddyServer.getInstance().send(playerDataMsg);
+        List<ClientData> playerData = new ArrayList<ClientData>();
+        List<Integer> playerWithActiveMap = new ArrayList<Integer>();
+        for(Player curPlayer : Player.getInstanceList()) {
+          playerData.add(curPlayer.getData());
+          if(curPlayer.getData().isMapLoaded()) {
+            playerWithActiveMap.add(curPlayer.getData().getId());
+          }
+        }
+        ManMessageTransferPlayerData playerDataMsg = new ManMessageTransferPlayerData(playerData);
+        TeddyServer.getInstance().send(playerDataMsg);
+        
+        ResMessageMapLoaded mapLoaded = new ResMessageMapLoaded(clientID, playerWithActiveMap.toArray(new Integer[playerWithActiveMap.size()]));
+        TeddyServer.getInstance().send(mapLoaded);
       }
     } else if (message instanceof NetworkMessageManipulation) {
       if (message instanceof ManControllerInput) {

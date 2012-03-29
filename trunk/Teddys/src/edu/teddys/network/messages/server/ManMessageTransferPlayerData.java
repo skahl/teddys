@@ -7,10 +7,8 @@ package edu.teddys.network.messages.server;
 import com.jme3.network.serializing.Serializable;
 import edu.teddys.network.ClientData;
 import edu.teddys.network.messages.NetworkMessageManipulation;
-import edu.teddys.objects.player.Player;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  *

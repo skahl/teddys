@@ -9,11 +9,14 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.scene.control.UpdateControl;
+import edu.teddys.GameModeEnum;
 import edu.teddys.callables.SetHealthCallable;
+import edu.teddys.input.ActionControllerEnum;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import edu.teddys.network.AttributeListener;
+import edu.teddys.states.Game;
+import java.util.Iterator;
 
 /**
  * The HUD's controller class
@@ -38,6 +41,7 @@ public class HUDController extends UpdateControl implements ActionListener {
    * Contructor
    */
   public HUDController() {
+
     messages = new ArrayList<String>();
 
     currentItemListener = new AttributeListener() {
@@ -53,6 +57,24 @@ public class HUDController extends UpdateControl implements ActionListener {
         throw new UnsupportedOperationException("Not supported yet.");
       }
     };
+
+    Game gameInstance = Game.getInstance();
+    hud = HUD.getInstance(gameInstance.getApp().getGuiNode(),
+            gameInstance.getAssetManager(),
+            gameInstance.getApp().getSettings().getWidth(),
+            gameInstance.getApp().getSettings().getHeight(),
+            GameModeEnum.DEATHMATCH);
+
+    hud.show();
+
+    registerWithInput(gameInstance.getInputManager());
+  }
+
+  public static HUDController getInstance() {
+    if (instance == null) {
+      instance = new HUDController();
+    }
+    return instance;
   }
 
   /**
@@ -67,13 +89,6 @@ public class HUDController extends UpdateControl implements ActionListener {
       hudSet = true;
     }
   }
-
-//  public static HUDController getInstance() {
-//    if (instance == null) {
-//      instance = new HUDController();
-//    }
-//    return instance;
-//  }
 
   /**
    * Add a message at the bottom of the HUD's message area.
@@ -154,21 +169,20 @@ public class HUDController extends UpdateControl implements ActionListener {
   }
 
   public void onAction(String name, boolean isPressed, float tpf) {
-    if (name.equals("previousWeapon")) {
+    if (name.equals(ActionControllerEnum.PREVIOUS_WEAPON.name())) {
       showWeapons();
       previousWeapon();
-    } else if (name.equals("nextWeapon")) {
+    } else if (name.equals(ActionControllerEnum.NEXT_WEAPON.name())) {
       showWeapons();
       nextWeapon();
     }
   }
 
-  public void registerWithInput(InputManager input) {
+  public final void registerWithInput(InputManager input) {
     this.input = input;
-    input.addMapping("nextWeapon", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
-    input.addMapping("previousWeapon", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
 
-    input.addListener(this, new String[]{"nextWeapon", "previousWeapon"});
+    input.addListener(this, new String[]{ActionControllerEnum.NEXT_WEAPON.name(),
+              ActionControllerEnum.PREVIOUS_WEAPON.name()});
   }
 
   @Override

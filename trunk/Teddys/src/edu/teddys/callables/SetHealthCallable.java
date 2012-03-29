@@ -4,6 +4,7 @@
  */
 package edu.teddys.callables;
 
+import edu.teddys.hud.HUDController;
 import edu.teddys.objects.player.Player;
 import java.util.concurrent.Callable;
 
@@ -26,9 +27,7 @@ public class SetHealthCallable implements Callable {
   public Object call() {
     Player player = Player.getInstance(playerID);
     player.getData().setHealth(health);
-    if(player.getHUDController() != null) {
-      player.getHUDController().setHealth(health);
-    }
+    HUDController.getInstance().setHealth(health);
     return null;
   }
 }
