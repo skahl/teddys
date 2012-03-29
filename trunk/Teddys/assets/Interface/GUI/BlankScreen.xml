@@ -2,6 +2,6 @@
 <nifty xmlns="http://nifty-gui.sourceforge.net/nifty.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
        xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty.xsd http://nifty-gui.sourceforge.net/nifty.xsd">
   
-  <screen id="BLANK"/>
+  <screen id="BLANK" />
 
 </nifty>

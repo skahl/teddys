@@ -49,7 +49,7 @@ public class MegaLoggerListener extends AppenderSkeleton {
         HUDController.getInstance().addMessage(message);
       } else {
         //TODO change so there's no ClassCastException anymore in specific situations .....
-        ((MessagePopupController) nifty.getCurrentScreen().getScreenController()).addMessage(message);
+//        ((MessagePopupController) nifty.getCurrentScreen().getScreenController()).addMessage(message);
       }
     }
   }
