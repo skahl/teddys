@@ -22,6 +22,13 @@ import edu.teddys.hud.HUDController;
 import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.network.ClientData;
+import edu.teddys.objects.weapons.DeafNut;
+import edu.teddys.objects.weapons.Florets;
+import edu.teddys.objects.weapons.HolyWater;
+import edu.teddys.objects.weapons.HoneyBrew;
+import edu.teddys.objects.weapons.Rocket;
+import edu.teddys.objects.weapons.SniperRifle;
+import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.states.Game;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +62,8 @@ public class Player {
   transient private CrosshairControl cameraControl;
   transient private HUD hud;
   transient private HUDController hudController;
+  transient private List<String> weapons;
+  transient private int activeWeaponIndex = 0;
   private Cursor cursor;
   ClientData data = new ClientData();
 
@@ -241,7 +250,15 @@ public class Player {
     control.setFallSpeed(5);
 
 
+    weapons.add(StenGun.class.getName());
+    weapons.add(Rocket.class.getName());
+    weapons.add(DeafNut.class.getName());
+    weapons.add(Florets.class.getName());
+    weapons.add(HolyWater.class.getName());
+    weapons.add(HoneyBrew.class.getName());
+    weapons.add(SniperRifle.class.getName());
 
+    
     // The location of the CharacterControl Spatial should be the same as from the Player's node
     control.setPhysicsLocation(node.getWorldTranslation().add(new Vector3f(0f, 0f, -1.2f)));
 
@@ -250,6 +267,25 @@ public class Player {
     data.setId(id);
 
     MegaLogger.getLogger().debug("New player created (id=" + id + ")");
+  }
+  
+  public String getNextWeapon() {
+      if (++activeWeaponIndex < weapons.size()) {
+          return weapons.get(activeWeaponIndex);
+      } else {
+          activeWeaponIndex = 0;
+          return weapons.get(activeWeaponIndex);
+      }
+          
+  }
+  
+  public String getPreviousWeapon() {
+      if (--activeWeaponIndex >= 0) {
+          return weapons.get(activeWeaponIndex);
+      } else {
+          activeWeaponIndex = weapons.size() - 1;
+          return weapons.get(activeWeaponIndex);
+      }
   }
 
   /**
