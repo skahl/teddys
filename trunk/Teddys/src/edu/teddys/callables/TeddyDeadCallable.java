@@ -4,6 +4,7 @@
  */
 package edu.teddys.callables;
 
+import edu.teddys.MegaLogger;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
@@ -28,6 +29,7 @@ public class TeddyDeadCallable implements Callable {
     
     if(TeddyServer.getInstance().isRunning()) {
       player.getData().getSession().incDeaths();
+      MegaLogger.getLogger().debug("Increased deaths");
     }
     
     // Rid player of all items and weapons except the StenGun

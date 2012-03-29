@@ -34,6 +34,10 @@ public class ServerTimerThread extends Thread {
           ManMessageSetPosition posMsg = new ManMessageSetPosition();
           // update the players' positions
           for (Player player : Player.getInstanceList()) {
+            // Local server player?
+            if(player.getData().getId() == -1) {
+              continue;
+            }
             posMsg.getPositions().put(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
           }
           addClientPosition(posMsg.getPositions());

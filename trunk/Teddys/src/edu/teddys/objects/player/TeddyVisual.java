@@ -13,7 +13,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
-import edu.teddys.MegaLogger;
 import edu.teddys.effects.JetpackEffect;
 import edu.teddys.effects.TeddyDeath;
 import edu.teddys.hud.BarIndicator;

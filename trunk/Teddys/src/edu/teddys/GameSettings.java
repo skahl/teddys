@@ -55,7 +55,7 @@ public class GameSettings {
   /**
    * Shows the meshed of the bounding boxes and increases the verbosity of logs.
    */
-  public static final boolean DEBUG = false;
+  public static final boolean DEBUG = true;
   /**
    * Defined the value regarding the z axis in the 3D world.
    */

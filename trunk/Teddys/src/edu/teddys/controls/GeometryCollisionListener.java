@@ -72,6 +72,7 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
       if (nodeB.contains("player")) {
         if (!collidedPlayer) {
           collidedPlayer = true;
+          MegaLogger.getLogger().debug("collision() called. " + nodeA + " vs. " + nodeB);
           hitPlayerID = Integer.parseInt(nodeB.substring(startPlayerID));
         }
       }
@@ -82,15 +83,12 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
       if (nodeA.contains("player")) {
         if (!collidedPlayer) {
           collidedPlayer = true;
+          MegaLogger.getLogger().debug("collision() called. " + nodeA + " vs. " + nodeB);
           hitPlayerID = Integer.parseInt(nodeA.substring(startPlayerID));
         }
       }
 
       collided = true;
-    }
-    
-    if(collidedPlayer) {
-      MegaLogger.getLogger().debug("collision() called." + nodeA + ";" + nodeB);
     }
 
     if (TeddyServer.getInstance().isRunning()) {

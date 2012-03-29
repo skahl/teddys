@@ -30,7 +30,9 @@ public class SetHealthCallable implements Callable {
     player.getData().setHealth(health);
     HUDController.getInstance().setHealth(health);
     BarIndicator healthBar = player.getPlayerVisual().getHealthBar();
-    if (healthBar != null) healthBar.setValue(health);
+    if (healthBar != null) {
+      healthBar.setValue(health);
+    }
     return null;
   }
 }

@@ -5,9 +5,7 @@
 package edu.teddys.hud;
 
 import com.jme3.input.InputManager;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.scene.control.UpdateControl;
 import edu.teddys.GameModeEnum;
 import edu.teddys.callables.SetHealthCallable;
@@ -15,6 +13,7 @@ import edu.teddys.input.ActionControllerEnum;
 import java.util.ArrayList;
 import java.util.List;
 import edu.teddys.network.AttributeListener;
+import edu.teddys.network.TeddyServer;
 import edu.teddys.states.Game;
 import java.util.Iterator;
 
@@ -65,7 +64,9 @@ public class HUDController extends UpdateControl implements ActionListener {
             gameInstance.getApp().getSettings().getHeight(),
             GameModeEnum.DEATHMATCH);
 
-    hud.show();
+    if(!TeddyServer.getInstance().isRunning()) {
+      hud.show();
+    }
 
     //registerWithInput(gameInstance.getInputManager());
   }
@@ -195,5 +196,9 @@ public class HUDController extends UpdateControl implements ActionListener {
         hideWeapons();
       }
     }
+  }
+
+  public HUD getHUD() {
+    return hud;
   }
 }

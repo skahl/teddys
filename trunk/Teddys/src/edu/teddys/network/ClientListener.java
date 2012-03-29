@@ -10,6 +10,7 @@ import com.jme3.network.MessageListener;
 import com.jme3.network.message.DisconnectMessage;
 import edu.teddys.MegaLogger;
 import edu.teddys.callables.SetPositionOfTeddyCallable;
+import edu.teddys.hud.HUDController;
 import edu.teddys.input.ControllerInputListener;
 import edu.teddys.network.messages.NetworkMessage;
 import edu.teddys.network.messages.NetworkMessageGameState;
@@ -112,12 +113,13 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // A NEW TEAM MEMBER JOINED THE SERVER / UPDATED PLAYER DATA
           //
           ResMessageSendClientData msg = (ResMessageSendClientData) message;
-          Player.getInstance(Player.LOCAL_PLAYER).setData(msg.getClientData());
+          Player.getInstance(msg.getClientData().getId()).setData(msg.getClientData());
+          MegaLogger.getLogger().debug("Received clientdata for " + msg.getClientData().getId());
           if (msg.getClientData().getId() == Player.LOCAL_PLAYER) {
             Player player = Player.getInstance(Player.LOCAL_PLAYER);
             // update the HUD data
-            player.getHUD().setPlayerName(player.getData().getName());
-            player.getHUD().setTeam(
+            HUDController.getInstance().getHUD().setPlayerName(player.getData().getName());
+            HUDController.getInstance().getHUD().setTeam(
                     TeddyServer.getInstance().getData().getTeams().get(
                     player.getData().getTeamID()).getName());
           }
@@ -132,7 +134,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
             curPlayer = Player.getInstance(affected);
             curPlayer.getData().setMapLoaded(true);
             MegaLogger.getLogger().info(
-                    String.format("Teddy %s (%d) is ready yet!",
+                    String.format("%s (%d) is ready yet!",
                     curPlayer.getData().getName(),
                     affected));
             // The position is transferred from the server
@@ -181,7 +183,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
         } else if (message instanceof ManMessageSetPosition) {
           ManMessageSetPosition pos = (ManMessageSetPosition) message;
-          MegaLogger.getLogger().debug("Received a request to change or set the position");
           for (Entry<Integer, Vector3f> entry : pos.getPositions().entrySet()) {
             SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(
                     Player.getInstance(entry.getKey()),
@@ -189,7 +190,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
                     pos.isFixed());
             Game.getInstance().getApp().enqueue(setPos);
           }
-//          curPlayer.getPlayerControl().setWalkDirection(pos.getPosition().subtract(curPlayer.getPlayerControl().getPhysicsLocation()).normalize());
         } else if (message instanceof ManMessageActivateItem) {
           //
           // THE USER HAS TO ACTIVATE THE SPECIFIED ITEM YET

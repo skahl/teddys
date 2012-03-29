@@ -11,12 +11,12 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.ui.Picture;
 import edu.teddys.GameModeEnum;
+import edu.teddys.MegaLogger;
 import edu.teddys.objects.weapons.DeafNut;
 import edu.teddys.objects.weapons.Florets;
 import edu.teddys.objects.weapons.HolyWater;
 import edu.teddys.objects.weapons.HoneyBrew;
 import edu.teddys.objects.weapons.Rocket;
-import edu.teddys.objects.weapons.SniperRifle;
 import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.states.Game;
 import java.util.ArrayList;
@@ -404,6 +404,7 @@ public class HUD {
    */
   public void setPlayerName(String name) {
     playerName.setText(name);
+    MegaLogger.getLogger().debug("CHANGED TEDDY NAME!");
   }
 
   /**
@@ -412,6 +413,7 @@ public class HUD {
    */
   public void setTeam(String team) {
     this.team.setText(team);
+    MegaLogger.getLogger().debug("CHANGED TEDDY TEAM!");
   }
 
   /**

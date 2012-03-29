@@ -18,7 +18,6 @@ import edu.teddys.MegaLogger;
 import edu.teddys.callables.SetHealthCallable;
 import edu.teddys.callables.TeddyDeadCallable;
 import edu.teddys.controls.PlayerControl;
-import edu.teddys.hud.HUD;
 import edu.teddys.hud.HUDController;
 import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
@@ -61,7 +60,6 @@ public class Player {
   transient CapsuleCollisionShape collisionShape;
   transient private CameraNode camNode = null;
   transient private CrosshairControl cameraControl;
-  transient private HUD hud;
   transient private HUDController hudController;
   transient private List<String> weapons;
   transient private int activeWeaponIndex = 0;
@@ -122,7 +120,9 @@ public class Player {
     Player localPlayer = Player.getInstance(LOCAL_PLAYER);
     // Instead of copying all data, rename the node 
     // and change the position in the instances List
-    localPlayer.getNode().setName("player" + id.toString());
+    String nodeName = "player" + id.toString();
+    localPlayer.getNode().setName(nodeName);
+    localPlayer.invBoxGeo.setName(nodeName);
     localPlayer.getData().setId(id);
     localPlayer.initHUD();
     localPlayer.initCamNode();
@@ -218,16 +218,18 @@ public class Player {
   private Player(Integer id) {
 
     Game game = Game.getInstance();
+    
+    String nodeName = "player" + id.toString();
 
     // Use the toString() method to generate a quite uniquely identified Node
-    node = new Node("player" + id.toString());
-    
-    boolean showHealthBar = ((id != LOCAL_PLAYER) && !TeddyServer.getInstance().isRunning());
+    node = new Node(nodeName);
+
+    boolean showHealthBar = (id != LOCAL_PLAYER || TeddyServer.getInstance().isRunning());
     visual = new TeddyVisual(node, game.getAssetManager(), showHealthBar);
 
     // attach a cube to the model, so it becomes shootable
     Box invisibleBox = new Box(0.3f, 0.3f, 0.5f);
-    invBoxGeo = new Geometry("player" + id.toString(), invisibleBox);
+    invBoxGeo = new Geometry(nodeName, invisibleBox);
     Material red = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
     red.setColor("Color", ColorRGBA.Red);
     invBoxGeo.setMaterial(red);
@@ -419,12 +421,16 @@ public class Player {
     return cursor;
   }
 
-  public HUD getHUD() {
-    return hud;
-  }
-
+  /**
+   * 
+   * Test if theres a level element between the current position and the specified
+   * vector.
+   * 
+   * @param destPosition
+   * @return 
+   */
   public Boolean collidedWithLevel(Vector3f destPosition) {
-    
+
     Ray ray = new Ray(getPlayerControl().getPhysicsLocation(), destPosition);
     //ray.setLimit(); ??? 
     CollisionResults hits = new CollisionResults();
@@ -432,9 +438,10 @@ public class Player {
 
     if (hits.size() >= 1) {
       Geometry p;
-      for(int i=0; i<hits.size(); i++) {
+      for (int i = 0; i < hits.size(); i++) {
         p = hits.getCollision(i).getGeometry();
-        if(!p.getParent().getName().contains("player")) {
+        MegaLogger.getLogger().debug(p.getParent().getName());
+        if (!p.getParent().getName().contains("player")) {
           return true;
         }
       }

@@ -32,7 +32,6 @@ import edu.teddys.timer.ServerDataSync;
 import edu.teddys.timer.ServerTimer;
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -71,7 +70,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         //
         // USER HAS CHANGED HIS PAUSE STATUS
         //
-        Boolean pause = ((GSMessageGamePaused)message).isPaused();
+        Boolean pause = ((GSMessageGamePaused) message).isPaused();
         List<Integer> clientIDs = TeddyServer.getInstance().getClientIDs();
         clientIDs.remove(new Integer(source.getId()));
         ReqMessagePauseRequest msg = new ReqMessagePauseRequest(clientIDs.toArray(new Integer[clientIDs.size()]), pause);
@@ -103,6 +102,10 @@ public class ServerListener implements MessageListener<HostedConnection> {
 
         List<Integer> playerWithActiveMap = new ArrayList<Integer>();
         for (Player curPlayer : Player.getInstanceList()) {
+          // Local server player?
+          if(curPlayer.getData().getId() == -1) {
+            continue;
+          }
           if (curPlayer.getData().isMapLoaded()) {
             playerWithActiveMap.add(curPlayer.getData().getId());
           }
@@ -117,6 +120,10 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // refresh the clients' positions
         List<ClientData> clientDataList = new ArrayList<ClientData>();
         for (Player curPlayer : Player.getInstanceList()) {
+          // Local server player?
+          if(curPlayer.getData().getId() == -1) {
+            continue;
+          }
           clientDataList.add(curPlayer.getData());
         }
         ManMessageTransferPlayerData playerData = new ManMessageTransferPlayerData(clientDataList);
@@ -133,9 +140,9 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // RECEIVED USER DATA
         //
         ResMessageSendClientData msg = (ResMessageSendClientData) message;
-        // Tell the server to update the data
         ClientData data = msg.getClientData();
         Integer clientID = source.getId();
+        
         // Get the player object
         Player player = Player.getInstance(clientID);
         // Update the data
@@ -169,16 +176,21 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // Refresh the teamID
         player.getData().setTeam(teamID);
         msg.getClientData().setTeam(teamID);
-        String infoString = String.format("Teddy %s has joined the team %s!", data.getName(), assignedTeam.getName());
+        
+        String infoString = String.format("%s has joined the team '%s'!", data.getName(), assignedTeam.getName());
         MegaLogger.getLogger().info(infoString);
         NetworkMessageInfo teamInfoMsg = new NetworkMessageInfo(infoString);
         teamInfoMsg.setServerMessage(true);
         TeddyServer.getInstance().send(teamInfoMsg);
-
+        
         // Now update the player data on the clients
         List<ClientData> playerData = new ArrayList<ClientData>();
         List<Integer> playerWithActiveMap = new ArrayList<Integer>();
         for (Player curPlayer : Player.getInstanceList()) {
+          // Local server player should not be transferred
+          if(curPlayer.getData().getId() == -1) {
+            continue;
+          }
           playerData.add(curPlayer.getData());
           if (curPlayer.getData().isMapLoaded()) {
             playerWithActiveMap.add(curPlayer.getData().getId());

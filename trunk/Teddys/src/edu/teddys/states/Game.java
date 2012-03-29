@@ -27,6 +27,7 @@ import edu.teddys.callables.RemoveNodeFromPhysicsSpace;
 import edu.teddys.callables.RemovePhysicsCollisionListener;
 import edu.teddys.callables.SetPositionOfTeddyCallable;
 import edu.teddys.controls.GeometryCollisionListener;
+import edu.teddys.hud.HUDController;
 import edu.teddys.map.GameLoader;
 import edu.teddys.map.GameMapConfig.PositionBoundary;
 import edu.teddys.network.TeddyServer;
@@ -89,11 +90,15 @@ public class Game extends AbstractAppState {
       // attach keys
       initKeys(true);
 
-      if (Player.getInstance(Player.LOCAL_PLAYER).getHUD() != null) {
-        Player.getInstance(Player.LOCAL_PLAYER).getHUD().show();
-      }
-      if (Player.getInstance(Player.LOCAL_PLAYER).getCursor() != null) {
-        addSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
+//      if (Player.getInstance(Player.LOCAL_PLAYER).getHUD() != null) {
+//        Player.getInstance(Player.LOCAL_PLAYER).getHUD().show();
+//      }
+      //TODO passt?
+      if(!TeddyServer.getInstance().isRunning()) {
+        HUDController.getInstance().getHUD().show();
+        if (Player.getInstance(Player.LOCAL_PLAYER).getCursor() != null) {
+          addSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
+        }
       }
 
     } else {
@@ -101,11 +106,15 @@ public class Game extends AbstractAppState {
       // detach keys
       initKeys(false);
 
-      if (Player.getInstance(Player.LOCAL_PLAYER).getHUD() != null) {
-        Player.getInstance(Player.LOCAL_PLAYER).getHUD().hide();
-      }
-      if (Player.getInstance(Player.LOCAL_PLAYER).getCursor() != null) {
-        removeSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
+//      if (Player.getInstance(Player.LOCAL_PLAYER).getHUD() != null) {
+//        Player.getInstance(Player.LOCAL_PLAYER).getHUD().hide();
+//      }
+      //TODO passt?
+      if(!TeddyServer.getInstance().isRunning()) {
+        HUDController.getInstance().getHUD().hide();
+        if (Player.getInstance(Player.LOCAL_PLAYER).getCursor() != null) {
+          removeSpatial(this.app.getGuiNode(), Player.getInstance(Player.LOCAL_PLAYER).getCursor());
+        }
       }
     }
   }

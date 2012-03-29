@@ -104,7 +104,7 @@ public class BaseGame extends SimpleApplication {
     // get a clean logger
     MegaLogger.getLogger().removeAllAppenders();
     // Set the log level to ALL in order to be informed of all loggable events
-    MegaLogger.getLogger().setLevel(Level.INFO);
+//    MegaLogger.getLogger().setLevel(Level.INFO);
     PatternLayout basicLayout = new PatternLayout("%d{ISO8601} %-5p (%F:%L): %m%n");
     // Set up a daily log file. If a new day has begun, empty the log file and
     // save it with the specified date format in logs/.
