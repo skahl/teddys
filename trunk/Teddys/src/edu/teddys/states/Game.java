@@ -28,6 +28,7 @@ import edu.teddys.callables.RemovePhysicsCollisionListener;
 import edu.teddys.callables.SetPositionOfTeddyCallable;
 import edu.teddys.controls.GeometryCollisionListener;
 import edu.teddys.map.GameLoader;
+import edu.teddys.map.GameMapConfig.PositionBoundary;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.server.ManMessageSetPosition;
 import edu.teddys.objects.player.Player;
@@ -216,8 +217,18 @@ public class Game extends AbstractAppState {
    */
   public void setRandomPlayerPosition(Player player) {
     RandomDataImpl rnd = new RandomDataImpl();
-    //TODO use some spawn points
-    Vector3f pos = new Vector3f(rnd.nextLong(0, 6), rnd.nextLong(1, 2), GameSettings.WORLD_Z_INDEX);
+    
+    int numSpawnSpaces = gameLoader.getGameMapConfig().getPositionBoundaries().size();
+    
+    // randomly chose one of the spawn spaces
+    int chosenSpawnSpace = (int) rnd.nextLong(0,numSpawnSpaces-1);
+    // from that chosen spawn space, randomly chose the spawn coordinates
+    PositionBoundary pb = gameLoader.getGameMapConfig().getPositionBoundaries().get(chosenSpawnSpace);
+    
+    Vector3f pos = new Vector3f((float)rnd.nextLong((long)pb.getLowerBound().x, (long)pb.getUpperBound().x), 
+            (float)rnd.nextLong((long)pb.getLowerBound().y, (long)pb.getUpperBound().y),
+            pb.getUpperBound().z);
+    
     // this is the first position of the Teddy, so initialize a new List
     SetPositionOfTeddyCallable setPos = new SetPositionOfTeddyCallable(player, pos, true);
     getApp().enqueue(setPos);
