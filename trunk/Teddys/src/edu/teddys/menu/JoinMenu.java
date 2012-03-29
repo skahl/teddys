@@ -9,6 +9,7 @@ import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.screen.Screen;
 import edu.teddys.network.NetworkSettings;
 import edu.teddys.network.TeddyClient;
+import edu.teddys.states.AppStateSwitcher;
 
 /**
  * ScreenController for the join menu
@@ -37,6 +38,7 @@ public class JoinMenu extends MessagePopupController {
         String[] connectData = ipField.getText().split(":");
         if (connectData.length != 0) {
             TeddyClient.getInstance().join(connectData[0], Integer.parseInt(connectData[1]));
+            AppStateSwitcher.getInstance(null).activateState(AppStateSwitcher.AppStateEnum.GAME);
         }
     }
     

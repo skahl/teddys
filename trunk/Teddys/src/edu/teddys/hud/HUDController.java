@@ -133,14 +133,14 @@ public class HUDController extends UpdateControl implements ActionListener {
   /**
    * Highlight the next entry in the weapon list.
    */
-  private void nextWeapon() {
+  public void nextWeapon() {
     hud.getWeaponList().highlightNext();
   }
 
   /**
    * Highlight the previous entry in the weapon list.
    */
-  private void previousWeapon() {
+  public void previousWeapon() {
     hud.getWeaponList().highlightPrevious();
   }
 

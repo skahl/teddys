@@ -6,6 +6,7 @@ import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import edu.teddys.MegaLogger;
 import edu.teddys.hud.HUDController;
+import edu.teddys.input.ActionControllerEnum;
 import edu.teddys.input.AnalogControllerEnum;
 import edu.teddys.input.InputType;
 import edu.teddys.input.InputTuple;
@@ -201,6 +202,36 @@ public class PlayerControl extends CharacterControl {
 //        stopJetpack();
 //      }
 //    }
+      if (name.equals(ActionControllerEnum.NEXT_WEAPON.name())) {
+          
+            try {
+                try {
+                    currentWeapon = (Weapon)Class.forName(player.getNextWeapon()).newInstance();
+                    HUDController.getInstance().nextWeapon();
+                } catch (InstantiationException ex) {
+                    
+                } catch (IllegalAccessException ex) {
+                    
+                }
+            } catch (ClassNotFoundException ex) {
+                
+            }
+      } else if (name.equals(ActionControllerEnum.PREVIOUS_WEAPON.name())) {
+            try {
+                try {
+                    currentWeapon = (Weapon)Class.forName(player.getNextWeapon()).newInstance();
+                    HUDController.getInstance().previousWeapon();
+                } catch (InstantiationException ex) {
+                    
+                } catch (IllegalAccessException ex) {
+                    
+                }
+            } catch (ClassNotFoundException ex) {
+                
+            }
+          
+          
+      }
   }
 
   /** 

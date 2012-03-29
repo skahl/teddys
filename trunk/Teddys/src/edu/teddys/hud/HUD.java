@@ -231,11 +231,13 @@ public class HUD {
         weaponList = new HorizontalIconList(imageSize, iconOffset, 2 * imageSize, assetManager, hudNode);
 
         //test weapon list
-        weaponList.addItem("Test1", 0, "Interface/HUD/placeholder.png", ColorRGBA.Blue);
-        weaponList.addItem("Test2", 1, "Interface/HUD/placeholder.png", ColorRGBA.Red);
-        weaponList.addItem("Test3", 2, "Interface/HUD/placeholder.png", ColorRGBA.Yellow);
-        weaponList.addItem("Test4", 3, "Interface/HUD/placeholder.png", ColorRGBA.Orange);
-        weaponList.addItem("Test5", 2, "Interface/HUD/placeholder.png", ColorRGBA.Green);
+        weaponList.addItem("pistole", 0, pistoleIcon, ColorRGBA.Yellow);
+        weaponList.addItem("rocket", 1, rocketIcon, ColorRGBA.Yellow);
+        weaponList.addItem("deafNut", 2, deafNutIcon, ColorRGBA.Yellow);
+        weaponList.addItem("flower", 3, flowerIcon, ColorRGBA.Yellow);
+        weaponList.addItem("holyWater", 4, holyWaterIcon, ColorRGBA.Yellow);
+        weaponList.addItem("honeyBrew", 5, honeyBrewIcon, ColorRGBA.Yellow);
+        weaponList.addItem("sniper", 6, pistoleIcon, ColorRGBA.Yellow);
         //weaponList.show();
 
         //parent.attachChild(hudNode);
