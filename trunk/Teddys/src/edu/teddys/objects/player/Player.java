@@ -13,6 +13,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import edu.teddys.GameModeEnum;
+import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.callables.SetHealthCallable;
 import edu.teddys.callables.TeddyDeadCallable;
@@ -260,7 +261,7 @@ public class Player {
 
     
     // The location of the CharacterControl Spatial should be the same as from the Player's node
-    control.setPhysicsLocation(node.getWorldTranslation().add(new Vector3f(0f, 0f, -1.2f)));
+    control.setPhysicsLocation(node.getWorldTranslation().add(new Vector3f(0f, 0f, GameSettings.WORLD_Z_INDEX)));
 
 
     // Set the (network) client ID

@@ -5,7 +5,8 @@
 package edu.teddys;
 
 import edu.teddys.controls.PlayerControl;
-import edu.teddys.network.TeddyServerData;
+import edu.teddys.network.NetworkCommunicatorSpidermonkeyClient;
+import edu.teddys.network.NetworkCommunicatorSpidermonkeyServer;
 import edu.teddys.timer.ChecksumManager;
 import edu.teddys.timer.ClientTimer;
 import edu.teddys.timer.ServerDataSync;
