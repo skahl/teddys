@@ -97,12 +97,6 @@ public class Game extends AbstractAppState {
       }
 
     } else {
-      // deactivate
-      //this.app.getRootNode().detachChild(rotationNode);
-
-      // TODO: Why nullpointer exception on exit?
-      //stateManager.cleanup();
-//      rootNode.detachAllChildren();
 
       // detach keys
       initKeys(false);

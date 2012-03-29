@@ -3,6 +3,7 @@ package edu.teddys.map;
 import com.jme3.asset.AssetLoadException;
 import com.jme3.light.Light;
 import edu.teddys.MegaLogger;
+import edu.teddys.callables.AttachLightCallable;
 import edu.teddys.states.Game;
 
 /**
@@ -32,7 +33,7 @@ public class GameLoader {
         Game.getInstance().getApp().getViewPort().setBackgroundColor(gameMapCfg.getBackgroundColor());
         // set lights from config
         for(Light l : gameMapCfg.getLights()) {
-          Game.getInstance().getRootNode().addLight(l);
+          Game.getInstance().getApp().enqueue(new AttachLightCallable(l));
         }
       } else {
         MegaLogger.getLogger().fatal(new Throwable("Map config could not be parsed successfully!"));

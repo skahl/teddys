@@ -45,27 +45,6 @@ public class Game extends AbstractAppState {
     }
   };
 
-  // AnalogListener
-    /*
-  public AnalogListener analogListener = new AnalogListener() {
-  public void onAnalog(String name, float pressDuration, float tpf) {
-  
-  if(name.equals("ParticleTrigger")) {
-  // TODO: Trigger particle emitter activation.
-  jetpack1.setEnabled(true);
-  jetpack2.setEnabled(true);
-  } else {
-  if(jetpack1.isEnabled()) {
-  jetpack1.setEnabled(false);
-  }
-  if(jetpack2.isEnabled()) {
-  jetpack2.setEnabled(false);
-  }
-  }
-  }
-  };
-  
-   */
   @Override
   public void update(float tpf) {
   }

@@ -17,7 +17,7 @@ public class FloretsParticle extends CustomParticle {
   public FloretsParticle(String name) {
     super(name);
     
-    this.setMesh(new Quad(0.3f, 0.6f));
+    this.setMesh(new Quad(0.4f, 0.6f));
     
     mat = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
     mat.setTexture("ColorMap", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/flowerParticle.png"));
