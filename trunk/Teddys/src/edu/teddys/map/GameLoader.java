@@ -1,6 +1,7 @@
 package edu.teddys.map;
 
 import com.jme3.asset.AssetLoadException;
+import com.jme3.light.Light;
 import edu.teddys.MegaLogger;
 import edu.teddys.states.Game;
 
@@ -15,7 +16,7 @@ public class GameLoader {
   private GameMap gameMap;
   private GameMapConfig gameMapCfg;
 
-  public GameLoader(String name, String packagePath, Game game) {
+  public GameLoader(String name, String packagePath) {
 
     try {
 
@@ -23,8 +24,19 @@ public class GameLoader {
 
 //      gameMap = new GameMap(name + ".j3o", game);
 //      gameMapCfg = new GameMapConfig(name + ".cfg");
-      gameMap = new GameMap(packagePath, game);
-      gameMapCfg = new GameMapConfig(packagePath);
+      gameMap = new GameMap(packagePath+name);
+      gameMapCfg = new GameMapConfig(packagePath+name);
+      
+      if(gameMapCfg.parsingSuccessfull()) {
+        // set backgroundcolor from config
+        Game.getInstance().getApp().getViewPort().setBackgroundColor(gameMapCfg.getBackgroundColor());
+        // set lights from config
+        for(Light l : gameMapCfg.getLights()) {
+          Game.getInstance().getRootNode().addLight(l);
+        }
+      } else {
+        MegaLogger.getLogger().fatal(new Throwable("Map config could not be parsed successfully!"));
+      }
 
     } catch (AssetLoadException e) {
       MegaLogger.getLogger().fatal(new Throwable("Map could not be loaded!", e));
