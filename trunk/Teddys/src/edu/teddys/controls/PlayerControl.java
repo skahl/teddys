@@ -145,8 +145,8 @@ public class PlayerControl extends CharacterControl {
 //            Player plHit = Player.getPlayerByNode(nodeName);
 //            plHit.getPlayerVisual().die(); // play the die effect :D
 //
-//            //TODO Now calculate the specific damage dependend from the current weapon
-//            /*TODO If there is no other reason than for checking the weapon's range,
+//            // Now calculate the specific damage dependend from the current weapon
+//            /* If there is no other reason than for checking the weapon's range,
 //             * one could use ray.setLimit() to limit the intersection check distance
 //             * 
 //             */
@@ -170,7 +170,6 @@ public class PlayerControl extends CharacterControl {
 //                    player.getData().getId(),
 //                    plHit.getData().getId(),
 //                    resDamage);
-//            //TODO this should only be done by the server instance!
 //
 //            MegaLogger.getLogger().info("Hit: "+nodeName+hitmsg);
 //            TeddyServer.getInstance().send(dmgMsg);

@@ -13,6 +13,7 @@ import com.jme3.network.serializing.Serializable;
 @Serializable
 public class NetworkMessageInfo extends NetworkMessage {
   
+  private Boolean serverMessage = false;
   private String message = "";
   
   public NetworkMessageInfo() {
@@ -42,5 +43,13 @@ public class NetworkMessageInfo extends NetworkMessage {
 
   final protected void setMessage(String message) {
     this.message = message;
+  }
+  
+  public Boolean isServerMessage() {
+    return serverMessage;
+  }
+  
+  public void setServerMessage(Boolean serverMessage) {
+    this.serverMessage = serverMessage;
   }
 }

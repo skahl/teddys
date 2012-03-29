@@ -91,7 +91,7 @@ public class NetworkCommunicatorSpidermonkeyServer implements NetworkCommunicato
   }
 
   public String getPubKey(String pubKeyClient) {
-    //TODO: Use a socket connection for the encryption part
+    //TODO: Implement encryption
     return "";
   }
 

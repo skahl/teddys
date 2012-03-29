@@ -29,7 +29,6 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 import edu.teddys.network.messages.NetworkMessageRequest;
 import edu.teddys.network.messages.NetworkMessageResponse;
 import edu.teddys.network.messages.client.GSMessageGamePaused;
-import edu.teddys.network.messages.client.GSMessagePlayerReady;
 import edu.teddys.network.messages.client.ManControllerInput;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
@@ -201,7 +200,6 @@ public class BaseGame extends SimpleApplication {
     //stateManager.getState(Menu.class).initialize(stateManager, this);
     //stateManager.getState(Menu.class).setEnabled(true);
 
-    //TODO check if this is correct
     // set the ControllerInputListener as input listener
     getInputManager().addListener(
             ControllerInputListener.getInstance(),
@@ -276,7 +274,6 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(InputTuple.class);
     // Client
     Serializer.registerClass(GSMessageGamePaused.class);
-    Serializer.registerClass(GSMessagePlayerReady.class);
     Serializer.registerClass(ManControllerInput.class);
     Serializer.registerClass(ManCursorPosition.class);
     Serializer.registerClass(ResMessageMapLoaded.class);

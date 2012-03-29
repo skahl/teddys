@@ -44,7 +44,7 @@ public class SetPositionOfTeddyCallable implements Callable {
       player.getPlayerControl().setPhysicsLocation(serverPosition);
       MegaLogger.getLogger().debug("Player set to a FIXED position.");
     } else {
-      //TODO integrate smooth movement
+      //FIXME smooth movement
       Vector3f curPos = player.getPlayerControl().getPhysicsLocation();
       player.getPlayerControl().setPhysicsLocation(serverPosition.interpolate(curPos,
               GameSettings.CLIENT_INTERPOL_SMOOTHING));

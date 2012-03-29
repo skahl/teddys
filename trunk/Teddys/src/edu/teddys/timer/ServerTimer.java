@@ -29,6 +29,8 @@ public class ServerTimer {
   
   /**
    * Start the server timer.
+   * 
+   * If a thread already exists, just return.
    */
   public static void startTimer() {
     if (thread != null) {

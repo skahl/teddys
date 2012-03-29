@@ -7,6 +7,8 @@ package edu.teddys.network;
 import com.jme3.network.serializing.Serializable;
 
 /**
+ * 
+ * Session-related data storage. For example, this is used for statistics.
  *
  * @author cm
  */

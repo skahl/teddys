@@ -44,7 +44,6 @@ public class ClientData {
   /**
    * Indicates whether the player is ready to play the game.
    */
-  private boolean ready = false;
   private boolean mapLoaded = false;
   
   public ClientData() {
@@ -65,8 +64,6 @@ public class ClientData {
 
   public void setId(Integer id) {
     this.id = id;
-    //TODO remove in later versions
-    this.name = "Ted " + id;
   }
 
   public String getName() {
@@ -107,14 +104,6 @@ public class ClientData {
 
   public void setTeam(Integer team) {
     this.team = team;
-  }
-
-  public boolean isReady() {
-    return ready;
-  }
-
-  public void setReady(boolean ready) {
-    this.ready = ready;
   }
 
   public boolean isMapLoaded() {
