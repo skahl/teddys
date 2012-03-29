@@ -118,7 +118,6 @@ public class CrosshairControl implements AnalogListener {
     
     if(name.equals(AnalogControllerEnum.WEAPON.name())) {
       ManCursorPosition curPosMsg = new ManCursorPosition(new Vector3f(newPos.x, newPos.y, 0));
-      //TODO this should be only done by a client
       TeddyClient.getInstance().send(curPosMsg);
     }
 

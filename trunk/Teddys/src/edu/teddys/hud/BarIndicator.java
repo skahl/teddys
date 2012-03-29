@@ -44,7 +44,6 @@ public class BarIndicator {
     geom.setMaterial(mat);
     geom.move(x, y, 0);
 
-    //TODO add node
     Game.getInstance().addSpatial(parent, geom);
     this.width = width;
     this.height = height;

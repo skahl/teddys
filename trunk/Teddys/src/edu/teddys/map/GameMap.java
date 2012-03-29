@@ -20,14 +20,14 @@ public class GameMap {
   private RigidBodyControl mapPhysics;
   private CollisionShape sceneShape;
 
-  public GameMap(String mapPath, Game game) {
+  public GameMap(String mapPath) {
     // Change in BaseGame:simpleInitApp (Game.getInstance().loadGameMap())
 //    mapPath = "Models/firstlevel/firstlevel.j3o";
 //    mapPath = "Models/darkness/darkness.j3o";
 
     try {
 
-      mapModel = (Node) game.getApp().getAssetManager().loadModel(mapPath);
+      mapModel = (Node) Game.getInstance().getApp().getAssetManager().loadModel(mapPath+".j3o");
 
       mapModel.center();
       mapModel.getLocalRotation().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_Y);

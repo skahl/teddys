@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : darkness.xml.xml
+    Created on : 29. März 2012, 12:47
+    Author     : skahl
+    Description:
+        darkness configuration xml file.
+-->
+
+<map>
+  <backgroundColor>0.5f,0.6f,0.7f</backgroundColor>
+  <spawnSpace>
+    <lowerBound>0.0f,0.0f,0.0f</lowerBound>
+    <higherBound>1.0f,1.0f,1.0f</higherBound>
+  </spawnSpace>
+  <light>
+    <type>Directional</type>
+    <position>-1.0f,-1.0f,-1.0f</position>
+    <color>1.0f,1.0f,1.0f</color>
+  </light>
+  <light>
+    <type>Directional</type>
+    <position>-1.0f,-1.0f,-1.0f</position>
+    <color>1.0f,1.0f,1.0f</color>
+  </light>
+  <light>
+    <type>Directional</type>
+    <position>-1.0f,-1.0f,-1.0f</position>
+    <color>0.7f,0.7f,0.7f</color>
+  </light>
+</map>

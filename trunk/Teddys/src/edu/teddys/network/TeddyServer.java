@@ -195,11 +195,13 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
     
     // Send a message to all clients
     NetworkMessageInfo info = new NetworkMessageInfo(message);
+    info.setServerMessage(true);
     TeddyServer.getInstance().send(info);
     
     // Send a message to the new client
     String serverMsg = String.format("Welcome to %s!", getData().getName());
     NetworkMessageInfo clientInfo = new NetworkMessageInfo(conn.getId(), serverMsg);
+    clientInfo.setServerMessage(true);
     TeddyServer.getInstance().send(clientInfo);
     
     // Request the client data

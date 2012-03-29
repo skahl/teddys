@@ -23,8 +23,8 @@ public class ReqMessageMapRequest extends NetworkMessageRequest {
     super();
   }
 
-  public ReqMessageMapRequest(String levelName, String levelPath) {
-    this();
+  public ReqMessageMapRequest(Integer clientID, String levelName, String levelPath) {
+    super(new Integer[]{clientID});
     this.levelName = levelName;
     this.levelPath = levelPath;
   }

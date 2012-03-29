@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : darkness.xml.xml
+    Created on : 29. März 2012, 12:47
+    Author     : skahl
+    Description:
+        darkness configuration xml file.
+-->
+
+<map>
+  <backgroundColor>0.0f,0.0f,0.0f</backgroundColor>
+  <spawnSpace>
+    <lowerBound>0.0f,0.0f,0.0f</lowerBound>
+    <higherBound>1.0f,1.0f,1.0f</higherBound>
+  </spawnSpace>
+  <light>
+    <type>Point</type>
+    <position>-0.751926f,2.3f,-4.7f</position>
+    <radius>20</radius>
+    <color>1.0f,1.0f,0.8f</color>
+  </light>
+  <light>
+    <type>Point</type>
+    <position>-0.751926f,2.3f,3.4f</position>
+    <radius>20</radius>
+    <color>1.0f,1.0f,0.8f</color>
+  </light>
+  <light>
+    <type>Point</type>
+    <position>-0.751927f,12.4f,0.25f</position>
+    <radius>20</radius>
+    <color>1.0f,1.0f,0.8f</color>
+  </light>
+  <light>
+    <type>Point</type>
+    <position>-0.751926f,8.4f,5.0f</position>
+    <radius>20</radius>
+    <color>1.0f,1.0f,0.8f</color>
+  </light>
+  <light>
+    <type>Point</type>
+    <position>-0.751926f,5.4f,-3.8f</position>
+    <radius>20</radius>
+    <color>1.0f,1.0f,0.8f</color>
+  </light>
+  <light>
+    <type>Point</type>
+    <position>-0.751926f,5.4f,4.2f</position>
+    <radius>20</radius>
+    <color>1.0f,1.0f,0.8f</color>
+  </light>
+  <light>
+    <type>Point</type>
+    <position>-0.751926f,8.4f,-2.8f</position>
+    <radius>20</radius>
+    <color>1.0f,1.0f,0.8f</color>
+  </light>
+</map>

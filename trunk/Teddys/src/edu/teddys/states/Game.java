@@ -50,7 +50,7 @@ public class Game extends AbstractAppState {
   private BasicShadowRenderer shadowRenderer; // Shadow rendering
   private GameLoader gameLoader;
   private boolean paused;
-  private Entry<String, String> levelData = new SimpleEntry<String, String>("firstlevel", "maps/firstlevel.zip");
+  private Entry<String, String> levelData = new SimpleEntry<String, String>("firstlevel", "Models/firstlevel/");
   // TESTING PHYSICS PROBLEMS
   private GeometryCollisionListener geoColListener;
 
@@ -124,8 +124,6 @@ public class Game extends AbstractAppState {
       this.inputManager = this.app.getInputManager();
       this.rootNode = this.app.getRootNode();
 
-      //app.getViewPort().setBackgroundColor(new ColorRGBA(0.5f, 0.6f, 0.7f, 1f));
-      app.getViewPort().setBackgroundColor(new ColorRGBA(0f, 0f, 0f, 1f));
 
       this.paused = false;
       super.setEnabled(false);
@@ -314,7 +312,7 @@ public class Game extends AbstractAppState {
   public void loadGameMap(String levelName, String mapPath) {
     MegaLogger.getLogger().debug("Loading map (" + levelName + "): " + mapPath);
     levelData = new SimpleEntry<String, String>(levelName, mapPath);
-    gameLoader = new GameLoader(levelName, mapPath, this);
+    gameLoader = new GameLoader(levelName, mapPath);
     addMapModel(gameLoader.getGameMap().getMapModel());
   }
 

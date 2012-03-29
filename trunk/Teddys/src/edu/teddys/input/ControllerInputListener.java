@@ -5,7 +5,17 @@ import com.jme3.input.controls.AnalogListener;
 import com.jme3.math.Vector2f;
 import edu.teddys.MegaLogger;
 import edu.teddys.timer.ClientTimer;
+import edu.teddys.timer.ClientTimerThread;
 
+/**
+ * 
+ * This class reads the keyboard and mouse events to save it in an array
+ * that is periodically transmitted to the server.
+ * 
+ * @see ClientTimerThread
+ * 
+ * @author cm
+ */
 public class ControllerInputListener implements AnalogListener, ActionListener {
 
   private static ControllerInputListener instance;

@@ -93,7 +93,6 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
       MegaLogger.getLogger().debug("collision() called." + nodeA + ";" + nodeB);
     }
 
-    //TODO THIS SHOULD BE ONLY CALLED BY THE SERVER!!
     if (TeddyServer.getInstance().isRunning()) {
       if (hitPlayerID != null) {
         MegaLogger.getLogger().debug("Player " + hitPlayerID + " was hit.");
@@ -119,10 +118,12 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
   private void trigger(Integer hitPlayerID) {
 
     if (weapon != null) {
+      
       // damage calculation
       RandomDataImpl rnd = new RandomDataImpl();
       Float weaponDamage = FastMath.abs((float) rnd.nextGaussian(weapon.getBaseDamage(), GameSettings.DAMAGE_SIGMA));
       Float weaponAccuracy = FastMath.abs((float) rnd.nextGaussian(weapon.getAccuracy(), GameSettings.DAMAGE_SIGMA));
+      //TODO use the range information
       Float damage = GameSettings.DAMAGE_MAX * weaponDamage * weaponAccuracy;
 
       int resDamage = (int) Math.ceil(damage);

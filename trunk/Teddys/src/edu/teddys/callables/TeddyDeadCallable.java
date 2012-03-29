@@ -26,7 +26,6 @@ public class TeddyDeadCallable implements Callable {
     // Trigger PlayerVisual.die()
     player.getPlayerVisual().die();
     
-    //TODO increment just for the server?
     if(TeddyServer.getInstance().isRunning()) {
       player.getData().getSession().incDeaths();
     }
