@@ -58,10 +58,9 @@ public class PauseMenu extends MessagePopupController {
     /**
      * Retrieves the player data and displays them in order.
      */
-    private void updateScores() {
+    public void updateScores() {
         
-        Player[] players = new Player[Player.getInstanceList().size()]; 
-        Player.getInstanceList().toArray(players);
+        Player[] players = Player.getInstanceList().toArray(new Player[Player.getInstanceList().size()]);
         Comparator comp = new Comparator() {
             public int compare(Object t, Object t1) {
                 float r1;

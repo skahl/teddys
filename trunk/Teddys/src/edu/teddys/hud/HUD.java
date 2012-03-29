@@ -403,7 +403,6 @@ public class HUD {
    */
   public void setPlayerName(String name) {
     playerName.setText(name);
-    MegaLogger.getLogger().debug("CHANGED TEDDY NAME!");
   }
 
   /**
@@ -412,7 +411,6 @@ public class HUD {
    */
   public void setTeam(String team) {
     this.team.setText(team);
-    MegaLogger.getLogger().debug("CHANGED TEDDY TEAM!");
   }
 
   /**

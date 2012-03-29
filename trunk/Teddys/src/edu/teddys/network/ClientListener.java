@@ -218,6 +218,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // NEW PLAYER DATA AVAILABLE. SYNC
           //
           ManMessageTransferPlayerData msg = (ManMessageTransferPlayerData) message;
+          MegaLogger.getLogger().debug(msg.getData());
           for (ClientData data : msg.getData()) {
             Player.getInstance(data.getId()).setData(data);
             if (data.getId() == Player.LOCAL_PLAYER) {

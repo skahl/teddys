@@ -32,13 +32,15 @@ public class Deathmatch extends GameMode {
               newValue);
       NetworkMessageInfo info = new NetworkMessageInfo(msg);
       TeddyServer.getInstance().send(info);
+      MegaLogger.getLogger().debug(msg);
     } else if(fieldName.equals(SessionDataFieldsEnum.deaths) && newValue > 5) {
       String msg = String.format(
               "D'ou! It's the %d-th death of %s.",
-              Player.getInstance(playerId).getData().getName(),
-              newValue);
+              newValue,
+              Player.getInstance(playerId).getData().getName());
       NetworkMessageInfo info = new NetworkMessageInfo(msg);
       TeddyServer.getInstance().send(info);
+      MegaLogger.getLogger().debug(msg);
     }
   }
 }

@@ -5,6 +5,7 @@
 package edu.teddys.network;
 
 import com.jme3.network.serializing.Serializable;
+import edu.teddys.MegaLogger;
 import java.util.ArrayList;
 import java.util.List;
 

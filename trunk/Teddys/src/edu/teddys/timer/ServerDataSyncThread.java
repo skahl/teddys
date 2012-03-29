@@ -6,6 +6,12 @@ package edu.teddys.timer;
 
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
+import edu.teddys.network.ClientData;
+import edu.teddys.network.TeddyServer;
+import edu.teddys.network.messages.server.ManMessageTransferPlayerData;
+import edu.teddys.objects.player.Player;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -36,6 +42,17 @@ public class ServerDataSyncThread extends Thread {
 //        posMsg.getPositions().put(player.getData().getId(), player.getPlayerControl().getPhysicsLocation());
 //      }
 //      TeddyServer.getInstance().send(posMsg);
+      
+      List<ClientData> clientData = new ArrayList<ClientData>();
+      for(Player player : Player.getInstanceList()) {
+        // Local server player
+        if(player.getData().getId() == -1) {
+          continue;
+        }
+        clientData.add(player.getData());
+      }
+      ManMessageTransferPlayerData transferPlayerData = new ManMessageTransferPlayerData(clientData);
+      TeddyServer.getInstance().send(transferPlayerData);
       
       // ... and sleep an amount of time.
       try {
