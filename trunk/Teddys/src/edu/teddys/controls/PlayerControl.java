@@ -120,6 +120,8 @@ public class PlayerControl extends CharacterControl {
         }
 
         if (name.equals(AnalogControllerEnum.WEAPON.name())) {
+          
+          MegaLogger.getLogger().info("PHYSICSLOCATION: "+String.valueOf(this.getPhysicsLocation()));
 
             // check if weapon can fire again
             if (currentWeapon.getEffect().isTriggerable()) {
@@ -218,6 +220,10 @@ public class PlayerControl extends CharacterControl {
                 //HUDController.getInstance().showWeapons();
                 //HUDController.getInstance().nextWeapon();
                 HUDController.getInstance().selectWeapon(player.getActiveWeapon());
+                
+                // after changing the weapon, attach the new weapon on the player's node
+                
+                Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
             } catch (InstantiationException ex) {
                 Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {
@@ -251,6 +257,9 @@ public class PlayerControl extends CharacterControl {
                 //HUDController.getInstance().showWeapons();
                 //HUDController.getInstance().nextWeapon();
                 HUDController.getInstance().selectWeapon(player.getActiveWeapon());
+                
+                
+                Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
             } catch (InstantiationException ex) {
                 Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {

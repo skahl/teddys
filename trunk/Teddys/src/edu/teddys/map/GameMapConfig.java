@@ -7,17 +7,13 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import edu.teddys.MegaLogger;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
-import javax.lang.model.util.Elements;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -34,7 +30,7 @@ public class GameMapConfig {
   private DocumentBuilder docBuilder;
   
   // Position boundaries, used for spawning players and items
-  private LinkedList<PositionBoundary> positionBoundaries;
+  private ArrayList<PositionBoundary> positionBoundaries;
   // Background Color of the Scene
   private ColorRGBA backgroundColor;
   // Light List
@@ -110,7 +106,7 @@ public class GameMapConfig {
   
   
   private boolean readPositionBoundaries() {
-    positionBoundaries = new LinkedList<PositionBoundary>();
+    positionBoundaries = new ArrayList<PositionBoundary>();
     
     NodeList spawnSpaces = document.getElementsByTagName("spawnSpace");
     for(int i=0; i<spawnSpaces.getLength(); i++) {
@@ -151,7 +147,7 @@ public class GameMapConfig {
     return vec;
   }
   
-  public LinkedList<PositionBoundary> getPositionBoundaries() {
+  public ArrayList<PositionBoundary> getPositionBoundaries() {
     return positionBoundaries;
   }
   

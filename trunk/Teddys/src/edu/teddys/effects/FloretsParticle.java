@@ -23,6 +23,7 @@ public class FloretsParticle extends CustomParticle {
     mat.setTexture("ColorMap", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/flowerParticle.png"));
     mat.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
     mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+    mat.getAdditionalRenderState().setAlphaTest(true);
     this.setMaterial(mat);
     
   }
