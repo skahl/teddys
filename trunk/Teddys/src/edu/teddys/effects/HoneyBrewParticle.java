@@ -22,7 +22,8 @@ public class HoneyBrewParticle extends CustomParticle {
     mat = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
     mat.setTexture("ColorMap", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/HoneyBrew.png"));
     mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
-    //mat.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
+    mat.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
+    mat.getAdditionalRenderState().setAlphaTest(true);
     this.setMaterial(mat);
     
   }

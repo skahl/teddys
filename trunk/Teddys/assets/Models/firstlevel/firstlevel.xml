@@ -11,24 +11,24 @@
 <map>
   <backgroundColor>0.5f,0.6f,0.7f</backgroundColor>
   <spawnSpace>
-    <lowerBound>2.5f,4.5f,-1.2f</lowerBound>
-    <higherBound>6.5f,5.5f,-1.2f</higherBound>
+    <lowerBound>-4.0f,-3.2f,-1.2f</lowerBound>
+    <higherBound>-2.15f,-2.9f,-1.2f</higherBound>
   </spawnSpace>
   <spawnSpace>
-    <lowerBound>4.0f,3.0f,-1.2f</lowerBound>
-    <higherBound>6.0f,4.0f,-1.2f</higherBound>
+    <lowerBound>-5.1f,-4.7f,-1.2f</lowerBound>
+    <higherBound>-1.1f,-4.3f,-1.2f</higherBound>
   </spawnSpace>
   <spawnSpace>
-    <lowerBound>-5.4f,5.0f,-1.2f</lowerBound>
-    <higherBound>-3.3f,6.0f,-1.2f</higherBound>
+    <lowerBound>4.0f,-4.5f,-1.2f</lowerBound>
+    <higherBound>6.5f,-3.8f,-1.2f</higherBound>
   </spawnSpace>
   <spawnSpace>
-    <lowerBound>-5.4f,3.0f,-1.2f</lowerBound>
-    <higherBound>-3.3f,4.0f,-1.2f</higherBound>
+    <lowerBound>-4.5f,-2.9f,-1.2f</lowerBound>
+    <higherBound>8.5f,-2.8f,-1.2f</higherBound>
   </spawnSpace>
   <spawnSpace>
-    <lowerBound>-2.2f,7.5f,-1.2f</lowerBound>
-    <higherBound>2.2f,10.0f,-1.2f</higherBound>
+    <lowerBound>-1.7f,1.2f,-1.2f</lowerBound>
+    <higherBound>4.7f,0.4f,-1.2f</higherBound>
   </spawnSpace>
   <light>
     <type>Directional</type>

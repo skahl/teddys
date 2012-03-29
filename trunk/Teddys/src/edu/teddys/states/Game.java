@@ -221,12 +221,12 @@ public class Game extends AbstractAppState {
     int numSpawnSpaces = gameLoader.getGameMapConfig().getPositionBoundaries().size();
     
     // randomly chose one of the spawn spaces
-    int chosenSpawnSpace = (int) rnd.nextLong(1,numSpawnSpaces);
+    int chosenSpawnSpace = (int) rnd.nextLong(0,numSpawnSpaces-1);
     // from that chosen spawn space, randomly chose the spawn coordinates
     PositionBoundary pb = gameLoader.getGameMapConfig().getPositionBoundaries().get(chosenSpawnSpace);
     
-    Vector3f pos = new Vector3f((float)rnd.nextUniform(pb.getLowerBound().x, pb.getUpperBound().x), 
-            (float)rnd.nextUniform(pb.getLowerBound().y, pb.getUpperBound().y),
+    Vector3f pos = new Vector3f((float)rnd.nextLong((long)pb.getLowerBound().x, (long)pb.getUpperBound().x), 
+            (float)rnd.nextLong((long)pb.getLowerBound().y, (long)pb.getUpperBound().y),
             pb.getUpperBound().z);
     
     // this is the first position of the Teddy, so initialize a new List
