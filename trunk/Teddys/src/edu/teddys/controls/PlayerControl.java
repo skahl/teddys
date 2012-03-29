@@ -217,8 +217,9 @@ public class PlayerControl extends CharacterControl {
                 currentClassWeapon = Class.forName(player.getNextWeapon());
                 currentContructor = currentClassWeapon.getConstructor(Player.class);
                 currentWeapon = (Weapon) currentContructor.newInstance(player);
-                HUDController.getInstance().showWeapons();
-                HUDController.getInstance().nextWeapon();
+                //HUDController.getInstance().showWeapons();
+                //HUDController.getInstance().nextWeapon();
+                HUDController.getInstance().selectWeapon(player.getActiveWeapon());
             } catch (InstantiationException ex) {
                 Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {
@@ -246,11 +247,12 @@ public class PlayerControl extends CharacterControl {
             Constructor currentContructor;
 
             try {
-                currentClassWeapon = Class.forName(player.getNextWeapon());
+                currentClassWeapon = Class.forName(player.getPreviousWeapon());
                 currentContructor = currentClassWeapon.getConstructor(Player.class);
                 currentWeapon = (Weapon) currentContructor.newInstance(player);
-                HUDController.getInstance().showWeapons();
-                HUDController.getInstance().nextWeapon();
+                //HUDController.getInstance().showWeapons();
+                //HUDController.getInstance().nextWeapon();
+                HUDController.getInstance().selectWeapon(player.getActiveWeapon());
             } catch (InstantiationException ex) {
                 Logger.getLogger(PlayerControl.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalAccessException ex) {

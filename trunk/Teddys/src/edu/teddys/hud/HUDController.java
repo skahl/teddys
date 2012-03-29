@@ -166,6 +166,8 @@ public class HUDController extends UpdateControl implements ActionListener {
    * @param name 
    */
   public void selectWeapon(String name) {
+      showWeapons();
+      hud.selectWeapon(name);
   }
 
   public void onAction(String name, boolean isPressed, float tpf) {

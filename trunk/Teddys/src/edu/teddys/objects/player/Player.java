@@ -287,6 +287,10 @@ public class Player {
           return weapons.get(activeWeaponIndex);
       }
   }
+  
+  public String getActiveWeapon() {
+      return weapons.get(activeWeaponIndex);
+  }
 
   /**
    * playerControl getter.
