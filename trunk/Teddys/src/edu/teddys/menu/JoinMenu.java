@@ -38,7 +38,7 @@ public class JoinMenu extends MessagePopupController {
         String[] connectData = ipField.getText().split(":");
         if (connectData.length != 0) {
             TeddyClient.getInstance().join(connectData[0], Integer.parseInt(connectData[1]));
-            AppStateSwitcher.getInstance(null).activateState(AppStateSwitcher.AppStateEnum.GAME);
+            AppStateSwitcher.getInstance().activateState(AppStateSwitcher.AppStateEnum.GAME);
         }
     }
     

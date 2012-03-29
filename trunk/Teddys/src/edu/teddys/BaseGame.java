@@ -29,7 +29,6 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 import edu.teddys.network.messages.NetworkMessageRequest;
 import edu.teddys.network.messages.NetworkMessageResponse;
 import edu.teddys.network.messages.client.GSMessageGamePaused;
-import edu.teddys.network.messages.client.GSMessagePlayerReady;
 import edu.teddys.network.messages.client.ManControllerInput;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
@@ -180,6 +179,8 @@ public class BaseGame extends SimpleApplication {
     stateManager.attach(new Menu());
     stateManager.attach(Game.getInstance());
     stateManager.attach(new Pause());
+    
+    AppStateSwitcher.getInstance().setManager(stateManager);
 
     // init thread pool with size
     threadPool = new ScheduledThreadPoolExecutor(6);
@@ -196,12 +197,9 @@ public class BaseGame extends SimpleApplication {
     }
 
     // init start state
-    stateManager.getState(Game.class).initialize(stateManager, this);
-    stateManager.getState(Game.class).setEnabled(true);
-    //stateManager.getState(Menu.class).initialize(stateManager, this);
-    //stateManager.getState(Menu.class).setEnabled(true);
+    AppStateSwitcher.getInstance().setApp(this);
+    AppStateSwitcher.getInstance().activateState(AppStateSwitcher.AppStateEnum.GAME);
 
-    //TODO check if this is correct
     // set the ControllerInputListener as input listener
     getInputManager().addListener(
             ControllerInputListener.getInstance(),
@@ -276,7 +274,6 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(InputTuple.class);
     // Client
     Serializer.registerClass(GSMessageGamePaused.class);
-    Serializer.registerClass(GSMessagePlayerReady.class);
     Serializer.registerClass(ManControllerInput.class);
     Serializer.registerClass(ManCursorPosition.class);
     Serializer.registerClass(ResMessageMapLoaded.class);
@@ -300,7 +297,6 @@ public class BaseGame extends SimpleApplication {
   }
 
   private void initGUI() {
-    AppStateSwitcher.getInstance(stateManager);
     niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, audioRenderer, viewPort);
     nifty = niftyDisplay.getNifty();
     // add the custom appender to react to some infos

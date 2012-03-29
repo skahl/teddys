@@ -18,7 +18,6 @@ import edu.teddys.network.messages.NetworkMessageManipulation;
 import edu.teddys.network.messages.NetworkMessageRequest;
 import edu.teddys.network.messages.NetworkMessageResponse;
 import edu.teddys.network.messages.client.GSMessageGamePaused;
-import edu.teddys.network.messages.client.GSMessagePlayerReady;
 import edu.teddys.network.messages.client.ManControllerInput;
 import edu.teddys.network.messages.client.ResMessageMapLoaded;
 import edu.teddys.network.messages.client.ResMessageSendChecksum;
@@ -82,7 +81,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
       }
 
       // get the server timestamp
-      //TODO check if it is a message from the server!!
       NetworkMessage tempMsg = (NetworkMessage) message;
       if (tempMsg.getServerTimestamp() != null) {
         // set the new timestamp
@@ -93,19 +91,21 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         // RECEIVED A SIMPLE MESSAGE
         //
         NetworkMessageInfo info = (NetworkMessageInfo) message;
-        //TODO check if the server sent the message
-        String teddyName = "";
-        try {
-          teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
-        } catch (NullPointerException ex) {
-          teddyName = String.valueOf(source.getId());
+        if(info.isServerMessage()) {
+          MegaLogger.getLogger().info(message);
+        } else {
+          String teddyName = "";
+          try {
+            teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
+          } catch (NullPointerException ex) {
+            teddyName = String.valueOf(source.getId());
+          }
+          String infoString = String.format(
+                  "Teddy %s says: %s",
+                  teddyName,
+                  info.getMessage());
+          MegaLogger.getLogger().info(infoString);
         }
-        String infoString = String.format(
-                "Teddy %s says: %s",
-                //              info.getTimestamp(),
-                teddyName,
-                info.getMessage());
-        MegaLogger.getLogger().info(infoString);
       } else if (message instanceof NetworkMessageResponse) {
         if (message instanceof ResMessageSendClientData) {
           //
@@ -128,9 +128,14 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // ADD THE CLIENT TO THE LOCAL WORLD
           //
           ResMessageMapLoaded msg = (ResMessageMapLoaded) message;
+          Player curPlayer;
           for(Integer affected : msg.getAffected()) {
-            Player.getInstance(affected).getData().setMapLoaded(true);
-            MegaLogger.getLogger().debug("Client " + msg.getAffected() + " has loaded the map.");
+            curPlayer = Player.getInstance(affected);
+            curPlayer.getData().setMapLoaded(true);
+            MegaLogger.getLogger().info(
+                    String.format("Teddy %s (%d) is ready yet!",
+                      curPlayer.getData().getName(),
+                      affected));
             // The position is transferred from the server
             Game.getInstance().addPlayerToWorld(Player.getInstance(affected));
           }
@@ -154,11 +159,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           GSMessageBeginGame msg = (GSMessageBeginGame) message;
           //TODO check if this is the place to add the players ...
           // start the server timer to get the tick
-          // if the server is local, don't change the value.
-//          if (source.getId() != Player.LOCAL_PLAYER) {
-            ServerTimer.setServerTimestamp(msg.getServerTimestamp());
-            ServerTimer.startTimer();
-//          }
+          ServerTimer.setServerTimestamp(msg.getServerTimestamp());
+          ServerTimer.startTimer();
           // start sending input data
           ClientTimer.startTimer();
           // activate the keyboard and mouse listeners
@@ -169,30 +171,19 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // END OF THE GAME. DISPLAY STATISTICS ...
           //
           //TODO Set game state to "EndGame"
-//          ServerTimer.stopTimer();
+          //TODO This message has to be sent by the server!
+          ServerTimer.stopTimer();
 
-          Player.getInstance(Player.LOCAL_PLAYER).getData().setReady(false);
           Player.getInstance(Player.LOCAL_PLAYER).getData().setMapLoaded(false);
           // Stop sending the actions to the server
           ClientTimer.stopTimer();
           Game.getInstance().getInputManager().removeListener(ControllerInputListener.getInstance());
-          //TODO what about the other players?
           for(Player player : Player.getInstanceList()) {
             // Reset the data
             player.getData().getSession().setDeaths(0);
             player.getData().getSession().setKills(0);
-            //TODO statistics!!
+            //TODO display statistics!!
           }
-        } else if (message instanceof GSMessagePlayerReady) {
-          //
-          // A PLAYER IS READY TO START THE GAME
-          //
-          //TODO the status could be updated, but is synced as well. So this can be deleted
-//          String teddyName = TeddyServer.getInstance().getClientData(source.getId()).getName();
-//          String infoString = String.format("Player %s is ready yet!", teddyName);
-//          MegaLogger.getLogger().info(infoString);
-//          // Refresh the server data
-//          TeddyServer.getInstance().getClientData(source.getId()).setReady(true);
         }
       } else if (message instanceof NetworkMessageManipulation) {
         if (message instanceof ManControllerInput) {
@@ -223,8 +214,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // A DAMAGE REQUEST TO BE APPLIED
           //
           ManMessageSendDamage msg = (ManMessageSendDamage) message;
-          
-          //TODO care about the local damage which has been already calculated!
           
           // Add a painful scar
           Player.getInstance(msg.getDamagedTeddy()).addDamage(msg.getDamage());
@@ -279,18 +268,21 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // THE ACTIVE NETWORK SERVER SHOULD BE CHANGED
           //
           ReqMessageRelocateServer msg = (ReqMessageRelocateServer) message;
-          //TODO Stop the local server
-          TeddyServer.getInstance().stopServer();
           // Start the server on the default server port
           TeddyServer.getInstance().startServer(NetworkSettings.SERVER_PORT);
-          //TODO Force the clients to join the new server ^^
+          //TODO read the local IP
+          NetworkMessageInfo newServerMsg = new NetworkMessageInfo(String.format(
+                  "I just started my server. Join me at %s:%d",
+                  "127.0.0.1",
+                  NetworkSettings.SERVER_PORT
+                  ));
+          TeddyClient.getInstance().send(newServerMsg);
           MegaLogger.getLogger().debug("Relocated server.");
         } else if (message instanceof ReqMessageSendChecksum) {
           //
           // PROTECTION: CHECKSUM REQUEST RECEIVED
           //
           ReqMessageSendChecksum msg = (ReqMessageSendChecksum) message;
-          //TODO calculate the checksum (use a dummy value now)
           ResMessageSendChecksum response = new ResMessageSendChecksum(
                   msg.getToken(), ChecksumManager.calculateChecksum(msg.getFiles()));
           TeddyClient.getInstance().send(response);
@@ -301,17 +293,16 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           ResMessageSendClientData response = new ResMessageSendClientData(
                   Player.getInstance(Player.LOCAL_PLAYER).getData());
           TeddyClient.getInstance().send(response);
-
-          //TEMPORARY
-
-          //TODO adapt to the game flow
-          GSMessagePlayerReady playerReady = new GSMessagePlayerReady();
-          TeddyClient.getInstance().send(playerReady);
         } else if (message instanceof ReqMessagePlayerDisconnect) {
           ReqMessagePlayerDisconnect disconnectMsg = (ReqMessagePlayerDisconnect) message;
-          Game.getInstance().removePlayerFromWorld(Player.getInstance(disconnectMsg.getClientID()));
+          Integer clientID = disconnectMsg.getClientID();
+          Player curPlayer = Player.getInstance(clientID);
+          Game.getInstance().removePlayerFromWorld(curPlayer);
+          //TODO check if the player has been already freed
           MegaLogger.getLogger().debug(String.format(
-                  "Player %d has been disconnected from the server.", disconnectMsg.getClientID()));
+                  "Player %s (%d) has been disconnected from the server.",
+                  curPlayer.getData().getName(),
+                  clientID));
         }
       }
     }
