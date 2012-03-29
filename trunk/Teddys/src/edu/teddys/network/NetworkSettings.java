@@ -14,8 +14,8 @@ public class NetworkSettings {
   /**
    * The default value for server connection. Used for development issues yet.
    */
-//  public static final String DEFAULT_SERVER = "127.0.0.1";
-  public static final String DEFAULT_SERVER = "192.168.5.2";
+  public static final String DEFAULT_SERVER = "127.0.0.1";
+//  public static final String DEFAULT_SERVER = "192.168.5.2";
 //  public static final String DEFAULT_SERVER = "192.168.178.34";
   /**
    * The port on which the socket will be opened.
