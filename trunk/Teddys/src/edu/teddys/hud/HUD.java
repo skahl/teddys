@@ -121,20 +121,21 @@ public class HUD {
       t.setSize(messageFont.getCharSet().getRenderedSize());
       t.setLocalTranslation(0, height - i * t.getLineHeight(), 0);
       t.setColor(ColorRGBA.Black);
-      hudNode.attachChild(t);
+      t.setText("");
       messages.add(0, t);
+      hudNode.attachChild(t);
     }
-
 
     //show the player's name and team
     playerName = new BitmapText(messageFont);
     playerName.setLocalTranslation(9 * width / 10, height, 0);
-    playerName.setText("Dr. Unnamed");
+    playerName.setText("Prof. Dr. Unnamed");
     playerName.setColor(ColorRGBA.Black);
     hudNode.attachChild(playerName);
+    
     team = new BitmapText(messageFont);
     team.setLocalTranslation(9 * width / 10, height - team.getLineHeight(), 0);
-    team.setText("Team Red");
+    team.setText("Viewer");
     team.setColor(ColorRGBA.Black);
     hudNode.attachChild(team);
 

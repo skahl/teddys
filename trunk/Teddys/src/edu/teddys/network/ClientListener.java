@@ -55,7 +55,10 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
 
   public void messageReceived(com.jme3.network.Client source, Message message) {
 
-    if (!(message instanceof ManControllerInput) && !(message instanceof ManMessageSetPosition)) {
+    if (!(message instanceof ManControllerInput) 
+            && !(message instanceof ManMessageSetPosition)
+            && !(message instanceof ManMessageTransferPlayerData)
+            && !(message instanceof ManMessageTransferServerData)) {
       String inputMessage = String.format(
               "Client received a message (%s): %s",
               message.getClass().getSimpleName(), message);
@@ -93,7 +96,9 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
         //
         NetworkMessageInfo info = (NetworkMessageInfo) message;
         if (info.isServerMessage()) {
-          MegaLogger.getLogger().info(message);
+          MegaLogger.getLogger().info(info.getMessage());
+          //FIXME Use the MegaLoggerListener instead
+          HUDController.getInstance().addMessage(info.getMessage());
         } else {
           String teddyName = "";
           try {
@@ -106,6 +111,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
                   teddyName,
                   info.getMessage());
           MegaLogger.getLogger().info(infoString);
+          //FIXME Use the MegaLoggerListener instead
+          HUDController.getInstance().addMessage(infoString);
         }
       } else if (message instanceof NetworkMessageResponse) {
         if (message instanceof ResMessageSendClientData) {
@@ -207,9 +214,11 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           try {
             String goodTeddy = Player.getInstance(Player.LOCAL_PLAYER).getData().getName();
             String badTeddy = Player.getInstance(msg.getSource()).getData().getName();
-            String infoString = String.format("Mad Teddy %s attacked 'Good Old %s'! %s: %d",
+            String infoString = String.format("Mad %s attacked 'Good Old' %s! %s: %d",
                     badTeddy, goodTeddy, getDamageMessage(msg.getDamage()), msg.getDamage());
             MegaLogger.getLogger().info(infoString);
+            //FIXME Use the MegaLoggerListener instead
+            HUDController.getInstance().addMessage(infoString);
           } catch (Exception ex) {
             MegaLogger.getLogger().warn(ex);
           }
@@ -218,7 +227,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // NEW PLAYER DATA AVAILABLE. SYNC
           //
           ManMessageTransferPlayerData msg = (ManMessageTransferPlayerData) message;
-          MegaLogger.getLogger().debug(msg.getData());
           for (ClientData data : msg.getData()) {
             Player.getInstance(data.getId()).setData(data);
             if (data.getId() == Player.LOCAL_PLAYER) {

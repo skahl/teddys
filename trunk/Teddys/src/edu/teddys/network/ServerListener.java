@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
+import edu.teddys.GameMode;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
@@ -188,7 +189,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
         teamInfoMsg.setServerMessage(true);
         TeddyServer.getInstance().send(teamInfoMsg);
         
-        String infoString2 = String.format("We're currently playing a %s!", Game.getInstance().getCurrentGameMode());
+        GameMode gameMode = Game.getInstance().getCurrentGameMode();
+        String infoString2 = String.format("We're currently playing a %s for %d minutes!", gameMode.getName(), gameMode.getMaxMinutes());
         NetworkMessageInfo individualMessage = new NetworkMessageInfo(clientID, infoString2);
         individualMessage.setServerMessage(true);
         TeddyServer.getInstance().send(individualMessage);

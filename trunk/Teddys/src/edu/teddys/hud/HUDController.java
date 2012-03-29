@@ -44,14 +44,16 @@ public class HUDController extends UpdateControl implements ActionListener {
     currentItemListener = new AttributeListener() {
 
       public void attributeChanged(Object value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //TODO
+//        throw new UnsupportedOperationException("Not supported yet.");
       }
     };
 
     currentWeaponListener = new AttributeListener() {
 
       public void attributeChanged(Object value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //TODO
+//        throw new UnsupportedOperationException("Not supported yet.");
       }
     };
 
@@ -76,18 +78,18 @@ public class HUDController extends UpdateControl implements ActionListener {
     return instance;
   }
 
-  /**
-   * Set the HUD to be controlled.
-   * @param hud 
-   */
-  public void setHUD(final HUD hud) {
-    if (!hudSet) {
-      this.hud = hud;
-
-      //hud.getParent().addControl(this);
-      hudSet = true;
-    }
-  }
+//  /**
+//   * Set the HUD to be controlled.
+//   * @param hud 
+//   */
+//  public void setHUD(final HUD hud) {
+//    if (!hudSet) {
+//      this.hud = hud;
+//
+//      //hud.getParent().addControl(this);
+//      hudSet = true;
+//    }
+//  }
 
   /**
    * Add a message at the bottom of the HUD's message area.
@@ -95,12 +97,10 @@ public class HUDController extends UpdateControl implements ActionListener {
    */
   public void addMessage(String message) {
 
-    //Game.hud.setMessage(0, message);
-
     messages.add(0, message);
     messagesReceived++;
 
-    if (hudSet) {
+//    if (hudSet) {
       int j = 0;
 
       if (messagesReceived < numMessages) {
@@ -110,7 +110,7 @@ public class HUDController extends UpdateControl implements ActionListener {
       for (int i = j; i < numMessages; i++) {
         hud.setMessage(i, (String) it.next());
       }
-    }
+//    }
   }
 
   /**
