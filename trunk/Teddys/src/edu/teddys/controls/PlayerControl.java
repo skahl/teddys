@@ -40,6 +40,7 @@ public class PlayerControl extends CharacterControl {
   private short jetpackTimer = 0;
   private float weaponTimer = 0.0f;
   private short hudUpdateTimer = 0;
+  private Vector3f positionCorrection = new Vector3f();
   // Weapon
   Weapon currentWeapon;
 
