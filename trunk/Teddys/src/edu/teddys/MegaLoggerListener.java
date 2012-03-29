@@ -45,7 +45,7 @@ public class MegaLoggerListener extends AppenderSkeleton {
     if (le.getLevel().isGreaterOrEqual(Level.INFO)) {
       String message = this.layout.format(le);
 //      //TODO this is dependent from the game state!
-      if (AppStateSwitcher.getInstance(null).getState(AppStateSwitcher.AppStateEnum.GAME).isEnabled()) {
+      if (AppStateSwitcher.getInstance().getState(AppStateSwitcher.AppStateEnum.GAME).isEnabled()) {
         HUDController.getInstance().addMessage(message);
       } else {
         //TODO change so there's no ClassCastException anymore in specific situations .....
