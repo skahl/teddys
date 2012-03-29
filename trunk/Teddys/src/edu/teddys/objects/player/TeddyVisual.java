@@ -49,7 +49,7 @@ public class TeddyVisual {
      * @param node
      * @param assetManager 
      */
-    public TeddyVisual(Node node, AssetManager assetManager) {
+    public TeddyVisual(Node node, AssetManager assetManager, boolean showHealthBar) {
         this.node = node;
       
         // control init
@@ -104,7 +104,8 @@ public class TeddyVisual {
         
         node.attachChild(geo);
         
-        healthBar = new BarIndicator(0.4f, 0.1f, geo.getLocalTranslation().x, 
+        if (showHealthBar)
+            healthBar = new BarIndicator(0.4f, 0.1f, geo.getLocalTranslation().x, 
                 geo.getLocalTranslation().y+0.8f, assetManager, ColorRGBA.Red, node);
     }   
     
@@ -169,6 +170,10 @@ public class TeddyVisual {
      */
     public JetpackEffect getJetpack() {
         return jetpackFx;
+    }
+    
+    public void showHealthBar() {
+        
     }
     
     /**

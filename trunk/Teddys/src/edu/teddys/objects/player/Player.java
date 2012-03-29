@@ -23,6 +23,7 @@ import edu.teddys.hud.HUDController;
 import edu.teddys.input.CrosshairControl;
 import edu.teddys.input.Cursor;
 import edu.teddys.network.ClientData;
+import edu.teddys.network.TeddyServer;
 import edu.teddys.objects.weapons.DeafNut;
 import edu.teddys.objects.weapons.Florets;
 import edu.teddys.objects.weapons.HolyWater;
@@ -220,7 +221,9 @@ public class Player {
 
     // Use the toString() method to generate a quite uniquely identified Node
     node = new Node("player" + id.toString());
-    visual = new TeddyVisual(node, game.getAssetManager());
+    
+    boolean showHealthBar = ((id != LOCAL_PLAYER) && !TeddyServer.getInstance().isRunning());
+    visual = new TeddyVisual(node, game.getAssetManager(), showHealthBar);
 
     // attach a cube to the model, so it becomes shootable
     Box invisibleBox = new Box(0.3f, 0.3f, 0.5f);
