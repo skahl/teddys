@@ -55,6 +55,12 @@ public class HUD {
     private final float teamListYLocation;
     private VerticalIconList teamList;
 
+    private String deafNutIcon = "Textures/Effects/deafNutParticle.png";
+    private String flowerIcon = "Textures/Effects/flowerParticle.png";
+    private String holyWaterIcon = "Textures/Effects/holyWaterParticle.png";
+    private String honeyBrewIcon = "Textures/Effects/HoneyBrew.png";
+    private String pistoleIcon = "Textures/Effects/kugel_pistole.png";
+    private String rocketIcon = "Textures/Effects/rocketParticle.png";
     
     private HUD(Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
 
