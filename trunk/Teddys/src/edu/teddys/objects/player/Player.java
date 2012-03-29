@@ -249,7 +249,7 @@ public class Player {
     control.setGravity(5);
     control.setFallSpeed(5);
 
-
+    weapons = new ArrayList<String>();
     weapons.add(StenGun.class.getName());
     weapons.add(Rocket.class.getName());
     weapons.add(DeafNut.class.getName());
