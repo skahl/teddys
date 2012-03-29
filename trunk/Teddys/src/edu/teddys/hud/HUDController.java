@@ -7,8 +7,6 @@ package edu.teddys.hud;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.scene.control.UpdateControl;
-import edu.teddys.GameModeEnum;
-import edu.teddys.callables.SetHealthCallable;
 import edu.teddys.input.ActionControllerEnum;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +60,7 @@ public class HUDController extends UpdateControl implements ActionListener {
             gameInstance.getAssetManager(),
             gameInstance.getApp().getSettings().getWidth(),
             gameInstance.getApp().getSettings().getHeight(),
-            GameModeEnum.DEATHMATCH);
+            gameInstance.getCurrentGameMode());
 
     if(!TeddyServer.getInstance().isRunning()) {
       hud.show();

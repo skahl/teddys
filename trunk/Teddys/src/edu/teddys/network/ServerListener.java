@@ -28,6 +28,7 @@ import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
+import edu.teddys.timer.MatchTimer;
 import edu.teddys.timer.ServerDataSync;
 import edu.teddys.timer.ServerTimer;
 import java.awt.Color;
@@ -131,6 +132,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
 
         ServerDataSync.startTimer();
         ServerTimer.startTimer();
+        // The MatchTimer automatically shuts down ...
+        MatchTimer.startTimer(Game.getInstance().getCurrentGameMode());
 
         // Now start a game
         GSMessageBeginGame beginGame = new GSMessageBeginGame(source.getId());
@@ -182,6 +185,11 @@ public class ServerListener implements MessageListener<HostedConnection> {
         NetworkMessageInfo teamInfoMsg = new NetworkMessageInfo(infoString);
         teamInfoMsg.setServerMessage(true);
         TeddyServer.getInstance().send(teamInfoMsg);
+        
+        String infoString2 = String.format("We're currently playing a %s!", Game.getInstance().getCurrentGameMode());
+        NetworkMessageInfo individualMessage = new NetworkMessageInfo(clientID, infoString2);
+        individualMessage.setServerMessage(true);
+        TeddyServer.getInstance().send(individualMessage);
         
         // Now update the player data on the clients
         List<ClientData> playerData = new ArrayList<ClientData>();

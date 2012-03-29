@@ -9,5 +9,6 @@ package edu.teddys;
  * @author cm
  */
 public enum GameModeEnum {
-  DEATHMATCH,CAPTURE_THE_HONEY
+
+  DEATHMATCH, CAPTURE_THE_HONEY
 }

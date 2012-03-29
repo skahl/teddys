@@ -14,10 +14,10 @@ import com.jme3.network.serializing.Serializable;
  */
 @Serializable
 public class Deathmatch extends GameMode {
-
-  @Override
-  public String getName() {
-    return "Deathmatch";
+  
+  public Deathmatch() {
+    minutesToPlay = 30;
+    modeEnum = GameModeEnum.DEATHMATCH;
   }
   
 }

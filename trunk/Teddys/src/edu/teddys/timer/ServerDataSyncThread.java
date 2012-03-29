@@ -4,20 +4,8 @@
  */
 package edu.teddys.timer;
 
-import com.jme3.math.Vector3f;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
-import edu.teddys.network.TeddyServer;
-import edu.teddys.network.TeddyServerData;
-import edu.teddys.network.messages.server.ManMessageSetPosition;
-import edu.teddys.network.messages.server.ManMessageTransferServerData;
-import edu.teddys.objects.player.Player;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  *

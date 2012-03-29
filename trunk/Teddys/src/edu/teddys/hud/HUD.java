@@ -10,6 +10,7 @@ import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.ui.Picture;
+import edu.teddys.GameMode;
 import edu.teddys.GameModeEnum;
 import edu.teddys.MegaLogger;
 import edu.teddys.objects.weapons.DeafNut;
@@ -70,7 +71,7 @@ public class HUD {
   private String pistoleIcon = "Textures/Effects/kugel_pistole.png";
   private String rocketIcon = "Textures/Effects/rocketParticle.png";
 
-  private HUD(Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
+  private HUD(Node parent, AssetManager assetManager, float width, float height, GameMode mode) {
 
     hudNode = new Node("hudNode");
     this.parent = parent;
@@ -256,9 +257,7 @@ public class HUD {
 
     //parent.attachChild(hudNode);
 
-
-
-    switch (mode) {
+    switch (GameModeEnum.valueOf(mode.getName())) {
       case CAPTURE_THE_HONEY:
         initTeam();
         break;
@@ -307,7 +306,7 @@ public class HUD {
    * @param mode The game mode
    * @return The singleton object
    */
-  public static HUD getInstance(Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
+  public static HUD getInstance(Node parent, AssetManager assetManager, float width, float height, GameMode mode) {
     if (instance == null) {
       instance = new HUD(parent, assetManager, width, height, mode);
     }
