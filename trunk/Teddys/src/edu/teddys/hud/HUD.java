@@ -55,9 +55,9 @@ public class HUD {
     private final float teamListYLocation;
     private VerticalIconList teamList;
 
-    private String deafNutIcon = "Textures/Effects/deafNutParticle.png";
+    private String deafNutIcon = "Textures/Effects/deafnutParticle.png";
     private String flowerIcon = "Textures/Effects/flowerParticle.png";
-    private String holyWaterIcon = "Textures/Effects/holyWaterParticle.png";
+    private String holyWaterIcon = "Textures/Effects/holywaterParticle.png";
     private String honeyBrewIcon = "Textures/Effects/HoneyBrew.png";
     private String pistoleIcon = "Textures/Effects/kugel_pistole.png";
     private String rocketIcon = "Textures/Effects/rocketParticle.png";
