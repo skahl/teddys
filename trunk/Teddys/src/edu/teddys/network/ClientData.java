@@ -48,6 +48,7 @@ public class ClientData {
   
   public ClientData() {
     super();
+    getSession().playerId = getId();
   }
 
   public Integer getHealth() {
@@ -58,12 +59,13 @@ public class ClientData {
     this.health = health;
   }
 
-  public Integer getId() {
+  final public Integer getId() {
     return id;
   }
 
   public void setId(Integer id) {
     this.id = id;
+    getSession().playerId = id;
   }
 
   public String getName() {
@@ -82,7 +84,7 @@ public class ClientData {
     this.position = position;
   }
 
-  public ClientSessionData getSession() {
+  final public ClientSessionData getSession() {
     return session;
   }
 

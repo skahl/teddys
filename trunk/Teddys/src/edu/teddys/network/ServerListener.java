@@ -151,6 +151,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // Update the data
         player.setData(data);
         player.getData().setName("Ted " + clientID);
+        // Register the GameMode as listener for the attributes
+        player.getData().getSession().registerListener(Game.getInstance().getCurrentGameMode());
 
         if (TeddyServer.getInstance().getData().getTeams().isEmpty()) {
           // Create a new team

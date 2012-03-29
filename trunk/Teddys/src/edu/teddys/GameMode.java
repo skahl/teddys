@@ -5,6 +5,7 @@
 package edu.teddys;
 
 import com.jme3.network.serializing.Serializable;
+import edu.teddys.network.SessionDataListener;
 import edu.teddys.network.TeddyServer;
 import edu.teddys.network.messages.server.GSMessageEndGame;
 import edu.teddys.timer.MatchTimer;
@@ -14,7 +15,7 @@ import edu.teddys.timer.MatchTimer;
  * @author cm
  */
 @Serializable
-abstract public class GameMode {
+abstract public class GameMode implements SessionDataListener {
   
   protected Integer minutesToPlay = 5;
   

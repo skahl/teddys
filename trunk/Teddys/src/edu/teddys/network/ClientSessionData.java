@@ -5,6 +5,8 @@
 package edu.teddys.network;
 
 import com.jme3.network.serializing.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -20,9 +22,15 @@ public class ClientSessionData {
   private Integer wins = 0;
   private Integer losses = 0;
   private Integer rounds = 0;
+  transient Integer playerId = -1;
+  transient List<SessionDataListener> listeners = new ArrayList<SessionDataListener>();
 
   public ClientSessionData() {
     super();
+  }
+  
+  public void registerListener(SessionDataListener listener) {
+    listeners.add(listener);
   }
 
   public Integer getDeaths() {
@@ -30,6 +38,7 @@ public class ClientSessionData {
   }
 
   public void setDeaths(Integer deaths) {
+    newValue(SessionDataFieldsEnum.deaths, this.deaths, deaths);
     this.deaths = deaths;
   }
 
@@ -38,6 +47,7 @@ public class ClientSessionData {
   }
 
   public void setKills(Integer kills) {
+    newValue(SessionDataFieldsEnum.kills, this.kills, kills);
     this.kills = kills;
   }
 
@@ -46,6 +56,7 @@ public class ClientSessionData {
   }
 
   public void setLosses(Integer losses) {
+    newValue(SessionDataFieldsEnum.losses, this.losses, losses);
     this.losses = losses;
   }
 
@@ -54,6 +65,7 @@ public class ClientSessionData {
   }
 
   public void setRounds(Integer rounds) {
+    newValue(SessionDataFieldsEnum.rounds, this.rounds, rounds);
     this.rounds = rounds;
   }
 
@@ -62,26 +74,33 @@ public class ClientSessionData {
   }
 
   public void setWins(Integer wins) {
+    newValue(SessionDataFieldsEnum.wins, this.wins, wins);
     this.wins = wins;
   }
   
   public void incDeaths() {
-    deaths++;
+    setDeaths(getDeaths()+1);
   }
   
   public void incKills() {
-    kills++;
+    setKills(getKills()+1);
   }
   
   public void incLosses() {
-    losses++;
+    setLosses(getLosses()+1);
   }
   
   public void incWins() {
-    wins++;
+    setWins(getWins()+1);
   }
   
   public void incRounds() {
-    rounds++;
+    setRounds(getRounds()+1);
+  }
+
+  private void newValue(SessionDataFieldsEnum name, Integer oldVal, Integer newVal) {
+    for(SessionDataListener listener : listeners) {
+      listener.valueChanged(playerId, name, oldVal, newVal);
+    }
   }
 }
