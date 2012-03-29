@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-    Document   : darkness.xml.xml
+    Document   : firstlevel.xml
     Created on : 29. März 2012, 12:47
     Author     : skahl
     Description:
-        darkness configuration xml file.
+        firstlevel configuration xml file.
 -->
 
 <map>
   <backgroundColor>0.5f,0.6f,0.7f</backgroundColor>
   <spawnSpace>
-    <lowerBound>0.0f,0.0f,0.0f</lowerBound>
-    <higherBound>1.0f,1.0f,1.0f</higherBound>
+    <lowerBound>2.5f,4.5f,-1.2f</lowerBound>
+    <higherBound>6.5f,5.5f,-1.2f</higherBound>
+  </spawnSpace>
+  <spawnSpace>
+    <lowerBound>4.0f,3.0f,-1.2f</lowerBound>
+    <higherBound>6.0f,4.0f,-1.2f</higherBound>
+  </spawnSpace>
+  <spawnSpace>
+    <lowerBound>-5.4f,5.0f,-1.2f</lowerBound>
+    <higherBound>-3.3f,6.0f,-1.2f</higherBound>
+  </spawnSpace>
+  <spawnSpace>
+    <lowerBound>-5.4f,3.0f,-1.2f</lowerBound>
+    <higherBound>-3.3f,4.0f,-1.2f</higherBound>
+  </spawnSpace>
+  <spawnSpace>
+    <lowerBound>-2.2f,7.5f,-1.2f</lowerBound>
+    <higherBound>2.2f,10.0f,-1.2f</higherBound>
   </spawnSpace>
   <light>
     <type>Directional</type>
