@@ -23,7 +23,7 @@ public class GameSettings {
   /**
    * The title displayed on the window
    */
-  public static final String TITLE = "Teddys (pre-beta)";
+  public static final String TITLE = "Teddys";
   /**
    * Set multisampling to 0 to switch antialiasing off (harder edges, faster.) 
    * Set multisampling to 2 or 4 to activate antialising (softer edges, may be slower.) 
@@ -54,7 +54,7 @@ public class GameSettings {
   /**
    * Shows the meshed of the bounding boxes and increases the verbosity of logs.
    */
-  public static final boolean DEBUG = true;
+  public static final boolean DEBUG = false;
   /**
    * Defined the value regarding the z axis in the 3D world.
    */

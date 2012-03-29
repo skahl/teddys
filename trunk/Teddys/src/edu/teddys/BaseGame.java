@@ -230,8 +230,8 @@ public class BaseGame extends SimpleApplication {
       // Now start the timer
       ServerTimer.startTimer();
       // Load the map
-      Game.getInstance().loadGameMap("firstlevel", "Models/firstlevel/firstlevel.j3o");
-//      Game.getInstance().loadGameMap("darkness", "Models/darkness/darkness.j3o");
+//      Game.getInstance().loadGameMap("firstlevel", "Models/firstlevel/firstlevel.j3o");
+      Game.getInstance().loadGameMap("darkness", "Models/darkness/darkness.j3o");
       
     } else {
       flyCam.setEnabled(false);
