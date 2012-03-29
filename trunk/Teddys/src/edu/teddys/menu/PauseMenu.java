@@ -10,7 +10,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.screen.Screen;
-import edu.teddys.network.SessionClientData;
+import edu.teddys.network.ClientSessionData;
 import edu.teddys.objects.player.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,7 +84,7 @@ public class PauseMenu extends MessagePopupController {
         Arrays.sort(players, comp);
         
         for (int i = 0; i < players.length; i++) {
-            SessionClientData data = players[i].getData().getSession();            
+            ClientSessionData data = players[i].getData().getSession();            
             
             if (i < numEntries) {
                 

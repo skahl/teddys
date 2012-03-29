@@ -36,7 +36,7 @@ public class ClientData {
   /**
    * Session-related information, that is the number of deaths, kills, rounds etc.
    */
-  private SessionClientData session = new SessionClientData();
+  private ClientSessionData session = new ClientSessionData();
   /**
    * Team allocation if available.
    */
@@ -82,7 +82,7 @@ public class ClientData {
     this.position = position;
   }
 
-  public SessionClientData getSession() {
+  public ClientSessionData getSession() {
     return session;
   }
 
@@ -94,7 +94,7 @@ public class ClientData {
     this.lastPosition = lastPosition;
   }
 
-  public void setSession(SessionClientData session) {
+  public void setSession(ClientSessionData session) {
     this.session = session;
   }
 

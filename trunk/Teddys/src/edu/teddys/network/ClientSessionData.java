@@ -13,7 +13,7 @@ import com.jme3.network.serializing.Serializable;
  * @author cm
  */
 @Serializable
-public class SessionClientData {
+public class ClientSessionData {
 
   private Integer kills = 0;
   private Integer deaths = 0;
@@ -21,7 +21,7 @@ public class SessionClientData {
   private Integer losses = 0;
   private Integer rounds = 0;
 
-  public SessionClientData() {
+  public ClientSessionData() {
     super();
   }
 

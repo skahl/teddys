@@ -17,7 +17,7 @@ import edu.teddys.controls.MappingEnum;
 import edu.teddys.input.ControllerEvents;
 import edu.teddys.input.ControllerInputListener;
 import edu.teddys.network.ClientData;
-import edu.teddys.network.SessionClientData;
+import edu.teddys.network.ClientSessionData;
 import edu.teddys.network.Team;
 import edu.teddys.network.TeddyClient;
 import edu.teddys.network.TeddyServer;
@@ -255,7 +255,7 @@ public class BaseGame extends SimpleApplication {
     Serializer.registerClass(NetworkMessageRequest.class);
     Serializer.registerClass(NetworkMessageResponse.class);
     // Internal data to be serialized
-    Serializer.registerClass(SessionClientData.class);
+    Serializer.registerClass(ClientSessionData.class);
     Serializer.registerClass(ClientData.class);
     Serializer.registerClass(Team.class);
     Serializer.registerClass(Player.class);
