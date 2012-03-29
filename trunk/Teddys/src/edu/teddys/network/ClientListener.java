@@ -139,10 +139,12 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           for (Integer affected : msg.getAffected()) {
             curPlayer = Player.getInstance(affected);
             curPlayer.getData().setMapLoaded(true);
-            MegaLogger.getLogger().info(
-                    String.format("%s (%d) is ready yet!",
+            String readyMsg = String.format("%s (%d) is ready yet!",
                     curPlayer.getData().getName(),
-                    affected));
+                    affected);
+            MegaLogger.getLogger().info(readyMsg);
+            //FIXME MegaLoggerListener
+            HUDController.getInstance().addMessage(readyMsg);
             // The position is transferred from the server
             Game.getInstance().addPlayerToWorld(Player.getInstance(affected));
           }
