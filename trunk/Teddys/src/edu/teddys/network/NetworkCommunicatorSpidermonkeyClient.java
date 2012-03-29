@@ -9,6 +9,7 @@ import com.jme3.network.ClientStateListener;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessage;
+import edu.teddys.objects.player.Player;
 import java.io.IOException;
 
 /**
@@ -100,7 +101,9 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
     // Check for active connection
     if (isValidConnection()) {
       // close the active connection
-      disconnect(client.getData().getId());
+      disconnect(Player.LOCAL_PLAYER);
+      //TODO REMOVE PLAYER??
+//      Player.LOCAL_PLAYER = -1;
     }
     if (serverIP == null || serverPort == null) {
       String msg = "Invalid server configuration! serverIP or serverPort is null. "
@@ -124,11 +127,8 @@ public class NetworkCommunicatorSpidermonkeyClient implements NetworkCommunicato
   }
 
   public void disconnect(Integer clientID) {
-    if (!networkClient.isConnected()) {
-      return;
-    }
-    networkClient.close();
-    MegaLogger.getLogger().info("The client is disconnected now!");
+    MegaLogger.getLogger().warn("No active connection to the specified server!");
+    //TODO change game state
   }
 
   public Client getNetworkClient() {

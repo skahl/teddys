@@ -5,6 +5,7 @@
 package edu.teddys;
 
 import de.lessvoid.nifty.Nifty;
+import edu.teddys.hud.HUDController;
 import edu.teddys.menu.MessagePopupController;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.AppStateSwitcher;
@@ -19,7 +20,7 @@ import org.apache.log4j.spi.LoggingEvent;
  * @author cm
  */
 public class MegaLoggerListener extends AppenderSkeleton {
-  
+
   private Nifty nifty;
 
   public MegaLoggerListener(Layout layout, Nifty nifty) {
@@ -27,7 +28,7 @@ public class MegaLoggerListener extends AppenderSkeleton {
     this.nifty = nifty;
     this.name = getClass().getSimpleName();
   }
-  
+
   /*
    * 
    *TODO Show the specified message as a popup if the client is in a menu or as
@@ -41,16 +42,14 @@ public class MegaLoggerListener extends AppenderSkeleton {
               ErrorCode.MISSING_LAYOUT);
       return;
     }
-    if(le.getLevel().isGreaterOrEqual(Level.INFO)) {
+    if (le.getLevel().isGreaterOrEqual(Level.INFO)) {
       String message = this.layout.format(le);
-      //TODO this is dependent from the game state!
-        if (AppStateSwitcher.getInstance(null).getState(AppStateSwitcher.AppStateEnum.GAME).isEnabled()) {
-            if (Player.LOCAL_PLAYER != -1 && Player.getInstance(Player.LOCAL_PLAYER).getHUDController() != null) {
-                Player.getInstance(Player.LOCAL_PLAYER).getHUDController().addMessage(message);
-            }
-        } else {
-            ((MessagePopupController) nifty.getCurrentScreen().getScreenController()).addMessage(message);
-        }
+//      //TODO this is dependent from the game state!
+      if (AppStateSwitcher.getInstance(null).getState(AppStateSwitcher.AppStateEnum.GAME).isEnabled()) {
+        HUDController.getInstance().addMessage(message);
+      } else {
+        ((MessagePopupController) nifty.getCurrentScreen().getScreenController()).addMessage(message);
+      }
     }
   }
 

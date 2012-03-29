@@ -5,17 +5,13 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import edu.teddys.MegaLogger;
+import edu.teddys.hud.HUDController;
 import edu.teddys.input.AnalogControllerEnum;
 import edu.teddys.input.InputType;
 import edu.teddys.input.InputTuple;
 import edu.teddys.objects.player.Player;
 import edu.teddys.objects.player.TeddyVisual;
-import edu.teddys.objects.weapons.DeafNut;
-import edu.teddys.objects.weapons.Florets;
-import edu.teddys.objects.weapons.HolyWater;
-import edu.teddys.objects.weapons.HoneyBrew;
 import edu.teddys.objects.weapons.Rocket;
-import edu.teddys.objects.weapons.StenGun;
 import edu.teddys.objects.weapons.Weapon;
 import edu.teddys.states.Game;
 import java.util.LinkedList;
@@ -44,11 +40,9 @@ public class PlayerControl extends CharacterControl {
   private short jetpackTimer = 0;
   private float weaponTimer = 0.0f;
   private short hudUpdateTimer = 0;
-  
   // Weapon
   Weapon currentWeapon;
-  
-  
+
   /**
    * PlayerControl constructor. Sets physics properties.
    * 
@@ -59,21 +53,21 @@ public class PlayerControl extends CharacterControl {
    */
   public PlayerControl(Player player, CollisionShape collisionShape, float stepHeight, TeddyVisual vis) {
     super(collisionShape, stepHeight);
-    
+
     this.player = player;
     visual = vis;
     serverControlInput = new LinkedList<InputTuple>();
 
     left = new Vector3f(-1, 0, 0);
     right = new Vector3f(1, 0, 0);
-    
+
 //    currentWeapon = new DeafNut(player);//new Florets(player);//new Rocket(player);//new HolyWater(player);//new HoneyBrew(player);//new StenGun(player);//
     currentWeapon = new Rocket(player);
 //    currentWeapon = new Florets(player);
 //    currentWeapon = new HolyWater(player);
 //    currentWeapon = new HoneyBrew(player);
 //    currentWeapon = new StenGun(player);
-    
+
     Game.getInstance().addSpatial(visual.getNode(), currentWeapon.getEffect().getNode());
   }
 
@@ -85,9 +79,9 @@ public class PlayerControl extends CharacterControl {
    * @param tpf 
    */
   public void onAnalog(String name, float value, float tpf) {
-    
+
     //TODO integrate the position information from the server
-    
+
     if (name.equals(AnalogControllerEnum.MOVE_LEFT.name())) {
 
       // reset control timer
@@ -255,9 +249,9 @@ public class PlayerControl extends CharacterControl {
    * @param cursorPos 
    */
   public void setScreenPositions(Vector2f cursorPos) {
-    
+
     Vector3f playerPos = Game.getInstance().getApp().getCamera().getScreenCoordinates(player.getNode().getWorldTranslation());
-    
+
     vectorPlayerToCursor = (cursorPos.subtract(new Vector2f(playerPos.x, playerPos.y))).normalizeLocal();
     currentWeapon.getEffect().setVector(new Vector3f(vectorPlayerToCursor.x, vectorPlayerToCursor.y, 0f));
   }
@@ -310,22 +304,20 @@ public class PlayerControl extends CharacterControl {
 
     // increase HUD timer and act on it, if necessary
     hudUpdateTimer++;
-    if(hudUpdateTimer > 4) {
-        hudUpdateTimer = 0;
-        
-        // inform the visual representation of this player about the view vector
-        visual.setViewVector(vectorPlayerToCursor);
-        
-        // update HUD
-        if(player.getHUDController() != null) {
-          player.getHUDController().setJetpackEnergy((int) currentEnergy);
-        }
+    if (hudUpdateTimer > 4) {
+      hudUpdateTimer = 0;
+
+      // inform the visual representation of this player about the view vector
+      visual.setViewVector(vectorPlayerToCursor);
+
+      // update HUD
+      HUDController.getInstance().setJetpackEnergy((int) currentEnergy);
     }
 
     InputTuple entry = null;
-    
-    synchronized(serverControlInput) {
-      
+
+    synchronized (serverControlInput) {
+
       while (serverControlInput.size() > 0) {
 
         entry = serverControlInput.pop();

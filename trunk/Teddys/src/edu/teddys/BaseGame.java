@@ -238,7 +238,7 @@ public class BaseGame extends SimpleApplication {
       
       // Get the handle to the client and try to join the specified server
       TeddyClient client = TeddyClient.getInstance();
-      MegaLogger.getLogger().info("Client has " + client.getData().getHealth() + " health points at the beginning.");
+      MegaLogger.getLogger().info("Client has " + Player.getInstance(Player.LOCAL_PLAYER).getData().getHealth() + " health points at the beginning.");
 
       // Try to connect to the server
       if (client.join(TeddyClient.getInstance().getServerIP(), NetworkSettings.SERVER_PORT)) {
@@ -314,6 +314,11 @@ public class BaseGame extends SimpleApplication {
     nifty.addXml("Interface/GUI/JoinScreen.xml");
     nifty.addXml("Interface/GUI/OptionsScreen.xml");
     nifty.addXml("Interface/GUI/Popups.xml");
+    if(TeddyServer.getInstance().isRunning()) {
+      nifty.gotoScreen(MenuTypes.BLANK.name());
+//    } else {
+//      nifty.gotoScreen(MenuTypes.MAIN_MENU.name());
+    }
     
     ((PauseMenu) nifty.getScreen(MenuTypes.PAUSE_MENU.name()).getScreenController()).setApplication(this);    
     ((MainMenu) nifty.getScreen(MenuTypes.MAIN_MENU.name()).getScreenController()).setApplication(this);

@@ -75,8 +75,8 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
 
       // CHECK CLIENT ID
       Integer[] rec = ((NetworkMessage) message).getRecipients();
-      if (rec.length != 0 && !(Arrays.asList(rec)).contains(
-              TeddyClient.getInstance().getData().getId())) {
+      // This is legal since a new player message is sent to this user directly
+      if (rec.length != 0 && !(Arrays.asList(rec)).contains(Player.LOCAL_PLAYER)) {
         MegaLogger.getLogger().debug("Not a message for me ...");
         return;
       }
@@ -128,12 +128,12 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // ADD THE CLIENT TO THE LOCAL WORLD
           //
           ResMessageMapLoaded msg = (ResMessageMapLoaded) message;
-          Player newPlayer = Player.getInstance(msg.getAffected());
-          //TODO this should have been done already when the player data was received
-          newPlayer.getData().setMapLoaded(true);
-          MegaLogger.getLogger().debug("Client " + msg.getAffected() + " has loaded the map.");
-          // The position has been set by the server already
-          Game.getInstance().addPlayerToWorld(newPlayer);
+          for(Integer affected : msg.getAffected()) {
+            Player.getInstance(affected).getData().setMapLoaded(true);
+            MegaLogger.getLogger().debug("Client " + msg.getAffected() + " has loaded the map.");
+            // The position is transferred from the server
+            Game.getInstance().addPlayerToWorld(Player.getInstance(affected));
+          }
         }
       } else if (message instanceof NetworkMessageGameState) {
         if (message instanceof GSMessageGamePaused) {
@@ -267,7 +267,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // Load the game map
           Game.getInstance().loadGameMap(msg.getLevelName(), msg.getLevelPath());
           // Now that the map is loaded, send the confirmation
-          ResMessageMapLoaded mapLoaded = new ResMessageMapLoaded(TeddyClient.getInstance().getData().getId());
+          ResMessageMapLoaded mapLoaded = new ResMessageMapLoaded(Player.LOCAL_PLAYER);
           TeddyClient.getInstance().send(mapLoaded);
         } else if (message instanceof ReqMessagePauseRequest) {
           //

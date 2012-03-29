@@ -162,10 +162,7 @@ public class TeddyClient implements NetworkCommunicatorAPI, ClientStateListener 
     ClientTimer.stopTimer();
     MegaLogger.getLogger().warn("Client has been disconnected from the server");
     //TODO react to this event, such as settings the appropriate GameState
-  }
-
-  public ClientData getData() {
-    //TODO replace the calls to Player.getInstance(LOCAL_PLAYER)!!
-    return Player.getInstance(Player.LOCAL_PLAYER).getData();
+    //TODO what about the player ID?
+//    Player.LOCAL_PLAYER = -1;
   }
 }
