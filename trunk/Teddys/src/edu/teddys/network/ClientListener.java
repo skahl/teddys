@@ -114,7 +114,6 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           //
           ResMessageSendClientData msg = (ResMessageSendClientData) message;
           Player.getInstance(msg.getClientData().getId()).setData(msg.getClientData());
-          MegaLogger.getLogger().debug("Received clientdata for " + msg.getClientData().getId());
           if (msg.getClientData().getId() == Player.LOCAL_PLAYER) {
             Player player = Player.getInstance(Player.LOCAL_PLAYER);
             // update the HUD data
@@ -221,7 +220,16 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           ManMessageTransferPlayerData msg = (ManMessageTransferPlayerData) message;
           for (ClientData data : msg.getData()) {
             Player.getInstance(data.getId()).setData(data);
+            if (data.getId() == Player.LOCAL_PLAYER) {
+              Player player = Player.getInstance(Player.LOCAL_PLAYER);
+              // update the HUD data
+              HUDController.getInstance().getHUD().setPlayerName(player.getData().getName());
+              HUDController.getInstance().getHUD().setTeam(
+                      TeddyServer.getInstance().getData().getTeams().get(
+                      player.getData().getTeamID()).getName());
+            }
           }
+          //TODO check
         } else if (message instanceof ManMessageTransferServerData) {
           //
           // NEW SERVER DATA AVAILABLE. SYNC
@@ -251,13 +259,10 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
           // A USER PAUSED HIS GAME
           //
           ReqMessagePauseRequest req = (ReqMessagePauseRequest) message;
-          MegaLogger.getLogger().debug("Pause request!!");
           if (req.isPaused()) {
             AppStateSwitcher.getInstance().pause(false);
-            MegaLogger.getLogger().debug("Paused!!");
           } else {
             AppStateSwitcher.getInstance().unpause(false);
-            MegaLogger.getLogger().debug("Unpaused!!");
           }
         } else if (message instanceof ReqMessageRelocateServer) {
           //
