@@ -171,10 +171,7 @@ public class TeddyVisual {
     public JetpackEffect getJetpack() {
         return jetpackFx;
     }
-    
-    public void showHealthBar() {
-        
-    }
+
     
     /**
      * Getter method for the teddey's health bar.

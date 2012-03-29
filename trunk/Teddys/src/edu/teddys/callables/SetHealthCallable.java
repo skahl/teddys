@@ -4,6 +4,7 @@
  */
 package edu.teddys.callables;
 
+import edu.teddys.hud.BarIndicator;
 import edu.teddys.hud.HUDController;
 import edu.teddys.objects.player.Player;
 import java.util.concurrent.Callable;
@@ -28,6 +29,8 @@ public class SetHealthCallable implements Callable {
     Player player = Player.getInstance(playerID);
     player.getData().setHealth(health);
     HUDController.getInstance().setHealth(health);
+    BarIndicator healthBar = player.getPlayerVisual().getHealthBar();
+    if (healthBar != null) healthBar.setValue(health);
     return null;
   }
 }
