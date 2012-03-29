@@ -243,7 +243,6 @@ public class HUD {
         weaponIndices.put(Florets.class.getName(), 3);
         weaponIndices.put(HolyWater.class.getName(), 4);
         weaponIndices.put(HoneyBrew.class.getName(), 5);
-        weaponIndices.put(SniperRifle.class.getName(), 6);
         
         weaponList = new HorizontalIconList(imageSize, iconOffset, 2 * imageSize, assetManager, hudNode);
 
@@ -254,7 +253,6 @@ public class HUD {
         weaponList.addItem("flower", 3, flowerIcon, ColorRGBA.Yellow);
         weaponList.addItem("holyWater", 4, holyWaterIcon, ColorRGBA.Yellow);
         weaponList.addItem("honeyBrew", 5, honeyBrewIcon, ColorRGBA.Yellow);
-        weaponList.addItem("sniper", 6, pistoleIcon, ColorRGBA.Yellow);
         //weaponList.show();
 
         //parent.attachChild(hudNode);
