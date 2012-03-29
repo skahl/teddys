@@ -425,9 +425,6 @@ public class PlayerControl extends CharacterControl {
    * @param input A queue of actions gathered in the last time frame.
    */
   public synchronized void newInput(LinkedList<InputTuple> input) {
-    if (input == null) {
-      input = new LinkedList<InputTuple>();
-    }
     if (serverControlInput == null) {
       serverControlInput = new LinkedList<InputTuple>();
     }

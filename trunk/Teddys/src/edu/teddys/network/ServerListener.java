@@ -219,6 +219,9 @@ public class ServerListener implements MessageListener<HostedConnection> {
       if (message instanceof ManControllerInput) {
         ManControllerInput input = (ManControllerInput) message;
         // refresh the player's action
+        if(input.getInput() == null) {
+          return;
+        }
         Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
         // send this message to all players since there's no local input manager attached to the users
         TeddyServer.getInstance().send(input);
