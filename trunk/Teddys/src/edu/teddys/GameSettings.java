@@ -98,7 +98,7 @@ public class GameSettings {
   /**
    * Low-pass filtered interpolation of the Teddy position in case of deviance.
    */
-  public static final Float CLIENT_INTERPOL_SMOOTHING = 0.3f;
+  public static final Float CLIENT_INTERPOL_SMOOTHING = 0.7f;
   /**
    * Checksum interval in milliseconds (Default: 3000 ms)
    * @see ChecksumManager

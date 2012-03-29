@@ -15,6 +15,8 @@ import java.util.List;
  */
 @Serializable
 public class Team {
+  
+  private transient static Integer numTeams = new Integer(0);
 
   private String name = "Grampen";
   /**
@@ -22,6 +24,7 @@ public class Team {
    */
   private String color = Color.BLACK.toString();
   private List<Integer> players = new ArrayList<Integer>();
+  private Integer teamID = new Integer(0);
 
   public Team() {
   }
@@ -34,6 +37,7 @@ public class Team {
   public Team(Color color, String teamName) {
     this(teamName);
     setColor(color.toString());
+    teamID = numTeams++;
   }
 
   public String getColor() {
@@ -66,5 +70,9 @@ public class Team {
   
   public void removePlayer(Integer clientID) {
     getPlayers().remove(clientID);
+  }
+  
+  public Integer getTeamID() {
+    return teamID;
   }
 }

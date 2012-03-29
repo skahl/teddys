@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -148,7 +149,10 @@ public class TeddyServer implements NetworkCommunicatorAPI, ConnectionListener {
 
   public List<Integer> getClientIDs() {
     if (getData() != null && !Player.getInstances().isEmpty()) {
-      return new ArrayList<Integer>(Player.getInstances().keySet());
+      Set<Integer> clients = Player.getInstances().keySet();
+      // This is the default local player ID
+      clients.remove(new Integer(-1));
+      return new ArrayList<Integer>(clients);
     }
     return new ArrayList<Integer>();
   }
