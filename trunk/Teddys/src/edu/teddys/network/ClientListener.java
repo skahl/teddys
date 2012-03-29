@@ -54,7 +54,7 @@ public class ClientListener implements MessageListener<com.jme3.network.Client> 
 
   public void messageReceived(com.jme3.network.Client source, Message message) {
 
-    if (!(message instanceof ManControllerInput)) {
+    if (!(message instanceof ManControllerInput) && !(message instanceof ManMessageSetPosition)) {
       String inputMessage = String.format(
               "Client received a message (%s): %s",
               message.getClass().getSimpleName(), message);
