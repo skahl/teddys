@@ -58,7 +58,6 @@ public class DeafNutShot extends RigidBodyControl implements Effect {
   public void update(float tpf) {
     super.update(tpf);
     
-    // TODO: Sowas in allen Waffen um Refreshrate nicht abwarten zu müssen?
     if(partColBox.collidedPlayer()) {
       
       reset();

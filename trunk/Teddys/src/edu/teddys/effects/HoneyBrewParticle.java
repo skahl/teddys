@@ -17,7 +17,7 @@ public class HoneyBrewParticle extends CustomParticle {
   public HoneyBrewParticle(String name) {
     super(name);
     
-    this.setMesh(new Quad(1f, 0.2f));
+    this.setMesh(new Quad(1f, 0.3f));
     
     mat = new Material(Game.getInstance().getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
     mat.setTexture("ColorMap", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/HoneyBrew.png"));

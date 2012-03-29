@@ -123,7 +123,7 @@ public class GeometryCollisionListener implements PhysicsCollisionListener {
       RandomDataImpl rnd = new RandomDataImpl();
       Float weaponDamage = FastMath.abs((float) rnd.nextGaussian(weapon.getBaseDamage(), GameSettings.DAMAGE_SIGMA));
       Float weaponAccuracy = FastMath.abs((float) rnd.nextGaussian(weapon.getAccuracy(), GameSettings.DAMAGE_SIGMA));
-      //TODO use the range information
+      
       Float damage = GameSettings.DAMAGE_MAX * weaponDamage * weaponAccuracy;
 
       int resDamage = (int) Math.ceil(damage);

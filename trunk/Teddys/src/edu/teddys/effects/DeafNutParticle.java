@@ -25,6 +25,7 @@ public class DeafNutParticle extends CustomParticle {
     mat.setTexture("ColorMap", Game.getInstance().getAssetManager().loadTexture("Textures/Effects/deafnutParticle.png"));
     mat.getAdditionalRenderState().setFaceCullMode(FaceCullMode.Off);
     mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+    mat.getAdditionalRenderState().setAlphaTest(true);
     this.setMaterial(mat);
     
   }

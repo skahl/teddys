@@ -85,7 +85,6 @@ public class PlayerControl extends CharacterControl {
      */
     public void onAnalog(String name, float value, float tpf) {
 
-        //TODO integrate the position information from the server
 
         if (name.equals(AnalogControllerEnum.MOVE_LEFT.name())) {
 
@@ -121,7 +120,7 @@ public class PlayerControl extends CharacterControl {
 
         if (name.equals(AnalogControllerEnum.WEAPON.name())) {
           
-          MegaLogger.getLogger().info("PHYSICSLOCATION: "+String.valueOf(this.getPhysicsLocation()));
+          //MegaLogger.getLogger().info("PHYSICSLOCATION: "+String.valueOf(this.getPhysicsLocation()));
 
             // check if weapon can fire again
             if (currentWeapon.getEffect().isTriggerable()) {
@@ -214,6 +213,8 @@ public class PlayerControl extends CharacterControl {
             Constructor currentContructor;
 
             try {
+                currentWeapon.getEffect().reset();
+                
                 currentClassWeapon = Class.forName(player.getNextWeapon());
                 currentContructor = currentClassWeapon.getConstructor(Player.class);
                 currentWeapon = (Weapon) currentContructor.newInstance(player);
@@ -251,6 +252,8 @@ public class PlayerControl extends CharacterControl {
             Constructor currentContructor;
 
             try {
+                currentWeapon.getEffect().reset();
+                
                 currentClassWeapon = Class.forName(player.getPreviousWeapon());
                 currentContructor = currentClassWeapon.getConstructor(Player.class);
                 currentWeapon = (Weapon) currentContructor.newInstance(player);

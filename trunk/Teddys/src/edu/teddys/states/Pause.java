@@ -4,7 +4,6 @@
  */
 package edu.teddys.states;
 
-import edu.teddys.controls.RotationControl;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
