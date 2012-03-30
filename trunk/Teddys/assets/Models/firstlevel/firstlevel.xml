@@ -27,8 +27,8 @@
     <higherBound>8.5f,-2.8f,-1.2f</higherBound>
   </spawnSpace>
   <spawnSpace>
-    <lowerBound>-1.7f,1.2f,-1.2f</lowerBound>
-    <higherBound>4.7f,0.4f,-1.2f</higherBound>
+    <lowerBound>-1.7f,1.3f,-1.2f</lowerBound>
+    <higherBound>4.7f,2.4f,-1.2f</higherBound>
   </spawnSpace>
   <light>
     <type>Directional</type>
