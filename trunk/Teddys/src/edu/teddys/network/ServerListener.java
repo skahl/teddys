@@ -105,7 +105,7 @@ public class ServerListener implements MessageListener<HostedConnection> {
         List<Integer> playerWithActiveMap = new ArrayList<Integer>();
         for (Player curPlayer : Player.getInstanceList()) {
           // Local server player?
-          if(curPlayer.getData().getId() == -1) {
+          if(curPlayer.getData().getId() == -1 || curPlayer.getData().getId() == source.getId()) {
             continue;
           }
           if (curPlayer.getData().isMapLoaded()) {

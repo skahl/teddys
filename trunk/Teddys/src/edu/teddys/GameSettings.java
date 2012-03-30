@@ -92,11 +92,11 @@ public class GameSettings {
    */
   public static final Integer MAX_CLIENT_INTERPOL_CAPACITY = 5;
   /**
-   * Transmit the position of all Teddys every n-th tick. Default: 3
+   * Transmit the position of all Teddys every n-th tick. Default: 10
    */
-  public static final Integer TRANSMIT_POSITION_MOD = 10;
+  public static final Integer TRANSMIT_POSITION_MOD = 5;
   /**
-   * Low-pass filtered interpolation of the Teddy position in case of deviance.
+   * Filtered interpolation of the Teddy position in case of deviance.
    */
   public static final Float CLIENT_INTERPOL_SMOOTHING = 0.7f;
   /**
@@ -105,10 +105,10 @@ public class GameSettings {
    */
   public static final Integer CHECKSUM_INTERVAL = 3000;
   /**
-   * Server synchronization interval in milliseconds (Default: 1000 ms)
+   * Server synchronization interval in milliseconds (Default: 2000 ms)
    * @see ServerDataSync
    */
-  public static final Integer NETWORK_SERVER_SYNC_INTERVAL = 1000;
+  public static final Integer NETWORK_SERVER_SYNC_INTERVAL = 2000;
   /**
    * The interval for event calculations in ms.
    * @see ServerTimer

@@ -9,7 +9,7 @@ import edu.teddys.MegaLogger;
 
 /**
  * 
- * Triggers a network message to sync the current server data.
+ * Triggers a network message to sync the current server data, i.e. Player data.
  *
  * @author cm
  */
