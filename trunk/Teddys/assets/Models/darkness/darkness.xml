@@ -12,11 +12,11 @@
   <backgroundColor>0.05f,0.05f,0.01f</backgroundColor>
   <spawnSpace>
     <lowerBound>-6.5f,-7.0f,-0.7f</lowerBound>
-    <higherBound>8.0f,-6.25f,-0.7f</higherBound>
+    <higherBound>8.0f,-6.0f,-0.7f</higherBound>
   </spawnSpace>
   <spawnSpace>
-    <lowerBound>-5.0f,-3.0f,-0.7f</lowerBound>
-    <higherBound>0.5f,-3.0f,-0.7f</higherBound>
+    <lowerBound>-5.0f,-2.0f,-0.7f</lowerBound>
+    <higherBound>0.5f,-1.0f,-0.7f</higherBound>
   </spawnSpace>
   <spawnSpace>
     <lowerBound>-6.7f,-1.0f,-0.7f</lowerBound>

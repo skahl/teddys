@@ -11,8 +11,8 @@
 <map>
   <backgroundColor>0.5f,0.6f,0.7f</backgroundColor>
   <spawnSpace>
-    <lowerBound>-4.0f,-3.2f,-1.2f</lowerBound>
-    <higherBound>-2.15f,-2.9f,-1.2f</higherBound>
+    <lowerBound>-4.0f,-3.0f,-1.2f</lowerBound>
+    <higherBound>-2.15f,-2.0f,-1.2f</higherBound>
   </spawnSpace>
   <spawnSpace>
     <lowerBound>-5.1f,-4.7f,-1.2f</lowerBound>
@@ -24,7 +24,7 @@
   </spawnSpace>
   <spawnSpace>
     <lowerBound>-4.5f,-2.9f,-1.2f</lowerBound>
-    <higherBound>8.5f,-2.8f,-1.2f</higherBound>
+    <higherBound>8.5f,-2.0f,-1.2f</higherBound>
   </spawnSpace>
   <spawnSpace>
     <lowerBound>-1.7f,1.3f,-1.2f</lowerBound>
