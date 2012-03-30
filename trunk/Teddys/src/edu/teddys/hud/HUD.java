@@ -10,6 +10,7 @@ import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.ui.Picture;
+import edu.teddys.GameMode;
 import edu.teddys.GameModeEnum;
 import edu.teddys.MegaLogger;
 import edu.teddys.objects.weapons.DeafNut;
@@ -70,7 +71,7 @@ public class HUD {
   private String pistoleIcon = "Textures/Effects/kugel_pistole.png";
   private String rocketIcon = "Textures/Effects/rocketParticle.png";
 
-  private HUD(Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
+  private HUD(Node parent, AssetManager assetManager, float width, float height, GameMode mode) {
 
     hudNode = new Node("hudNode");
     this.parent = parent;
@@ -120,20 +121,21 @@ public class HUD {
       t.setSize(messageFont.getCharSet().getRenderedSize());
       t.setLocalTranslation(0, height - i * t.getLineHeight(), 0);
       t.setColor(ColorRGBA.Black);
-      hudNode.attachChild(t);
+      t.setText("");
       messages.add(0, t);
+      hudNode.attachChild(t);
     }
-
 
     //show the player's name and team
     playerName = new BitmapText(messageFont);
     playerName.setLocalTranslation(9 * width / 10, height, 0);
-    playerName.setText("Dr. Unnamed");
+    playerName.setText("Prof. Dr. Unnamed");
     playerName.setColor(ColorRGBA.Black);
     hudNode.attachChild(playerName);
+    
     team = new BitmapText(messageFont);
     team.setLocalTranslation(9 * width / 10, height - team.getLineHeight(), 0);
-    team.setText("Team Red");
+    team.setText("Viewer");
     team.setColor(ColorRGBA.Black);
     hudNode.attachChild(team);
 
@@ -256,9 +258,7 @@ public class HUD {
 
     //parent.attachChild(hudNode);
 
-
-
-    switch (mode) {
+    switch (GameModeEnum.valueOf(mode.getName())) {
       case CAPTURE_THE_HONEY:
         initTeam();
         break;
@@ -307,7 +307,7 @@ public class HUD {
    * @param mode The game mode
    * @return The singleton object
    */
-  public static HUD getInstance(Node parent, AssetManager assetManager, float width, float height, GameModeEnum mode) {
+  public static HUD getInstance(Node parent, AssetManager assetManager, float width, float height, GameMode mode) {
     if (instance == null) {
       instance = new HUD(parent, assetManager, width, height, mode);
     }
@@ -404,7 +404,6 @@ public class HUD {
    */
   public void setPlayerName(String name) {
     playerName.setText(name);
-    MegaLogger.getLogger().debug("CHANGED TEDDY NAME!");
   }
 
   /**
@@ -413,7 +412,6 @@ public class HUD {
    */
   public void setTeam(String team) {
     this.team.setText(team);
-    MegaLogger.getLogger().debug("CHANGED TEDDY TEAM!");
   }
 
   /**

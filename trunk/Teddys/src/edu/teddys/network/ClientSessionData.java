@@ -5,6 +5,9 @@
 package edu.teddys.network;
 
 import com.jme3.network.serializing.Serializable;
+import edu.teddys.MegaLogger;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -13,16 +16,22 @@ import com.jme3.network.serializing.Serializable;
  * @author cm
  */
 @Serializable
-public class SessionClientData {
+public class ClientSessionData {
 
   private Integer kills = 0;
   private Integer deaths = 0;
   private Integer wins = 0;
   private Integer losses = 0;
   private Integer rounds = 0;
+  transient Integer playerId = -1;
+  transient List<SessionDataListener> listeners = new ArrayList<SessionDataListener>();
 
-  public SessionClientData() {
+  public ClientSessionData() {
     super();
+  }
+  
+  public void registerListener(SessionDataListener listener) {
+    listeners.add(listener);
   }
 
   public Integer getDeaths() {
@@ -30,6 +39,7 @@ public class SessionClientData {
   }
 
   public void setDeaths(Integer deaths) {
+    newValue(SessionDataFieldsEnum.deaths, this.deaths, deaths);
     this.deaths = deaths;
   }
 
@@ -38,6 +48,7 @@ public class SessionClientData {
   }
 
   public void setKills(Integer kills) {
+    newValue(SessionDataFieldsEnum.kills, this.kills, kills);
     this.kills = kills;
   }
 
@@ -46,6 +57,7 @@ public class SessionClientData {
   }
 
   public void setLosses(Integer losses) {
+    newValue(SessionDataFieldsEnum.losses, this.losses, losses);
     this.losses = losses;
   }
 
@@ -54,6 +66,7 @@ public class SessionClientData {
   }
 
   public void setRounds(Integer rounds) {
+    newValue(SessionDataFieldsEnum.rounds, this.rounds, rounds);
     this.rounds = rounds;
   }
 
@@ -62,26 +75,33 @@ public class SessionClientData {
   }
 
   public void setWins(Integer wins) {
+    newValue(SessionDataFieldsEnum.wins, this.wins, wins);
     this.wins = wins;
   }
   
   public void incDeaths() {
-    deaths++;
+    setDeaths(getDeaths()+1);
   }
   
   public void incKills() {
-    kills++;
+    setKills(getKills()+1);
   }
   
   public void incLosses() {
-    losses++;
+    setLosses(getLosses()+1);
   }
   
   public void incWins() {
-    wins++;
+    setWins(getWins()+1);
   }
   
   public void incRounds() {
-    rounds++;
+    setRounds(getRounds()+1);
+  }
+
+  private void newValue(SessionDataFieldsEnum name, Integer oldVal, Integer newVal) {
+    for(SessionDataListener listener : listeners) {
+      listener.valueChanged(playerId, name, oldVal, newVal);
+    }
   }
 }

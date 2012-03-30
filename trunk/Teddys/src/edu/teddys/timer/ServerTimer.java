@@ -4,11 +4,8 @@
  */
 package edu.teddys.timer;
 
-import com.jme3.math.Vector3f;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
-import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  *

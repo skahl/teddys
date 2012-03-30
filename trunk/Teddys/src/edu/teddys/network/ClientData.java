@@ -36,7 +36,7 @@ public class ClientData {
   /**
    * Session-related information, that is the number of deaths, kills, rounds etc.
    */
-  private SessionClientData session = new SessionClientData();
+  private ClientSessionData session = new ClientSessionData();
   /**
    * Team allocation if available.
    */
@@ -48,6 +48,7 @@ public class ClientData {
   
   public ClientData() {
     super();
+    getSession().playerId = getId();
   }
 
   public Integer getHealth() {
@@ -58,12 +59,13 @@ public class ClientData {
     this.health = health;
   }
 
-  public Integer getId() {
+  final public Integer getId() {
     return id;
   }
 
   public void setId(Integer id) {
     this.id = id;
+    getSession().playerId = id;
   }
 
   public String getName() {
@@ -82,7 +84,7 @@ public class ClientData {
     this.position = position;
   }
 
-  public SessionClientData getSession() {
+  final public ClientSessionData getSession() {
     return session;
   }
 
@@ -94,7 +96,7 @@ public class ClientData {
     this.lastPosition = lastPosition;
   }
 
-  public void setSession(SessionClientData session) {
+  public void setSession(ClientSessionData session) {
     this.session = session;
   }
 

@@ -425,12 +425,12 @@ public class PlayerControl extends CharacterControl {
    * @param input A queue of actions gathered in the last time frame.
    */
   public synchronized void newInput(LinkedList<InputTuple> input) {
-    if (input == null) {
-      input = new LinkedList<InputTuple>();
+    synchronized(serverControlInput) {
+      try {
+        serverControlInput.addAll(input);
+      } catch(Exception ex) {
+        // Sometimes a NUllPointerException is generated because of concurrency?
+      }
     }
-    if (serverControlInput == null) {
-      serverControlInput = new LinkedList<InputTuple>();
-    }
-    serverControlInput.addAll(input);
   }
 }

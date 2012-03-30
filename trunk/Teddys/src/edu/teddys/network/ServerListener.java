@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.network.HostedConnection;
 import com.jme3.network.Message;
 import com.jme3.network.MessageListener;
+import edu.teddys.GameMode;
 import edu.teddys.MegaLogger;
 import edu.teddys.network.messages.NetworkMessageGameState;
 import edu.teddys.network.messages.NetworkMessageInfo;
@@ -28,6 +29,7 @@ import edu.teddys.network.messages.server.ReqMessagePauseRequest;
 import edu.teddys.objects.player.Player;
 import edu.teddys.states.Game;
 import edu.teddys.timer.ChecksumManager;
+import edu.teddys.timer.MatchTimer;
 import edu.teddys.timer.ServerDataSync;
 import edu.teddys.timer.ServerTimer;
 import java.awt.Color;
@@ -131,6 +133,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
 
         ServerDataSync.startTimer();
         ServerTimer.startTimer();
+        // The MatchTimer automatically shuts down ...
+        MatchTimer.startTimer(Game.getInstance().getCurrentGameMode());
 
         // Now start a game
         GSMessageBeginGame beginGame = new GSMessageBeginGame(source.getId());
@@ -148,6 +152,8 @@ public class ServerListener implements MessageListener<HostedConnection> {
         // Update the data
         player.setData(data);
         player.getData().setName("Ted " + clientID);
+        // Register the GameMode as listener for the attributes
+        player.getData().getSession().registerListener(Game.getInstance().getCurrentGameMode());
 
         if (TeddyServer.getInstance().getData().getTeams().isEmpty()) {
           // Create a new team
@@ -183,6 +189,12 @@ public class ServerListener implements MessageListener<HostedConnection> {
         teamInfoMsg.setServerMessage(true);
         TeddyServer.getInstance().send(teamInfoMsg);
         
+        GameMode gameMode = Game.getInstance().getCurrentGameMode();
+        String infoString2 = String.format("We're currently playing a %s for %d minutes!", gameMode.getName(), gameMode.getMaxMinutes());
+        NetworkMessageInfo individualMessage = new NetworkMessageInfo(clientID, infoString2);
+        individualMessage.setServerMessage(true);
+        TeddyServer.getInstance().send(individualMessage);
+        
         // Now update the player data on the clients
         List<ClientData> playerData = new ArrayList<ClientData>();
         List<Integer> playerWithActiveMap = new ArrayList<Integer>();
@@ -209,6 +221,9 @@ public class ServerListener implements MessageListener<HostedConnection> {
       if (message instanceof ManControllerInput) {
         ManControllerInput input = (ManControllerInput) message;
         // refresh the player's action
+        if(input.getInput() == null) {
+          return;
+        }
         Player.getInstance(input.getSource()).getPlayerControl().newInput(input.getInput());
         // send this message to all players since there's no local input manager attached to the users
         TeddyServer.getInstance().send(input);

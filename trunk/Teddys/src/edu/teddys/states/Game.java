@@ -9,13 +9,14 @@ import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.shadow.BasicShadowRenderer;
 import edu.teddys.callables.AttachToNodeCallable;
 import edu.teddys.BaseGame;
+import edu.teddys.GameMode;
+import edu.teddys.GameModeEnum;
 import edu.teddys.callables.DetachFromNodeCallable;
 import edu.teddys.GameSettings;
 import edu.teddys.MegaLogger;
@@ -35,6 +36,8 @@ import edu.teddys.network.messages.server.ManMessageSetPosition;
 import edu.teddys.objects.player.Player;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.math.random.RandomDataImpl;
 
 /**
@@ -55,6 +58,7 @@ public class Game extends AbstractAppState {
   private Entry<String, String> levelData = new SimpleEntry<String, String>("firstlevel", "Models/firstlevel/");
   // TESTING PHYSICS PROBLEMS
   private GeometryCollisionListener geoColListener;
+  private GameMode currentGameMode = null;
 
   //private boolean enabled;
   protected Game() {
@@ -160,6 +164,17 @@ public class Game extends AbstractAppState {
       if (GameSettings.DEBUG) {
         // debug switch not working
         bulletAppState.getPhysicsSpace().enableDebug(this.app.getAssetManager());
+      }
+      try {
+        try {
+          currentGameMode = (GameMode) Class.forName(GameSettings.DEFAULT_GAME_MODE.getName()).newInstance();
+        } catch (InstantiationException ex) {
+          MegaLogger.getLogger().fatal(ex);
+        } catch (IllegalAccessException ex) {
+          MegaLogger.getLogger().fatal(ex);
+        }
+      } catch (ClassNotFoundException ex) {
+        Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
       }
 
       MegaLogger.getLogger().debug("New game instance created.");
@@ -321,6 +336,10 @@ public class Game extends AbstractAppState {
 
   public InputManager getInputManager() {
     return inputManager;
+  }
+  
+  public GameMode getCurrentGameMode() {
+    return currentGameMode;
   }
 
   public void loadGameMap(String levelName, String mapPath) {
